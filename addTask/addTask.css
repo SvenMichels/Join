@@ -1,0 +1,57 @@
+p{
+    margin: 0;
+}
+
+.taskContainer{
+    position: absolute;
+    width: 440px;
+    height: 376px;
+    top: 327px;
+    left: 328px;
+}
+
+.taskTitle{
+    display: flex;
+    flex-direction: column;
+    width: 440px;
+    height: 96px;
+    gap: 8px;
+}
+
+.taskDescription{
+    display: flex;
+    flex-direction: column;
+    width: 440px;
+    height: 168px;
+    top: 112px;
+    gap: 4px;
+}
+
+.taskDate{
+    display: flex;
+    flex-direction: column;
+    width: 440px;
+    height: 96px;
+    top: 296px;
+    left: 0.25px;
+    gap: 8px;
+}
+
+.spaceContainer{
+    position: absolute;
+    width: 0px;
+    height: 424px;
+    top: 327px;
+    left: 816.25px;
+    border: solid 1px;
+    color: #D1D1D1;
+}
+
+.prioContainer{
+    position: absolute;
+    width: fixed(440px);
+    height: fixed(400px);
+    top: 327px;
+    left: 864.25px;
+    gap: 24px;
+}

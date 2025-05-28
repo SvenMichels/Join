@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Join – Kanban Board</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="styles/standard.css" />
+    <link rel="stylesheet" href="styles/fonts.css" />
+    <link rel="stylesheet" href="./addTask.css"/>
+    <script src="scripts/app.js"></script>
+    <script src="addTask.js"></script>
+  </head>
+
+  <body>
+    <img class="logo" src="./assets/icons/join_logo_1.png" alt="" />
+    <div>
+      <h1>Add Task</h1>
+      <div class="taskContainer">
+        <div class="taskTitle">
+        <form>
+            <p>Title*</p>
+            <input type="text" placeholder="Enter a title" required/>
+        </div>
+        <div class="taskDescription">
+            <p>Description</p>
+            <input type="text" placeholder="Enter a Description" required/>
+        </div>
+        <div class="taskDate">
+            <p>Due date*</p>
+            <input type="date" placeholder="dd/mm/yyyy" required/>
+        </div>
+        </form>
+    </div>
+    <div class="spaceContainer"></div>
+      <div class="prioContainer">
+        <p>Priority</p>
+        <button>Urgent
+          <img src="/assets/icons/prio_alta_small.svg">
+        </button>
+        <button>Medium
+          <img src="/assets/icons/prio_media_color.svg">
+        </button>
+        <button>Low
+          <img src="/assets/icons/prio_baja.svg">
+        </button>
+        <p>Assigned to</p>
+        <input>
+        <p>Category*</p>
+        <input>
+        <p>Subtasks</p>
+        <input>
+      </div>
+    </div>
+    <div class="createContainer">
+        <div>
+            <p>*This field is required</p>
+        </div>
+        <div>
+            <button>Clear</button>
+            <button>Create Task</button>
+        </div>
+    </div>
+
+    <footer>
+    </footer>
+  </body>
+</html>
