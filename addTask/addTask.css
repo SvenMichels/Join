@@ -1,57 +1,120 @@
-p{
-    margin: 0;
+/* Allgemein Header Style */
+.headerStyle {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 1440px;
+  height: 96px;
+  padding: 20 40 20 348;
+  box-shadow: 0px 4px 4px 0px #0000001a;
 }
 
-.taskContainer{
-    position: absolute;
-    width: 440px;
-    height: 376px;
-    top: 327px;
-    left: 328px;
+/* Allgemein NavBarStyle */
+.navBarStyle {
+  width: 232px;
+  height: 1024px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #2a3647;
+  padding-top: 64px;
+  padding-bottom: 64px;
 }
 
-.taskTitle{
-    display: flex;
-    flex-direction: column;
-    width: 440px;
-    height: 96px;
-    gap: 8px;
+.logo {
+  width: 100.03px;
+  height: 121.97px;
 }
 
-.taskDescription{
-    display: flex;
-    flex-direction: column;
-    width: 440px;
-    height: 168px;
-    top: 112px;
-    gap: 4px;
+.menu3 {
+  width: 232px;
+  height: 229px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
 }
 
-.taskDate{
-    display: flex;
-    flex-direction: column;
-    width: 440px;
-    height: 96px;
-    top: 296px;
-    left: 0.25px;
-    gap: 8px;
+.taskSummary {
+  width: 232px;
+  height: 46px;
+  padding-top: 8px;
+  padding-right: 53px;
+  padding-bottom: 8px;
+  padding-left: 53px;
+  gap: 20px;
+  border-radius: 8px;
+}
+.taskFrame9 {
+}
+.taskBoard {
+}
+.taskContacts {
+}
+/* addTaskSection */
+p {
+  margin: 0;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  font-weight: 400;
+  size: 20px;
+  line-height: 120%;
+  letter-spacing: 0%;
 }
 
-.spaceContainer{
-    position: absolute;
-    width: 0px;
-    height: 424px;
-    top: 327px;
-    left: 816.25px;
-    border: solid 1px;
-    color: #D1D1D1;
+.taskContainer {
+  position: absolute;
+  width: 440px;
+  height: 376px;
+  top: 327px;
+  left: 328px;
 }
 
-.prioContainer{
-    position: absolute;
-    width: fixed(440px);
-    height: fixed(400px);
-    top: 327px;
-    left: 864.25px;
-    gap: 24px;
+.taskTitle {
+  display: flex;
+  flex-direction: column;
+  width: 440px;
+  height: 96px;
+  gap: 8px;
+}
+
+.taskDescription {
+  display: flex;
+  flex-direction: column;
+  width: 440px;
+  height: 168px;
+  top: 112px;
+  gap: 4px;
+}
+
+.taskDate {
+  display: flex;
+  flex-direction: column;
+  width: 440px;
+  height: 96px;
+  top: 296px;
+  left: 0.25px;
+  gap: 8px;
+}
+
+.spaceContainer {
+  position: absolute;
+  width: 0px;
+  height: 424px;
+  top: 327px;
+  left: 816.25px;
+  border: solid 1px;
+  color: #d1d1d1;
+}
+
+.prioContainer {
+  position: absolute;
+  width: fixed(440px);
+  height: fixed(400px);
+  top: 327px;
+  left: 864.25px;
+  gap: 24px;
 }
