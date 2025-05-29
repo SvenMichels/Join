@@ -1,68 +1,18 @@
-/* Allgemein Header Style */
-.headerStyle {
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-  width: 1440px;
-  height: 96px;
-  padding: 20 40 20 348;
-  box-shadow: 0px 4px 4px 0px #0000001a;
-}
-
-/* Allgemein NavBarStyle */
-.navBarStyle {
-  width: 232px;
-  height: 1024px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  position: absolute;
-  top: 0;
-  left: 0;
-  background-color: #2a3647;
-  padding-top: 64px;
-  padding-bottom: 64px;
-}
-
-.logo {
-  width: 100.03px;
-  height: 121.97px;
-}
-
-.menu3 {
-  width: 232px;
-  height: 229px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 15px;
-}
-
-.taskSummary {
-  width: 232px;
-  height: 46px;
-  padding-top: 8px;
-  padding-right: 53px;
-  padding-bottom: 8px;
-  padding-left: 53px;
-  gap: 20px;
-  border-radius: 8px;
-}
-.taskFrame9 {
-}
-.taskBoard {
-}
-.taskContacts {
-}
-/* addTaskSection */
 p {
   margin: 0;
-  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
-  font-weight: 400;
+  font-weight: 200;
   size: 20px;
   line-height: 120%;
   letter-spacing: 0%;
+}
+
+.taskh1Container{
+    width: 278px;
+    height: 73px;
+    position: absolute;
+    top: 206px;
+    left: 328px;
+    gap: 1px;
 }
 
 .taskContainer {
@@ -81,13 +31,26 @@ p {
   gap: 8px;
 }
 
+.taskTitleInput{
+    width: 440px;
+    height: 48px;
+    border-radius: 10px;
+    border: 1px solid #D1D1D1;
+}
+
 .taskDescription {
   display: flex;
   flex-direction: column;
   width: 440px;
   height: 168px;
-  top: 112px;
-  gap: 4px;
+  gap: 8px;
+}
+
+.taskDescriptionInput{
+    width: 440px;
+    height: 120px;
+    border-radius: 10px;
+    border: 1px solid #D1D1D1;
 }
 
 .taskDate {
@@ -98,6 +61,13 @@ p {
   top: 296px;
   left: 0.25px;
   gap: 8px;
+}
+
+.taskDateInput{
+    width: 440px;
+    height: 96px;
+    border-radius: 10px;
+    border: 1px solid #D1D1D1;
 }
 
 .spaceContainer {
@@ -117,4 +87,18 @@ p {
   top: 327px;
   left: 864.25px;
   gap: 24px;
+}
+
+.error-message {
+    color: red;
+    font-size: 0.8rem;
+    display: none;
+}
+
+input:invalid+.error-message {
+    display: block;
+}
+
+input:valid+.error-message {
+    display: none;
 }
