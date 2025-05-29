@@ -1,104 +1,135 @@
 <!DOCTYPE html>
 <html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Join – Kanban Board</title>
+    <link rel="stylesheet" href="addTask.css" />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Join – Kanban Board</title>
-  <link rel="stylesheet" href="addTask.css">
-
-</head>
-
-<body>
-  <header class="headerStyle">
-    <div>
-      <p>Kanban Project Management Tool</p>
+  <body>
+    <header class="headerStyle">
+      <div>
+        <p>Kanban Project Management Tool</p>
+      </div>
+      <div class="profileContainer">
+        <div class="helpContainer">
+          <img class="helpIcon" src="../assets/icons/help.svg" alt="help.svg" />
+        </div>
+        <img
+          class="profileIcon"
+          src="../assets/icons/user_profile_initials.svg"
+          alt="profil_dummy"
+        />
+      </div>
+    </header>
+    <nav class="navBarStyle">
+      <img class="logo" src="/assets/icons/join_white.svg" alt="Logo" />
+      <div class="menu3">
+        <div class="taskSummary">
+          <button class="navBtn">
+            <img
+              class="navIcons"
+              src="/assets/icons/summary_2.svg"
+              alt=""
+            />Summary
+          </button>
+        </div>
+        <div class="taskFrame9">
+          <button class="navBtn">
+            <img class="navIcons" src="/assets/icons/add_task.svg" alt="" />Add
+            Task
+          </button>
+        </div>
+        <div class="taskBoard">
+          <button class="navBtnBoard">
+            <img class="navIcons" src="/assets/icons/board.svg" alt="" />Board
+          </button>
+        </div>
+        <div class="taskContacts">
+          <button class="navBtn">
+            <img
+              class="navIcons"
+              src="/assets/icons/contacts.svg"
+              alt=""
+            />Contacts
+          </button>
+        </div>
+      </div>
+      <div class="taskFrame22">
+        <a href="../impressum.html" class="taskFrameLink">Privacy Policy</a>
+        <a href="../datenschutz.html" class="taskFrameLink">Legal notice</a>
+      </div>
+    </nav>
+    <div class="taskh1Container">
+      <h1>Add Task</h1>
     </div>
-    <div class="profileContainer">
-      <div class="helpContainer">
-        <img class="helpIcon" src="../assets/icons/help.svg" alt="help.svg">
-      </div>
-      <img class="profileIcon" src="../assets/icons/user_profile_initials.svg" alt="profil_dummy">
-    </div>
-  </header>
-  <nav class="navBarStyle">
-    <img class="logo" src="/assets/icons/join_white.svg" alt="Logo" />
-    <div class="menu3">
-      <div class="taskSummary">
-        <button class="navBtn"><img class="navIcons" src="/assets/icons/summary_2.svg" alt="">Summary</button>
-      </div>
-      <div class="taskFrame9">
-        <button class="navBtn"><img class="navIcons" src="/assets/icons/add_task.svg" alt="">Add Task</button>
-      </div>
-      <div class="taskBoard">
-        <button class="navBtnBoard">
-          <img class="navIcons" src="/assets/icons/board.svg" alt="">Board
-        </button>
-      </div>
-      <div class="taskContacts">
-        <button class="navBtn"><img class="navIcons" src="/assets/icons/contacts.svg" alt="">Contacts</button>
-      </div>
-    </div>
-    <div class="taskFrame22">
-      <a href="../impressum.html" class="taskFrameLink">Privacy Policy</a>
-      <a href="../datenschutz.html" class="taskFrameLink">Legal notice</a>
-    </div>
-  </nav>
-  <div class="taskh1Container">
-    <h1>Add Task</h1>
     <div class="taskContainer">
-      <div class="taskTitle">
-        <form>
-          <div class="taskTitle">
-            <label for="titleInput">Title<span style="color:#FF8190">*</span></label>
-            <input type="text" id="titleInput" name="title" placeholder="Enter a title" class="taskTitleInput" required>
-            <span class="error-message">This field is required.</span>
-          </div>
+      <form>
+        <div class="taskTitle">
+          <label for="titleInput"
+            >Title<span style="color: #ff8190">*</span></label
+          >
+          <input
+            type="text"
+            id="titleInput"
+            name="title"
+            placeholder="Enter a title"
+            class="taskTitleInput"
+            required
+          />
+          <span class="error-message">This field is required.</span>
+        </div>
 
-          <div class="taskDescription">
-            <label for="descriptionInput">Description</label>
-            <input type="text" id="descriptionInput" placeholder="Enter a Description" class="taskDescriptionInput">
-          </div>
+        <div class="taskDescription">
+          <label for="descriptionInput">Description</label>
+          <input
+            type="text"
+            id="descriptionInput"
+            placeholder="Enter a Description"
+            class="taskDescriptionInput"
+          />
+        </div>
 
-          <div class="taskDate">
-            <label for="dateInput">Due date<span style="color:#FF8190">*</span></label>
-            <input type="date" id="dateInput" content="dd.mm.yyyy" class="taskDateInput" class="taskDateInput" required>
-          </div>
-        </form>
-      </div>
-      <div class="spaceContainer"></div>
-      <div class="prioContainer">
-        <p>Priority</p>
-        <button>Urgent
-          <img src="/assets/icons/prio_alta_small.svg">
-        </button>
-        <button>Medium
-          <img src="/assets/icons/prio_media_color.svg">
-        </button>
-        <button>Low
-          <img src="/assets/icons/prio_baja.svg">
-        </button>
-        <p>Assigned to</p>
-        <input>
-        <p>Category*</p>
-        <input>
-        <p>Subtasks</p>
-        <input>
-      </div>
+        <div class="taskDate">
+          <label for="dateInput"
+            >Due date<span style="color: #ff8190">*</span></label
+          >
+          <input
+            type="date"
+            id="dateInput"
+            content="dd.mm.yyyy"
+            class="taskDateInput"
+            class="taskDateInput"
+            required
+          />
+        </div>
+      </form>
     </div>
-    <div class="createContainer">
-      <div>
-        <p>*This field is required</p>
-      </div>
-      <div>
-        <button>Clear</button>
-        <button>Create Task</button>
-      </div>
+    <div class="spaceContainer"></div>
+    <div class="prioContainer">
+      <p>Priority</p>
+      <button>
+        Urgent
+        <img src="/assets/icons/prio_alta_small.svg" />
+      </button>
+      <button>
+        Medium
+        <img src="/assets/icons/prio_media_color.svg" />
+      </button>
+      <button>
+        Low
+        <img src="/assets/icons/prio_baja.svg" />
+      </button>
+      <p>Assigned to</p>
+      <input />
+      <p>Category*</p>
+      <input />
+      <p>Subtasks</p>
+      <input />
     </div>
 
-    <footer>
-    </footer>
-      <script src="./addTask.js"></script>
-</body>
-
+    <footer></footer>
+    <script src="./addTask.js"></script>
+  </body>
 </html>

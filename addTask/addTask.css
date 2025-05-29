@@ -1,3 +1,176 @@
+body {
+  margin: 0;
+  max-width: 1440px;
+  height: 100vh;
+}
+
+/* HEADER */
+.headerStyle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: calc(1440px - 308px);
+  position: relative;
+  height: 96px;
+  padding: 20px 40px 20px 348px;
+  box-shadow: 0px 4px 4px 0px #0000001a;
+}
+
+.profileContainer {
+  width: 104px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.helpContainer {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.helpIcon {
+  width: 20px;
+  height: 20px;
+}
+
+.profileIcon {
+  width: 56px;
+  height: 56px;
+}
+
+.content {
+  display: flex;
+}
+
+.navBarStyle {
+  width: 232px;
+  height: 1024px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #2a3647;
+}
+
+/* NavBar */
+.logo {
+  width: 100.03px;
+  height: 121.97px;
+  display: flex;
+  justify-content: space-between;
+  padding-top: 64px;
+}
+
+.menu3 {
+  width: 232px;
+  height: 229px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.taskSummary {
+  width: 232px;
+  height: 46px;
+}
+
+.taskFrame9 {
+width: 232px;
+height: 46px;
+
+}
+.taskBoard {
+width: 232px;
+height: 46px;
+border-radius: 8px;
+
+}
+.taskContacts {
+width: 232px;
+height: 46px;
+border-radius: 8px;
+}
+
+.navBtnBoard{
+    background-color: #2a3647;
+    color: #CDCDCD;
+    width: 232px;
+    height: 46px;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.navBtn{
+    background-color: #2a3647;
+    color: #CDCDCD;
+    width: 232px;
+    height: 46px;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.navBtnBoard:hover{
+    cursor: pointer;
+    background-color: #091931;
+}
+
+.navBtn:hover{
+    cursor: pointer;
+    background-color: #091931;
+}
+
+.navIcons{
+    width: 30px;
+    height: 30px;
+}
+
+.taskFrame22{
+    width: 232px;
+    height: 317px;
+    gap: 4px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.taskFrameLink{
+    color: #CDCDCD;
+    border: none;
+    text-decoration: none;
+    width: 121px;
+    height: 35px;
+    padding: 8px;
+}
+
+.taskFrameLink:hover{
+    cursor: pointer;
+    color: #00BEE8;
+    font-weight: 700;
+}
+
+.seperator {
+  width: 0px;
+  height: 424px;
+  top: 327px;
+  left: 816.25px;
+  border: solid 1px;
+  color: #d1d1d1;
+}
+
 p {
   margin: 0;
   font-weight: 200;
@@ -12,6 +185,7 @@ p {
     position: absolute;
     top: 206px;
     left: 328px;
+    display: flex;
     gap: 1px;
 }
 
@@ -71,7 +245,7 @@ p {
 }
 
 .spaceContainer {
-  position: absolute;
+  position: fixed;
   width: 0px;
   height: 424px;
   top: 327px;
@@ -81,9 +255,9 @@ p {
 }
 
 .prioContainer {
-  position: absolute;
-  width: fixed(440px);
-  height: fixed(400px);
+  position: fixed;
+  width: 440px;
+  height: 400px;
   top: 327px;
   left: 864.25px;
   gap: 24px;
