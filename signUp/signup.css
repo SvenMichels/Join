@@ -9,13 +9,21 @@ body {
   height: 100vh;
   background-color: rgba(246, 247, 248, 1);
 }
+
 main {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 1440px;
-    align-items: center;
-    height: 100vh;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1440px;
+  align-items: center;
+  height: 100vh;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 598px;
 }
 
 form {
@@ -24,7 +32,8 @@ form {
   flex-direction: column;
   text-align: center;
   box-sizing: border-box;
-  width: 598px;
+  width: 100%;
+  max-width: 598px;
   height: 630px;
   padding-top: 48px;
   padding-right: 88px;
@@ -32,17 +41,8 @@ form {
   padding-left: 88px;
   gap: 32px;
   border-radius: 30px;
-  box-shadow: 0px 0px 14px 3px rgba(0, 0, 0, 0.4);
-  margin-top: 196px;
-
-  img {
-    display: flex;
-    width: 32px;
-    height: 32px;
-    position: relative;
-    top: 5.63px;
-    left: 5.33px;
-  }
+  box-shadow: 0px 0px 14px 3px rgba(0, 0, 0, 0.08);
+  margin-top: 226px;
 
   a {
     color: rgba(41, 171, 226, 1);
@@ -54,11 +54,23 @@ form {
   }
 }
 
+.form-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
 footer {
   display: flex;
-  gap: 16px;
   color: rgba(168, 168, 168, 1);
   margin-top: auto;
+  justify-content: center;
+  gap: 24px;
+}
+
+.form-title {
+  display: flex;
+  width: 100%;
 }
 
 h1 {
@@ -70,10 +82,11 @@ h1 {
   letter-spacing: 0%;
   text-align: center;
   margin: 0;
+  width: 100%;
 }
 
 input {
-    color: rgba(209, 209, 209, 1);
+  color: rgba(209, 209, 209, 1);
   display: flex;
   box-sizing: border-box;
   width: 100%;
@@ -125,8 +138,36 @@ button {
 }
 
 label {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    margin-bottom: 36px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-bottom: 36px;
+}
+
+.input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.input-wrapper input {
+  width: 100%;
+  padding-right: 40px; 
+  padding-left: 12px;
+  height: 40px;
+  box-sizing: border-box;
+}
+
+.input-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 20px;
+  width: 20px;
+  cursor: pointer;
+  opacity: 0.6;
+}
+
+.input-icon:hover {
+  opacity: 1;
 }

@@ -14,27 +14,51 @@
 <body>
   <main>
     <img class="logo" src="../assets/icons/join_logo_1.png" alt="" />
-    <div>
+    <div class="form-container">
 
-      <form>
-        <h1><img src="../assets/icons/arrow-left-line.svg" alt="">Sign Up</h1>
+      <form onsubmit="signUp(); return false;">
+        <div class="form-header">
+          <img class="pointer" src="../assets/icons/arrow-left-line.svg" alt=""
+            onclick="window.location.href='../index.html'">
+          <div class="form-title">
+            <h1>Sign Up</h1>
+          </div>
+        </div>
+        <div class="input-wrapper">
+          <input id="inputName" type="text" placeholder="Name" autocomplete="name" required />
+          <img class="input-icon" src="../assets/icons/person.svg" alt="Name icon" />
+        </div>
 
-        <input type="text" placeholder="Name" required /> 
-        <input type="text" placeholder="Email" required />
-        <input type="text" placeholder="Password" required /> <img src="../assets/icons/visibility.svg" alt="">
-        <input type="text" placeholder="Confirm Password" required />
+        <div class="input-wrapper">
+          <input id="inputEmail" type="email" placeholder="Email" autocomplete="email" required />
+          <img class="input-icon" src="../assets/icons/mail.svg" alt="Email icon" />
+        </div>
+
+        <div class="input-wrapper">
+          <input id="inputPassword" type="password" placeholder="Password" autocomplete="new-password" required />
+          <img class="input-icon toggle-password" src="../assets/icons/visibility.svg"
+            alt="Toggle password visibility" />
+        </div>
+        <div class="input-wrapper">
+          <input id="inputConfirmPassword" name="confirmPassword" type="password" placeholder="Confirm Password"
+            autocomplete="new-password" required />
+          <img class="input-icon toggle-password" src="../assets/icons/visibility.svg"
+            alt="Toggle password visibility" />
+        </div>
+
         <div>
           <label>
-            <input id="checkBox" type="checkbox" />I accept the <a href="">Privacy policy</a></label>
-          <button id="signUpBtn" disabled>Sign up</button>
+            <input id="checkBox" type="checkbox" />
+            I accept the&nbsp;<a href="">Privacy policy</a>
+          </label>
+          <button id="signUpBtn" type="submit" disabled>Sign up</button>
         </div>
-    </div>
-    </form>
+      </form>
 
-    <footer>
-      <p>Privacy Policy</p>
-      <p>Legal Notice</p>
-    </footer>
+      <footer>
+        <p>Privacy Policy</p>
+        <p>Legal Notice</p>
+      </footer>
   </main>
   <script src="./signup.js"></script>
 </body>

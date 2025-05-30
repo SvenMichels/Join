@@ -1,18 +1,40 @@
-function checkBoxCheck() {
-    let checkBoxRef = document.getElementById('checkBox');
-    let signUp = document.getElementById('signUpBtn');
-            signUp.disabled = true;
-            signUp.style.color = '#9e9e9e';
+const passwordInput = document.getElementById("inputPassword");
+const confirmPasswordInput = document.getElementById("inputConfirmPassword");
+const checkbox = document.getElementById("checkBox");
+const signUpBtn = document.getElementById("signUpBtn");
 
-    checkBoxRef.addEventListener('change', (event) => {
-        if (checkBoxRef.checked) {
-            signUp.disabled = false;
-            signUp.style.color = 'white';
-        } else {
-            signUp.disabled = true;
-            signUp.style.color = '#9e9e9e';
-        }
-    });
+const togglePasswordIcon = document.querySelector('#inputPassword + .toggle-password');
+const toggleConfirmIcon = document.querySelector('#inputConfirmPassword + .toggle-password');
+
+function validatePasswordsMatch() {
+  if (passwordInput.value !== confirmPasswordInput.value) {
+    confirmPasswordInput.setCustomValidity("Passwords do not match");
+  } else {
+    confirmPasswordInput.setCustomValidity("");
+  }
 }
 
-checkBoxCheck();
+passwordInput.addEventListener("input", validatePasswordsMatch);
+confirmPasswordInput.addEventListener("input", validatePasswordsMatch);
+
+checkbox.addEventListener("change", () => {
+  signUpBtn.disabled = !checkbox.checked;
+});
+
+// Passwort anzeigen/verstecken
+togglePasswordIcon.addEventListener('click', () => {
+  const isHidden = passwordInput.type === 'password';
+  passwordInput.type = isHidden ? 'text' : 'password';
+  togglePasswordIcon.src = isHidden
+    ? '../assets/icons/visibility_off.svg'
+    : '../assets/icons/visibility.svg';
+});
+
+// Bestätigungspasswort anzeigen/verstecken
+toggleConfirmIcon.addEventListener('click', () => {
+  const isHidden = confirmPasswordInput.type === 'password';
+  confirmPasswordInput.type = isHidden ? 'text' : 'password';
+  toggleConfirmIcon.src = isHidden
+    ? '../assets/icons/visibility_off.svg'
+    : '../assets/icons/visibility.svg';
+});
