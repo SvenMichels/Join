@@ -103,6 +103,7 @@
             class="taskDateInput"
             required
           />
+          <span class="error-message">This field is required.</span>
         </div>
       </form>
     </div>
@@ -125,12 +126,25 @@
       </button>
       </div>
       </div>
+      <div class="prioAssignedContainer">
       <p>Assigned to</p>
-      <input />
-      <p>Category*</p>
-      <input />
+      <input class="prioAssignInput" type="text"/>
+      </div>
+      <div class="prioCategoryContainer">
+      <p>Category<span style="color: #ff8190">*</span></p>
+      <input class="prioCategoryInput" type="text"/>
+      </div>
+      <div class="prioSubtaskContainer">
       <p>Subtasks</p>
-      <input />
+      <input class="prioSubtaskInput" type="text"/>
+      </div>
+    </div>
+    <div class="requiredContainer">
+      <span><span style="color: #ff8190">*</span>This field is required</span>
+    </div>
+    <div class="createContainer">
+      <button class="clearButton">Clear<img src="../assets/icons/iconoir_cancel.svg"></button>
+      <button class="createButton">Create Task<img src="../assets/icons/check.svg"></button>
     </div>
 
     <footer></footer>

@@ -2,6 +2,7 @@ body {
   margin: 0;
   max-width: 1440px;
   height: 100vh;
+  background-color: #F6F7F8;
 }
 
 /* HEADER */
@@ -160,15 +161,6 @@ body {
   font-weight: 700;
 }
 
-.seperator {
-  width: 0px;
-  height: 424px;
-  top: 327px;
-  left: 816.25px;
-  border: solid 1px;
-  color: #d1d1d1;
-}
-
 p {
   margin: 0;
   font-weight: 200;
@@ -177,6 +169,7 @@ p {
   letter-spacing: 0%;
 }
 
+/* TaskContent */
 .taskh1Container {
   width: 278px;
   height: 73px;
@@ -287,15 +280,16 @@ p {
   gap: 8px;
   border: 1px;
   border-radius: 10px;
-  background: #FFFFFF;
-  box-shadow: 0px 0px 4px 0px #0000001A;
+  background: #ffffff;
+  box-shadow: 0px 0px 4px 0px #0000001a;
+  cursor: pointer;
 }
 
-.prioButtonUrgent:hover{
+.prioButtonUrgent:hover {
   box-shadow: 0px 4px 4px 0px #00000040;
 }
 
-.prioButtonMedium{
+.prioButtonMedium {
   display: flex;
   flex-direction: row;
   width: 136px;
@@ -305,15 +299,16 @@ p {
   gap: 8px;
   border: 1px;
   border-radius: 10px;
-  background: #FFFFFF;
-  box-shadow: 0px 0px 4px 0px #0000001A;
+  background: #ffffff;
+  box-shadow: 0px 0px 4px 0px #0000001a;
+  cursor: pointer;
 }
 
-.prioButtonMedium:hover{
+.prioButtonMedium:hover {
   box-shadow: 0px 4px 4px 0px #00000040;
 }
 
-.prioButtonLow{
+.prioButtonLow {
   display: flex;
   flex-direction: row;
   width: 136px;
@@ -323,11 +318,12 @@ p {
   gap: 8px;
   border: 1px;
   border-radius: 10px;
-  background: #FFFFFF;
-  box-shadow: 0px 0px 4px 0px #0000001A;
+  background: #ffffff;
+  box-shadow: 0px 0px 4px 0px #0000001a;
+  cursor: pointer;
 }
 
-.prioButtonLow:hover{
+.prioButtonLow:hover {
   box-shadow: 0px 4px 4px 0px #00000040;
 }
 
@@ -348,4 +344,112 @@ input:invalid + .error-message {
 
 input:valid + .error-message {
   display: none;
+}
+
+.prioAssignedContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 440px;
+  height: 80px;
+}
+
+.prioAssignInput {
+  width: 440px;
+  height: 48px;
+  display: flex;
+  justify-content: space-between;
+  border-radius: 10px;
+  border: 1px solid #d1d1d1;
+}
+
+.prioCategoryContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 440px;
+  height: 80px;
+}
+
+.prioCategoryInput {
+  width: 440px;
+  height: 48px;
+  display: flex;
+  justify-content: space-between;
+  border-radius: 10px;
+  border: 1px solid #d1d1d1;
+}
+
+.prioSubtaskContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 440px;
+  height: 80px;
+}
+
+.prioSubtaskInput {
+  width: 440px;
+  height: 48px;
+  display: flex;
+  justify-content: space-between;
+  border-radius: 10px;
+  border: 1px solid #d1d1d1;
+}
+
+.requiredContainer {
+  width: 170px;
+  height: 27px;
+  position: absolute;
+  top: 926px;
+  left: 328px;
+}
+
+.createContainer {
+  display: flex;
+  gap: 16px;
+  width: 309px;
+  height: 56px;
+  position: absolute;
+  top: 889px;
+  left: 995.25px;
+}
+
+.clearButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  width: 110px;
+  height: 56px;
+  gap: 4px;
+  border-radius: 10px;
+  padding: 16px;
+  border: 1px solid #2a3647;
+  background-color: #f6f7f8;
+}
+
+.clearButton:hover {
+  border: 2px solid #29abe2;
+  box-shadow: 0px 4px 4px 0px #00000040;
+}
+
+.createButton {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 183px;
+  height: 56px;
+  gap: 4px;
+  border-radius: 10px;
+  padding: 16px;
+  background: #2A3647;
+  color: #FFFFFF ;
+  border: 0px;
+}
+
+.createButton:hover{
+  background: #29ABE2;
+  box-shadow: 0px 4px 4px 0px #00000040;
 }
