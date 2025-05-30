@@ -82,84 +82,82 @@ body {
 }
 
 .taskFrame9 {
-width: 232px;
-height: 46px;
-
+  width: 232px;
+  height: 46px;
 }
 .taskBoard {
-width: 232px;
-height: 46px;
-border-radius: 8px;
-
+  width: 232px;
+  height: 46px;
+  border-radius: 8px;
 }
 .taskContacts {
-width: 232px;
-height: 46px;
-border-radius: 8px;
+  width: 232px;
+  height: 46px;
+  border-radius: 8px;
 }
 
-.navBtnBoard{
-    background-color: #2a3647;
-    color: #CDCDCD;
-    width: 232px;
-    height: 46px;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
+.navBtnBoard {
+  background-color: #2a3647;
+  color: #cdcdcd;
+  width: 232px;
+  height: 46px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
 }
 
-.navBtn{
-    background-color: #2a3647;
-    color: #CDCDCD;
-    width: 232px;
-    height: 46px;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+.navBtn {
+  background-color: #2a3647;
+  color: #cdcdcd;
+  width: 232px;
+  height: 46px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
-.navBtnBoard:hover{
-    cursor: pointer;
-    background-color: #091931;
+.navBtnBoard:hover {
+  cursor: pointer;
+  background-color: #091931;
 }
 
-.navBtn:hover{
-    cursor: pointer;
-    background-color: #091931;
+.navBtn:hover {
+  cursor: pointer;
+  background-color: #091931;
 }
 
-.navIcons{
-    width: 30px;
-    height: 30px;
+.navIcons {
+  width: 30px;
+  height: 30px;
 }
 
-.taskFrame22{
-    width: 232px;
-    height: 317px;
-    gap: 4px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+.taskFrame22 {
+  width: 232px;
+  height: 317px;
+  gap: 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-.taskFrameLink{
-    color: #CDCDCD;
-    border: none;
-    text-decoration: none;
-    width: 121px;
-    height: 35px;
-    padding: 8px;
+.taskFrameLink {
+  color: #cdcdcd;
+  border: none;
+  text-decoration: none;
+  width: 121px;
+  height: 35px;
+  padding: 8px;
 }
 
-.taskFrameLink:hover{
-    cursor: pointer;
-    color: #00BEE8;
-    font-weight: 700;
+.taskFrameLink:hover {
+  cursor: pointer;
+  color: #00bee8;
+  font-weight: 700;
 }
 
 .seperator {
@@ -179,14 +177,14 @@ p {
   letter-spacing: 0%;
 }
 
-.taskh1Container{
-    width: 278px;
-    height: 73px;
-    position: absolute;
-    top: 206px;
-    left: 328px;
-    display: flex;
-    gap: 1px;
+.taskh1Container {
+  width: 278px;
+  height: 73px;
+  position: absolute;
+  top: 206px;
+  left: 328px;
+  display: flex;
+  gap: 1px;
 }
 
 .taskContainer {
@@ -205,11 +203,11 @@ p {
   gap: 8px;
 }
 
-.taskTitleInput{
-    width: 440px;
-    height: 48px;
-    border-radius: 10px;
-    border: 1px solid #D1D1D1;
+.taskTitleInput {
+  width: 440px;
+  height: 48px;
+  border-radius: 10px;
+  border: 1px solid #d1d1d1;
 }
 
 .taskDescription {
@@ -220,11 +218,11 @@ p {
   gap: 8px;
 }
 
-.taskDescriptionInput{
-    width: 440px;
-    height: 120px;
-    border-radius: 10px;
-    border: 1px solid #D1D1D1;
+.taskDescriptionInput {
+  width: 440px;
+  height: 120px;
+  border-radius: 10px;
+  border: 1px solid #d1d1d1;
 }
 
 .taskDate {
@@ -237,11 +235,11 @@ p {
   gap: 8px;
 }
 
-.taskDateInput{
-    width: 440px;
-    height: 96px;
-    border-radius: 10px;
-    border: 1px solid #D1D1D1;
+.taskDateInput {
+  width: 440px;
+  height: 96px;
+  border-radius: 10px;
+  border: 1px solid #d1d1d1;
 }
 
 .spaceContainer {
@@ -256,6 +254,8 @@ p {
 
 .prioContainer {
   position: fixed;
+  display: flex;
+  flex-direction: column;
   width: 440px;
   height: 400px;
   top: 327px;
@@ -263,16 +263,89 @@ p {
   gap: 24px;
 }
 
+.prioContent {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 440px;
+  height: 88px;
+}
+
+.prioButtonContainer {
+  display: flex;
+  gap: 16px;
+  height: 56px;
+}
+
+.prioButtonUrgent {
+  display: flex;
+  flex-direction: row;
+  width: 136px;
+  height: 56px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px;
+  border-radius: 10px;
+  background: #FFFFFF;
+  box-shadow: 0px 0px 4px 0px #0000001A;
+}
+
+.prioButtonUrgent:hover{
+  box-shadow: 0px 4px 4px 0px #00000040;
+}
+
+.prioButtonMedium{
+  display: flex;
+  flex-direction: row;
+  width: 136px;
+  height: 56px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px;
+  border-radius: 10px;
+  background: #FFFFFF;
+  box-shadow: 0px 0px 4px 0px #0000001A;
+}
+
+.prioButtonMedium:hover{
+  box-shadow: 0px 4px 4px 0px #00000040;
+}
+
+.prioButtonLow{
+  display: flex;
+  flex-direction: row;
+  width: 136px;
+  height: 56px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px;
+  border-radius: 10px;
+  background: #FFFFFF;
+  box-shadow: 0px 0px 4px 0px #0000001A;
+}
+
+.prioButtonLow:hover{
+  box-shadow: 0px 4px 4px 0px #00000040;
+}
+
+.prioIcons {
+  width: 20px;
+  height: 14.51px;
+}
+
 .error-message {
-    color: red;
-    font-size: 0.8rem;
-    display: none;
+  color: red;
+  font-size: 0.8rem;
+  display: none;
 }
 
-input:invalid+.error-message {
-    display: block;
+input:invalid + .error-message {
+  display: block;
 }
 
-input:valid+.error-message {
-    display: none;
+input:valid + .error-message {
+  display: none;
 }
