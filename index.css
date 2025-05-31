@@ -3,17 +3,25 @@ body{
     margin: 0;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
     max-width: 1440px;
-    height: 100vw;
+    height: 100vh;
+}
+
+.logInHeader{
+    width: 1440px;
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    flex-direction: row;
 }
 
 .logo{
-    position: absolute;
-    display: flex;
-    align-items:start;
-    justify-content:start;
+    width: 100px;
+    height: 122px;
+    top: 80px;
+    left: 77px;
 }
 
 h1{
@@ -43,8 +51,8 @@ h1{
     flex-direction: column;
     border: 2px solid #000;
     border-radius: 20px;
-    width: 598px;
-    height: 630px;
+    width: 652px;
+    height: 449px;
     box-shadow: #000;
 }
 
@@ -56,6 +64,13 @@ form{
     flex-direction: column;
 }
 
+.textareaIconComb{
+    width: 100%;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+
 .email{
     align-content: center;
     border: 1px solid #D1D1D1;
@@ -63,6 +78,13 @@ form{
     Padding: 12px 21px 12px 21px;
     gap: 10px;
     height: 48px;
+    width: 422px;
+    resize: none;
+}
+
+.mailIcon{
+    position: absolute;
+    padding-right: 30px;
 }
 
 .password{
@@ -72,4 +94,64 @@ form{
     Padding: 12px 21px 12px 21px;
     gap: 10px;
     height: 48px;
+    width: 422px;
+    resize: none;
+}
+
+.passwordIcon{
+    position: absolute;
+    padding-right: 30px;
+}
+
+.buttonContainer{
+    display: flex;
+    flex-direction: row;
+    gap: 35px;
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  height: 56px;
+  gap: 4px;
+  border-radius: 10px;
+  padding: 15px 24px 15px 24px;
+  border: 1px solid #2a3647;
+  background-color: #FFFFFF;
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.btn:hover{
+    background-color: #2a3647;
+    color: #FFFFFF;
+}
+
+.guestLogIn{
+    width: 177px;
+}
+
+.logIn{
+    width: 110px;
+}
+
+.footer{
+    width: 246px;
+    height: 35px;
+    top: 949px;
+    left: 597px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.txtFooterDesign{
+    color: #A8A8A8 ;
+    font-weight: 400;
+    font-size: 16px;
+    width: 105px;
+    height: 19px;
 }
