@@ -8,51 +8,115 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="styles/standard.css">
   <link rel="stylesheet" href="styles/fonts.css">
+  <link rel="stylesheet" href="startPage.css">
   <script src="scripts/app.js"></script>
 </head>
 
 <body>
-    <div>
-        <img src="./assets/icons/join_logo_1.png" alt="Join 360" class>
-    </div>
-    <main>
-    <nav class="nav">
-      <img src="./assets/icons/join_white.svg" alt="">
-      <div class="navLink" id="summary"><img src="./assets/icons/summary_2.svg" alt=""><a href="index.html">Summary</a>
-  <body>
-    <img class="logo" src="./assets/icons/join_logo_1.png" alt="" />
-    <div>
-      <h1>Log in</h1>
-      <form>
-        <input type="text" required/>
-        <input type="text" required/>
-      </form>
-      <div>
-        <button>log in</button>
-        <button>log in as guest</button>
-      </div>
-      <div class="navLink" id="add_task"><img src="./assets/icons/add_task.svg" alt=""><a href="addtask.html">Add
-          Task</a></div>
-      <div class="navLink" id="board"><img src="./assets/icons/board.svg" alt=""><a href="contact.html">Board</a></div>
-      <div class="navLink" id="contacts"><img src="./assets/icons/contacts.svg" alt=""><a
-          href="contact.html">Contacts</a></div>
-    </nav>
-    <section>
-      <header class="header"></header>
-      <section class="join">
-        <section class="mainSection">
-          <div class="headline">Join 360</div>
-          <div class="taskOverview">To Do</div>
-        </section>
-        <div class="greets">
-          <div class="greet">Good morning,</div>
-          <div class="name">Random Guest</div>
+  <nav class="navBarStyle">
+        <img class="logo" src="/assets/icons/join_white.svg" alt="Logo" />
+        <div class="menu3">
+            <div class="taskSummary">
+                <button class="navBtn">
+                    <img class="navIcons" src="/assets/icons/summary_2.svg" alt="" />Summary
+                </button>
+            </div>
+            <div class="taskFrame9">
+                <button class="navBtn">
+                    <img class="navIcons" src="/assets/icons/add_task.svg" alt="" />Add
+                    Task
+                </button>
+            </div>
+            <div class="taskBoard">
+                <button class="navBtnBoard">
+                    <img class="navIcons" src="/assets/icons/board.svg" alt="" />Board
+                </button>
+            </div>
+            <div class="taskContacts">
+                <button class="navBtn">
+                    <img class="navIcons" src="/assets/icons/contacts.svg" alt="" />Contacts
+                </button>
+            </div>
         </div>
-      </section>
+        <div class="taskFrame22">
+            <a href="../impressum.html" class="taskFrameLink">Privacy Policy</a>
+            <a href="../datenschutz.html" class="taskFrameLink">Legal notice</a>
+        </div>
+    </nav>
+
+  <main>
+    <header>
+      <p>Kanban Project Management Tool</p>
+      <div class="profile">
+        <img src="/assets/icons/help.svg" alt="">        
+        <img src="/assets/icons/user_profile_initials.svg" alt="" class="icon">
+      </div>
+    </header>
+    <div class="frontPage">
+      <div class="headline"><h1>Join 360</h1><div class="divider"></div><p>Key Metrics at a Glance</p></div>
+      <div class="mainContent">
+        <div class="info">
+          <div class="row">
+            <div class="toDo">
+              <img class="icon" src="/assets/icons/edit_bg.svg" alt="">
+              <div class="taskInfo">
+                <p class="counter todoTaskAmount">0</p>
+                <p class="taskText">To-Do</p>
+              </div>
+            </div>
+            <div class="done">
+              <img class="icon" src="/assets/icons/check_bg.svg" alt="">
+              <div class="taskInfo">
+                <p class="counter doneTaskAmount">1</p>
+                <p class="taskText">Done</p>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="urgent">
+              <div class="urgentAmount">
+                <img class="icon" src="/assets/icons/prio_alta_big.svg" alt="">
+                <div class="taskInfo">
+                  <p class="counter urgentTaskAmount">2</p>
+                  <p class="taskText">Urgent</p>
+                </div>
+              </div>
+              <p class="divider"></p>
+              <div class="urgentDate taskInfo">
+                <p class="urgentTaskDate">May 31, 2025</p>
+                <p class="urgentTaskDateText">Upcoming Deadline</p>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="stats">
+              <div>
+                <div class="taskInfo">
+                  <p class="counter taskInBoard">3</p>
+                  <p class="taskText">Tasks in Board</p>
+                </div>
+              </div>
+              <div>
+                <div class="taskInfo">
+                  <p class="counter taskInProgress">4</p>
+                  <p class="taskText">Tasks in Progress</p>
+                </div>
+              </div>
+              <div>
+                <div class="taskInfo">
+                  <p class="counter awaitingFeedback">5</p>
+                  <p class="taskText">Awaiting Feedback</p>
+                </div>
+              </div>
+            </div>
+          </div>  
+        </div>
+        <div class="greetings">
+          <p>Good Morning,</p>
+          <p class="username">Johnny Test</p>
+        </div>
+      </div>
     </div>
-
-    </section>
-
   </main>
   
 </body>
