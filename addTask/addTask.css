@@ -48,8 +48,9 @@ body {
 }
 
 .navBarStyle {
+  flex-shrink: 0;
   width: 232px;
-  height: 1024px;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -196,6 +197,24 @@ p {
   gap: 8px;
 }
 
+.taskAddBoardContainer{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 50vw;
+  left: 50vh;
+  gap: 10px;
+  width: 326px;
+  height: 74px;
+  background-color: #2A3647;
+  box-shadow: 0px 0px 4px 0px #00000026;
+  border-radius: 20px;
+  color: #FFFFFF;
+;
+}
+
 .taskTitleInput {
   width: 440px;
   height: 48px;
@@ -299,7 +318,8 @@ p {
   gap: 8px;
   border: 1px;
   border-radius: 10px;
-  background: #ffffff;
+  background: #FFA800;
+  color: #FFFFFF;
   box-shadow: 0px 0px 4px 0px #0000001a;
   cursor: pointer;
 }
@@ -452,4 +472,8 @@ input:valid + .error-message {
 .createButton:hover{
   background: #29ABE2;
   box-shadow: 0px 4px 4px 0px #00000040;
+}
+
+.d_none{
+  display: none;
 }
