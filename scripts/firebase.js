@@ -3,6 +3,8 @@
 // Diese Funktionen sind asynchron und geben Promises zurück, die die Antwort der Firebase-Datenbank enthalten.
 // Diese Datei ist Teil des Projekts "Join DA" und wird in der Datei "index.js" importiert.
 
+
+
 const BASE_URL =
   "https://join-da-project-default-rtdb.europe-west1.firebasedatabase.app/";
 
@@ -70,9 +72,12 @@ export async function requestData(method = "GET", path = "", data = {}) {
   }
 
   const response = await fetch(BASE_URL + path + ".json", options);
+  const result = await response.json();
   if (!response.ok) {
     throw new Error(`Request failed: ${response.status}`);
   }
 
-  return response.json();
+  return { status: response.status, data: result };
 }
+
+
