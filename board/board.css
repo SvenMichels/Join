@@ -2,7 +2,7 @@ body {
   margin: 0;
   max-width: 1440px;
   height: 100vh;
-  background-color: #F6F7F8;
+  background-color: #f6f7f8;
 }
 
 /* HEADER */
@@ -141,31 +141,101 @@ p {
 
 .taskh1Container {
   width: 100%;
+  max-width: calc(1440px - 308px);
   height: 73px;
   position: absolute;
   top: 206px;
   left: 328px;
   display: flex;
-  gap: 1px;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .searchAddContainer {
-    display: flex; 
+  display: flex;
 }
 
 .board {
-    display: flex;
-    width: 1208px;
-height: 688px;
-top: 336px;
-left: 232px;
-padding-right: 64px;
-padding-left: 64px;
-gap: 26px;
-position: absolute;
-
+  display: flex;
+  width: 1208px;
+  height: 688px;
+  top: 336px;
+  left: 232px;
+  padding-right: 64px;
+  padding-left: 64px;
+  gap: 26px;
+  position: absolute;
 }
 
 .column {
-    
+  width: 246px;
+  height: 688px;
+  gap: 24px;
+}
+
+.searchField {
+  width: 312px;
+  height: 48px;
+  /* padding-top: 8px; */
+  /* padding-right: 16px; */
+  /* padding-bottom: 8px; */
+  /* padding-left: 16px; */
+  gap: 10px;
+  border-radius: 10px;
+  border-width: 1px;
+}
+
+.board-wrapper h2 {
+  width: 100%;
+  padding-right: 40px;
+  padding-left: 12px;
+  height: 40px;
+  box-sizing: border-box;
+}
+
+.board-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.board-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 20px;
+  width: 20px;
+  cursor: pointer;
+  opacity: 0.6;
+}
+
+.input-wrapper {
+  position: relative;
+  align-items: center;
+  width: 100%;
+  text-align: center;
+  justify-content: center;
+  display: flex;
+}
+
+.add_btn_default {
+  height: 48px;
+}
+
+.input-wrapper input {
+  width: 100%;
+  padding-right: 40px;
+  padding-left: 12px;
+  height: 48px;
+  box-sizing: border-box;
+}
+
+.input-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  cursor: pointer;
+  opacity: 0.6;
 }
