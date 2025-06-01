@@ -52,49 +52,48 @@
         </div>
     </nav>
     <div class="taskh1Container">
-        <h1>Add Task</h1>
+        <h1>Board</h1>
         <div class="searchAddContainer">
-            <div class="searchContainer">
-                <input id="" class="" type="text" placeholder="Find Task" onkeyup="">
+            <div class="searchContainer input-wrapper">
+                <input id="" class="searchField" type="text" placeholder="Find Task" onkeyup="">
                 <div class=""></div>
-                <img onclick="" class="" src="../assets/icons/search.svg" alt="">
+                <img onclick="" class="input-icon" src="../assets/icons/search.svg" alt="">
             </div>
-            <div onclick="" class="addContainer">
-                <div class="">Add task</div>
-                <img class="" src="../assets/icons/add_task.svg" alt="">
-            </div>
+
+                <img class="add_btn_default" src="../assets/icons/add_task_default.svg" alt="">
+
         </div>
     </div>
 
     <main class="board">
         <section class="column" data-status="todo">
-            <header>
+            <header class="board-wrapper">
                 <h2>To Do</h2>
-                <button class="add-task-btn" aria-label="Add Task"></button>
+                <img id="add-task-btn" class="board-icon" src="../assets/icons/add_task_btn.svg" alt="">
             </header>
             <div class="task-list" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
         </section>
 
         <section class="column" data-status="in-progress">
-            <header>
+            <header class="board-wrapper">
                 <h2>In Progress</h2>
-                <button class="add-task-btn" aria-label="Add Task"></button>
+                <img id="add-task-btn" class="board-icon" src="../assets/icons/add_task_btn.svg" alt="">
             </header>
             <div class="task-list" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
         </section>
 
         <section class="column" data-status="await">
-            <header>
+            <header class="board-wrapper">
                 <h2>Await Feedback</h2>
-                <button class="add-task-btn" aria-label="Add Task"></button>
+                <img id="add-task-btn" class="board-icon" src="../assets/icons/add_task_btn.svg" alt="">
             </header>
             <div class="task-list" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
         </section>
 
         <section class="column" data-status="done">
-            <header>
+            <header class="board-wrapper">
                 <h2>Done</h2>
-                <button class="add-task-btn" aria-label="Add Task"></button>
+                <img id="add-task-btn" class="board-icon" src="../assets/icons/add_task_btn.svg" alt="">
             </header>
             <div class="task-list" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
         </section>
