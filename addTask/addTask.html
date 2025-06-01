@@ -17,6 +17,7 @@
           <img class="helpIcon" src="../assets/icons/help.svg" alt="help.svg" />
         </div>
         <img
+          onclick="showSubMenu()"
           class="profileIcon"
           src="../assets/icons/user_profile_initials.svg"
           alt="profil_dummy"
@@ -61,6 +62,11 @@
         <a href="../privatPolicy.html" class="taskFrameLink">Legal notice</a>
       </div>
     </nav>
+    <div id="subMenuContainer" class="subMenuContainer d_none">
+      <button onclick="changeToPolicy()" class="subMenuButtons">Privat Policy</button>
+      <button onclick="changeToLegalNotice()" class="subMenuButtons">Legal Notice</button>
+      <button class="subMenuButtons">Log out</button>
+    </div>
     <div class="taskh1Container">
       <h1>Add Task</h1>
     </div>
@@ -129,22 +135,30 @@
       <div class="prioAssignedContainer">
         <p>Assigned to</p>
         <div class="prioAssignInput">
-        <input class="assignInput" type="text" placeholder="Search..."/>
-        <img src="../assets/icons/arrow_drop_down.svg">
+          <input class="assignInput" type="text" placeholder="Search..." />
+          <img src="../assets/icons/arrow_drop_down.svg" />
         </div>
       </div>
       <div class="prioCategoryContainer">
         <p>Category<span style="color: #ff8190">*</span></p>
         <div class="prioCategoryInput">
-        <input class="categoryInput" type="text" placeholder="Select task category" />
-        <img src="../assets/icons/arrow_drop_down.svg">
+          <input
+            class="categoryInput"
+            type="text"
+            placeholder="Select task category"
+          />
+          <img src="../assets/icons/arrow_drop_down.svg" />
         </div>
       </div>
       <div class="prioSubtaskContainer">
         <p>Subtasks</p>
         <div class="prioSubtaskInput">
-          <input class="subtaskInput" type="text" placeholder="Add new subtask"/>
-          <img class="taskPrioIcons" src="../assets/icons/add.svg">
+          <input
+            class="subtaskInput"
+            type="text"
+            placeholder="Add new subtask"
+          />
+          <img class="taskPrioIcons" src="../assets/icons/add.svg" />
         </div>
       </div>
     </div>
@@ -152,9 +166,9 @@
       <span><span style="color: #ff8190">*</span>This field is required</span>
     </div>
     <div class="taskAddBoardContainer d_none">
-        <span>Task added to board</span>
-        <img class="navIcons" src="../assets/icons/board.svg" />
-      </div>
+      <span>Task added to board</span>
+      <img class="navIcons" src="../assets/icons/board.svg" />
+    </div>
     <div class="createContainer">
       <button class="clearButton">
         Clear<img src="../assets/icons/iconoir_cancel.svg" />
