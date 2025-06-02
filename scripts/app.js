@@ -1,9 +1,45 @@
 import { loadData, postData, deleteData, requestData } from "./firebase.js";
 import { formatFirebaseData, loadTasks } from "./utils/helpers.js";
+import { createUser } from "./users/users.js";
+import { getNewUserInput } from "../signup/signup.js";
 
-
-export function init() {
+export async function init() {
   console.log("App initialized");
+
+  const form = document.getElementById("signUpForm");
+  if (!form) return console.warn("signUpForm not found");
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    console.log("Submit triggered");
+    await getNewUserInput();
+  });
+
+  const checkBox = document.getElementById("checkBox");
+  const signUpBtn = document.getElementById("signUpBtn");
+  if (checkBox && signUpBtn) {
+    checkBox.addEventListener("change", () => {
+      signUpBtn.disabled = !checkBox.checked;
+    });
+  }
+}
+
+init();
+
+// async function randomTest() {
+//   const response = await requestData("POST", "/users/", {
+//     userName: "test User",
+//     userEmail: "blabla@bla.com",
+//     userAssignedTo: "",
+//     password: "123",
+//     userTelephone: "0123456789",
+//   });
+//   const userId = response.data.name;
+
+//   await requestData("PATCH", `/users/${userId}`, {
+//     id: userId + "RANDOMUSERID",
+//   });
+// }
 
 //   requestData("PUT", "tasks", {
 //     taskHead: "Random Task",
@@ -64,18 +100,3 @@ export function init() {
 //     ],
 //     tasksInfo: "This is additional information about the user.",
 //   });
-
-
-//   requestData("POST", "/tasks/", {
-//     taskHead: "Example Task",
-//     taskDescription: "This is an example task description.",
-//     taskAssignedTo: "",
-//     taskPriority: "",
-//     subTasks: [],
-//   });
-
-loadTasks();
-
-}
-
-init();
