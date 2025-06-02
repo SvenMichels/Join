@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="de">
+<<<<<<< Updated upstream
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -15,9 +16,21 @@
 
     <script type="module" src="./index.js"></script>
   </head>
+=======
+>>>>>>> Stashed changes
 
-  <body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Join – Kanban Board</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="./index.css" />
+  <link rel="stylesheet" href="styles/fonts.css" />
+</head>
 
+<<<<<<< Updated upstream
     <img id="bigLogo" class="bigLogo" src="./assets/icons/join_logo_2.svg" alt="">
 
     <div class="logInHeader">
@@ -26,45 +39,46 @@
         <p class="signUpTxt">Not a Join user?</p>
         <button class="signUpBtn btn">Sign up</button>
       </div>
+=======
+<body>
+
+  <div class="logInHeader">
+    <img class="logo" src="./assets/icons/join_logo_1.png" />
+    <div class="signUpConatainer">
+      <p>Not a Join user?</p>
+      <button>Sign up</button>
+    </div>
+  </div>
+
+  <div class="logInContainer">
+    <div class="logInTxt">
+      <h1>Log in</h1>
+      <div class="h1Underline"></div>
+>>>>>>> Stashed changes
     </div>
 
-    <div class="logInContainer">
-      <div class="logInTxt">
-        <h1>Log in</h1>
-        <div class="h1Underline"></div>
+    <form>
+      <div class="textareaIconComb">
+        <img class="mailIcon" src="./assets/icons/mail.svg" alt="" />
+        <textarea class="email" type="text" required placeholder="E-Mail" id="loginEmail"></textarea>
       </div>
-
-      <form>
-        <div class="textareaIconComb">
-          <img class="mailIcon" src="./assets/icons/mail.svg" alt="" />
-          <textarea
-            class="email"
-            type="text"
-            required
-            placeholder="E-Mail"
-          ></textarea>
-        </div>
-        <div class="textareaIconComb">
-          <img class="passwordIcon" src="./assets/icons/lock.svg" alt="" />
-          <textarea
-            class="password"
-            type="text"
-            required
-            placeholder="Password"
-          ></textarea>
-        </div>
-      </form>
-
-      <div class="buttonContainer">
-        <button class="btn logIn">Log in</button>
-        <button class="btn guestLogIn">Guest Log in</button>
+      <div class="textareaIconComb">
+        <img class="passwordIcon" src="./assets/icons/lock.svg" alt="" />
+        <textarea class="password" type="text" required placeholder="Password" id="loginPassword"></textarea>
       </div>
+    </form>
+
+    <div class="buttonContainer">
+      <button class="btn logIn">Log in</button>
+      <button class="btn guestLogIn">Guest Log in</button>
     </div>
+  </div>
 
-    <footer class="footer">
-      <p class="txtFooterDesign">Privacy Policy</p>
-      <p class="txtFooterDesign">Legal notice</p>
-    </footer>
-    <script type="module" src="./scripts/app.js"></script>
-  </body>
+  <footer class="footer">
+    <p class="txtFooterDesign">Privacy Policy</p>
+    <p class="txtFooterDesign">Legal notice</p>
+  </footer>
+  <script type="module" src="./scripts/app.js"></script>
+</body>
+
 </html>

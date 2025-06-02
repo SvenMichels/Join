@@ -1,4 +1,5 @@
 import { requestData } from "../firebase.js";
+<<<<<<< Updated upstream
 import { getNewUserInput } from "../../signup/signup.js";
 
 export async function createUser(userData) {
@@ -17,6 +18,15 @@ export async function createUser(userData) {
     console.error("Error creating user:", error);
     throw error;
   }
+=======
+
+export async function createUser(userData) {
+  const customId = response.data.name;
+  const dataWithId = { ...userData, id: customId };
+
+  await requestData("PUT", `/users/${customId}`, dataWithId);
+  return customId;
+>>>>>>> Stashed changes
 }
 
 export async function getUser(userId) {
@@ -30,4 +40,8 @@ export async function updateUser(userId, updatedData) {
 
 export async function deleteUser(userId) {
   return await requestData("DELETE", `/users/${userId}`);
+<<<<<<< Updated upstream
 }
+=======
+}
+>>>>>>> Stashed changes
