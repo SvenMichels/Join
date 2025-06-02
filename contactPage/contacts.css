@@ -2,6 +2,22 @@ body{
     margin: 0;
 }
 
+.header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0px 4px 4px 0px #000000;
+    max-width: 1440px;
+    height: 96px;
+    padding: 20px 40px 20px 348px;
+}
+
+.headerTxt{
+    font-family: 'Inter';
+    font-weight: 400;
+    font-size: 20px;
+}
+
 .headerBtns{
     display: flex;
     align-items: center;
@@ -30,4 +46,31 @@ body{
 .profileBtn:hover{
     background-color: #2a3647;
     color: #FFFFFF;
+}
+
+.sidebar{
+    display: flex;
+    flex-direction: column;
+}
+
+.navSidebar{
+    position: absolute;
+    width: 232px;
+    height: 100vh;
+    background-color: #2a3647;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-between;
+    padding:64px 0px 64px 0px;
+}
+
+.logo{
+    width: 100px;
+    height: 122px
+}
+
+.legalSites{
+    display: flex;
+    flex-direction: column;
 }
