@@ -16,7 +16,7 @@ body {
   height: 96px;
   padding: 20px 40px 20px 348px;
   box-shadow: 0px 4px 4px 0px #0000001a;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
 }
 
 .profileContainer {
@@ -45,7 +45,7 @@ body {
   height: 56px;
 }
 
-.profileIcon:hover{
+.profileIcon:hover {
   cursor: pointer;
 }
 
@@ -83,20 +83,20 @@ body {
   padding: 10px;
 }
 
-.subMenuButtons{
+.subMenuButtons {
   width: 130px;
   height: 46px;
   padding: 8px 16px 8px 16px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  background-color: #2A3647;
+  background-color: #2a3647;
   border: 0px;
-  color: #CDCDCD;
+  color: #cdcdcd;
 }
 
-.subMenuButtons:hover{
-  background-color: #2A3D59;
+.subMenuButtons:hover {
+  background-color: #2a3d59;
 }
 
 /* NavBar */
@@ -114,6 +114,18 @@ body {
   display: flex;
   flex-direction: column;
   gap: 15px;
+}
+
+.navBtnLogIn {
+  background-color: #2a3647;
+  color: #cdcdcd;
+  width: 232px;
+  height: 46px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .taskSummary {
@@ -185,11 +197,21 @@ body {
   align-items: center;
 }
 
+.privatLink {
+  width: 232px;
+  gap: 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #091931;
+}
+
 .taskFrameLink {
+  display: flex;
+  align-items: center;
   color: #cdcdcd;
-  border: none;
   text-decoration: none;
-  width: 121px;
   height: 35px;
   padding: 8px;
 }
@@ -209,10 +231,18 @@ p {
 }
 
 /* Policy Section */
-.policyContainer{
-    display: flex;
-    flex-direction: column;
-    padding-top: 215px;
-    padding-left: 328px;
-    max-width: 1016px;
+.policyContainer {
+  display: flex;
+  flex-direction: column;
+  padding-top: 215px;
+  padding-left: 328px;
+  max-width: 1016px;
+}
+
+a:hover {
+  color: #29abe2;
+}
+
+.d_none {
+  display: none;
 }
