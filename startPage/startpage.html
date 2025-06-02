@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-
+<!-- (=^.^=) -->
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Join – Kanban Board</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="styles/standard.css">
-  <link rel="stylesheet" href="styles/fonts.css">
+  <!-- <link rel="stylesheet" href="/styles/standard.css"> -->
+  <link rel="stylesheet" href="/styles/fonts.css">
   <link rel="stylesheet" href="startPage.css">
-  <script src="scripts/app.js"></script>
+  <script src="/scripts/app.js"></script>
 </head>
 
 <body>
@@ -43,7 +42,6 @@
             <a href="../datenschutz.html" class="taskFrameLink">Legal notice</a>
         </div>
     </nav>
-
   <main>
     <header>
       <p>Kanban Project Management Tool</p>
@@ -52,20 +50,23 @@
         <img src="/assets/icons/user_profile_initials.svg" alt="" class="icon">
       </div>
     </header>
+      
     <div class="frontPage">
       <div class="headline"><h1>Join 360</h1><div class="divider"></div><p>Key Metrics at a Glance</p></div>
       <div class="mainContent">
         <div class="info">
           <div class="row">
-            <div class="toDo">
-              <img class="icon" src="/assets/icons/edit_bg.svg" alt="">
+            <div class="toDo btn" onclick="">
+              <img class="icon defaultIcon" src="/assets/icons/edit_bg.svg" alt="">
+              <img class="icon invertedIcon" src="/assets/icons/edit_inverted.svg" alt="" id="">
               <div class="taskInfo">
                 <p class="counter todoTaskAmount">0</p>
                 <p class="taskText">To-Do</p>
               </div>
             </div>
-            <div class="done">
-              <img class="icon" src="/assets/icons/check_bg.svg" alt="">
+            <div class="done btn" onclick="">
+              <img class="icon defaultIcon" src="/assets/icons/check_bg.svg" alt="">
+              <img src="/assets/icons/check_inverted.svg" alt="" class="icon invertedIcon">
               <div class="taskInfo">
                 <p class="counter doneTaskAmount">1</p>
                 <p class="taskText">Done</p>
@@ -73,7 +74,7 @@
             </div>
           </div>
           <div class="row">
-            <div class="urgent">
+            <div class="urgent btn" onclick="">
               <div class="urgentAmount">
                 <img class="icon" src="/assets/icons/prio_alta_big.svg" alt="">
                 <div class="taskInfo">
@@ -91,19 +92,19 @@
           <div class="row">
             <div class="stats">
               <div>
-                <div class="taskInfo">
+                <div class="taskInfo btn">
                   <p class="counter taskInBoard">3</p>
                   <p class="taskText">Tasks in Board</p>
                 </div>
               </div>
               <div>
-                <div class="taskInfo">
+                <div class="taskInfo btn">
                   <p class="counter taskInProgress">4</p>
                   <p class="taskText">Tasks in Progress</p>
                 </div>
               </div>
               <div>
-                <div class="taskInfo">
+                <div class="taskInfo btn">
                   <p class="counter awaitingFeedback">5</p>
                   <p class="taskText">Awaiting Feedback</p>
                 </div>

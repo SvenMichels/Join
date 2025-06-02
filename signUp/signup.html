@@ -16,7 +16,7 @@
     <img class="logo" src="../assets/icons/join_logo_1.png" alt="" />
     <div class="form-container">
 
-      <form onsubmit="signUp(); return false;">
+<form id="signUpForm">
         <div class="form-header">
           <img class="pointer" src="../assets/icons/arrow-left-line.svg" alt=""
             onclick="window.location.href='../index.html'">
@@ -51,7 +51,7 @@
             <input id="checkBox" type="checkbox" />
             I accept the&nbsp;<a href="">Privacy policy</a>
           </label>
-          <button id="signUpBtn" type="submit" disabled="disabled">Sign up</button>
+          <button id="signUpBtn" type="submit" disabled>Sign up</button>
         </div>
       </form>
 
@@ -60,7 +60,7 @@
         <p>Legal Notice</p>
       </footer>
   </main>
-  <script src="./signup.js"></script>
+  <script type="module" src="../scripts/app.js"></script>
 </body>
 
 </html>

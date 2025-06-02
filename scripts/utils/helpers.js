@@ -7,7 +7,7 @@ import { requestData } from "../firebase.js";
 
 export function formatFirebaseData(data) {
   if (!data || typeof data !== "object") return [];
-
+  
   return Object.entries(data).map(([id, value]) => ({
     id,
     ...value,
