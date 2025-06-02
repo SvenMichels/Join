@@ -1,10 +1,13 @@
+/* (=^.^=) */
 body{
     margin: 0;
     display: flex;
     flex-direction: row;
     height: 100vh;
     width: 100vw;
-    overflow-y: hidden;
+    /* overflow-y: hidden; */
+    font-family: Inter;
+    background-color: #F6F7F8;
 }
 
 a{
@@ -138,7 +141,8 @@ main{
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    padding-left: 116px;
+    gap: 50px;
+    /* padding-left: 116px; */
 }
 
 header{
@@ -149,6 +153,11 @@ header{
     padding: 20px 40px 20px 0px;
     height: 96px;
     box-shadow: 0px 4px 4px 0px #0000001a;
+    background-color: #ffffff;
+}
+
+header p{
+  padding-left: 116px;
 }
 
 .profile{
@@ -164,7 +173,8 @@ header{
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 100px;
+    gap: 50px;
+    padding-left: 116px;
 }
 
 .headline{
@@ -219,7 +229,7 @@ header{
     flex-direction: column;
     width: 100%;
     max-width: 560px;
-    gap: 70px;
+    gap: 30px;
 }
 
 .row{
@@ -235,7 +245,7 @@ header{
 .stats{
     display: flex;
     align-items: center;
-    gap: 40px;
+    gap: 18px;
 }
 
 .urgent, .stats{
@@ -268,4 +278,54 @@ header{
 .taskText{
     font-size: 20px;
     color: #2A3647;
+}
+
+/* BUTTON STYLING */
+.btn{
+  background-color: white;
+  padding: 36px 65px;
+  border-radius: 30px;
+}
+
+.invertedIcon{
+  display: none;
+}
+
+.btn:hover{
+  cursor: pointer;
+  transform: scale(1.05);
+  background-color: #2A3647;
+  color: white;
+}
+.btn:hover .taskText{
+  color: white;
+}
+
+.btn:hover .urgentDate p{
+  color: white;
+}
+
+.btn:hover .defaultIcon{
+  display: none;
+}
+
+.btn:hover .invertedIcon{
+  display: inline;
+  background-color: white;
+  border-radius: 50%;
+}
+
+
+/* GREETING_SECTION  */
+
+.greetings p:first-child{
+  font-weight: 500;
+  color: #2A3647;
+  font-size: 47px;
+}
+
+.username{
+  font-weight: 700;
+  color: #29ABE2;
+  font-size: 64px;
 }
