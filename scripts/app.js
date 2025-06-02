@@ -1,40 +1,10 @@
 import { loadData, postData, deleteData, requestData } from "./firebase.js";
 import { formatFirebaseData, loadTasks } from "./utils/helpers.js";
 import { createUser } from "./users/users.js";
-<<<<<<< Updated upstream
 import { getNewUserInput } from "../signup/signup.js";
-=======
->>>>>>> Stashed changes
 
 export async function init() {
   console.log("App initialized");
-  requestData("PUT", "/", {
-    userName: "test User",
-    userEmail: "blabla@bla.comdfgdfgdfgdfgdf",
-    userAssignedTo: "",
-    password: "123",
-    userTelephone: "0123456789",
-  })
-  // createUser(userData);
-}
-
-init();
-
-async function randomTest() {
-  const response = await requestData("POST", "/users/", {
-    userName: "test User",
-    userEmail: "blabla@bla.com",
-    userAssignedTo: "",
-    password: "123",
-    userTelephone: "0123456789",
-  });
-  const userId = response.data.name;
-
-  await requestData("PATCH", `/users/${userId}`, {
-    id: userId + "RANDOMUSERID",
-  });
-}
-
 
   const form = document.getElementById("signUpForm");
   if (!form) return console.warn("signUpForm not found");
