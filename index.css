@@ -1,9 +1,14 @@
+html{display: flex;
+    justify-content: center;
+    
+}
+
 body{
     font-family: "Inter";
     margin: 0;
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
     max-width: 1440px;
     height: 100vh;
@@ -15,6 +20,22 @@ body{
     align-items: start;
     justify-content: space-between;
     flex-direction: row;
+    padding-top: 50px;
+}
+
+.signUpContainer{
+    display: flex;
+    flex-direction: row;
+    width: 279px;
+    height: 49px;
+}
+
+.signUpTxt{
+    width: 153px;
+    height: 24px;
+    font-family: "Inter";
+    font-weight: 400;
+    font-size: 20px;
 }
 
 .logo{
@@ -22,6 +43,32 @@ body{
     height: 122px;
     top: 80px;
     left: 77px;
+}
+
+.bigLogo {
+    z-index: 999;
+    position: absolute;
+    display: flex;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100%;
+    max-width: 1440px;
+    height: 100%;
+    background-color: #FFFFFF;
+    padding: 0;
+    transition: all 0.5s ease;
+}
+
+.bigLogo.shrinkToLogo{
+    position: absolute;
+    width: 100px;
+    height: 122px;
+    top: 80px;
+    left: 77px;
+    padding: 0;
+    background-color: transparent;
+    transition: all 1.6s ease;
+
 }
 
 h1{
@@ -129,6 +176,16 @@ form{
     color: #FFFFFF;
 }
 
+.signUpBtn{
+    width: 91px !important;
+    height: 49px !important;
+    padding: 15px 16px 15px 16px !important;
+    gap: 10px !important;
+    font-family: "Inter";
+    font-weight: 700;
+    font-size: 16px;
+}
+
 .guestLogIn{
     width: 177px;
 }
@@ -146,6 +203,7 @@ form{
     flex-direction: row;
     justify-content: space-evenly;
     align-items: center;
+    padding-bottom: 50px;
 }
 
 .txtFooterDesign{
