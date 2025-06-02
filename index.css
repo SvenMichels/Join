@@ -45,6 +45,32 @@ body{
     left: 77px;
 }
 
+.bigLogo {
+    z-index: 999;
+    position: absolute;
+    display: flex;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100%;
+    max-width: 1440px;
+    height: 100%;
+    background-color: #FFFFFF;
+    padding: 0;
+    transition: all 0.5s ease;
+}
+
+.bigLogo.shrinkToLogo{
+    position: absolute;
+    width: 100px;
+    height: 122px;
+    top: 80px;
+    left: 77px;
+    padding: 0;
+    background-color: transparent;
+    transition: all 1.6s ease;
+
+}
+
 h1{
     font-weight: 700;
     font-size: 61px;
