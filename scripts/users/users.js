@@ -1,15 +1,13 @@
 import { requestData } from "../firebase.js";
-import { getNewUserInput } from "../../signup/signup.js";
+// import { getNewUserInput } from "../../signup/signup.js";
 
 export async function createUser(userData) {
   try {
-    // 1. Neue ID generieren durch POST an /users.json
     const response = await requestData("POST", "/users", userData); // Firebase erzeugt automatisch eine ID
 
     const customId = response.data.name; // 'name' enthält die Firebase-ID
     const dataWithId = { ...userData, id: customId };
 
-    // 2. Daten mit ID erneut unter /users/:id.json speichern
     await requestData("PUT", `/users/${customId}`, dataWithId);
 
     return customId;
