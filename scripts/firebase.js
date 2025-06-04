@@ -3,8 +3,6 @@
 // Diese Funktionen sind asynchron und geben Promises zurück, die die Antwort der Firebase-Datenbank enthalten.
 // Diese Datei ist Teil des Projekts "Join DA" und wird in der Datei "index.js" importiert.
 
-
-
 const BASE_URL =
   "https://join-da-project-default-rtdb.europe-west1.firebasedatabase.app/";
 
