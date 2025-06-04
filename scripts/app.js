@@ -1,27 +1,12 @@
 import { loadData, postData, deleteData, requestData } from "./firebase.js";
 import { formatFirebaseData, loadTasks } from "./utils/helpers.js";
 import { createUser } from "./users/users.js";
-import { getNewUserInput } from "../signup/signup.js";
+// import { getNewUserInput } from "../signup/signup.js";
+import { loginListeners } from "./events/loginevents.js";
 
 export async function init() {
   console.log("App initialized");
 
-  const form = document.getElementById("signUpForm");
-  if (!form) return console.warn("signUpForm not found");
-
-  form.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    console.log("Submit triggered");
-    await getNewUserInput();
-  });
-
-  const checkBox = document.getElementById("checkBox");
-  const signUpBtn = document.getElementById("signUpBtn");
-  if (checkBox && signUpBtn) {
-    checkBox.addEventListener("change", () => {
-      signUpBtn.disabled = !checkBox.checked;
-    });
-  }
 }
 
 init();
