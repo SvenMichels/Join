@@ -1,12 +1,23 @@
+html{
+    display: flex;
+    justify-content: center;
+    height: 1024px;
+}
+
 body{
     margin: 0;
+    font-family: 'Inter';
+    max-width: 1440px;
+    max-height: 1024px;
+    width: 1440px;
+    height: 1024px;
 }
 
 .header{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    box-shadow: 0px 4px 4px 0px #000000;
+    box-shadow: 4px 0px 4px 0px #000000;
     max-width: 1440px;
     height: 96px;
     padding: 20px 40px 20px 348px;
@@ -46,17 +57,19 @@ body{
 .profileBtn:hover{
     background-color: #2a3647;
     color: #FFFFFF;
+    cursor: pointer;
 }
 
 .sidebar{
     display: flex;
     flex-direction: column;
+    
 }
 
 .navSidebar{
     position: absolute;
     width: 232px;
-    height: 100vh;
+    height: 1024px;
     background-color: #2a3647;
     display: flex;
     align-items: center;
@@ -65,12 +78,113 @@ body{
     padding:64px 0px 64px 0px;
 }
 
+.navLinks{
+
+    display: flex;
+    justify-content: start;
+    gap: 20px;
+    color: #CDCDCD;
+    padding: 8px 0px 8px 18px;
+}
+
+.navbar{
+    width: 100%;
+    cursor: pointer;
+}
+
+.navLinks:hover{
+    color: #FFFFFF;
+    background-color: #091931;
+}
+
 .logo{
     width: 100px;
     height: 122px
 }
 
 .legalSites{
+    color: #A8A8A8;
     display: flex;
     flex-direction: column;
+}
+
+.txt:hover{
+    cursor: pointer;
+}
+
+.contactList{
+    background-color: #FFFFFF;
+    display: flex;
+    justify-content: center;
+    width: 456px;
+    margin-left: 232px;
+    padding-top: 96px;
+    height: 920px;
+    box-shadow: 0px 4px 4px #000000;
+}
+
+.content{
+    display: flex;
+    flex-direction: row;
+    
+}
+
+.newContact{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 352px;
+    height: 56px;
+    gap: 16px;
+    padding: 12px 0px 12px 0px;
+    margin-top: 22px;
+    left: 52px;
+    border: 1px solid #2a3647;
+    border-radius: 10px;
+    font-family: 'Inter';
+    font-weight: 700;
+    font-size: 21px;
+    background-color: #2a3647;
+    color: #FFFFFF;
+}    
+
+.newContactIcon{
+    width: 32px;
+    height: 32px;
+    top: 18px;
+    left: 257px;
+}
+
+.singleContact{
+    display: flex;
+}
+
+.bar{ 
+    height: 59px;
+    border: 3px solid #29ABE2;
+}
+
+.contactHeader{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 200px;
+    margin-left: 70px;
+    gap: 30px;
+    width: 569px;
+    height: 73px;
+}
+
+h1{
+    font-family: 'Inter';
+    font-weight: 700;
+    font-size: 61px;
+    color: #000000;
+}
+
+h2{
+    font-family: 'Inter';
+    font-weight: 400;
+    font-size: 27px;
+    color: #2a3647;
 }
