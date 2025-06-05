@@ -1,6 +1,6 @@
 import { loginUser, loginAsGuest } from "../auth/login.js";
 
-export function loginListeners() {
+export async function loginListeners() {
   const loginForm = document.getElementById("loginForm");
   if (!loginForm) return console.warn("loginForm not found");
   document.querySelector(".logIn").addEventListener("click", async () => {
@@ -9,8 +9,9 @@ export function loginListeners() {
 
     try {
       const user = await loginUser(email, password);
+
       alert(`Willkommen zurück, ${user.name || "User"}!`);
-      // window.location.href = "/board.html";
+      window.location.href = "../../board/board.html";
     } catch (err) {
       alert(err.message);
     }
@@ -20,7 +21,7 @@ export function loginListeners() {
     try {
       const guest = await loginAsGuest();
       alert(`Eingeloggt als Gast: ${guest.name || "Testuser"}`);
-      // window.location.href = "/board.html";
+      window.location.href = "../../board/board.html";
     } catch (err) {
       alert(err.message);
     }
