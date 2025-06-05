@@ -115,10 +115,10 @@ body{
 .contactList{
     background-color: #FFFFFF;
     display: flex;
-    justify-content: center;
+    align-items: center;
+    flex-direction: column;
     width: 456px;
     margin-left: 232px;
-    padding-top: 96px;
     height: 920px;
     box-shadow: 0px 4px 4px #000000;
 }
@@ -330,4 +330,70 @@ h2{
     width: 140px;
     height: 128px;
     gap: 22px;
+}
+
+.startLetter{
+    font-family: 'Inter';
+    font-weight: 400;
+    font-size: 20px;
+    color: #000000;
+    display: flex;
+    align-items: center;
+    width: 352px;
+    height: 58px;
+    padding: 17px 36px 17px 36px;
+}
+
+.stripe{
+    width: 352px;
+    border: 1px solid #D1D1D1;
+    border-radius: 3px;
+    margin: 8px 36px 8px 36px;
+    gap: 10px;
+}
+
+.contact{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 352px;
+    height: 78px;
+    gap: 35px;
+    border: 1px solid #2a3647;
+    border-radius: 10px;
+    background-color: #2a3647;
+    padding: 15px 35px 15px 36px
+}
+
+.pic{
+    width: 42px;
+    height: 42px;
+    border: 2px solid #FFFFFF;
+    border-radius: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #FF7A00;
+}
+
+.contactName{
+    width: 141px;
+    height: 24px;
+    font-family: 'Inter';
+    font-weight: 400;
+    font-size: 20px;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    
+}
+
+.contactEmail{
+    width: 160px;
+    height: 19px;
+    font-family: 'Inter';
+    font-size: 16px;
+    font-weight: 400;
+    margin-top: 5px;
+    color: #007cee;
 }
