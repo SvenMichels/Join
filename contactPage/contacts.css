@@ -157,6 +157,7 @@ body{
 
 .singleContact{
     display: flex;
+    flex-direction: column;
 }
 
 .bar{ 
@@ -187,4 +188,146 @@ h2{
     font-weight: 400;
     font-size: 27px;
     color: #2a3647;
+}
+
+.bigContact{
+    display: flex;
+    justify-content: center;
+}
+
+.profilePic{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Inter';
+    font-weight: 500;
+    font-size: 47px;
+    color: #FFFFFF;
+    width: 120px;
+    height: 120px;
+    background-color:#FF7A00;
+    border-radius: 70px;
+    border: 3px solid #FF7A00;
+
+}
+
+.profileName{
+    font-family: 'Inter';
+    font-size: 47px;
+    font-weight: 500;
+    margin: 0;
+}
+
+.profileHeader{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 54px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
+.nameBtns{
+    display: flex;
+    flex-direction: column;
+    height: 56px;
+
+}
+
+.btns{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 159px;
+    height: 24px;
+    gap: 20px;
+    font-family: 'Inter';
+    font-weight: 400;
+    font-size: 16px;
+}
+
+.editBtn{
+    display: flex;
+    align-items:center;
+    gap: 4px;
+}
+
+.deleteBtn{
+    display: flex;
+    align-items:center;
+    gap: 4px;
+} 
+
+.infoContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+
+}
+
+.information{ 
+    width: 207px;
+    height: 59px;
+    font-family: 'Inter';
+    font-weight: 400;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+}
+
+.emailContainer{
+    display: flex;
+    flex-direction: column;
+    width: 140px;
+    height: 53px;
+    margin-bottom: 40px;
+}
+
+.email{
+    font-family: 'Inter';
+    font-weight: 700;
+    font-size: 16px;
+    color: #000000;
+}
+
+.emailAdress{
+    width: 140px;
+    height: 19px;
+    font-family: 'Inter';
+    font-weight: 400;
+    font-size: 16px;
+    color: #007cee;
+    margin: 0;
+    padding-bottom: 25px;
+}
+
+.numberContainer{
+    display: flex;
+    flex-direction: column;
+    width: 140px;
+    height: 53px;
+}
+
+.phone{
+    font-family: 'Inter';
+    font-weight: 700;
+    font-size: 16px;
+    color: #000000;
+    margin: 0;
+}
+
+.phoneNumber{
+    width: 140px;
+    height: 19px;
+    font-family: 'Inter';
+    font-weight: 400;
+    font-size: 16px;
+}
+
+.mailPhone{
+    width: 140px;
+    height: 128px;
+    gap: 22px;
 }
