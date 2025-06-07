@@ -11,11 +11,11 @@ function changeToLegalNotice() {
   window.location.href = "../impressum.html";
 }
 
-if (windows.location.pathname.enndsWith("addtask.html")) {
+if (window.location.pathname.endsWith("addtask.html")) {
   initAddtask();
 }
 
-function initAddtask {
+function initAddtask() {
   addEventListener();
 }
 
@@ -30,23 +30,3 @@ export function addEventListener() {
       error.style.display = "block";
     }
   })};
-
-function validateDataAndSave() {
-  const taskName = document.getElementById("taskName");
-  const taskDescription = document.getElementById("taskDescription");
-  const dateInput = document.getElementById("taskDate");
-
-  const userSelectedName = taskName.value;
-  const userSelectedDesc = taskDescription.value;
-  const userSelectedDate = dateInput.value;
-
-  if(userSelectedName === ""){
-    alert("Please Select a Title.")
-  }else if(userSelectedDesc === "")
-    {alert("Please Add a Description.")
-  }else if(userSelectedDate === ""){
-    alert("Please Add a Date.")
-  }else {
-    alert("Your Task was Addet to your Board")
-  }
-}
