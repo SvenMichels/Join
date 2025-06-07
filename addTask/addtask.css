@@ -249,13 +249,13 @@ p {
   left: 328px;
 }
 
-.taskTitle {
+/* .taskTitle {
   display: flex;
   flex-direction: column;
   width: 440px;
   height: 96px;
   gap: 8px;
-}
+} */
 
 .taskAddBoardContainer {
   display: flex;
@@ -274,14 +274,14 @@ p {
   color: #ffffff;
 }
 
-.taskTitleInput {
+/* .taskTitleInput {
   width: 440px;
   height: 48px;
   border-radius: 10px;
   border: 1px solid #d1d1d1;
-}
+} */
 
-.taskDescription {
+/* .taskDescription {
   display: flex;
   flex-direction: column;
   width: 440px;
@@ -294,9 +294,9 @@ p {
   height: 120px;
   border-radius: 10px;
   border: 1px solid #d1d1d1;
-}
+} */
 
-.taskDate {
+/* .taskDate {
   display: flex;
   flex-direction: column;
   width: 440px;
@@ -304,14 +304,14 @@ p {
   top: 296px;
   left: 0.25px;
   gap: 8px;
-}
+} */
 
-.taskDateInput {
+/* .taskDateInput {
   width: 440px;
   height: 96px;
   border-radius: 10px;
   border: 1px solid #d1d1d1;
-}
+} */
 
 .spaceContainer {
   position: fixed;
