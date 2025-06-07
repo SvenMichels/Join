@@ -249,13 +249,13 @@ p {
   left: 328px;
 }
 
-/* .taskTitle {
+.taskTitle {
   display: flex;
   flex-direction: column;
   width: 440px;
   height: 96px;
   gap: 8px;
-} */
+}
 
 .taskAddBoardContainer {
   display: flex;
@@ -274,14 +274,14 @@ p {
   color: #ffffff;
 }
 
-/* .taskTitleInput {
+.taskTitleInput {
   width: 440px;
   height: 48px;
   border-radius: 10px;
   border: 1px solid #d1d1d1;
-} */
+}
 
-/* .taskDescription {
+.taskDescription {
   display: flex;
   flex-direction: column;
   width: 440px;
@@ -294,9 +294,11 @@ p {
   height: 120px;
   border-radius: 10px;
   border: 1px solid #d1d1d1;
-} */
+}
 
-/* .taskDate {
+
+
+.taskDate {
   display: flex;
   flex-direction: column;
   width: 440px;
@@ -304,14 +306,15 @@ p {
   top: 296px;
   left: 0.25px;
   gap: 8px;
-} */
+}
 
-/* .taskDateInput {
+.taskDateInput {
+  padding-left:10px;
   width: 440px;
-  height: 96px;
+  height: 48px;
   border-radius: 10px;
   border: 1px solid #d1d1d1;
-} */
+}
 
 .spaceContainer {
   position: fixed;
@@ -514,8 +517,8 @@ input:valid + .error-message {
 .requiredContainer {
   width: 170px;
   height: 27px;
-  position: absolute;
-  top: 926px;
+  position: fixed;
+  top: 810px;
   left: 328px;
 }
 
@@ -524,8 +527,8 @@ input:valid + .error-message {
   gap: 16px;
   width: 309px;
   height: 56px;
-  position: absolute;
-  top: 889px;
+  position: fixed;
+  top: 810px;
   left: 995.25px;
 }
 
@@ -566,6 +569,25 @@ input:valid + .error-message {
 .createButton:hover {
   background: #29abe2;
   box-shadow: 0px 4px 4px 0px #00000040;
+}
+
+input::placeholder {
+  padding-left: 10px;
+}
+
+input[type=text]:focus {
+  border: 1px solid #29ABE2;
+  outline: 1px solid #29ABE2;
+}
+
+textarea::placeholder {
+  padding-top: 10px;
+  padding-left: 10px;
+}
+
+.taskTitleInput:focus {
+  border-color: #29ABE2;
+  border: 1px solid #29ABE2;
 }
 
 .d_none {

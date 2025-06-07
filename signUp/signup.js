@@ -54,9 +54,7 @@ export async function getNewUserInput() {
   const inputName = document.getElementById("inputName").value.trim();
   const inputEmail = document.getElementById("inputEmail").value.trim();
   const inputPassword = document.getElementById("inputPassword").value;
-  const inputConfirmPassword = document.getElementById(
-    "inputConfirmPassword"
-  ).value;
+  const inputConfirmPassword = document.getElementById("inputConfirmPassword").value;
 
   if (inputPassword !== inputConfirmPassword) {
     // alert("Passwords do not match");
