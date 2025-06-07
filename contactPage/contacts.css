@@ -148,6 +148,13 @@ body{
     color: #FFFFFF;
 }    
 
+.newContact:hover{
+    cursor: pointer;
+    background-color: #FFFFFF;
+    color: #2a3647;
+}
+
+
 .newContactIcon{
     width: 32px;
     height: 32px;

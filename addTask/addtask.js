@@ -1,14 +1,14 @@
 function showSubMenu() {
-  let subMenu = document.getElementById('subMenuContainer');
-  subMenu.classList.toggle('d_none');
+  let subMenu = document.getElementById("subMenuContainer");
+  subMenu.classList.toggle("d_none");
 }
 
 function changeToPolicy() {
-  window.location.href = '../privatPolicy.html';
+  window.location.href = "../privatPolicy.html";
 }
 
 function changeToLegalNotice() {
-  window.location.href = '../impressum.html';
+  window.location.href = "../impressum.html";
 }
 
 if (window.location.pathname.endsWith("addtask.html")) {
