@@ -20,7 +20,7 @@ function singleContact() {
             <div class="mailPhone">
               <div class="emailContainer">
                 <p class="email">Email</p>
-                <p class="emailAdress">marcel.kruck12@gmx.de</p>
+                <p id="eMail" class="emailAdress">marcel.kruck12@gmx.de</p>
               </div>
               <div class="numberContainer">
                 <p class="phone">Phone</p>
