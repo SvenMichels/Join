@@ -29,4 +29,26 @@ function singleContact() {
               </div>
             </div>
           </div>`;
+
+          // kommt in singleContact rein
+}
+
+function alphabetfilter(){
+    return`
+      <div class="startLetter">M</div>
+          <div class="stripe"></div>`
+
+          //muss in allContacts über contact
+}
+
+function contactCard(){
+    return`<div class="contact">
+            <div class="pic">MK</div>
+            <div class="nameAdressContainer">
+            <div class="contactName">Marcel Kruck</div>
+            <div class="contactEmail">marcel.kruck12@gmx.de</div>
+          </div>
+            </div>`
+
+            //kommt auch in allcontacts rein aber unter stripe
 }
