@@ -7,7 +7,6 @@ import { loginListeners } from "./events/loginevents.js";
 export async function init() {
   console.log("App initialized");
   loginListeners();
-
 }
 
 init();

@@ -12,21 +12,17 @@
       <div>
         <p>Kanban Project Management Tool</p>
       </div>
-      <div class="profileContainer">
-        <div class="helpContainer">
-          <img class="helpIcon" src="../assets/icons/help.svg" alt="help.svg" />
-        </div>
-        <img
-          onclick="showSubMenu()"
-          class="profileIcon"
-          src="../assets/icons/user_profile_initials.svg"
-          alt="profil_dummy"
-        />
-      </div>
     </header>
     <nav class="navBarStyle">
       <img class="logo" src="/assets/icons/join_white.svg" alt="Logo" />
       <div class="menu3">
+                  <button class="navBtnLogIn d_none">
+            <img
+              class="navIcons"
+              src="/assets/icons/login.svg"
+              alt=""
+            />Log In
+          </button>
         <div class="taskSummary">
           <button class="navBtn">
             <img
@@ -58,8 +54,10 @@
         </div>
       </div>
       <div class="taskFrame22">
-        <a href="../impressum.html" class="taskFrameLink">Privacy Policy</a>
-        <a href="../privatPolicy.html" class="taskFrameLink">Legal notice</a>
+        <div class="privatLink">
+          <a href="./privatpolicy.html" class="taskFrameLink">Privacy Policy</a>
+        </div>
+        <a href="../legalnotice.html" class="taskFrameLink">Legal notice</a>
       </div>
     </nav>
     <div id="subMenuContainer" class="subMenuContainer d_none">
@@ -179,6 +177,6 @@
     </div>
 
     <footer></footer>
-    <script src="../privatpolicy.js"></script>
+    <script type="module" src="addtask.js"></script>
   </body>
 </html>

@@ -11,46 +11,62 @@
 
 <body>
     <header class="headerStyle">
-        <div>
-            <p>Kanban Project Management Tool</p>
-        </div>
-        <div class="profileContainer">
-            <div class="helpContainer">
-                <img class="helpIcon" src="../assets/icons/help.svg" alt="help.svg" />
-            </div>
-            <img class="profileIcon" src="../assets/icons/user_profile_initials.svg" alt="profil_dummy" />
-        </div>
+      <div>
+        <p>Kanban Project Management Tool</p>
+      </div>
     </header>
     <nav class="navBarStyle">
-        <img class="logo" src="/assets/icons/join_white.svg" alt="Logo" />
-        <div class="menu3">
-            <div class="taskSummary">
-                <button class="navBtn">
-                    <img class="navIcons" src="/assets/icons/summary_2.svg" alt="" />Summary
-                </button>
-            </div>
-            <div class="taskFrame9">
-                <button class="navBtn">
-                    <img class="navIcons" src="/assets/icons/add_task.svg" alt="" />Add
-                    Task
-                </button>
-            </div>
-            <div class="taskBoard">
-                <button class="navBtnBoard">
-                    <img class="navIcons" src="/assets/icons/board.svg" alt="" />Board
-                </button>
-            </div>
-            <div class="taskContacts">
-                <button class="navBtn">
-                    <img class="navIcons" src="/assets/icons/contacts.svg" alt="" />Contacts
-                </button>
-            </div>
+      <img class="logo" src="/assets/icons/join_white.svg" alt="Logo" />
+      <div class="menu3">
+                  <button class="navBtnLogIn d_none">
+            <img
+              class="navIcons"
+              src="/assets/icons/login.svg"
+              alt=""
+            />Log In
+          </button>
+        <div class="taskSummary">
+          <button class="navBtn">
+            <img
+              class="navIcons"
+              src="/assets/icons/summary_2.svg"
+              alt=""
+            />Summary
+          </button>
         </div>
-        <div class="taskFrame22">
-            <a href="../impressum.html" class="taskFrameLink">Privacy Policy</a>
-            <a href="../datenschutz.html" class="taskFrameLink">Legal notice</a>
+        <div class="taskFrame9">
+          <button class="navBtn">
+            <img class="navIcons" src="/assets/icons/add_task.svg" alt="" />Add
+            Task
+          </button>
         </div>
+        <div class="taskBoard">
+          <button class="navBtnBoard">
+            <img class="navIcons" src="/assets/icons/board.svg" alt="" />Board
+          </button>
+        </div>
+        <div class="taskContacts">
+          <button class="navBtn">
+            <img
+              class="navIcons"
+              src="/assets/icons/contacts.svg"
+              alt=""
+            />Contacts
+          </button>
+        </div>
+      </div>
+      <div class="taskFrame22">
+        <div class="privatLink">
+          <a href="./privatpolicy.html" class="taskFrameLink">Privacy Policy</a>
+        </div>
+        <a href="../legalnotice.html" class="taskFrameLink">Legal notice</a>
+      </div>
     </nav>
+    <div id="subMenuContainer" class="subMenuContainer d_none">
+      <button onclick="changeToPolicy()" class="subMenuButtons">Privat Policy</button>
+      <button onclick="changeToLegalNotice()" class="subMenuButtons">Legal Notice</button>
+      <button class="subMenuButtons">Log out</button>
+    </div>
     <div class="taskh1Container">
         <h1>Board</h1>
         <div class="searchAddContainer">

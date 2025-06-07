@@ -8,9 +8,9 @@ export async function createUser(userData) {
     const customId = response.data.name; // 'name' enthält die Firebase-ID
     const dataWithId = { ...userData, id: customId };
 
-    await requestData("PUT", `/users/${customId}`, dataWithId);
+    
 
-    return customId;
+    return await requestData("PUT", `/users/${customId}`, dataWithId);
   } catch (error) {
     console.error("Error creating user:", error);
     throw error;

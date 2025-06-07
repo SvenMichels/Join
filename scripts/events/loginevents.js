@@ -11,7 +11,7 @@ export async function loginListeners() {
       const user = await loginUser(email, password);
 
       alert(`Willkommen zurück, ${user.name || "User"}!`);
-      window.location.href = "../../board/board.html";
+      window.location.href = "../../startpage/startpage.html";
     } catch (err) {
       alert(err.message);
     }
@@ -21,7 +21,7 @@ export async function loginListeners() {
     try {
       const guest = await loginAsGuest();
       alert(`Eingeloggt als Gast: ${guest.name || "Testuser"}`);
-      window.location.href = "../../board/board.html";
+      window.location.href = "../../startpage/startpage.html";
     } catch (err) {
       alert(err.message);
     }

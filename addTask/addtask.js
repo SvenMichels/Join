@@ -1,37 +1,33 @@
 function showSubMenu() {
-  let subMenu = document.getElementById('subMenuContainer');
-  subMenu.classList.toggle('d_none');
+  let subMenu = document.getElementById("subMenuContainer");
+  subMenu.classList.toggle("d_none");
 }
 
 function changeToPolicy() {
-  window.location.href = '../privatPolicy.html';
+  window.location.href = "../privatPolicy.html";
 }
 
 function changeToLegalNotice() {
-  window.location.href = '../impressum.html';
+  window.location.href = "../impressum.html";
 }
 
+if (window.location.pathname.endsWith("addtask.html")) {
+  initAddtask();
+}
 
-// export function addEventListener(input1, input2) {
-//   const input = document.getElementById("input1");
-//   const error = document.querySelector(".error-message");
+function initAddtask() {
+  addEventListener();
+}
 
-//   input.addEventListener("input2", () => {
-//     if (input.validity.valid) {
-//       error.style.display = "none";
-//     } else {
-//       error.style.display = "block";
-//     }
-//   });
-// }
+export function addEventListener() {
+  const input = document.getElementById("titleInput");
+  const error = document.querySelector(".error-message");
 
-  // const input = document.getElementById("input1");
-  // const error = document.querySelector(".error-message");
-
-  // input.addEventListener("input2", () => {
-  //   if (input.validity.valid) {
-  //     error.style.display = "none";
-  //   } else {
-  //     error.style.display = "block";
-  //   }
-  // });
+  input.addEventListener("error-message", () => {
+    if (input.validity.valid) {
+      error.style.display = "none";
+    } else {
+      error.style.display = "block";
+    }
+  });
+}
