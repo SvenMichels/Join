@@ -1,0 +1,237 @@
+.dp-none{
+    display: none !important;
+}
+
+.hoverPosition{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    width: 1440px;
+    height: 1164px;
+    z-index: 1000;
+    background-color: rgba(128, 128, 128, 0.527);
+    
+}
+
+.hoverWindow {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+    margin-left: 42px;
+    z-index: 10000;
+    width: 1212px;
+    height: 592px; 
+    border: 1px solid transparent;
+    border-radius: 30px;
+    box-shadow: 2px 2px 2px 2px grey;
+}
+
+.leftSide{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 467px;
+    height: 594px;
+    background-color: #2a3647;
+    border: 1px solid transparent;
+    border-radius: 30px 0px 0px 30px;
+}
+
+.leftContent{
+    gap: 12px;
+}
+
+.leftLogo{
+    width: 55px;
+    height: 66px;
+}
+
+.windowH1{
+    margin: 0;
+    width: 366px;
+    height: 73px;
+    font-family: 'Inter';
+    font-size: 61px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.windowSlogan{
+    width: 371px;
+    height: 32px;
+    margin: 0;
+    font-family: 'Inter';
+    font-size: 27px;
+    font-weight: 400;
+    color: #ffffff;
+}
+
+.underline{
+    width: 90px;
+    border: 3px solid #29abe2;
+    background-color: #29abe2;
+}
+
+.rightSide{
+    display: flex;
+    flex-direction: column;
+    height: 594px;
+    width: 745px;
+    background-color: #ffffff;
+    border: 1px solid transparent;
+    border-radius: 0px 30px 30px 0px;
+}
+
+.closeBtn{
+    width: 32px;
+    height: 32px;
+    margin-top: 48px;
+    margin-right: 48px;
+    margin-left: 652px;
+    font-family: 'Inter';
+    font-size: 32px;
+    display: flex;
+    justify-content: end;
+}
+
+.closeBtn:hover{
+    cursor: pointer;
+}
+.rightContent{
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: row;
+    align-items: center;
+    
+}
+
+.profileIcon{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 120px;
+    height: 120px;
+    border: 3px solid transparent;
+    border-radius: 70px;
+    background-color: #D1D1D1;
+}
+
+.addContactIcon{
+    width: 64px;
+    height: 64px;
+}
+
+.addContactForm{
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    gap: 32px;
+}
+
+textarea{
+    display: flex;
+    font-family: 'Inter';
+    font-size: 20px;
+    font-weight: 400;
+    resize: none;
+    width: 422px;
+    height: 50px;
+    border: 1px solid #d1d1d1;
+    border-radius: 10px;
+}
+
+textarea::placeholder{
+    color: #D1D1D1;
+    padding: 11px;
+}
+
+.pers{
+    display: flex;
+    align-items: center;
+    justify-content: end;
+}
+
+.mail{
+    display: flex;
+    align-items: center;
+    justify-content: end;
+}
+
+.call{
+    display: flex;
+    align-items: center;
+    justify-content: end;
+}
+
+.inputIconPers{
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    margin: 20px;
+}
+
+.inputIconMail{
+    position: absolute;
+     width: 24px;
+    height: 24px;
+    margin: 20px;
+}
+
+.inputIconCall{
+    position: absolute;
+     width: 24px;
+    height: 24px;
+    margin: 20px;
+}
+
+.formBtns{
+    width: 364px;
+    height: 57px;
+}
+
+
+.cancelBtn{
+    width: 126px;
+    height: 57px;
+    border: 1px solid #2a3647;
+    border-radius: 10px;
+    font-family: 'Inter';
+    font-size: 20px;
+    font-weight: 400;
+    background-color: #ffffff;
+    color: #2a3647;
+}
+
+.cancelBtn:hover{
+    cursor: pointer;
+    background-color: #2a3647;
+    color: #ffffff;
+}
+
+.submitBtn{
+     width: 214px;
+    height: 57px;
+    border: 1px solid #2a3647;
+    border-radius: 10px;
+    font-family: 'Inter';
+    font-size: 20px;
+    font-weight: 400;
+    background-color: #ffffff;
+    color: #2a3647;
+}
+
+.submitBtn:hover{
+    cursor: pointer;
+    background-color: #2a3647;
+    color: #ffffff;
+}
+
+.checkIcon{
+    width: 15px;
+    height: 11px;
+    color: #2a3647;
+}
