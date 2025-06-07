@@ -1,37 +1,52 @@
 function showSubMenu() {
-  let subMenu = document.getElementById('subMenuContainer');
-  subMenu.classList.toggle('d_none');
+  let subMenu = document.getElementById("subMenuContainer");
+  subMenu.classList.toggle("d_none");
 }
 
 function changeToPolicy() {
-  window.location.href = '../privatPolicy.html';
+  window.location.href = "../privatPolicy.html";
 }
 
 function changeToLegalNotice() {
-  window.location.href = '../impressum.html';
+  window.location.href = "../impressum.html";
 }
 
+if (windows.location.pathname.enndsWith("addtask.html")) {
+  initAddtask();
+}
 
-// export function addEventListener(input1, input2) {
-//   const input = document.getElementById("input1");
-//   const error = document.querySelector(".error-message");
+function initAddtask {
+  addEventListener();
+}
 
-//   input.addEventListener("input2", () => {
-//     if (input.validity.valid) {
-//       error.style.display = "none";
-//     } else {
-//       error.style.display = "block";
-//     }
-//   });
-// }
+export function addEventListener() {
+  const input = document.getElementById("taskName");
+  const error = document.getElementById("errorMessage");
 
-  // const input = document.getElementById("input1");
-  // const error = document.querySelector(".error-message");
+  input.addEventListener("errorMessage", () => {
+    if (input.validity.valid) {
+      error.style.display = "none";
+    }else {
+      error.style.display = "block";
+    }
+  })};
 
-  // input.addEventListener("input2", () => {
-  //   if (input.validity.valid) {
-  //     error.style.display = "none";
-  //   } else {
-  //     error.style.display = "block";
-  //   }
-  // });
+function validateDataAndSave() {
+  const taskName = document.getElementById("taskName");
+  const taskDescription = document.getElementById("taskDescription");
+  const dateInput = document.getElementById("taskDate");
+
+  const userSelectedName = taskName.value;
+  const userSelectedDesc = taskDescription.value;
+  const userSelectedDate = dateInput.value;
+
+  if(userSelectedName === ""){
+    alert("Please Select a Title.")
+  }else if(userSelectedDesc === "")
+    {alert("Please Add a Description.")
+  }else if(userSelectedDate === ""){
+    alert("Please Add a Date.")
+  }else {
+    alert("Your Task was Addet to your Board")
+  }
+}

@@ -15,12 +15,25 @@
   }
 
   // Demo: Add sample task on load
-  window.addEventListener('DOMContentLoaded', () => {
+  window.addEventListener('DOMContentLoaded', async () => {
     const task = document.createElement('article');
     task.id = 'task-1';
     task.className = 'task';
     task.draggable = true;
     task.ondragstart = drag;
-    task.textContent = 'Log In erstellen';
-    document.querySelector('[data-status="todo"] .task-list').appendChild(task);
+    document.querySelector('[data-status="todo"].task-list').appendChild(task);
   });
+
+  // Funktion für das Submenu
+  function showSubMenu() {
+  let subMenu = document.getElementById('subMenuContainer');
+  subMenu.classList.toggle('d_none');
+}
+
+function changeToPolicy() {
+  window.location.href = '../privatPolicy.html';
+}
+
+function changeToLegalNotice() {
+  window.location.href = '../impressum.html';
+}
