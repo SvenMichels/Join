@@ -33,9 +33,9 @@ export function singleContact(name, email, phone, initials) {
           // kommt in singleContact rein
 }
 
-export function alphabetfilter(letter, firstLetter){
+export function alphabetfilter(letter){
     return`
-      <div class="startLetter">${letter}${firstLetter}</div>
+      <div class="startLetter">${letter}</div>
           <div class="stripe"></div>`
 
           //muss in allContacts über contact
