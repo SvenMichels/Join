@@ -4,29 +4,29 @@ function showSubMenu() {
 }
 
 function changeToPolicy() {
-  window.location.href = "../privatPolicy.html";
+  window.location.href = "../privatpolicy.html";
 }
 
 function changeToLegalNotice() {
-  window.location.href = "../impressum.html";
+  window.location.href = "../legalnotice.html";
 }
 
-if (window.location.pathname.endsWith("addtask.html")) {
-  initAddtask();
-}
+// if (window.location.pathname.endsWith("addtask.html")) {
+//   initAddtask();
+// }
 
-function initAddtask() {
-  addEventListener();
-}
+// function initAddtask() {
+//   addEventListener();
+// }
 
-export function addEventListener() {
-  const input = document.getElementById("taskName");
-  const error = document.getElementById("errorMessage");
+// export function addEventListener() {
+//   const input = document.getElementById("taskName");
+//   const error = document.getElementById("errorMessage");
 
-  input.addEventListener("errorMessage", () => {
-    if (input.validity.valid) {
-      error.style.display = "none";
-    }else {
-      error.style.display = "block";
-    }
-  })};
+//   input.addEventListener("errorMessage", () => {
+//     if (input.validity.valid) {
+//       error.style.display = "none";
+//     }else {
+//       error.style.display = "block";
+//     }
+//   })};

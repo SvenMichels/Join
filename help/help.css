@@ -1,8 +1,9 @@
 body {
   margin: 0;
-  max-width: 1440px;
+  width: 100vw;
   height: 100vh;
   background-color: #f6f7f8;
+  overflow-x: hidden;
 }
 
 /* HEADER */
@@ -10,33 +11,21 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: calc(1440px - 308px);
-  position: relative;
+  position: fixed;
+  width: 100vw;
   height: 96px;
   padding: 20px 40px 20px 348px;
   box-shadow: 0px 4px 4px 0px #0000001a;
+  background-color: #ffffff;
 }
 
-.profileContainer {
-  width: 104px;
-  height: 56px;
+.headerContainer {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: end;
-  gap: 16px;
-}
-
-.helpContainer {
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.helpIcon {
-  width: 20px;
-  height: 20px;
+  height: 96px;
+  width: 100%;
+  max-width: 1440px;
 }
 
 .profileIcon {
@@ -48,21 +37,21 @@ body {
   display: flex;
 }
 
+/* NavBar */
+
 .navBarStyle {
-  flex-shrink: 0;
   width: 232px;
   height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   background-color: #2a3647;
 }
 
-/* NavBar */
 .logo {
   width: 100.03px;
   height: 121.97px;
@@ -77,6 +66,18 @@ body {
   display: flex;
   flex-direction: column;
   gap: 15px;
+}
+
+.navBtnLogIn {
+  background-color: #2a3647;
+  color: #cdcdcd;
+  width: 232px;
+  height: 46px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .taskSummary {
@@ -148,11 +149,21 @@ body {
   align-items: center;
 }
 
+.privatLink {
+  width: 232px;
+  gap: 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #091931;
+}
+
 .taskFrameLink {
+  display: flex;
+  align-items: center;
   color: #cdcdcd;
-  border: none;
   text-decoration: none;
-  width: 121px;
   height: 35px;
   padding: 8px;
 }
@@ -173,15 +184,23 @@ p {
 
 /* Help Section */
 
+.helpSection {
+    display: flex;
+    flex-direction: column;
+    padding-top: 215px;
+    padding-left: 328px;
+    max-width: 1016px;
+    margin-right: 50px;
+    overflow-y: auto;
+    gap: 24px;
+}
+
 .helpH1 {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 1014px;
+  max-width: 1014px;
   height: 73px;
-  position: absolute;
-  top: 206px;
-  left: 328px;
 }
 
 .h1Image {
@@ -201,11 +220,6 @@ p {
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  width: 1014px;
-  height: 1024px;
-  position: absolute;
-  top: 311px;
-  left: 328px;
   gap: 24px;
 }
 
@@ -223,7 +237,6 @@ p {
 .helpHow {
   width: 346px;
   height: 32px;
-  margin: 0;
 }
 
 .helpStep {
@@ -256,4 +269,17 @@ h3{
 .helpEnjoy{
     width: 346px;
     height: 64px;
+}
+
+a:hover {
+  color: #29abe2;
+}
+
+.enjoy {
+  margin-top: 50px;
+  margin-bottom: 10px;
+}
+
+h2 {
+    margin: 0;
 }

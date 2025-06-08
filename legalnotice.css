@@ -237,6 +237,8 @@ p {
   padding-top: 215px;
   padding-left: 328px;
   max-width: 1016px;
+  margin-right: 50px;
+  padding-bottom: 10px;
 }
 
 a:hover {

@@ -12,11 +12,20 @@ body {
   justify-content: space-between;
   align-items: center;
   position: fixed;
-  width: 100%;
+  width: 100vw;
   height: 96px;
   padding: 20px 40px 20px 348px;
   box-shadow: 0px 4px 4px 0px #0000001a;
   background-color: #ffffff;
+}
+
+.headerContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 96px;
+  width: 100%;
+  max-width: 1440px;
 }
 
 .profileContainer {
@@ -33,6 +42,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 16px;
 }
 
 .helpIcon {
@@ -296,8 +306,6 @@ p {
   border: 1px solid #d1d1d1;
 }
 
-
-
 .taskDate {
   display: flex;
   flex-direction: column;
@@ -309,7 +317,7 @@ p {
 }
 
 .taskDateInput {
-  padding-left:10px;
+  padding-left: 10px;
   width: 440px;
   height: 48px;
   border-radius: 10px;
@@ -575,9 +583,9 @@ input::placeholder {
   padding-left: 10px;
 }
 
-input[type=text]:focus {
-  border: 1px solid #29ABE2;
-  outline: 1px solid #29ABE2;
+input[type="text"]:focus {
+  border: 1px solid #29abe2;
+  outline: 1px solid #29abe2;
 }
 
 textarea::placeholder {
@@ -586,8 +594,8 @@ textarea::placeholder {
 }
 
 .taskTitleInput:focus {
-  border-color: #29ABE2;
-  border: 1px solid #29ABE2;
+  border-color: #29abe2;
+  border: 1px solid #29abe2;
 }
 
 .d_none {
