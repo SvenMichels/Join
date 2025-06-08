@@ -1,10 +1,10 @@
-function singleContact() {
+export function singleContact(name, email, phone, initials) {
   return `
 <div>
             <div class="profileHeader">
-              <div class="profilePic">MK</div>
+              <div class="profilePic">${initials}</div>
               <div class="nameBtns">
-                <p class="profileName">Marcel Kruck</p>
+                <p id="profileName" class="profileName">${name}</p>
                 <div class="btns">
                   <p class="editBtn">
                     <img src="../assets/icons/edit.svg" alt="" />Edit
@@ -20,11 +20,11 @@ function singleContact() {
             <div class="mailPhone">
               <div class="emailContainer">
                 <p class="email">Email</p>
-                <p id="eMail" class="emailAdress">marcel.kruck12@gmx.de</p>
+                <p id="eMail" class="emailAdress">${email}</p>
               </div>
               <div class="numberContainer">
                 <p class="phone">Phone</p>
-                <p class="phoneNumber">+49 17684865614</p>
+                <p class="phoneNumber">${phone}</p>
               </div>
               </div>
             </div>
@@ -33,20 +33,20 @@ function singleContact() {
           // kommt in singleContact rein
 }
 
-function alphabetfilter(){
+export function alphabetfilter(letter, firstLetter){
     return`
-      <div class="startLetter">M</div>
+      <div class="startLetter">${letter}${firstLetter}</div>
           <div class="stripe"></div>`
 
           //muss in allContacts über contact
 }
 
-function contactCard(){
+export function contactCard(name, email, initials){
     return`<div class="contact">
-            <div class="pic">MK</div>
+            <div class="pic">${initials}</div>
             <div class="nameAdressContainer">
-            <div class="contactName">Marcel Kruck</div>
-            <div class="contactEmail">marcel.kruck12@gmx.de</div>
+            <div id="profileName" class="contactName">${name}</div>
+            <div class="${email}"</div>
           </div>
             </div>`
 

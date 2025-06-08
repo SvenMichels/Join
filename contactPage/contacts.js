@@ -1,3 +1,5 @@
+import { alphabetfilter, contactCard, singleContact } from './contactTemplate.js';
+
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("addBtn").addEventListener("click", openAddWindow);
   document.getElementById("closeBtn").addEventListener("click", closeAddWindow);
@@ -12,27 +14,69 @@ function closeAddWindow() {
   document.getElementById(`addWindow`).classList.add("dp-none");
 }
 
-function addContact() {
-  getName();
-  getEmail();
-  getPhone();
-  getInitials();
+function addContact(event) {
+  event.preventDefault();
+  const name = getName();
+  const email = getEmail();
+  const phone = getPhone();
+  const initials = getInitials(name);
+  const firstLetter = getFirstLetter(name);
+
+  renderContact(name, email, phone, initials, firstLetter);
+  closeAddWindow();
 }
 
 function getName() {
- const contentRef = document.getElementById("contactName").value;
-  contentRef.innerHTML = "";
+ return document.getElementById("contactName").value.trim();
+}
+
+function getEmail() {
+  return document.getElementById("contactEmail").value.trim();
+}
+
+function getPhone() {
+  return document.getElementById("contactPhone").value.trim();
 }
 
 function getInitials() {
-  const Input = document.getElementById("contactName").value.trim();
-  const words = Input.split("").filter((word) => word.length > 0);
-  const initials =
-    words[0][0].toUpperCase() + words[words.length - 1][0].toUpeprCase();
-  document.getElementById("Initials").textContent = "Initialen: " + initials;
-//die id Initials muss noch in profileIcon eingesetzt werden
+  const words = name.split(" ").filter(Boolean);
+  const first = words[0]?.[0]?.toUpperCase() || "";
+  const second = words[1]?.[0]?.toUpperCase() || "";
+  return first + second;
 }
 
-function getEmail() {}
+function getFirstLetter(name) {
+  return name[0]?.toUpperCase() || "";
+}
 
-function getPhone() {}
+const usedLetters = new Set();
+
+function createAlphabetFilterIfNeeded(letter) {
+  if (!usedLetters.has(letter)) {
+    usedLetters.add(letter);
+    return alphabetfilter(letter);
+  }
+  return "";
+}
+
+function renderContact(name, email, phone, initials, firstLetter) {
+  renderAlphabetFilter(firstLetter);
+  renderContactCard(name, email, initials);
+  renderSingleContact(name, email, phone, initials);
+}
+
+function renderAlphabetFilter(firstLetter) {
+  if (usedLetters.has(firstLetter)) return;
+  usedLetters.add(firstLetter);
+  document.getElementById("allContacts").innerHTML += alphabetfilter(firstLetter);
+}
+
+function renderContactCard(name, email, initials) {
+  const allContactsRef = document.getElementById("allContacts");
+  allContactsRef.innerHTML += contactCard(name, email, initials);
+}
+
+function renderSingleContact(name, email, phone, initials) {
+  const bigContactRef = document.getElementById("bigContact");
+  bigContactRef.innerHTML = singleContact(name, email, phone, initials);
+}
