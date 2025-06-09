@@ -1,4 +1,4 @@
-export function singleContact(name, email, phone, initials) {
+export function singleContact(name, email, phone, initials, id) {
   return `
 <div id = "bigContactCard">
             <div class="profileHeader">
@@ -9,7 +9,7 @@ export function singleContact(name, email, phone, initials) {
                   <p id="edit" class="editBtn">
                     <img src="../assets/icons/edit.svg" alt="" />Edit
                   </p>
-                  <p id="delete" class="deleteBtn">
+                  <p id="delete" class="deleteBtn" data-id="${id}">
                     <img src="../assets/icons/delete.svg" alt="" />Delete
                   </p>
                 </div>
@@ -37,12 +37,12 @@ export function alphabetfilter(letter){
           <div class="stripe"></div>`
 }
 
-export function contactCard(name, email, initials){
-    return`<div class="contact">
-            <div class="pic">${initials}</div>
-            <div class="nameAdressContainer">
-            <div id="profileName" class="contactName">${name}</div>
-            <div class="${email}"</div>
-          </div>
+export function contactCard(name, email, initials, id){
+    return` <div class="contact" data-id="${id}">
+              <div class="pic">${initials}</div>
+              <div class="nameAdressContainer">
+                <div id="profileName" class="contactName">${name}</div>
+                <div class="${email}"</div>
+              </div>
             </div>`
 }
