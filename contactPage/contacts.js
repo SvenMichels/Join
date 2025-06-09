@@ -64,14 +64,6 @@ function getFirstLetter(name) {
 
 const usedLetters = new Set();
 
-function createAlphabetFilterIfNeeded(letter) {
-  if (!usedLetters.has(letter)) {
-    usedLetters.add(letter);
-    return alphabetfilter(letter);
-  }
-  return "";
-}
-
 function renderContact(name, email, phone, initials, firstLetter) {
   renderAlphabetFilter(firstLetter);
   renderContactCard(name, email, initials);

@@ -31,7 +31,3 @@ function animateBigLogoShrink(element, onComplete) {
     onComplete();
   });
 }
-
-export function changeToSignup() {
-  window.location.href = "../signup/signup.html";
-}
