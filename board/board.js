@@ -1,39 +1,84 @@
-  function allowDrop(event) {
-    event.preventDefault();
-  }
+// board.js
+import { requestData } from "../scripts/firebase.js"; // Pfad ggf. anpassen
 
-  function drag(event) {
-    event.dataTransfer.setData("text/plain", event.target.id);
-  }
+const statusMap = {
+  "todo": "todoList",
+  "in-progress": "inProgressList",
+  "await": "awaitList",
+  "done": "doneList"
+};
 
-  function drop(event) {
-    event.preventDefault();
-    const taskId = event.dataTransfer.getData("text/plain");
-    const task = document.getElementById(taskId);
-    const targetList = event.currentTarget;
-    targetList.appendChild(task);
+async function fetchTasks() {
+  try {
+    const { data: tasks } = await requestData("GET", "/tasks/");
+    console.table("Tasks geladen:", tasks);
+    renderTasks(Object.values(tasks));
+    setupDragAndDrop();
+  } catch (error) {
+    console.error("Fehler beim Laden der Tasks:", error);
   }
+}
 
-  // Demo: Add sample task on load
-  window.addEventListener('DOMContentLoaded', async () => {
-    const task = document.createElement('article');
-    task.id = 'task-1';
-    task.className = 'task';
-    task.draggable = true;
-    task.ondragstart = drag;
-    document.querySelector('[data-status="todo"].task-list').appendChild(task);
+function renderTasks(tasks) {
+  tasks.forEach(task => {
+    const taskElement = createTaskElement(task);
+    const targetId = statusMap[task.status];
+    const list = document.getElementById(targetId);
+    if (list) list.appendChild(taskElement);
   });
-
-  // Funktion für das Submenu
-  function showSubMenu() {
-  let subMenu = document.getElementById('subMenuContainer');
-  subMenu.classList.toggle('d_none');
 }
 
-function changeToPolicy() {
-  window.location.href = '../privatPolicy.html';
+function createTaskElement(task) {
+  const prioClass = (task.prio || 'low').toLowerCase();
+  const element = document.createElement("article");
+  element.className = `task prio-${prioClass}`;
+  element.draggable = true;
+  element.id = `task-${task.id}`;
+  element.addEventListener("dragstart", drag);
+  element.innerHTML = `
+    <h3>${task.title}</h3>
+    <p>${task.description}</p>
+    <div class="meta">
+      <span>Fällig: ${task.dueDate}</span>
+      <span>Prio: ${task.prio}</span>
+    </div>
+  `;
+  return element;
 }
 
-function changeToLegalNotice() {
-  window.location.href = '../impressum.html';
+function allowDrop(event) {
+  event.preventDefault();
 }
+
+function drag(event) {
+  event.dataTransfer.setData("text/plain", event.target.id);
+}
+
+function drop(event) {
+  event.preventDefault();
+  const taskId = event.dataTransfer.getData("text/plain");
+  const taskElement = document.getElementById(taskId);
+  const newStatus = Object.keys(statusMap).find(key => statusMap[key] === event.currentTarget.id);
+  event.currentTarget.appendChild(taskElement);
+  updateTaskStatus(taskId.replace("task-", ""), newStatus);
+}
+
+async function updateTaskStatus(id, newStatus) {
+  try {
+    await requestData("PUT", `/tasks/${id}`, { status: newStatus });
+  } catch (error) {
+    console.error("Fehler beim Aktualisieren des Status:", error);
+  }
+}
+
+function setupDragAndDrop() {
+  Object.values(statusMap).forEach(id => {
+    const list = document.getElementById(id);
+    if (list) {
+      list.addEventListener("dragover", allowDrop);
+      list.addEventListener("drop", drop);
+    }
+  });
+}
+
+window.addEventListener("DOMContentLoaded", fetchTasks);

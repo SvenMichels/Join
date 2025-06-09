@@ -1,34 +1,70 @@
-function showSubMenu() {
-  let subMenu = document.getElementById("subMenuContainer");
-  subMenu.classList.toggle("d_none");
-}
+ import { requestData } from "../scripts/firebase.js"; // Firebase-Datenbankzugriff
 
-function changeToPolicy() {
-  window.location.href = "../privatpolicy.html";
-}
+document.addEventListener("DOMContentLoaded", async () => {
+  const form = document.getElementById("taskForm");
 
-function changeToLegalNotice() {
-  window.location.href = "../legalnotice.html";
-}
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
+    const title = form.elements["taskTitle"].value.trim();
+    const description = form.elements["taskDescription"].value.trim();
+    const dueDate = form.elements["taskDate"].value;
+    const category = form.elements["category"].value;
+    const assigned = form.elements["assignedUsers"].value;
+    const subtasks = form.elements["subtask"].value
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
 
+    let prio = null;
+    if (document.getElementById("urgentTask").classList.contains("active"))
+      prio = "Urgent";
+    if (document.getElementById("mediumTask").classList.contains("active"))
+      prio = "Medium";
+    if (document.getElementById("lowTask").classList.contains("active"))
+      prio = "Low";
 
-// if (window.location.pathname.endsWith("addtask.html")) {
-//   initAddtask();
-// }
+    if (!title || !description || !category) {
+      alert("Bitte alle Pflichtfelder ausfüllen!");
+      return;
+    }
 
-// function initAddtask() {
-//   addEventListener();
-// }
+    const task = {
+      id: Date.now(),
+      title,
+      description,
+      dueDate,
+      category,
+      assigned,
+      subtasks,
+      prio,
+      status: "todo",
+    };
 
-// export function addEventListener() {
-//   const input = document.getElementById("taskName");
-//   const error = document.getElementById("errorMessage");
+    console.log("Neue Aufgabe:", task);
+    await requestData("POST", "/tasks/", task);
 
-//   input.addEventListener("errorMessage", () => {
-//     if (input.validity.valid) {
-//       error.style.display = "none";
-//     }else {
-//       error.style.display = "block";
-//     }
-//   })};
+    form.reset();
+    alert("Aufgabe erfolgreich erstellt!");
+  });
+
+  document.getElementById("urgentTask").addEventListener("click", (e) => {
+    e.preventDefault();
+    togglePriority("urgentTask");
+  });
+  document.getElementById("mediumTask").addEventListener("click", (e) => {
+    e.preventDefault();
+    togglePriority("mediumTask");
+  });
+  document.getElementById("lowTask").addEventListener("click", (e) => {
+    e.preventDefault();
+    togglePriority("lowTask");
+  });
+
+  function togglePriority(activeId) {
+    ["urgentTask", "mediumTask", "lowTask"].forEach((id) => {
+      document.getElementById(id).classList.remove("active");
+    });
+    document.getElementById(activeId).classList.add("active");
+  }
+});

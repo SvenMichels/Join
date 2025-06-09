@@ -1,58 +1,63 @@
 <!DOCTYPE html>
 <html lang="de">
- <head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>
-   Join – Kanban Board
-  </title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&amp;display=swap" rel="stylesheet"/>
-  <link href="./index.css" rel="stylesheet"/>
-  <link href="styles/fonts.css" rel="stylesheet"/>
-  <link href="./animatedIndex.css" rel="stylesheet"/>
-  <script src="./index.js" type="module">
-  </script>
- </head>
- <body>
-  <img alt="Join Logo groß" class="bigLogo" id="bigLogo" src="./assets/icons/join_logo_2.svg"/>
-  <div class="logInHeader">
-   <img alt="Join Logo" class="logo" id="logo" src="./assets/icons/join_logo_1.png"/>
-   <div class="signUpContainer">
-    <p class="signUpTxt">
-     Not a Join user?
-    </p>
-    <button class="signUpBtn btn" onclick="window.location.href = '../signup/signup.html';">
-     Sign up
-    </button>
-   </div>
-  </div>
-  <form class="loginForm" id="loginForm">
-   <div class="textareaIconComb">
-    <img alt="Mail Icon" class="mailIcon" src="./assets/icons/mail.svg"/>
-    <input class="email" id="loginEmail" placeholder="E-Mail" required="" type="email"/>
-   </div>
-   <div class="textareaIconComb">
-    <img alt="Password Icon" class="passwordIcon" src="./assets/icons/lock.svg"/>
-    <input class="password" id="loginPassword" placeholder="Password" required="" type="password"/>
-   </div>
-  </form>
-  <div class="buttonContainer">
-   <button class="btn logIn">
-    Log in
-   </button>
-   <button class="btn guestLogIn">
-    Guest Log in
-   </button>
-  </div>
-  <footer class="footer">
-   <p class="txtFooterDesign">
-    Privacy Policy
-   </p>
-   <p class="txtFooterDesign">
-    Legal notice
-   </p>
-  </footer>
-  <script src="./scripts/app.js" type="module">
-  </script>
- </body>
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>
+        Join – Kanban Board
+    </title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&amp;display=swap"
+        rel="stylesheet" />
+    <link href="./index.css" rel="stylesheet" />
+    <link href="styles/fonts.css" rel="stylesheet" />
+    <link href="./animatedIndex.css" rel="stylesheet" />
+    <script src="./index.js" type="module">
+    </script>
+</head>
+
+<body>
+    <img alt="Join Logo groß" class="bigLogo" id="bigLogo" src="./assets/icons/join_logo_2.svg" />
+    <div class="logInHeader">
+        <img alt="Join Logo" class="logo" id="logo" src="./assets/icons/join_logo_1.png" />
+        <div class="signUpContainer">
+            <p class="signUpTxt">
+                Not a Join user?
+            </p>
+            <button class="signUpBtn btn" onclick="window.location.href = '../signup/signup.html';">
+                Sign up
+            </button>
+        </div>
+    </div>
+    <form class="loginForm" id="loginForm">
+        <div class="textareaIconComb">
+            <img alt="Mail Icon" class="mailIcon" src="./assets/icons/mail.svg" />
+            <input class="email" id="loginEmail" placeholder="E-Mail" required="" type="email" />
+        </div>
+        <div class="textareaIconComb">
+            <img alt="Password Icon" class="passwordIcon" src="./assets/icons/lock.svg" />
+            <input class="password" id="loginPassword" placeholder="Password" required="" type="password" />
+        </div>
+    </form>
+    <div class="buttonContainer">
+        <button class="btn logIn">
+            Log in
+        </button>
+        <button class="btn guestLogIn">
+            Guest Log in
+        </button>
+    </div>
+    <footer class="footer">
+        <p class="txtFooterDesign">
+            Privacy Policy
+        </p>
+        <p class="txtFooterDesign">
+            Legal notice
+        </p>
+    </footer>
+    <script src="./scripts/app.js" type="module">
+    </script>
+</body>
+
 </html>

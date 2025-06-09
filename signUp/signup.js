@@ -14,15 +14,15 @@ const toggleConfirmIcon = document.querySelector(
   "#inputConfirmPassword + .toggle-password"
 );
 
-if (window.location.pathname.endsWith('signup.html')) {
+if (window.location.pathname.endsWith("signup.html")) {
   initSignup();
 }
 
 function initSignup() {
-    passwordListener();
-    togglePasswordVisibility();
-    // validatePasswordsMatch();
-};
+  passwordListener();
+  togglePasswordVisibility();
+  // validatePasswordsMatch();
+}
 
 function validatePasswordsMatch() {
   if (passwordInput.value !== confirmPasswordInput.valuve) {
@@ -35,8 +35,10 @@ function validatePasswordsMatch() {
 // Event-Listener für die Passwortüberprüfung
 function passwordListener() {
   passwordInput.addEventListener("inputPassword", validatePasswordsMatch);
-  confirmPasswordInput.addEventListener("inputConfirmPassword", validatePasswordsMatch);
-
+  confirmPasswordInput.addEventListener(
+    "inputConfirmPassword",
+    validatePasswordsMatch
+  );
 
   checkbox.addEventListener("click", () => {
     signUpBtn.disabled = !checkbox.checked;
@@ -71,9 +73,10 @@ export async function getNewUserInput() {
   const inputName = document.getElementById("inputName").value.trim();
   const inputEmail = document.getElementById("inputEmail").value.trim();
   const inputPassword = document.getElementById("inputPassword").value;
-  const inputConfirmPassword = document.getElementById("inputConfirmPassword").value;
+  const inputConfirmPassword = document.getElementById(
+    "inputConfirmPassword"
+  ).value;
   console.log(inputPassword, inputConfirmPassword);
-  
 
   if (inputPassword !== inputConfirmPassword) {
     alert("Passwords do not match");
@@ -83,7 +86,7 @@ export async function getNewUserInput() {
   const userData = {
     userName: inputName,
     userEmail: inputEmail,
-    password: inputPassword
+    password: inputPassword,
   };
 
   try {

@@ -6,11 +6,9 @@ export async function createUser(userData) {
     const response = await requestData("POST", "/users", userData); // Firebase erzeugt automatisch eine ID
 
     const customId = response.data.name; // 'name' enthält die Firebase-ID
-    const dataWithId = { ...userData, id: customId };
+    const userWithId = { ...userData, id: customId };
 
-    
-
-    return await requestData("PUT", `/users/${customId}`, dataWithId);
+    return await requestData("PUT", `/users/${customId}`, userWithId);
   } catch (error) {
     console.log("Error creating user:", error);
     throw error;

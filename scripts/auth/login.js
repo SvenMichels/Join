@@ -2,7 +2,7 @@ import { requestData } from "../firebase.js";
 
 export async function loginUser(email, password) {
   try {
-    const response = await requestData("GET", "/users");
+    const response = await requestData("GET", "/users/");
     const users = response.data;
     // Durch alle Nutzer iterieren und vergleichen
     for (const id in users) {
@@ -26,7 +26,7 @@ export async function loginUser(email, password) {
 
 export async function loginAsGuest() {
   try {
-    const response = await requestData("GET", "/users");
+    const response = await requestData("GET", "/users/");
     const users = response.data;
     console.table("Guest login attempt:", users);
 
