@@ -2,6 +2,7 @@ html{
     display: flex;
     justify-content: center;
     height: 1024px;
+    text-decoration: none;
 }
 
 body{
