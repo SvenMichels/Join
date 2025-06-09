@@ -1,14 +1,24 @@
-import { alphabetfilter, contactCard, singleContact } from './contactTemplate.js';
+import {
+  alphabetfilter,
+  contactCard,
+  singleContact,
+} from "./contactTemplate.js";
+import { requestData } from "../scripts/firebase.js";
+import { createUser } from "../scripts/users/users.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("addBtn").addEventListener("click", openAddWindow);
-  document.getElementById("closeBtn").addEventListener("click", closeAddWindow, closeEditWindow);
+  document
+    .getElementById("closeBtn")
+    .addEventListener("click", closeAddWindow, closeEditWindow);
   document.getElementById("submitBtn").addEventListener("click", addContact);
- });
-
-document.getElementById("bigContactCard").addEventListener("DOMContentLoaded", () => {
-  document.getElementById("edit").addEventListener("click", openEditWindow);
 });
+
+// document
+//   .getElementById("bigContactCard")
+//   .addEventListener("DOMContentLoaded", () => {
+//     document.getElementById("edit").addEventListener("click", openEditWindow);
+//   });
 
 function openAddWindow() {
   document.getElementById(`addWindow`).classList.remove("dp-none");
@@ -26,21 +36,28 @@ function closeEditWindow() {
   document.getElementById(`editWindow`).classList.add("dp-none");
 }
 
-function addContact(event) {
+async function addContact(event) {
   event.preventDefault();
   const name = getName();
   const email = getEmail();
   const phone = getPhone();
   const initials = getInitials(name);
   const firstLetter = getFirstLetter(name);
+  const contactData = { name, email, phone, initials };
 
-  renderContact(name, email, phone, initials, firstLetter);
-  emptyInput();
-  closeAddWindow();
+  try {
+    await createUser(contactData);
+    renderContact(name, email, phone, initials, firstLetter);
+    emptyInput();
+    closeAddWindow();
+  } catch (error) {
+    console.error("Fehler beim Erstellen des Kontakts:", error);
+    alert("Kontakt konnte nicht gespeichert werden.");
+  }
 }
 
 function getName() {
- return document.getElementById("contactName").value.trim();
+  return document.getElementById("contactName").value.trim();
 }
 
 function getEmail() {
@@ -73,7 +90,8 @@ function renderContact(name, email, phone, initials, firstLetter) {
 function renderAlphabetFilter(firstLetter) {
   if (usedLetters.has(firstLetter)) return;
   usedLetters.add(firstLetter);
-  document.getElementById("allContacts").innerHTML += alphabetfilter(firstLetter);
+  document.getElementById("allContacts").innerHTML +=
+    alphabetfilter(firstLetter);
 }
 
 function renderContactCard(name, email, initials) {
@@ -87,7 +105,7 @@ function renderSingleContact(name, email, phone, initials) {
 }
 
 function emptyInput() {
-  document.getElementById('contactName').value = "";
-  document.getElementById('contactEmail').value = "";
-  document.getElementById('contactPhone').value = "";
+  document.getElementById("contactName").value = "";
+  document.getElementById("contactEmail").value = "";
+  document.getElementById("contactPhone").value = "";
 }
