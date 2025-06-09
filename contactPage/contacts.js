@@ -4,8 +4,10 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("addBtn").addEventListener("click", openAddWindow);
   document.getElementById("closeBtn").addEventListener("click", closeAddWindow, closeEditWindow);
   document.getElementById("submitBtn").addEventListener("click", addContact);
-  document.getElementById("edit").addEventListener("click", openEditWindow);
+ });
 
+document.getElementById("bigContactCard").addEventListener("DOMContentLoaded", () => {
+  document.getElementById("edit").addEventListener("click", openEditWindow);
 });
 
 function openAddWindow() {
@@ -31,7 +33,7 @@ function addContact(event) {
   const phone = getPhone();
   const initials = getInitials(name);
   const firstLetter = getFirstLetter(name);
-  
+
   renderContact(name, email, phone, initials, firstLetter);
   emptyInput();
   closeAddWindow();

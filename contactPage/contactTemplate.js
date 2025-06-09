@@ -1,6 +1,6 @@
 export function singleContact(name, email, phone, initials) {
   return `
-<div>
+<div id = "bigContactCard">
             <div class="profileHeader">
               <div class="profilePic">${initials}</div>
               <div class="nameBtns">
