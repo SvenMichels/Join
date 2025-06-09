@@ -2,8 +2,10 @@ import { alphabetfilter, contactCard, singleContact } from './contactTemplate.js
 
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("addBtn").addEventListener("click", openAddWindow);
-  document.getElementById("closeBtn").addEventListener("click", closeAddWindow);
+  document.getElementById("closeBtn").addEventListener("click", closeAddWindow, closeEditWindow);
   document.getElementById("submitBtn").addEventListener("click", addContact);
+  document.getElementById("edit").addEventListener("click", openEditWindow);
+
 });
 
 function openAddWindow() {
@@ -14,6 +16,14 @@ function closeAddWindow() {
   document.getElementById(`addWindow`).classList.add("dp-none");
 }
 
+function openEditWindow() {
+  document.getElementById(`editWindow`).classList.remove("dp-none");
+}
+
+function closeEditWindow() {
+  document.getElementById(`editWindow`).classList.add("dp-none");
+}
+
 function addContact(event) {
   event.preventDefault();
   const name = getName();
@@ -21,8 +31,9 @@ function addContact(event) {
   const phone = getPhone();
   const initials = getInitials(name);
   const firstLetter = getFirstLetter(name);
-
+  
   renderContact(name, email, phone, initials, firstLetter);
+  emptyInput();
   closeAddWindow();
 }
 
@@ -38,7 +49,7 @@ function getPhone() {
   return document.getElementById("contactPhone").value.trim();
 }
 
-function getInitials() {
+function getInitials(name) {
   const words = name.split(" ").filter(Boolean);
   const first = words[0]?.[0]?.toUpperCase() || "";
   const second = words[1]?.[0]?.toUpperCase() || "";
@@ -79,4 +90,10 @@ function renderContactCard(name, email, initials) {
 function renderSingleContact(name, email, phone, initials) {
   const bigContactRef = document.getElementById("bigContact");
   bigContactRef.innerHTML = singleContact(name, email, phone, initials);
+}
+
+function emptyInput() {
+  document.getElementById('contactName').value = "";
+  document.getElementById('contactEmail').value = "";
+  document.getElementById('contactPhone').value = "";
 }

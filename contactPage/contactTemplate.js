@@ -6,10 +6,10 @@ export function singleContact(name, email, phone, initials) {
               <div class="nameBtns">
                 <p id="profileName" class="profileName">${name}</p>
                 <div class="btns">
-                  <p class="editBtn">
+                  <p id="edit" class="editBtn">
                     <img src="../assets/icons/edit.svg" alt="" />Edit
                   </p>
-                  <p class="deleteBtn">
+                  <p id="delete" class="deleteBtn">
                     <img src="../assets/icons/delete.svg" alt="" />Delete
                   </p>
                 </div>
@@ -29,16 +29,12 @@ export function singleContact(name, email, phone, initials) {
               </div>
             </div>
           </div>`;
-
-          // kommt in singleContact rein
 }
 
 export function alphabetfilter(letter){
     return`
       <div class="startLetter">${letter}</div>
           <div class="stripe"></div>`
-
-          //muss in allContacts über contact
 }
 
 export function contactCard(name, email, initials){
@@ -49,6 +45,4 @@ export function contactCard(name, email, initials){
             <div class="${email}"</div>
           </div>
             </div>`
-
-            //kommt auch in allcontacts rein aber unter stripe
 }

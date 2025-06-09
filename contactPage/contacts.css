@@ -259,11 +259,21 @@ h2{
     gap: 4px;
 }
 
+.editBtn:hover{
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 .deleteBtn{
     display: flex;
     align-items:center;
     gap: 4px;
 } 
+
+.deleteBtn:hover{
+    text-decoration: underline;
+    cursor: pointer;
+}
 
 .infoContainer{
     display: flex;
@@ -369,13 +379,15 @@ h2{
     border: 1px solid #2a3647;
     border-radius: 10px;
     background-color: #2a3647;
-    padding: 15px 35px 15px 36px
+    margin: 15px 35px 15px 36px;
+    padding-left: 5px;
 }
 
 .pic{
     width: 42px;
     height: 42px;
     border: 2px solid #FFFFFF;
+    color: #FFFFFF;
     border-radius: 50px;
     display: flex;
     justify-content: center;
