@@ -13,6 +13,11 @@ body{
     height: 1024px;
 }
 
+.helpBtn:hover{
+    width: 24px;
+    height: 24px;
+}
+
 .header{
     display: flex;
     align-items: center;
@@ -156,7 +161,8 @@ body{
 
 .newContact:hover{
     cursor: pointer;
-    background-color: #FFFFFF;
+    background-color: #29ABE2;
+    border-color: #29ABE2;
     color: #2a3647;
 }
 
@@ -421,4 +427,8 @@ h2{
     font-weight: 400;
     margin-top: 5px;
     color: #007cee;
+}
+
+.txt:hover{
+    color: #29ABE2;
 }

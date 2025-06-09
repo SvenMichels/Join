@@ -7,11 +7,10 @@
     align-items: center;
     justify-content: center;
     position: absolute;
-    width: 1440px;
-    height: 1164px;
+    width: 1990px;  
+    height: 98vh;
     z-index: 1000;
     background-color: rgba(128, 128, 128, 0.527);
-    
 }
 
 .hoverWindow {
@@ -208,8 +207,8 @@ textarea::placeholder{
 
 .cancelBtn:hover{
     cursor: pointer;
-    background-color: #2a3647;
-    color: #ffffff;
+    color: #29abe2;
+    border-color: #29abe2;
 }
 
 .submitBtn{
@@ -220,13 +219,14 @@ textarea::placeholder{
     font-family: 'Inter';
     font-size: 20px;
     font-weight: 400;
-    background-color: #ffffff;
-    color: #2a3647;
+    background-color: #2a3647;
+    color: #ffffff;
 }
 
 .submitBtn:hover{
     cursor: pointer;
-    background-color: #2a3647;
+    background-color: #29abe2;
+    border-color: #29abe2;
     color: #ffffff;
 }
 

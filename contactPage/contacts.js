@@ -6,10 +6,6 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("submitBtn").addEventListener("click", addContact);
  });
 
-document.getElementById("bigContactCard").addEventListener("DOMContentLoaded", () => {
-  document.getElementById("edit").addEventListener("click", openEditWindow);
-});
-
 function openAddWindow() {
   document.getElementById(`addWindow`).classList.remove("dp-none");
 }
