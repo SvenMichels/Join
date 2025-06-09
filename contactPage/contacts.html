@@ -1,155 +1,191 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <link rel="stylesheet" href="./contacts.css" />
-  <link rel="stylesheet" href="hoverWindow.css" />
-
-  <script type="module" src="./contacts.js"></script>
-
-  <title>Document</title>
-</head>
-
-<body>
-  <div id="addWindow" class="hoverPosition dp-none">
-    <div class="hoverWindow">
-      <div class="leftSide">
-        <div class="leftContent">
-          <img class="leftLogo" src="../assets/icons/join_white.svg" alt="" />
-          <p class="windowH1">Add contact</p>
-          <p class="windowSlogan">Tasks are better with a Team</p>
-          <div class="underline"></div>
-        </div>
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <link href="./contacts.css" rel="stylesheet"/>
+  <link href="hoverWindow.css" rel="stylesheet"/>
+  <script src="./contacts.js" type="module">
+  </script>
+  <title>
+   Document
+  </title>
+ </head>
+ <body>
+  <div class="hoverPosition dp-none" id="addWindow">
+   <div class="hoverWindow">
+    <div class="leftSide">
+     <div class="leftContent">
+      <img alt="Bild" class="leftLogo" src="../assets/icons/join_white.svg"/>
+      <p class="windowH1">
+       Add contact
+      </p>
+      <p class="windowSlogan">
+       Tasks are better with a Team
+      </p>
+      <div class="underline">
       </div>
-      <div class="rightSide">
-        <p id="closeBtn" class="closeBtn">X</p>
-        <div class="rightContent">
-          <div class="profileIcon">
-            <img class="addContactIcon" src="../assets/icons/person_add.svg" alt="" />
-          </div>
-          <form id="addContactForm" class="addContactForm">
-            <div class="pers">
-              <textarea type="text" id="contactName" placeholder="Name" required></textarea><img class="inputIconPers"
-                src="../assets/icons/person.svg" alt="" />
-            </div>
-            <div class="mail">
-              <textarea src="../assets/icons/" type="email" id="contactEmail" placeholder="Email"
-                required></textarea><img class="inputIconMail" src="../assets/icons/mail.svg" alt="" />
-            </div>
-            <div class="call">
-              <textarea src="../assets/icons/" type="tel" id="contactPhone" placeholder="Phone" required></textarea><img
-                class="inputIconCall" src="../assets/icons/call.svg" alt="" />
-            </div>
-            <div class="formBtns">
-              <button id="cancelBtn" type="reset" class="cancelBtn">Cancel x</button>
-              <button id="submitBtn" type="submit" class="submitBtn">Create Contact <img class="checkIcon"
-                  src="../assets/icons/check.svg" alt=""></button>
-            </div>
-          </form>
-        </div>
-      </div>
+     </div>
     </div>
-  </div>
-
-  <div id="editWindow" class="hoverPosition dp-none">
-    <div class="hoverWindow">
-      <div class="leftSide">
-        <div class="leftContent">
-          <img class="leftLogo" src="../assets/icons/join_white.svg" alt="" />
-          <p class="windowH1">Edit contact</p>
-          <div class="underline"></div>
-        </div>
+    <div class="rightSide">
+     <p class="closeBtn" id="closeBtn">
+      X
+     </p>
+     <div class="rightContent">
+      <div class="profileIcon">
+       <img alt="Bild" class="addContactIcon" src="../assets/icons/person_add.svg"/>
       </div>
-      <div class="rightSide">
-        <p class="closeBtn">X</p>
-        <div class="rightContent">
-          <div class="profileIcon">
-            <img class="addContactIcon" src="../assets/icons/person_add.svg" alt="" />
-          </div>
-          <form id="addContactForm" class="addContactForm">
-            <div class="pers">
-              <textarea type="text" id="contactName" placeholder="Name" required></textarea><img class="inputIconPers"
-                src="../assets/icons/person.svg" alt="" />
-            </div>
-            <div class="mail">
-              <textarea src="../assets/icons/" type="email" id="contactEmail" placeholder="Email"
-                required></textarea><img class="inputIconMail" src="../assets/icons/mail.svg" alt="" />
-            </div>
-            <div class="call">
-              <textarea src="../assets/icons/" type="tel" id="contactPhone" placeholder="Phone" required></textarea><img
-                class="inputIconCall" src="../assets/icons/call.svg" alt="" />
-            </div>
-            <div class="formBtns">
-              <button class="cancelBtn">Cancel x</button>
-              <button type="submit" class="submitBtn">Create Contact <img class="checkIcon"
-                  src="../assets/icons/check.svg" alt=""></button>
-            </div>
-          </form>
-        </div>
-      </div>
+      <form class="addContactForm" id="addContactForm">
+       <div class="pers">
+        <textarea id="contactName" placeholder="Name" required="" type="text"></textarea>
+        <img alt="Bild" class="inputIconPers" src="../assets/icons/person.svg"/>
+       </div>
+       <div class="mail">
+        <textarea id="contactEmail" placeholder="Email" required="" src="../assets/icons/" type="email"></textarea>
+        <img alt="Bild" class="inputIconMail" src="../assets/icons/mail.svg"/>
+       </div>
+       <div class="call">
+        <textarea id="contactPhone" placeholder="Phone" required="" src="../assets/icons/" type="tel"></textarea>
+        <img alt="Bild" class="inputIconCall" src="../assets/icons/call.svg"/>
+       </div>
+       <div class="formBtns">
+        <button class="cancelBtn" id="cancelBtn" type="reset">
+         Cancel x
+        </button>
+        <button class="submitBtn" id="submitBtn" type="submit">
+         Create Contact
+         <img alt="Bild" class="checkIcon" src="../assets/icons/check.svg"/>
+        </button>
+       </div>
+      </form>
+     </div>
     </div>
+   </div>
   </div>
-
+  <div class="hoverPosition dp-none" id="editWindow">
+   <div class="hoverWindow">
+    <div class="leftSide">
+     <div class="leftContent">
+      <img alt="Bild" class="leftLogo" src="../assets/icons/join_white.svg">
+       <p class="windowH1">
+        Edit contact
+       </p>
+       <div class="underline">
+       </div>
+      </img>
+     </div>
+    </div>
+    <div class="rightSide">
+     <p class="closeBtn">
+      X
+     </p>
+     <div class="rightContent">
+      <div class="profileIcon">
+       <img alt="Bild" class="addContactIcon" src="../assets/icons/person_add.svg"/>
+      </div>
+      <form class="addContactForm" id="addContactForm">
+       <div class="pers">
+        <textarea id="contactName" placeholder="Name" required="" type="text"></textarea>
+        <img alt="Bild" class="inputIconPers" src="../assets/icons/person.svg"/>
+       </div>
+       <div class="mail">
+        <textarea id="contactEmail" placeholder="Email" required="" src="../assets/icons/" type="email"></textarea>
+        <img alt="Bild" class="inputIconMail" src="../assets/icons/mail.svg"/>
+       </div>
+       <div class="call">
+        <textarea id="contactPhone" placeholder="Phone" required="" src="../assets/icons/" type="tel"></textarea>
+        <img alt="Bild" class="inputIconCall" src="../assets/icons/call.svg"/>
+       </div>
+       <div class="formBtns">
+        <button class="cancelBtn">
+         Cancel x
+        </button>
+        <button class="submitBtn" type="submit">
+         Create Contact
+         <img alt="Bild" class="checkIcon" src="../assets/icons/check.svg"/>
+        </button>
+       </div>
+      </form>
+     </div>
+    </div>
+   </div>
+  </div>
   <section class="sidebar">
-    <div id="" class="navSidebar">
-      <img class="logo" src="../assets/icons/join_white.svg" alt="" />
-
-      <div class="navbar">
-        <div class="navLinks">
-          <img src="../assets/icons/summary_2.svg" alt="" />
-          <p>Summary</p>
-        </div>
-
-        <div class="navLinks">
-          <img src="../assets/icons/add_task.svg" alt="" />
-          <p>Add Task</p>
-        </div>
-
-        <div class="navLinks">
-          <img src="../assets/icons/board.svg" alt="" />
-          <p>Board</p>
-        </div>
-
-        <div class="navLinks">
-          <img src="../assets/icons/contacts.svg" alt="" />
-          <p>Contacts</p>
-        </div>
+   <div class="navSidebar" id="">
+    <img alt="Bild" class="logo" src="../assets/icons/join_white.svg">
+     <div class="navbar">
+      <div class="navLinks">
+       <img alt="Bild" src="../assets/icons/summary_2.svg"/>
+       <p>
+        Summary
+       </p>
       </div>
-      <div class="legalSites">
-        <p class="txt">Privacy Policy</p>
-        <p class="txt">Legal notice</p>
+      <div class="navLinks">
+       <img alt="Bild" src="../assets/icons/add_task.svg"/>
+       <p>
+        Add Task
+       </p>
       </div>
-    </div>
+      <div class="navLinks">
+       <img alt="Bild" src="../assets/icons/board.svg"/>
+       <p>
+        Board
+       </p>
+      </div>
+      <div class="navLinks">
+       <img alt="Bild" src="../assets/icons/contacts.svg"/>
+       <p>
+        Contacts
+       </p>
+      </div>
+     </div>
+     <div class="legalSites">
+      <p class="txt">
+       Privacy Policy
+      </p>
+      <p class="txt">
+       Legal notice
+      </p>
+     </div>
+    </img>
+   </div>
   </section>
-
-  <header id="" class="header">
-    <p class="headerTxt">Kanban Project Management Tool</p>
-    <div class="headerBtns">
-      <img src="../assets/icons/help.svg" alt="" />
-      <button class="profileBtn">MK</button>
-    </div>
+  <header class="header" id="">
+   <p class="headerTxt">
+    Kanban Project Management Tool
+   </p>
+   <div class="headerBtns">
+    <img alt="Bild" src="../assets/icons/help.svg"/>
+    <button class="profileBtn">
+     MK
+    </button>
+   </div>
   </header>
-
   <section class="content">
-    <div class="contactList">
-      <button id="addBtn" class="newContact">
-        <p>Add new contact</p>
-        <img class="newContactIcon" src="../assets/icons/person_add.svg" alt="" />
-      </button>
-      <div id="allContacts" class="allContacts"></div>
+   <div class="contactList">
+    <button class="newContact" id="addBtn">
+     <p>
+      Add new contact
+     </p>
+     <img alt="Bild" class="newContactIcon" src="../assets/icons/person_add.svg"/>
+    </button>
+    <div class="allContacts" id="allContacts">
     </div>
-    <div class="singleContact">
-      <div class="contactHeader">
-        <h1>Contact</h1>
-        <div class="bar"></div>
-        <h2>Better with a team</h2>
-      </div>
-      <div id="bigContact" class="bigContact"></div>
+   </div>
+   <div class="singleContact">
+    <div class="contactHeader">
+     <h1>
+      Contact
+     </h1>
+     <div class="bar">
+     </div>
+     <h2>
+      Better with a team
+     </h2>
     </div>
+    <div class="bigContact" id="bigContact">
+    </div>
+   </div>
   </section>
-</body>
-
+ </body>
 </html>

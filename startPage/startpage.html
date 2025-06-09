@@ -1,130 +1,176 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- (=^.^=) -->
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Join – Kanban Board</title>
+ <!-- (=^.^=) -->
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Join – Kanban Board
+  </title>
   <!-- <link rel="stylesheet" href="/styles/standard.css"> -->
-  <link rel="stylesheet" href="/styles/fonts.css">
-  <link rel="stylesheet" href="startpage.css">
-  <script src="/scripts/app.js"></script>
-</head>
-
-<body>
+  <link href="/styles/fonts.css" rel="stylesheet"/>
+  <link href="startpage.css" rel="stylesheet"/>
+  <script src="/scripts/app.js">
+  </script>
+ </head>
+ <body>
   <nav class="navBarStyle">
-    <img class="logo" src="/assets/icons/join_white.svg" alt="Logo" />
-    <div class="menu3">
-      <div class="taskSummary">
-        <button class="navBtn">
-          <img class="navIcons" src="/assets/icons/summary_2.svg" alt="" />Summary
-        </button>
-      </div>
-      <div class="taskFrame9">
-        <button class="navBtn">
-          <img class="navIcons" src="/assets/icons/add_task.svg" alt="" />Add
+   <img alt="Logo" class="logo" src="/assets/icons/join_white.svg"/>
+   <div class="menu3">
+    <div class="taskSummary">
+     <button class="navBtn">
+      <img alt="Bild" class="navIcons" src="/assets/icons/summary_2.svg"/>
+      Summary
+     </button>
+    </div>
+    <div class="taskFrame9">
+     <button class="navBtn">
+      <img alt="Bild" class="navIcons" src="/assets/icons/add_task.svg"/>
+      Add
           Task
-        </button>
-      </div>
-      <div class="taskBoard">
-        <button class="navBtnBoard">
-          <img class="navIcons" src="/assets/icons/board.svg" alt="" />Board
-        </button>
-      </div>
-      <div class="taskContacts">
-        <button class="navBtn">
-          <img class="navIcons" src="/assets/icons/contacts.svg" alt="" />Contacts
-        </button>
-      </div>
+     </button>
     </div>
-    <div class="taskFrame22">
-      <a href="../impressum.html" class="taskFrameLink">Privacy Policy</a>
-      <a href="../datenschutz.html" class="taskFrameLink">Legal notice</a>
+    <div class="taskBoard">
+     <button class="navBtnBoard">
+      <img alt="Bild" class="navIcons" src="/assets/icons/board.svg"/>
+      Board
+     </button>
     </div>
+    <div class="taskContacts">
+     <button class="navBtn">
+      <img alt="Bild" class="navIcons" src="/assets/icons/contacts.svg"/>
+      Contacts
+     </button>
+    </div>
+   </div>
+   <div class="taskFrame22">
+    <a class="taskFrameLink" href="../impressum.html">
+     Privacy Policy
+    </a>
+    <a class="taskFrameLink" href="../datenschutz.html">
+     Legal notice
+    </a>
+   </div>
   </nav>
   <main>
-    <header>
-      <p>Kanban Project Management Tool</p>
-      <div class="profile">
-        <img src="/assets/icons/help.svg" alt="">
-        <img src="/assets/icons/user_profile_initials.svg" alt="" class="icon">
-      </div>
-    </header>
-
-    <div class="frontPage">
-      <div class="headline">
-        <h1>Join 360</h1>
-        <div class="divider"></div>
-        <p>Key Metrics at a Glance</p>
-      </div>
-      <div class="mainContent">
-        <div class="info">
-          <div class="row">
-            <div class="toDo btn" onclick="">
-              <img class="icon defaultIcon" src="/assets/icons/edit_bg.svg" alt="">
-              <img class="icon invertedIcon" src="/assets/icons/edit_inverted.svg" alt="" id="">
-              <div class="taskInfo">
-                <p class="counter todoTaskAmount">0</p>
-                <p class="taskText">To-Do</p>
-              </div>
-            </div>
-            <div class="done btn" onclick="">
-              <img class="icon defaultIcon" src="/assets/icons/check_bg.svg" alt="">
-              <img src="/assets/icons/check_inverted.svg" alt="" class="icon invertedIcon">
-              <div class="taskInfo">
-                <p class="counter doneTaskAmount">1</p>
-                <p class="taskText">Done</p>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="urgent btn" onclick="">
-              <div class="urgentAmount">
-                <img class="icon" src="/assets/icons/prio_alta_big.svg" alt="">
-                <div class="taskInfo">
-                  <p class="counter urgentTaskAmount">2</p>
-                  <p class="taskText">Urgent</p>
-                </div>
-              </div>
-              <p class="divider"></p>
-              <div class="urgentDate taskInfo">
-                <p class="urgentTaskDate">May 31, 2025</p>
-                <p class="urgentTaskDateText">Upcoming Deadline</p>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="stats">
-              <div>
-                <div class="taskInfo btn">
-                  <p class="counter taskInBoard">3</p>
-                  <p class="taskText">Tasks in Board</p>
-                </div>
-              </div>
-              <div>
-                <div class="taskInfo btn">
-                  <p class="counter taskInProgress">4</p>
-                  <p class="taskText">Tasks in Progress</p>
-                </div>
-              </div>
-              <div>
-                <div class="taskInfo btn">
-                  <p class="counter awaitingFeedback">5</p>
-                  <p class="taskText">Awaiting Feedback</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="greetings">
-          <p>Good Morning,</p>
-          <p class="username">Johnny Test</p>
-        </div>
-      </div>
+   <header>
+    <p>
+     Kanban Project Management Tool
+    </p>
+    <div class="profile">
+     <img alt="Bild" src="/assets/icons/help.svg"/>
+     <img alt="Bild" class="icon" src="/assets/icons/user_profile_initials.svg"/>
     </div>
+   </header>
+   <div class="frontPage">
+    <div class="headline">
+     <h1>
+      Join 360
+     </h1>
+     <div class="divider">
+     </div>
+     <p>
+      Key Metrics at a Glance
+     </p>
+    </div>
+    <div class="mainContent">
+     <div class="info">
+      <div class="row">
+       <div class="toDo btn" onclick="">
+        <img alt="Bild" class="icon defaultIcon" src="/assets/icons/edit_bg.svg"/>
+        <img alt="Bild" class="icon invertedIcon" id="" src="/assets/icons/edit_inverted.svg"/>
+        <div class="taskInfo">
+         <p class="counter todoTaskAmount">
+          0
+         </p>
+         <p class="taskText">
+          To-Do
+         </p>
+        </div>
+       </div>
+       <div class="done btn" onclick="">
+        <img alt="Bild" class="icon defaultIcon" src="/assets/icons/check_bg.svg"/>
+        <img alt="Bild" class="icon invertedIcon" src="/assets/icons/check_inverted.svg"/>
+        <div class="taskInfo">
+         <p class="counter doneTaskAmount">
+          1
+         </p>
+         <p class="taskText">
+          Done
+         </p>
+        </div>
+       </div>
+      </div>
+      <div class="row">
+       <div class="urgent btn" onclick="">
+        <div class="urgentAmount">
+         <img alt="Bild" class="icon" src="/assets/icons/prio_alta_big.svg"/>
+         <div class="taskInfo">
+          <p class="counter urgentTaskAmount">
+           2
+          </p>
+          <p class="taskText">
+           Urgent
+          </p>
+         </div>
+        </div>
+        <p class="divider">
+        </p>
+        <div class="urgentDate taskInfo">
+         <p class="urgentTaskDate">
+          May 31, 2025
+         </p>
+         <p class="urgentTaskDateText">
+          Upcoming Deadline
+         </p>
+        </div>
+       </div>
+      </div>
+      <div class="row">
+       <div class="stats">
+        <div>
+         <div class="taskInfo btn">
+          <p class="counter taskInBoard">
+           3
+          </p>
+          <p class="taskText">
+           Tasks in Board
+          </p>
+         </div>
+        </div>
+        <div>
+         <div class="taskInfo btn">
+          <p class="counter taskInProgress">
+           4
+          </p>
+          <p class="taskText">
+           Tasks in Progress
+          </p>
+         </div>
+        </div>
+        <div>
+         <div class="taskInfo btn">
+          <p class="counter awaitingFeedback">
+           5
+          </p>
+          <p class="taskText">
+           Awaiting Feedback
+          </p>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+     <div class="greetings">
+      <p>
+       Good Morning,
+      </p>
+      <p class="username">
+       Johnny Test
+      </p>
+     </div>
+    </div>
+   </div>
   </main>
-
-</body>
-
+ </body>
 </html>

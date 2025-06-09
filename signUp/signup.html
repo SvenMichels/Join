@@ -1,80 +1,89 @@
 <!DOCTYPE html>
 <html lang="de">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Join – Kanban Board</title>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
-    rel="stylesheet">
-  <link rel="stylesheet" href="signup.css">
-</head>
-
-<body>
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Join – Kanban Board
+  </title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&amp;display=swap" rel="stylesheet"/>
+  <link href="signup.css" rel="stylesheet"/>
+ </head>
+ <body>
   <main>
-    <img class="logo" src="../assets/icons/join_logo_1.png" alt="Join Logo" />
-
-    <div class="form-container">
-      <form id="signUpForm">
-        <div class="form-header">
-          <button type="button" onclick="window.location.href='../index.html'" class="back-button">
-            <img class="pointer" src="../assets/icons/arrow-left-line.svg" alt="Zurück" />
-          </button>
-          <div class="form-title">
-            <h1>Sign Up</h1>
-          </div>
-        </div>
-
-        <div class="input-wrapper">
-          <label for="inputName" class="visually-hidden">Name</label>
-          <input id="inputName" name="name" type="text" placeholder="Name" autocomplete="name" required />
-          <img class="input-icon" src="../assets/icons/person.svg" alt="Name icon" />
-        </div>
-
-        <div class="input-wrapper">
-          <label for="inputEmail" class="visually-hidden">Email</label>
-          <input id="inputEmail" name="email" type="email" placeholder="Email" autocomplete="email" required />
-          <img class="input-icon" src="../assets/icons/mail.svg" alt="Email icon" />
-        </div>
-
-        <div class="input-wrapper">
-          <label for="inputPassword" class="visually-hidden">Passwort</label>
-          <input id="inputPassword" name="password" type="password" placeholder="Password" autocomplete="new-password"
-            required />
-          <img class="input-icon toggle-password" src="../assets/icons/visibility.svg"
-            alt="Toggle password visibility" />
-        </div>
-
-        <div class="input-wrapper">
-          <label for="inputConfirmPassword" class="visually-hidden">Passwort bestätigen</label>
-          <input id="inputConfirmPassword" name="confirmPassword" type="password" placeholder="Confirm Password"
-            autocomplete="new-password" required />
-          <img class="input-icon toggle-password" src="../assets/icons/visibility.svg"
-            alt="Toggle password visibility" />
-        </div>
-
-        <div class="checkbox-wrapper">
-          <label>
-            <input id="checkBox" type="checkbox" required />
-            I accept the <a href="../privacypolicy.html">Privacy policy</a>
-          </label>
-        </div>
-
-        <div class="button-wrapper">
-          <button id="signUpBtn" type="submit">Sign up</button>
-        </div>
-      </form>
-    </div>
+   <img alt="Join Logo" class="logo" src="../assets/icons/join_logo_1.png"/>
+   <div class="form-container">
+    <form id="signUpForm">
+     <div class="form-header">
+      <button class="back-button" onclick="window.location.href='../index.html'" type="button">
+       <img alt="Zurück" class="pointer" src="../assets/icons/arrow-left-line.svg"/>
+      </button>
+      <div class="form-title">
+       <h1>
+        Sign Up
+       </h1>
+      </div>
+     </div>
+     <div class="input-wrapper">
+      <label class="visually-hidden" for="inputName">
+       Name
+      </label>
+      <input autocomplete="name" id="inputName" name="name" placeholder="Name" required="" type="text"/>
+      <img alt="Name icon" class="input-icon" src="../assets/icons/person.svg"/>
+     </div>
+     <div class="input-wrapper">
+      <label class="visually-hidden" for="inputEmail">
+       Email
+      </label>
+      <input autocomplete="email" id="inputEmail" name="email" placeholder="Email" required="" type="email"/>
+      <img alt="Email icon" class="input-icon" src="../assets/icons/mail.svg"/>
+     </div>
+     <div class="input-wrapper">
+      <label class="visually-hidden" for="inputPassword">
+       Passwort
+      </label>
+      <input autocomplete="new-password" id="inputPassword" name="password" placeholder="Password" required="" type="password"/>
+      <img alt="Toggle password visibility" class="input-icon toggle-password" src="../assets/icons/visibility.svg"/>
+     </div>
+     <div class="input-wrapper">
+      <label class="visually-hidden" for="inputConfirmPassword">
+       Passwort bestätigen
+      </label>
+      <input autocomplete="new-password" id="inputConfirmPassword" name="confirmPassword" placeholder="Confirm Password" required="" type="password"/>
+      <img alt="Toggle password visibility" class="input-icon toggle-password" src="../assets/icons/visibility.svg"/>
+     </div>
+     <div class="checkbox-wrapper">
+      <label>
+       <input id="checkBox" required="" type="checkbox"/>
+       I accept the
+       <a href="../privacypolicy.html">
+        Privacy policy
+       </a>
+      </label>
+     </div>
+     <div class="button-wrapper">
+      <button id="signUpBtn" type="submit">
+       Sign up
+      </button>
+     </div>
+    </form>
+   </div>
   </main>
-
   <footer>
-    <p><a href="../privacypolicy.html">Privacy Policy</a></p>
-    <p><a href="../legalnotice.html">Legal Notice</a></p>
+   <p>
+    <a href="../privacypolicy.html">
+     Privacy Policy
+    </a>
+   </p>
+   <p>
+    <a href="../legalnotice.html">
+     Legal Notice
+    </a>
+   </p>
   </footer>
-
-  <div id="overlay" class="d_none"></div>
-  <script type="module" src="../scripts/app.js"></script>
-</body>
-
+  <div class="d_none" id="overlay">
+  </div>
+  <script src="../scripts/app.js" type="module">
+  </script>
+ </body>
 </html>

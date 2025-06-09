@@ -1,140 +1,201 @@
 <!DOCTYPE html>
 <html lang="de">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Join – Kanban Board</title>
-  <link rel="stylesheet" href="addtask.css" />
-</head>
-
-<body>
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Join – Kanban Board
+  </title>
+  <link href="addtask.css" rel="stylesheet"/>
+ </head>
+ <body>
   <header class="headerStyle">
-    <div class="headerContainer">
-      <p>Kanban Project Management Tool</p>
-
-      <div class="helpContainer">
-        <a href="../help/help.html"><img class="helpIcon" src="../assets/icons/help.svg" /></a>
-        <img onclick="showSubMenu()" class="profileIcon" src="../assets/icons/user_profile_initials.svg" />
-      </div>
+   <div class="headerContainer">
+    <p>
+     Kanban Project Management Tool
+    </p>
+    <div class="helpContainer">
+     <a href="../help/help.html">
+      <img alt="Bild" class="helpIcon" src="../assets/icons/help.svg"/>
+     </a>
+     <img alt="Bild" class="profileIcon" onclick="showSubMenu()" src="../assets/icons/user_profile_initials.svg"/>
     </div>
-    <div id="subMenuContainer" class="subMenuContainer d_none">
-      <button onclick="changeToPolicy()" class="subMenuButtons">
-        Privat Policy
-      </button>
-      <button onclick="changeToLegalNotice()" class="subMenuButtons">
-        Legal Notice
-      </button>
-      <button class="subMenuButtons">Log out</button>
-    </div>
+   </div>
+   <div class="subMenuContainer d_none" id="subMenuContainer">
+    <button class="subMenuButtons" onclick="changeToPolicy()">
+     Privat Policy
+    </button>
+    <button class="subMenuButtons" onclick="changeToLegalNotice()">
+     Legal Notice
+    </button>
+    <button class="subMenuButtons">
+     Log out
+    </button>
+   </div>
   </header>
   <nav class="navBarStyle">
-    <img class="logo" src="/assets/icons/join_white.svg" alt="Logo" />
-    <div class="menu3">
-      <button class="navBtnLogIn d_none">
-        <img class="navIcons" src="/assets/icons/login.svg" alt="" />Log In
-      </button>
-      <div class="taskSummary">
-        <button class="navBtn">
-          <img class="navIcons" src="/assets/icons/summary_2.svg" alt="" />Summary
-        </button>
-      </div>
-      <div class="taskFrame9">
-        <button class="navBtn">
-          <img class="navIcons" src="/assets/icons/add_task.svg" alt="" />Add
+   <img alt="Logo" class="logo" src="/assets/icons/join_white.svg"/>
+   <div class="menu3">
+    <button class="navBtnLogIn d_none">
+     <img alt="Bild" class="navIcons" src="/assets/icons/login.svg"/>
+     Log In
+    </button>
+    <div class="taskSummary">
+     <button class="navBtn">
+      <img alt="Bild" class="navIcons" src="/assets/icons/summary_2.svg"/>
+      Summary
+     </button>
+    </div>
+    <div class="taskFrame9">
+     <button class="navBtn">
+      <img alt="Bild" class="navIcons" src="/assets/icons/add_task.svg"/>
+      Add
           Task
-        </button>
-      </div>
-      <div class="taskBoard">
-        <button class="navBtnBoard">
-          <img class="navIcons" src="/assets/icons/board.svg" alt="" />Board
-        </button>
-      </div>
-      <div class="taskContacts">
-        <button class="navBtn">
-          <img class="navIcons" src="/assets/icons/contacts.svg" alt="" />Contacts
-        </button>
-      </div>
+     </button>
     </div>
-    <div class="taskFrame22">
-      <a href="../privatpolicy.html" class="taskFrameLink">Privacy Policy</a>
-      <a href="../legalnotice.html" class="taskFrameLink">Legal notice</a>
+    <div class="taskBoard">
+     <button class="navBtnBoard">
+      <img alt="Bild" class="navIcons" src="/assets/icons/board.svg"/>
+      Board
+     </button>
     </div>
+    <div class="taskContacts">
+     <button class="navBtn">
+      <img alt="Bild" class="navIcons" src="/assets/icons/contacts.svg"/>
+      Contacts
+     </button>
+    </div>
+   </div>
+   <div class="taskFrame22">
+    <a class="taskFrameLink" href="../privatpolicy.html">
+     Privacy Policy
+    </a>
+    <a class="taskFrameLink" href="../legalnotice.html">
+     Legal notice
+    </a>
+   </div>
   </nav>
   <div class="taskh1Container">
-    <h1>Add Task</h1>
+   <h1>
+    Add Task
+   </h1>
   </div>
-  <form id="taskForm" class="taskContainer">
-    <div class="taskTitle">
-      <label for="taskTitle">Title<span style="color: #ff8190">*</span></label>
-      <input type="text" name="taskTitle" placeholder="Enter a title" class="taskTitleInput" />
-      <span style="color: #ff8190">This field is required</span>
+  <form class="taskContainer" id="taskForm">
+   <div class="taskTitle">
+    <label for="taskTitle">
+     Title
+     <span style="color: #ff8190">
+      *
+     </span>
+    </label>
+    <input class="taskTitleInput" name="taskTitle" placeholder="Enter a title" type="text"/>
+    <span style="color: #ff8190">
+     This field is required
+    </span>
+   </div>
+   <div class="taskDescription">
+    <label for="taskDescription">
+     Description
+    </label>
+    <input class="taskDescriptionInput" name="taskDescription" placeholder="Enter a Description" type="text"/>
+   </div>
+   <div class="taskDate">
+    <label for="taskDate">
+     Due Date
+     <span style="color: #ff8190">
+      *
+     </span>
+    </label>
+    <input class="taskDateInput" name="taskDate" placeholder="dd/mm/yyyy" type="date"/>
+    <span style="color: #ff8190">
+     This field is required
+    </span>
+   </div>
+   <div class="spaceContainer">
+   </div>
+   <div class="prioContainer">
+    <div class="prioContent">
+     <label for="taskPriority">
+      Priority
+     </label>
+     <div class="prioButtonContainer">
+      <button class="prioButtonUrgent" id="urgentTask" name="taskPriority">
+       Urgent
+       <img alt="Bild" src="../assets/icons/prio_alta_small.svg"/>
+      </button>
+      <button class="prioButtonMedium" id="mediumTask" name="taskPriority">
+       Medium
+       <img alt="Bild" src="../assets/icons/prio_media.svg"/>
+      </button>
+      <button class="prioButtonLow" id="lowTask" name="taskPriority">
+       Low
+       <img alt="Bild" src="../assets/icons/prio_baja.svg"/>
+      </button>
+     </div>
     </div>
-    <div class="taskDescription">
-      <label for="taskDescription">Description</label>
-      <input type="text" name="taskDescription" class="taskDescriptionInput" placeholder="Enter a Description" />
+    <div class="prioAssignedContainer">
+     <label for="assignedUsers">
+      assignedUsers
+     </label>
+     <select class="prioAssignInput" id="selector" name="assignedUsers">
+     </select>
+     <div id="selectedUser">
+     </div>
     </div>
-    <div class="taskDate">
-      <label for="taskDate">Due Date<span style="color: #ff8190">*</span></label>
-      <input type="date" name="taskDate" placeholder="dd/mm/yyyy" class="taskDateInput" />
-      <span style="color: #ff8190">This field is required</span>
+    <div class="prioCategoryContainer">
+     <label for="category">
+      Category
+      <span style="color: #ff8190">
+       *
+      </span>
+     </label>
+     <select class="prioCategoryInput" id="category" name="category">
+      <option value="">
+       1
+      </option>
+      <option value="">
+       2
+      </option>
+      <option value="">
+       3
+      </option>
+     </select>
     </div>
-    <div class="spaceContainer"></div>
-    <div class="prioContainer">
-      <div class="prioContent">
-        <label for="taskPriority">Priority</label>
-        <div class="prioButtonContainer">
-          <button id="urgentTask" name="taskPriority" class="prioButtonUrgent">
-            Urgent
-            <img src="../assets/icons/prio_alta_small.svg" />
-          </button>
-          <button id="mediumTask" name="taskPriority" class="prioButtonMedium">
-            Medium
-            <img src="../assets/icons/prio_media.svg" />
-          </button>
-          <button id="lowTask" name="taskPriority" class="prioButtonLow">
-            Low
-            <img src="../assets/icons/prio_baja.svg" />
-          </button>
-        </div>
-      </div>
-      <div class="prioAssignedContainer">
-        <label for="assignedUsers">assignedUsers</label>
-        <select name="assignedUsers" id="selector" class="prioAssignInput"></select>
-        <div id="selectedUser"></div>
-      </div>
-      <div class="prioCategoryContainer">
-        <label for="category">Category<span style="color: #ff8190">*</span></label>
-        <select name="category" id="category" class="prioCategoryInput">
-          <option value="">1</option>
-          <option value="">2</option>
-          <option value="">3</option>
-        </select>
-      </div>
-      <div class="prioSubtaskContainer">
-        <label for="subtask">Subtasks</label>
-        <input type="text" name="subtask" class="prioSubtaskInput" />
-        <li></li>
-        <li></li>
-      </div>
+    <div class="prioSubtaskContainer">
+     <label for="subtask">
+      Subtasks
+     </label>
+     <input class="prioSubtaskInput" name="subtask" type="text"/>
+     <li>
+     </li>
+     <li>
+     </li>
     </div>
-    <div class="requiredContainer">
-      <div>
-        <span style="color: #ff8190">*</span><span>This field is required</span>
-      </div>
-      <div class="createContainer">
-        <button type="reset" id="clearBtn" class="clearButton">
-          Clear<img src="../assets/icons/iconoir_cancel.svg" />
-        </button>
-        <button type="submit" class="createButton">
-          Create Task<img src="../assets/icons/check.svg">
-        </button>
-      </div>
+   </div>
+   <div class="requiredContainer">
+    <div>
+     <span style="color: #ff8190">
+      *
+     </span>
+     <span>
+      This field is required
+     </span>
     </div>
+    <div class="createContainer">
+     <button class="clearButton" id="clearBtn" type="reset">
+      Clear
+      <img alt="Bild" src="../assets/icons/iconoir_cancel.svg"/>
+     </button>
+     <button class="createButton" type="submit">
+      Create Task
+      <img alt="Bild" src="../assets/icons/check.svg"/>
+     </button>
+    </div>
+   </div>
   </form>
-
-  <footer></footer>
-  <script src="addtask.js"></script>
-</body>
-
+  <footer>
+  </footer>
+  <script src="addtask.js">
+  </script>
+ </body>
 </html>

@@ -12,7 +12,7 @@ export async function createUser(userData) {
 
     return await requestData("PUT", `/users/${customId}`, dataWithId);
   } catch (error) {
-    console.error("Error creating user:", error);
+    console.log("Error creating user:", error);
     throw error;
   }
 }

@@ -2,28 +2,25 @@ import { loginUser, loginAsGuest } from "../auth/login.js";
 
 export async function loginListeners() {
   const loginForm = document.getElementById("loginForm");
-  if (!loginForm) return console.warn("loginForm not found");
+  if (!loginForm) return console.log("loginForm not found");
   document.querySelector(".logIn").addEventListener("click", async () => {
     const email = document.querySelector("#loginEmail").value.trim();
     const password = document.querySelector("#loginPassword").value.trim();
 
     try {
       const user = await loginUser(email, password);
-
-      alert(`Willkommen zurück, ${user.userName || "User"}!`);
       window.location.href = "../../startpage/startpage.html";
     } catch (err) {
-      alert(err.message);
+      console.log(`Guest login failed: ${err.message}`);
     }
   });
 
   document.querySelector(".guestLogIn").addEventListener("click", async () => {
     try {
       const guest = await loginAsGuest();
-      alert(`Eingeloggt als Gast: ${guest.userName || "Testuser"}`);
       window.location.href = "../../startpage/startpage.html";
     } catch (err) {
-      alert(err.message);
+      console.log(`Guest login failed: ${err.message}`);
     }
   });
 }
@@ -31,7 +28,7 @@ export async function loginListeners() {
 export async function signupListeners() {
   const form = document.getElementById("signUpForm");
 
-  if (!form) return console.warn("signUpForm not found");
+  if (!form) return console.log("signUpForm not found");
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
