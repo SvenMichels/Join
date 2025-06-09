@@ -1,119 +1,107 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="./board.css">
-    <script src="board.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="./board.css">
+  <script src="board.js"></script>
 </head>
 
 <body>
-    <header class="headerStyle">
-      <div>
-        <p>Kanban Project Management Tool</p>
-      </div>
-    </header>
-    <nav class="navBarStyle">
-      <img class="logo" src="/assets/icons/join_white.svg" alt="Logo" />
-      <div class="menu3">
-                  <button class="navBtnLogIn d_none">
-            <img
-              class="navIcons"
-              src="/assets/icons/login.svg"
-              alt=""
-            />Log In
-          </button>
-        <div class="taskSummary">
-          <button class="navBtn">
-            <img
-              class="navIcons"
-              src="/assets/icons/summary_2.svg"
-              alt=""
-            />Summary
-          </button>
-        </div>
-        <div class="taskFrame9">
-          <button class="navBtn">
-            <img class="navIcons" src="/assets/icons/add_task.svg" alt="" />Add
-            Task
-          </button>
-        </div>
-        <div class="taskBoard">
-          <button class="navBtnBoard">
-            <img class="navIcons" src="/assets/icons/board.svg" alt="" />Board
-          </button>
-        </div>
-        <div class="taskContacts">
-          <button class="navBtn">
-            <img
-              class="navIcons"
-              src="/assets/icons/contacts.svg"
-              alt=""
-            />Contacts
-          </button>
-        </div>
-      </div>
-      <div class="taskFrame22">
-        <div class="privatLink">
-          <a href="./privatpolicy.html" class="taskFrameLink">Privacy Policy</a>
-        </div>
-        <a href="../legalnotice.html" class="taskFrameLink">Legal notice</a>
-      </div>
-    </nav>
-    <div id="subMenuContainer" class="subMenuContainer d_none">
-      <button onclick="changeToPolicy()" class="subMenuButtons">Privat Policy</button>
-      <button onclick="changeToLegalNotice()" class="subMenuButtons">Legal Notice</button>
-      <button class="subMenuButtons">Log out</button>
+  <header class="headerStyle">
+    <div>
+      <p>Kanban Project Management Tool</p>
     </div>
-    <div class="taskh1Container">
-        <h1>Board</h1>
-        <div class="searchAddContainer">
-            <div class="searchContainer input-wrapper">
-                <input id="" class="searchField" type="text" placeholder="Find Task" onkeyup="">
-                <div class=""></div>
-                <img onclick="" class="input-icon" src="../assets/icons/search.svg" alt="">
-            </div>
-
-                <img class="add_btn_default" src="../assets/icons/add_task_default.svg" alt="">
-
-        </div>
+  </header>
+  <nav class="navBarStyle">
+    <img class="logo" src="/assets/icons/join_white.svg" alt="Logo" />
+    <div class="menu3">
+      <button class="navBtnLogIn d_none">
+        <img class="navIcons" src="/assets/icons/login.svg" alt="" />Log In
+      </button>
+      <div class="taskSummary">
+        <button class="navBtn">
+          <img class="navIcons" src="/assets/icons/summary_2.svg" alt="" />Summary
+        </button>
+      </div>
+      <div class="taskFrame9">
+        <button class="navBtn">
+          <img class="navIcons" src="/assets/icons/add_task.svg" alt="" />Add
+          Task
+        </button>
+      </div>
+      <div class="taskBoard">
+        <button class="navBtnBoard">
+          <img class="navIcons" src="/assets/icons/board.svg" alt="" />Board
+        </button>
+      </div>
+      <div class="taskContacts">
+        <button class="navBtn">
+          <img class="navIcons" src="/assets/icons/contacts.svg" alt="" />Contacts
+        </button>
+      </div>
     </div>
+    <div class="taskFrame22">
+      <div class="privatLink">
+        <a href="./privatpolicy.html" class="taskFrameLink">Privacy Policy</a>
+      </div>
+      <a href="../legalnotice.html" class="taskFrameLink">Legal notice</a>
+    </div>
+  </nav>
+  <div id="subMenuContainer" class="subMenuContainer d_none">
+    <button onclick="changeToPolicy()" class="subMenuButtons">Privat Policy</button>
+    <button onclick="changeToLegalNotice()" class="subMenuButtons">Legal Notice</button>
+    <button class="subMenuButtons">Log out</button>
+  </div>
+  <div class="taskh1Container">
+    <h1>Board</h1>
+    <div class="searchAddContainer">
+      <div class="searchContainer input-wrapper">
+        <input id="" class="searchField" type="text" placeholder="Find Task" onkeyup="">
+        <div class=""></div>
+        <img onclick="" class="input-icon" src="../assets/icons/search.svg" alt="">
+      </div>
 
-    <main class="board">
-        <section class="column" data-status="todo">
-            <header class="board-wrapper">
-                <h2>To Do</h2>
-                <img id="add-task-btn" class="board-icon" src="../assets/icons/add_task_btn.svg" alt="">
-            </header>
-            <div class="task-list" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-        </section>
+      <img class="add_btn_default" src="../assets/icons/add_task_default.svg" alt="">
 
-        <section class="column" data-status="in-progress">
-            <header class="board-wrapper">
-                <h2>In Progress</h2>
-                <img id="add-task-btn" class="board-icon" src="../assets/icons/add_task_btn.svg" alt="">
-            </header>
-            <div class="task-list" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-        </section>
+    </div>
+  </div>
 
-        <section class="column" data-status="await">
-            <header class="board-wrapper">
-                <h2>Await Feedback</h2>
-                <img id="add-task-btn" class="board-icon" src="../assets/icons/add_task_btn.svg" alt="">
-            </header>
-            <div class="task-list" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-        </section>
+  <main class="board">
+    <section class="column" data-status="todo">
+      <header class="board-wrapper">
+        <h2>To Do</h2>
+        <img id="add-task-btn" class="board-icon" src="../assets/icons/add_task_btn.svg" alt="">
+      </header>
+      <div class="task-list" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+    </section>
 
-        <section class="column" data-status="done">
-            <header class="board-wrapper">
-                <h2>Done</h2>
-                <img id="add-task-btn" class="board-icon" src="../assets/icons/add_task_btn.svg" alt="">
-            </header>
-            <div class="task-list" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-        </section>
-    </main>
+    <section class="column" data-status="in-progress">
+      <header class="board-wrapper">
+        <h2>In Progress</h2>
+        <img id="add-task-btn" class="board-icon" src="../assets/icons/add_task_btn.svg" alt="">
+      </header>
+      <div class="task-list" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+    </section>
+
+    <section class="column" data-status="await">
+      <header class="board-wrapper">
+        <h2>Await Feedback</h2>
+        <img id="add-task-btn" class="board-icon" src="../assets/icons/add_task_btn.svg" alt="">
+      </header>
+      <div class="task-list" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+    </section>
+
+    <section class="column" data-status="done">
+      <header class="board-wrapper">
+        <h2>Done</h2>
+        <img id="add-task-btn" class="board-icon" src="../assets/icons/add_task_btn.svg" alt="">
+      </header>
+      <div class="task-list" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+    </section>
+  </main>
 
 </body>
 

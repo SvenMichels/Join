@@ -4,13 +4,12 @@ export async function loginUser(email, password) {
   try {
     const response = await requestData("GET", "/users");
     const users = response.data;
-      console.log("User logged in:", users);
     // Durch alle Nutzer iterieren und vergleichen
     for (const id in users) {
       const user = users[id];
       if (user.userEmail === email) {
         if (user.password === password) {
-          console.log("Login erfolgreich:", user);
+          console.log("Login erfolgreich:", user.userName);
           return user;
         } else {
           throw new Error("Falsches Passwort");
@@ -18,7 +17,6 @@ export async function loginUser(email, password) {
       }
     }
 
-    // Kein Benutzer mit passender E-Mail gefunden
     throw new Error("E-Mail nicht registriert");
   } catch (error) {
     console.warn("Login fehlgeschlagen:", error.message);
@@ -30,11 +28,12 @@ export async function loginAsGuest() {
   try {
     const response = await requestData("GET", "/users");
     const users = response.data;
+    console.table("Guest login attempt:", users);
 
     for (const id in users) {
       const user = users[id];
       if (user.userEmail === "test@guest.com") {
-        console.log("Guest login erfolgreich:", user);
+        console.log("Guest login erfolgreich:", user.userName);
         return user;
       }
     }

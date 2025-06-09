@@ -13,58 +13,67 @@
 
 <body>
   <main>
-    <img class="logo" src="../assets/icons/join_logo_1.png" alt="" />
-    <div class="form-container">
+    <img class="logo" src="../assets/icons/join_logo_1.png" alt="Join Logo" />
 
-<form id="signUpForm">
+    <div class="form-container">
+      <form id="signUpForm">
         <div class="form-header">
-          <img class="pointer" src="../assets/icons/arrow-left-line.svg" alt=""
-            onclick="window.location.href='../index.html'">
+          <button type="button" onclick="window.location.href='../index.html'" class="back-button">
+            <img class="pointer" src="../assets/icons/arrow-left-line.svg" alt="Zurück" />
+          </button>
           <div class="form-title">
             <h1>Sign Up</h1>
           </div>
         </div>
+
         <div class="input-wrapper">
-          <input id="inputName" type="text" placeholder="Name" autocomplete="name" required />
+          <label for="inputName" class="visually-hidden">Name</label>
+          <input id="inputName" name="name" type="text" placeholder="Name" autocomplete="name" required />
           <img class="input-icon" src="../assets/icons/person.svg" alt="Name icon" />
         </div>
 
         <div class="input-wrapper">
-          <input id="inputEmail" type="email" placeholder="Email" autocomplete="email" required />
+          <label for="inputEmail" class="visually-hidden">Email</label>
+          <input id="inputEmail" name="email" type="email" placeholder="Email" autocomplete="email" required />
           <img class="input-icon" src="../assets/icons/mail.svg" alt="Email icon" />
         </div>
 
         <div class="input-wrapper">
-          <input id="inputPassword" type="password" placeholder="Password" autocomplete="new-password" required />
+          <label for="inputPassword" class="visually-hidden">Passwort</label>
+          <input id="inputPassword" name="password" type="password" placeholder="Password" autocomplete="new-password"
+            required />
           <img class="input-icon toggle-password" src="../assets/icons/visibility.svg"
             alt="Toggle password visibility" />
         </div>
+
         <div class="input-wrapper">
+          <label for="inputConfirmPassword" class="visually-hidden">Passwort bestätigen</label>
           <input id="inputConfirmPassword" name="confirmPassword" type="password" placeholder="Confirm Password"
             autocomplete="new-password" required />
           <img class="input-icon toggle-password" src="../assets/icons/visibility.svg"
             alt="Toggle password visibility" />
         </div>
 
-        <div>
+        <div class="checkbox-wrapper">
           <label>
-            <input id="checkBox" type="checkbox" />
-            I accept the&nbsp;<a href="">Privacy policy</a>
+            <input id="checkBox" type="checkbox" required />
+            I accept the <a href="../privacypolicy.html">Privacy policy</a>
           </label>
-          <button id="signUpBtn" type="submit" disabled>Sign up</button>
+        </div>
+
+        <div class="button-wrapper">
+          <button id="signUpBtn" type="submit">Sign up</button>
         </div>
       </form>
-
-      <footer>
-        <p>Privacy Policy</p>
-        <p>Legal Notice</p>
-      </footer>
+    </div>
   </main>
 
+  <footer>
+    <p><a href="../privacypolicy.html">Privacy Policy</a></p>
+    <p><a href="../legalnotice.html">Legal Notice</a></p>
+  </footer>
+
   <div id="overlay" class="d_none"></div>
-
-
-
   <script type="module" src="../scripts/app.js"></script>
 </body>
 

@@ -1,9 +1,8 @@
 body {
-  font-family: "Inter";
+  font-family: "Inter", sans-serif;
   margin: 0;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   max-width: 1440px;
   height: 100vh;
@@ -13,10 +12,10 @@ body {
 main {
   display: flex;
   flex-direction: column;
-  width: 100%;
-  max-width: 1440px;
   align-items: center;
-  height: 100vh;
+  width: 100vw;
+  height: 100%;
+  padding-top: 170px;
 }
 
 .form-container {
@@ -24,124 +23,48 @@ main {
   flex-direction: column;
   width: 100%;
   max-width: 598px;
+  box-shadow: 0px 0px 14px 3px rgba(0, 0, 0, 0.08);
+  border-radius: 30px;
+  background-color: white;
+  padding: 48px 88px;
+  gap: 32px;
+  box-sizing: border-box;
 }
 
 form {
   color: rgba(168, 168, 168, 1);
   display: flex;
   flex-direction: column;
-  text-align: center;
-  box-sizing: border-box;
   width: 100%;
-  max-width: 598px;
-  height: 630px;
-  padding-top: 48px;
-  padding-right: 88px;
-  padding-bottom: 48px;
-  padding-left: 88px;
-  gap: 32px;
-  border-radius: 30px;
-  box-shadow: 0px 0px 14px 3px rgba(0, 0, 0, 0.08);
-  margin-top: 226px;
-
-  a {
-    color: rgba(41, 171, 226, 1);
-    text-decoration: none;
-  }
-
-  p {
-    margin: 0;
-  }
+  gap: 24px;
 }
 
 .form-header {
   display: flex;
-  flex-direction: row;
   align-items: center;
+  gap: 16px;
 }
 
-footer {
-  display: flex;
-  color: rgba(168, 168, 168, 1);
-  margin-top: auto;
-  justify-content: center;
-  gap: 24px;
+.back-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
 }
 
 .form-title {
   display: flex;
-  width: 100%;
-}
-
-h1 {
-  color: black;
-  font-family: "Inter";
-  font-weight: 700;
-  font-size: 61px;
-  line-height: 120%;
-  letter-spacing: 0%;
-  text-align: center;
-  margin: 0;
-  width: 100%;
-}
-
-input {
-  color: rgba(209, 209, 209, 1);
-  display: flex;
-  box-sizing: border-box;
-  width: 100%;
-  height: 48px;
-  padding-top: 12px;
-  padding-right: 21px;
-  padding-bottom: 12px;
-  padding-left: 21px;
-  gap: 10px;
-  border-radius: 10px;
-  border-width: 1px;
-  font-size: 20px;
-  border: solid 1px lightgrey;
-}
-
-#checkBox {
-  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 8px;
   width: 100%;
-  height: 16px;
-  width: 16px;
 }
 
-button {
-  background-color: rgba(42, 54, 71, 1);
-  color: white;
-  width: 128px;
-  height: 55px;
-  padding-top: 15px;
-  padding-right: 24px;
-  padding-bottom: 15px;
-  padding-left: 24px;
-  gap: 10px;
-  border-radius: 8px;
-  font-family: "Inter";
+.form-title h1 {
+  color: black;
+  font-family: "Inter", sans-serif;
   font-weight: 700;
-  font-size: 21px;
-  line-height: 120%;
-  letter-spacing: 0%;
-}
-
-.logo {
-  position: absolute;
-  width: 100px;
-  height: 121px;
-  top: 80px;
-  left: 77px;
-}
-
-label {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  margin-bottom: 36px;
+  font-size: 48px;
+  margin: 0 auto;
 }
 
 .input-wrapper {
@@ -150,10 +73,13 @@ label {
 }
 
 .input-wrapper input {
+  color: #2a2a2a;
   width: 100%;
-  padding-right: 40px; 
-  padding-left: 12px;
-  height: 40px;
+  height: 48px;
+  padding: 0 48px 0 12px;
+  border: 1px solid lightgrey;
+  border-radius: 10px;
+  font-size: 16px;
   box-sizing: border-box;
 }
 
@@ -164,10 +90,81 @@ label {
   transform: translateY(-50%);
   height: 20px;
   width: 20px;
-  cursor: pointer;
   opacity: 0.6;
+  cursor: pointer;
 }
 
 .input-icon:hover {
   opacity: 1;
+}
+
+.checkbox-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  gap: 8px;
+  text-align: center;
+}
+
+.checkbox-wrapper input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+}
+
+.checkbox-wrapper a {
+  color: rgba(41, 171, 226, 1);
+  text-decoration: none;
+}
+
+.button-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+button[type="submit"] {
+  background-color: rgba(42, 54, 71, 1);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  padding: 15px 32px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button[type="submit"]:hover {
+  background-color: rgba(30, 40, 55, 1);
+}
+
+footer {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  color: rgba(168, 168, 168, 1);
+  font-size: 14px;
+  padding: 24px;
+}
+
+footer a {
+  color: rgba(41, 171, 226, 1);
+  text-decoration: none;
+}
+
+.logo {
+  position: absolute;
+  width: 100px;
+  height: auto;
+  top: 40px;
+  left: 40px;
+}
+
+.visually-hidden {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
 }

@@ -10,7 +10,7 @@ export async function loginListeners() {
     try {
       const user = await loginUser(email, password);
 
-      alert(`Willkommen zurück, ${user.name || "User"}!`);
+      alert(`Willkommen zurück, ${user.userName || "User"}!`);
       window.location.href = "../../startpage/startpage.html";
     } catch (err) {
       alert(err.message);
@@ -20,7 +20,7 @@ export async function loginListeners() {
   document.querySelector(".guestLogIn").addEventListener("click", async () => {
     try {
       const guest = await loginAsGuest();
-      alert(`Eingeloggt als Gast: ${guest.name || "Testuser"}`);
+      alert(`Eingeloggt als Gast: ${guest.userName || "Testuser"}`);
       window.location.href = "../../startpage/startpage.html";
     } catch (err) {
       alert(err.message);

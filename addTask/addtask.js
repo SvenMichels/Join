@@ -11,6 +11,8 @@ function changeToLegalNotice() {
   window.location.href = "../legalnotice.html";
 }
 
+
+
 // if (window.location.pathname.endsWith("addtask.html")) {
 //   initAddtask();
 // }
