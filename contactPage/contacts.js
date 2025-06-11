@@ -13,9 +13,7 @@ const usedLetters = new Set();
 
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("addBtn").addEventListener("click", openAddWindow);
-  document
-    .getElementById("closeBtn")
-    .addEventListener("click", closeAddWindow, closeEditWindow);
+  document.getElementById("closeBtn").addEventListener("click", closeAddWindow, closeEditWindow);
   document.getElementById("submitBtn").addEventListener("click", addContact);
   document.getElementById("openMenu").addEventListener("click", closeOpenMenu)
 });
