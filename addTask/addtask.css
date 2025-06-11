@@ -602,3 +602,7 @@ textarea::placeholder {
 .d_none {
   display: none;
 }
+
+.txtDeco-none{
+    text-decoration: none;
+}
