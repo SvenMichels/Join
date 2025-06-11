@@ -4,6 +4,7 @@ body {
   height: 100vh;
   background-color: #f6f7f8;
   overflow-x: hidden;
+   font-family: 'Inter';
 }
 
 /* HEADER */
@@ -339,4 +340,8 @@ p {
 
 .task-list {
   height: 500px;
+}
+
+.txtDeco-none{
+    text-decoration: none;
 }

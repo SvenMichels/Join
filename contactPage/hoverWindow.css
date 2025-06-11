@@ -235,3 +235,36 @@ textarea::placeholder{
     height: 11px;
     color: #2a3647;
 }
+
+.dropDownMenu{
+    position: absolute;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    background-color: #2a3647;
+    width: 150px;
+    height: 158px;
+    border: 1px solid #2a3647;
+    border-radius: 20px 0px 20px 20px;
+    padding: 10px;
+    margin-top: 40px;
+    left: 89%;
+}
+
+.dropDownTxt{
+    margin-left: 20px;
+     font-family: 'Inter';
+    font-size: 16px;
+    font-weight: 400px;
+    color: #cdcdcd;
+}
+
+.dropDownTxt:hover{
+    color: #29abe2;
+    cursor: pointer;
+}
+
+.txtDeco-none{
+    text-decoration: none;
+}
