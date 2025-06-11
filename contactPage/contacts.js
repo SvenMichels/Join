@@ -6,7 +6,7 @@ import {
 import { requestData } from "../scripts/firebase.js";
 import { createUser } from "../scripts/users/users.js";
 
-let contactList =[] //muss später in der datenbank gespeichtert und aufgerufen werden können (rendern)
+let contactList = []; //muss später in der datenbank gespeichtert und aufgerufen werden können (rendern)
 let contactIdCounter = 0; //test //muss theoretisch auch geladen werden
 
 const usedLetters = new Set();
@@ -17,6 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .getElementById("closeBtn")
     .addEventListener("click", closeAddWindow, closeEditWindow);
   document.getElementById("submitBtn").addEventListener("click", addContact);
+  document.getElementById("openMenu").addEventListener("click", closeOpenMenu)
 });
 
 function openAddWindow() {
@@ -35,6 +36,15 @@ function closeEditWindow() {
   document.getElementById(`editWindow`).classList.add("dp-none");
 }
 
+function closeOpenMenu(){
+  const element = document.getElementById("dropDownMenu");
+  if (element.classList.contains("dp-none")) {
+      document.getElementById(`dropDownMenu`).classList.remove("dp-none");
+  } else {
+    document.getElementById(`dropDownMenu`).classList.add("dp-none");
+  }
+}
+
 async function addContact(event) {
   event.preventDefault();
   const name = getName();
@@ -44,7 +54,7 @@ async function addContact(event) {
   const firstLetter = getFirstLetter(name);
   const id = contactIdCounter++;
 
-  const contact ={name, email, phone, initials, id}
+  const contact = { name, email, phone, initials, id };
   contactList.push(contact);
   // const contactData = { name, email, phone, initials};
 
@@ -104,7 +114,7 @@ function renderSingleContact(name, email, phone, initials, id) {
   const bigContactRef = document.getElementById("bigContact");
   bigContactRef.innerHTML = singleContact(name, email, phone, initials, id);
 
-  document.addEventListener("click", function(event){
+  document.addEventListener("click", function (event) {
     if (event.target.matches(".deleteBtn")) {
       const id = parseInt(event.target.dataset.id);
       deleteContact(id);
@@ -120,23 +130,36 @@ function emptyInput() {
 
 function deleteContact(id) {
   // Gesuchten Kontakt aus dem contactList-Array entfernen
-  contactList = contactList.filter(contact => contact.id !== id);
+  contactList = contactList.filter((contact) => contact.id !== id);
 
   // UI neu aufbauen
   document.getElementById("allContacts").innerHTML = "";
   usedLetters.clear();
 
   for (const contact of contactList) {
-    renderContact(contact.name, contact.email, contact.phone, contact.initials, getFirstLetter(contact.name), contact.id);
+    renderContact(
+      contact.name,
+      contact.email,
+      contact.phone,
+      contact.initials,
+      getFirstLetter(contact.name),
+      contact.id
+    );
   }
 
   // Einzelansicht zurücksetzen
   document.getElementById("bigContact").innerHTML = "";
 }
 
-function showContact(id){
-  const contact = contacts.find(c => c.id === id);
+function showContact(id) {
+  const contact = contacts.find((c) => c.id === id);
   if (contact) {
-    renderSingleContact(contact.name, contact.email, contact.phone, contact.initials, contact.id);
+    renderSingleContact(
+      contact.name,
+      contact.email,
+      contact.phone,
+      contact.initials,
+      contact.id
+    );
   }
 }
