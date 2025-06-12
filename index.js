@@ -21,13 +21,12 @@ function removeElement(element) {
   element.remove();
 }
 
-function animateBigLogoShrink(element, onComplete) {
+function animateBigLogoShrink(element) {
   setTimeout(() => {
     element.classList.add("shrinkToLogo");
   }, 1500);
 
   element.addEventListener("transitionend", function handleTransitionEnd() {
     element.removeEventListener("transitionend", handleTransitionEnd);
-    onComplete();
   });
 }

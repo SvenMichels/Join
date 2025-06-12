@@ -18,7 +18,7 @@ body{
     width: 1440px;
     display: flex;
     align-items: start;
-    justify-content: space-between;
+    justify-content: flex-end;
     flex-direction: row;
     padding-top: 50px;
 }
@@ -28,6 +28,7 @@ body{
     flex-direction: row;
     width: 279px;
     height: 49px;
+    left: 90%;
 }
 
 .signUpTxt{
@@ -41,8 +42,7 @@ body{
 .logo{
     width: 100px;
     height: 122px;
-    top: 80px;
-    left: 77px;
+
 }
 
 .bigLogo {
