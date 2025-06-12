@@ -562,3 +562,13 @@ textarea::placeholder {
   background-color: #FF3D00;
   color: white;
 }
+
+.prioMediumBtnActive {
+  background-color: #FFA800;
+  color: white;
+}
+
+.prioLowBtnActive {
+  background-color: #7AE229;
+  color: white;
+}
