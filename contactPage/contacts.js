@@ -51,11 +51,13 @@ async function addContact(event) {
   const initials = getInitials(name);
   const firstLetter = getFirstLetter(name);
   const id = contactIdCounter++;
-
   const contact = { name, email, phone, initials, id };
   contactList.push(contact);
-  
 
+  contactCreated(contact, name, email, phone, initials, id, firstLetter);
+}
+
+  async function contactCreated(contact, name, email, phone, initials, firstLetter){
   try {
     await createUser(contact);
     renderContact(name, email, phone, initials, firstLetter);
