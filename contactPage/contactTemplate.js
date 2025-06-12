@@ -42,7 +42,7 @@ export function contactCard(name, email, initials, id){
               <div class="pic">${initials}</div>
               <div class="nameAdressContainer">
                 <div id="profileName" class="contactName">${name}</div>
-                <div class="${email}"</div>
+                <div class="email">${email}</div>
               </div>
             </div>`
 }

@@ -15,7 +15,8 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("addBtn").addEventListener("click", openAddWindow);
   document.getElementById("closeBtn").addEventListener("click", closeAddWindow, closeEditWindow);
   document.getElementById("submitBtn").addEventListener("click", addContact);
-  document.getElementById("openMenu").addEventListener("click", closeOpenMenu)
+  document.getElementById("openMenu").addEventListener("click", closeOpenMenu);
+  loadShowContact();
 });
 
 function openAddWindow() {
@@ -54,13 +55,13 @@ async function addContact(event) {
   const contact = { name, email, phone, initials, id };
   contactList.push(contact);
 
-  contactCreated(contact, name, email, phone, initials, id, firstLetter);
+  contactCreated(contact, name, email, phone, initials, firstLetter, id);
 }
 
-  async function contactCreated(contact, name, email, phone, initials, firstLetter){
+async function contactCreated(contact, name, email, phone, initials, firstLetter, id){
   try {
     await createUser(contact);
-    renderContact(name, email, phone, initials, firstLetter);
+    renderContact(name, email, phone, initials, firstLetter, id);
     emptyInput();
     closeAddWindow();
   } catch (error) {
@@ -108,6 +109,8 @@ function renderAlphabetFilter(firstLetter) {
 function renderContactCard(name, email, initials, id) {
   const allContactsRef = document.getElementById("allContacts");
   allContactsRef.innerHTML += contactCard(name, email, initials, id);
+
+  console.log("Rendering contact card with ID:", id);
 }
 
 function renderSingleContact(name, email, phone, initials, id) {
@@ -124,6 +127,18 @@ function bindDeleteButton(container) {
   deleteButton.addEventListener("click", () => {
     const id = parseInt(deleteButton.dataset.id);
     deleteContact(id);
+  });
+}
+
+function loadShowContact(){
+  // console.log("loadShowContact: Eventlistener registriert");
+  document.getElementById("allContacts").addEventListener("click", function (event) {
+    const contactCard = event.target.closest(".contact");
+    if (contactCard) {
+      const id = parseInt(contactCard.dataset.id);
+      console.log("Click on contactCard ID:", id);
+      showContact(id);
+    }
   });
 }
 
@@ -167,7 +182,7 @@ function clearBigContactView() {
 }
 //(=^.^=)
 function showContact(id) {
-  const contact = contacts.find((contact) => contact.id === id);
+  const contact = contactList.find((contact) => contact.id === id);
   if (contact) {
     renderSingleContact(
       contact.name,

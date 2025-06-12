@@ -1,4 +1,5 @@
-- delete button soll Kontakt auch aus der liste links löschen
+<!-- - delete button soll Kontakt auch aus der liste links löschen -->
 - liste links muss beim adden und deleten neu rendern und alphabetisch sortieren
-- auf die kontakte links soll man klicken können um sie zu öffnen
+<!-- - auf die kontakte links soll man klicken können um sie zu öffnen -->
+- css für angeklickte kontakte
 - kontakt editieren funktion implementieren
