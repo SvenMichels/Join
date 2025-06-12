@@ -41,7 +41,7 @@ function closeOpenMenu(){
   } else {
     document.getElementById(`dropDownMenu`).classList.add("dp-none");
   }
-}
+} 
 
 async function addContact(event) {
   event.preventDefault();
@@ -54,10 +54,10 @@ async function addContact(event) {
 
   const contact = { name, email, phone, initials, id };
   contactList.push(contact);
-  // const contactData = { name, email, phone, initials};
+  
 
   try {
-    await createUser(contactData);
+    await createUser(contact);
     renderContact(name, email, phone, initials, firstLetter);
     emptyInput();
     closeAddWindow();
