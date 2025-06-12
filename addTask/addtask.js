@@ -2,6 +2,7 @@
 
 document.addEventListener("DOMContentLoaded", async () => {
   const form = document.getElementById("taskForm");
+  document.getElementById("openMenu").addEventListener("click", closeOpenMenu);
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -68,3 +69,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById(activeId).classList.add("active");
   }
 });
+
+function closeOpenMenu(){
+  const element = document.getElementById("dropDownMenu");
+  if (element.classList.contains("dp-none")) {
+      document.getElementById(`dropDownMenu`).classList.remove("dp-none");
+  } else {
+    document.getElementById(`dropDownMenu`).classList.add("dp-none");
+  }
+}
