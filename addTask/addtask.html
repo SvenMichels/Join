@@ -21,9 +21,14 @@
                 <a href="../help/help.html">
                     <img alt="Bild" class="helpIcon" src="../assets/icons/help.svg" />
                 </a>
-                <img alt="Bild" class="profileIcon" onclick="showSubMenu()"
+                <img id="openMenu" alt="Bild" class="profileIcon" onclick="showSubMenu()"
                     src="../assets/icons/user_profile_initials.svg" />
             </div>
+             <div id="dropDownMenu" class="dropDownMenu dp-none">
+    <a class="txtDeco-none" href="../legalnotice.html"><P class="dropDownTxt">Legal Notice</P></a>
+    <a class="txtDeco-none" href="../privatpolicy.html"><P class="dropDownTxt">Privacy Policy</P></a>
+    <a class="txtDeco-none" href="../index.html"><P class="dropDownTxt">Log out</P></a>
+  </div>
         </div>
         <div class="subMenuContainer d_none" id="subMenuContainer">
             <button class="subMenuButtons" onclick="changeToPolicy()">

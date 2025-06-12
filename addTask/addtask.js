@@ -1,12 +1,12 @@
 import { requestData } from "../scripts/firebase.js"; // Firebase-Datenbankzugriff
 
-const urgentImageArray = ['../assets/icons/urgent_red.svg', '../assets/icons/urgent_white.svg'];
-const mediumImageArray = ['../assets/icons/medium_yellow.svg', '../assets/icons/medium_white.svg'];
-const lowImageArray = ['../assets/icons/low_green.svg', '../assets/icons/low_white.svg'];
+let urgentImageArray = ['../assets/icons/urgent_red.svg', '../assets/icons/urgent_white.svg'];
+let mediumImageArray = ['../assets/icons/medium_yellow.svg', '../assets/icons/medium_white.svg'];
+let lowImageArray = ['../assets/icons/low_green.svg', '../assets/icons/low_white.svg'];
 
 let currentActiveId = null;
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   const form = document.getElementById("taskForm");
 
   form.addEventListener("submit", async (e) => {
@@ -52,63 +52,68 @@ document.addEventListener("DOMContentLoaded", () => {
     await requestData("POST", "/tasks/", task);
 
     form.reset();
-    resetPrio();
+    resetPrio(); // Reset auch nach dem Abschicken
     alert("Aufgabe erfolgreich erstellt!");
   });
 
-  // Prio-Buttons Events
+  // Event Listener für Prio-Buttons
   document.getElementById("urgent-task").addEventListener("click", (e) => {
     e.preventDefault();
     resetPrio();
-    document.getElementById("urgent-task").classList.add("prioUrgentBtnActive");
+    document.getElementById('urgent-task').classList.add('prioUrgentBtnActive');
     togglePriority("urgent-task-img");
   });
 
   document.getElementById("medium-task").addEventListener("click", (e) => {
     e.preventDefault();
     resetPrio();
-    document.getElementById("medium-task").classList.add("prioMediumBtnActive");
-    togglePriority("medium-task-img");
+    document.getElementById('medium-task').classList.add('prioMediumBtnActive');
+    togglePriority("medium-task");
   });
 
   document.getElementById("low-task").addEventListener("click", (e) => {
     e.preventDefault();
     resetPrio();
-    document.getElementById("low-task").classList.add("prioLowBtnActive");
-    togglePriority("low-task-img");
+    document.getElementById('low-task').classList.add('prioLowBtnActive');
+    togglePriority("low-task");
   });
 });
 
 function togglePriority(activeId) {
   const priorities = {
     "urgent-task-img": urgentImageArray,
-    "medium-task-img": mediumImageArray,
-    "low-task-img": lowImageArray,
+    "medium-task": mediumImageArray,
+    "low-task": lowImageArray
   };
 
   Object.keys(priorities).forEach((id) => {
     const images = priorities[id];
-    const imgEl = document.getElementById(id);
+    const imgElement = document.getElementById(id);
 
     if (id === activeId) {
-      imgEl.src = images[1];
-      currentActiveId = activeId;
+      if (currentActiveId === activeId) {
+        imgElement.src = images[0];
+        currentActiveId = null;
+      } else {
+        imgElement.src = images[1];
+        currentActiveId = activeId;
+      }
     } else {
-      imgEl.src = images[0];
+      imgElement.src = images[0];
     }
   });
 }
 
 function resetPrio() {
-  // Klassen zurücksetzen
+  // Buttons zurücksetzen
   document.getElementById("urgent-task").classList.remove("prioUrgentBtnActive");
   document.getElementById("medium-task").classList.remove("prioMediumBtnActive");
   document.getElementById("low-task").classList.remove("prioLowBtnActive");
 
-  // Bilder zurücksetzen
+  // Icons zurücksetzen
   document.getElementById("urgent-task-img").src = urgentImageArray[0];
-  document.getElementById("medium-task-img").src = mediumImageArray[0];
-  document.getElementById("low-task-img").src = lowImageArray[0];
+  document.getElementById("medium-task").src = mediumImageArray[0];
+  document.getElementById("low-task").src = lowImageArray[0];
 
   currentActiveId = null;
 }
