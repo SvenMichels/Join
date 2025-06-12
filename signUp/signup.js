@@ -1,96 +1,83 @@
 import { createUser } from "../scripts/users/users.js";
-import { renderSignup } from "../signup/signuptemplate.js";
 
 const passwordInput = document.getElementById("inputPassword");
 const confirmPasswordInput = document.getElementById("inputConfirmPassword");
 const checkbox = document.getElementById("checkBox");
 const signUpBtn = document.getElementById("signUpBtn");
-
-const togglePasswordIcon = document.querySelector(
-  "#inputPassword + .toggle-password"
-);
-
-const toggleConfirmIcon = document.querySelector(
-  "#inputConfirmPassword + .toggle-password"
-);
+const togglePasswordIcon = document.querySelector("#inputPassword + .toggle-password");
+const toggleConfirmIcon = document.querySelector("#inputConfirmPassword + .toggle-password");
 
 if (window.location.pathname.endsWith("signup.html")) {
   initSignup();
 }
 
 function initSignup() {
-  passwordListener();
-  togglePasswordVisibility();
-  // validatePasswordsMatch();
+  setupPasswordValidation();
+  setupPasswordToggle();
+  setupSignupHandler();
+}
+
+function setupPasswordValidation() {
+  passwordInput.addEventListener("input", validatePasswordsMatch);
+  confirmPasswordInput.addEventListener("input", validatePasswordsMatch);
 }
 
 function validatePasswordsMatch() {
-  if (passwordInput.value !== confirmPasswordInput.valuve) {
-    confirmPasswordInput.setCustomValidity("Passwords do not match");
-  } else {
-    confirmPasswordInput.setCustomValidity("Passwords Match");
-  }
+  const mismatch = passwordInput.value !== confirmPasswordInput.value;
+  confirmPasswordInput.setCustomValidity(mismatch ? "Passwords do not match" : "");
 }
 
-// Event-Listener für die Passwortüberprüfung
-function passwordListener() {
-  passwordInput.addEventListener("inputPassword", validatePasswordsMatch);
-  confirmPasswordInput.addEventListener(
-    "inputConfirmPassword",
-    validatePasswordsMatch
-  );
-
-  checkbox.addEventListener("click", () => {
-    signUpBtn.disabled = !checkbox.checked;
-    if (checkbox.checked && signUpBtn) {
-      console.log("Checkbox is checked, enabling sign up button");
-      getNewUserInput();
-    }
-  });
-}
-
-function togglePasswordVisibility() {
-  // Passwort anzeigen/verstecken
+function setupPasswordToggle() {
   togglePasswordIcon.addEventListener("click", () => {
-    const isHidden = passwordInput.type === "password";
-    passwordInput.type = isHidden ? "text" : "password";
-    togglePasswordIcon.src = isHidden
-      ? "../assets/icons/visibility_off.svg"
-      : "../assets/icons/visibility.svg";
+    toggleInputVisibility(passwordInput, togglePasswordIcon);
   });
 
-  // Bestätigungspasswort anzeigen/verstecken
   toggleConfirmIcon.addEventListener("click", () => {
-    const isHidden = confirmPasswordInput.type === "password";
-    confirmPasswordInput.type = isHidden ? "text" : "password";
-    toggleConfirmIcon.src = isHidden
-      ? "../assets/icons/visibility_off.svg"
-      : "../assets/icons/visibility.svg";
+    toggleInputVisibility(confirmPasswordInput, toggleConfirmIcon);
   });
 }
 
-export async function getNewUserInput() {
-  const inputName = document.getElementById("inputName").value.trim();
-  const inputEmail = document.getElementById("inputEmail").value.trim();
-  const inputPassword = document.getElementById("inputPassword").value;
-  const inputConfirmPassword = document.getElementById(
-    "inputConfirmPassword"
-  ).value;
-  console.log(inputPassword, inputConfirmPassword);
+function toggleInputVisibility(input, icon) {
+  const isHidden = input.type === "password";
+  input.type = isHidden ? "text" : "password";
+  icon.src = isHidden
+    ? "../assets/icons/visibility_off.svg"
+    : "../assets/icons/visibility.svg";
+}
 
-  if (inputPassword !== inputConfirmPassword) {
-    alert("Passwords do not match");
-    return;
+function setupSignupHandler() {
+  signUpBtn.addEventListener("click", async () => {
+    if (!checkbox.checked) return;
+
+    const userData = collectUserInput();
+    if (!userData) return;
+
+    await submitUser(userData);
+  });
+}
+
+function collectUserInput() {
+  const userName = document.getElementById("inputName").value.trim();
+  const userEmail = document.getElementById("inputEmail").value.trim();
+  const password = passwordInput.value;
+  const confirmPassword = confirmPasswordInput.value;
+
+  if (!userName || !userEmail) {
+    alert("Name and email are required");
+    return null;
   }
 
-  const userData = {
-    userName: inputName,
-    userEmail: inputEmail,
-    password: inputPassword,
-  };
+  if (password !== confirmPassword) {
+    alert("Passwords do not match");
+    return null;
+  }
 
+  return { userName, userEmail, password };
+}
+
+async function submitUser(userData) {
   try {
-    const userId = await createUser(userData);
+    await createUser(userData);
   } catch (error) {
     console.error("User creation failed", error);
     alert("Registration failed. Please try again.");
