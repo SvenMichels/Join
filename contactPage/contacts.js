@@ -165,7 +165,7 @@ function renderAllContacts(contacts) {
 function clearBigContactView() {
   document.getElementById("bigContact").innerHTML = "";
 }
-
+//(=^.^=)
 function showContact(id) {
   const contact = contacts.find((contact) => contact.id === id);
   if (contact) {
