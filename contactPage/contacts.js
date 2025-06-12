@@ -113,12 +113,17 @@ function renderContactCard(name, email, initials, id) {
 function renderSingleContact(name, email, phone, initials, id) {
   const bigContactRef = document.getElementById("bigContact");
   bigContactRef.innerHTML = singleContact(name, email, phone, initials, id);
+  bindDeleteButton(bigContactRef);
+}
 
-  document.addEventListener("click", function (event) {
-    if (event.target.matches(".deleteBtn")) {
-      const id = parseInt(event.target.dataset.id);
-      deleteContact(id);
-    }
+function bindDeleteButton(container) {
+  const deleteButton = container.querySelector(".deleteBtn");
+
+  if (!deleteButton) return;
+
+  deleteButton.addEventListener("click", () => {
+    const id = parseInt(deleteButton.dataset.id);
+    deleteContact(id);
   });
 }
 
@@ -129,10 +134,8 @@ function emptyInput() {
 }
 
 function deleteContact(id) {
-  // Gesuchten Kontakt aus dem contactList-Array entfernen
   contactList = contactList.filter((contact) => contact.id !== id);
 
-  // UI neu aufbauen
   document.getElementById("allContacts").innerHTML = "";
   usedLetters.clear();
 
@@ -147,12 +150,11 @@ function deleteContact(id) {
     );
   }
 
-  // Einzelansicht zurücksetzen
   document.getElementById("bigContact").innerHTML = "";
 }
 
 function showContact(id) {
-  const contact = contacts.find((c) => c.id === id);
+  const contact = contacts.find((contact) => contact.id === id);
   if (contact) {
     renderSingleContact(
       contact.name,
