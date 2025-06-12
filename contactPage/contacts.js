@@ -134,12 +134,23 @@ function emptyInput() {
 }
 
 function deleteContact(id) {
-  contactList = contactList.filter((contact) => contact.id !== id);
+  contactList = removeContactById(contactList, id);
+  clearContactListUI();
+  renderAllContacts(contactList);
+  clearBigContactView();
+}
 
+function removeContactById(list, id) {
+  return list.filter(contact => contact.id !== id);
+}
+
+function clearContactListUI() {
   document.getElementById("allContacts").innerHTML = "";
   usedLetters.clear();
+}
 
-  for (const contact of contactList) {
+function renderAllContacts(contacts) {
+  for (const contact of contacts) {
     renderContact(
       contact.name,
       contact.email,
@@ -149,7 +160,9 @@ function deleteContact(id) {
       contact.id
     );
   }
+}
 
+function clearBigContactView() {
   document.getElementById("bigContact").innerHTML = "";
 }
 
