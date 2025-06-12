@@ -1,5 +1,10 @@
  import { requestData } from "../scripts/firebase.js"; // Firebase-Datenbankzugriff
 
+let urgentImageArray = ['../assets/icons/urgent_red.svg' , '../assets/icons/urgent_white.svg']
+let mediumImageArray = ['../assets/icons/medium_yellow.svg' , '../assets/icons/medium_white.svg']
+let lowImageArray = ['../assets/icons/low_green.svg' , '../assets/icons/low_white.svg']
+
+
 document.addEventListener("DOMContentLoaded", async () => {
   const form = document.getElementById("taskForm");
   document.getElementById("openMenu").addEventListener("click", closeOpenMenu);
@@ -18,11 +23,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       .filter(Boolean);
 
     let prio = null;
-    if (document.getElementById("urgentTask").classList.contains("active"))
+    if (document.getElementById("urgent-task").classList.contains("active")) {
       prio = "Urgent";
-    if (document.getElementById("mediumTask").classList.contains("active"))
+    }
+    if (document.getElementById("medium-task").classList.contains("active"))
       prio = "Medium";
-    if (document.getElementById("lowTask").classList.contains("active"))
+    if (document.getElementById("low-task").classList.contains("active"))
       prio = "Low";
 
     if (!title || !description || !category) {
@@ -49,26 +55,44 @@ document.addEventListener("DOMContentLoaded", async () => {
     alert("Aufgabe erfolgreich erstellt!");
   });
 
-  document.getElementById("urgentTask").addEventListener("click", (e) => {
+  document.getElementById("urgent-task").addEventListener("click", (e) => {
     e.preventDefault();
-    togglePriority("urgentTask");
+    let urgentRef = document.getElementById('urgent-task');
+    urgentRef.classList.toggle('prioUrgentBtnActive');
+    togglePriority("urgent-task-img");
   });
-  document.getElementById("mediumTask").addEventListener("click", (e) => {
+  document.getElementById("medium-task").addEventListener("click", (e) => {
     e.preventDefault();
-    togglePriority("mediumTask");
+    let mediumRef = document.getElementById('medium-task');
+    mediumRef.classList.toggle('prioMediumBtnActive');
+    togglePriority("medium-task-img");
   });
-  document.getElementById("lowTask").addEventListener("click", (e) => {
+  document.getElementById("low-task").addEventListener("click", (e) => {
     e.preventDefault();
-    togglePriority("lowTask");
+    togglePriority("low-task");
   });
 
-  function togglePriority(activeId) {
-    ["urgentTask", "mediumTask", "lowTask"].forEach((id) => {
-      document.getElementById(id).classList.remove("active");
-    });
-    document.getElementById(activeId).classList.add("active");
-  }
-});
+let currentActiveId = null;
+
+function togglePriority(activeId) {
+  const imageIds = ["urgent-task-img", "medium-task", "low-task"];
+  imageIds.forEach((id) => {
+    if (id === activeId) {
+      if (currentActiveId === activeId) {
+        // Wenn bereits aktiv, dann deaktivieren
+        document.getElementById(id).src = urgentImageArray[0]; // inaktives Bild
+        currentActiveId = null;
+      } else {
+        // Aktivieren
+        document.getElementById(id).src = urgentImageArray[1]; // aktives Bild
+        currentActiveId = activeId;
+      }
+    } else {
+      // Für alle anderen Bilder, inaktives Bild setzen
+      document.getElementById(id).src = urgentImageArray[0];
+    }
+  });
+}});
 
 function closeOpenMenu(){
   const element = document.getElementById("dropDownMenu");

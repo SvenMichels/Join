@@ -356,65 +356,20 @@ p {
 
 .prioButtonContainer {
   display: flex;
+  justify-content: space-between;
   gap: 16px;
-  height: 56px;
 }
 
-.prioButtonUrgent {
-  display: flex;
-  flex-direction: row;
+.prioButtons{
   width: 136px;
   height: 56px;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  border: 1px;
+  border-style: none;
   border-radius: 10px;
-  background: #ffffff;
-  box-shadow: 0px 0px 4px 0px #0000001a;
-  cursor: pointer;
+  background: #FFFFFF;
+  box-shadow: 0px 0px 4px 0px #0000001A;
 }
 
-.prioButtonUrgent:hover {
-  box-shadow: 0px 4px 4px 0px #00000040;
-}
-
-.prioButtonMedium {
-  display: flex;
-  flex-direction: row;
-  width: 136px;
-  height: 56px;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  border: 1px;
-  border-radius: 10px;
-  background: #ffa800;
-  color: #ffffff;
-  box-shadow: 0px 0px 4px 0px #0000001a;
-  cursor: pointer;
-}
-
-.prioButtonMedium:hover {
-  box-shadow: 0px 4px 4px 0px #00000040;
-}
-
-.prioButtonLow {
-  display: flex;
-  flex-direction: row;
-  width: 136px;
-  height: 56px;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  border: 1px;
-  border-radius: 10px;
-  background: #ffffff;
-  box-shadow: 0px 0px 4px 0px #0000001a;
-  cursor: pointer;
-}
-
-.prioButtonLow:hover {
+.prioButtons:hover {
   box-shadow: 0px 4px 4px 0px #00000040;
 }
 
@@ -639,6 +594,44 @@ textarea::placeholder {
     cursor: pointer;
 }
 
-.txtDeco-none{
-    text-decoration: none;
+.prioUrgentBtnActive{
+  background-color: #FF3D00;
+  color: white;
+}
+
+.dropDownMenu{
+    position: absolute;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    background-color: #2a3647;
+    width: 150px;
+    height: 158px;
+    border: 1px solid #2a3647;
+    border-radius: 20px 0px 20px 20px;
+    padding: 10px;
+    margin-top: 40px;
+    top: 70%;
+    left: 73%;
+}
+
+.dropDownTxt{
+  z-index: 1000;
+    margin-left: 20px;
+    margin-top: 20px;
+     font-family: 'Inter';
+    font-size: 16px;
+    font-weight: 400px;
+    color: #cdcdcd;
+}
+
+.dropDownTxt:hover{
+    color: #29abe2;
+    cursor: pointer;
+}
+
+.prioUrgentBtnActive{
+  background-color: #FF3D00;
+  color: white;
 }
