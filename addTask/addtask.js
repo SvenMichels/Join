@@ -1,119 +1,146 @@
-import { requestData } from "../scripts/firebase.js"; // Firebase-Datenbankzugriff
+import { requestData } from "../scripts/firebase.js";
 
-let urgentImageArray = ['../assets/icons/urgent_red.svg', '../assets/icons/urgent_white.svg'];
-let mediumImageArray = ['../assets/icons/medium_yellow.svg', '../assets/icons/medium_white.svg'];
-let lowImageArray = ['../assets/icons/low_green.svg', '../assets/icons/low_white.svg'];
+const priorityIcons = {
+  urgent: ["../assets/icons/urgent_red.svg", "../assets/icons/urgent_white.svg"],
+  medium: ["../assets/icons/medium_yellow.svg", "../assets/icons/medium_white.svg"],
+  low: ["../assets/icons/low_green.svg", "../assets/icons/low_white.svg"]
+};
 
-let currentActiveId = null;
+let currentActivePriority = null;
 
-document.addEventListener("DOMContentLoaded", async () => {
-  const form = document.getElementById("taskForm");
-
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const title = form.elements["taskTitle"].value.trim();
-    const description = form.elements["taskDescription"].value.trim();
-    const dueDate = form.elements["taskDate"].value;
-    const category = form.elements["category"].value;
-    const assigned = form.elements["assignedUsers"].value;
-    const subtasks = form.elements["subtask"].value
-      .split(",")
-      .map((s) => s.trim())
-      .filter(Boolean);
-
-    let prio = null;
-    if (document.getElementById("urgent-task").classList.contains("prioUrgentBtnActive")) {
-      prio = "Urgent";
-    } else if (document.getElementById("medium-task").classList.contains("prioMediumBtnActive")) {
-      prio = "Medium";
-    } else if (document.getElementById("low-task").classList.contains("prioLowBtnActive")) {
-      prio = "Low";
-    }
-
-    if (!title || !description || !category) {
-      alert("Bitte alle Pflichtfelder ausfüllen!");
-      return;
-    }
-
-    const task = {
-      id: Date.now(),
-      title,
-      description,
-      dueDate,
-      category,
-      assigned,
-      subtasks,
-      prio,
-      status: "todo",
-    };
-
-    console.log("Neue Aufgabe:", task);
-    await requestData("POST", "/tasks/", task);
-
-    form.reset();
-    resetPrio(); // Reset auch nach dem Abschicken
-    alert("Aufgabe erfolgreich erstellt!");
-  });
-
-  // Event Listener für Prio-Buttons
-  document.getElementById("urgent-task").addEventListener("click", (e) => {
-    e.preventDefault();
-    resetPrio();
-    document.getElementById('urgent-task').classList.add('prioUrgentBtnActive');
-    togglePriority("urgent-task-img");
-  });
-
-  document.getElementById("medium-task").addEventListener("click", (e) => {
-    e.preventDefault();
-    resetPrio();
-    document.getElementById('medium-task').classList.add('prioMediumBtnActive');
-    togglePriority("medium-task");
-  });
-
-  document.getElementById("low-task").addEventListener("click", (e) => {
-    e.preventDefault();
-    resetPrio();
-    document.getElementById('low-task').classList.add('prioLowBtnActive');
-    togglePriority("low-task");
-  });
+window.addEventListener("DOMContentLoaded", () => {
+  initializeForm();
+  initializePriorityButtons();
 });
 
-function togglePriority(activeId) {
-  const priorities = {
-    "urgent-task-img": urgentImageArray,
-    "medium-task": mediumImageArray,
-    "low-task": lowImageArray
-  };
+function initializeForm() {
+  const form = document.getElementById("taskForm");
+  form.addEventListener("submit", handleFormSubmit);
+}
 
-  Object.keys(priorities).forEach((id) => {
-    const images = priorities[id];
-    const imgElement = document.getElementById(id);
-
-    if (id === activeId) {
-      if (currentActiveId === activeId) {
-        imgElement.src = images[0];
-        currentActiveId = null;
-      } else {
-        imgElement.src = images[1];
-        currentActiveId = activeId;
-      }
-    } else {
-      imgElement.src = images[0];
-    }
+function initializePriorityButtons() {
+  ["urgent", "medium", "low"].forEach(priority => {
+    const button = document.getElementById(`${priority}-task`);
+    button.addEventListener("click", event => handlePrioritySelection(event, priority));
   });
 }
 
-function resetPrio() {
-  // Buttons zurücksetzen
-  document.getElementById("urgent-task").classList.remove("prioUrgentBtnActive");
-  document.getElementById("medium-task").classList.remove("prioMediumBtnActive");
-  document.getElementById("low-task").classList.remove("prioLowBtnActive");
+function handleFormSubmit(event) {
+  event.preventDefault();
 
-  // Icons zurücksetzen
-  document.getElementById("urgent-task-img").src = urgentImageArray[0];
-  document.getElementById("medium-task").src = mediumImageArray[0];
-  document.getElementById("low-task").src = lowImageArray[0];
+  const form = event.target;
+  const task = collectTaskData(form);
 
-  currentActiveId = null;
+  if (!isTaskValid(task)) {
+    alert("Bitte alle Pflichtfelder ausfüllen!");
+    return;
+  }
+
+  submitTask(task);
+  resetFormState(form);
+}
+
+function collectTaskData(form) {
+  return {
+    id: Date.now(),
+    title: getValue(form, "taskTitle"),
+    description: getValue(form, "taskDescription"),
+    dueDate: form.elements["taskDate"].value,
+    category: form.elements["category"].value,
+    assigned: form.elements["assignedUsers"].value,
+    subtasks: parseSubtasks(form.elements["subtask"].value),
+    prio: getSelectedPriority(),
+    status: "todo"
+  };
+}
+
+function getValue(form, name) {
+  return form.elements[name].value.trim();
+}
+
+function parseSubtasks(subtasks) {
+  return subtasks
+    .split(",")
+    .map(subtask => subtask.trim())
+    .filter(Boolean);
+}
+
+function getSelectedPriority() {
+  if (isPrioritySelected("urgent")) return "Urgent";
+  if (isPrioritySelected("medium")) return "Medium";
+  if (isPrioritySelected("low")) return "Low";
+  return null;
+}
+
+function isPrioritySelected(priority) {
+  const button = document.getElementById(`${priority}-task`);
+  return button.classList.contains(getPriorityClass(priority));
+}
+
+function isTaskValid(task) {
+  return task.title && task.description && task.category;
+}
+
+async function submitTask(task) {
+  console.log("Neue Aufgabe:", task);
+  await requestData("POST", "/tasks/", task);
+}
+
+function resetFormState(form) {
+  form.reset();
+  resetPrioritySelection();
+  alert("Aufgabe erfolgreich erstellt!");
+}
+
+function handlePrioritySelection(event, priority) {
+  event.preventDefault();
+  resetPrioritySelection();
+  activatePriority(priority);
+  updatePriorityIcon(priority);
+}
+
+function activatePriority(priority) {
+  const button = document.getElementById(`${priority}-task`);
+  button.classList.add(getPriorityClass(priority));
+}
+
+function updatePriorityIcon(priority) {
+  const icon = getPriorityIcon(priority);
+  if (!icon) return;
+
+  const [inactive, active] = priorityIcons[priority];
+  const isActive = currentActivePriority === priority;
+
+  icon.src = isActive ? inactive : active;
+  currentActivePriority = isActive ? null : priority;
+}
+
+function resetPrioritySelection() {
+  ["urgent", "medium", "low"].forEach(priority => {
+    deactivatePriority(priority);
+    resetPriorityIcon(priority);
+  });
+  currentActivePriority = null;
+}
+
+function deactivatePriority(priority) {
+  const button = document.getElementById(`${priority}-task`);
+  button.classList.remove(getPriorityClass(priority));
+}
+
+function resetPriorityIcon(priority) {
+  const icon = getPriorityIcon(priority);
+  if (icon) icon.src = priorityIcons[priority][0];
+}
+
+function getPriorityClass(priority) {
+  return `prio${capitalize(priority)}BtnActive`;
+}
+
+function getPriorityIcon(priority) {
+  return document.getElementById(`${priority}-task-img`) || document.getElementById(`${priority}-task`);
+}
+
+function capitalize(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
 }
