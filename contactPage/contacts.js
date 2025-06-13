@@ -6,16 +6,19 @@ import {
 import { requestData } from "../scripts/firebase.js";
 import { createUser } from "../scripts/users/users.js";
 
-let contactList = []; //muss später in der datenbank gespeichtert und aufgerufen werden können (rendern)
-let contactIdCounter = 0; //test //muss theoretisch auch geladen werden
-
+let contactList = [];
+let contactIdCounter = 0; 
+let currentlyEditingId = null;
 const usedLetters = new Set();
+
+window.contactList = contactList;
 
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("addBtn").addEventListener("click", openAddWindow);
-  document.getElementById("closeBtn").addEventListener("click", closeAddWindow, closeEditWindow);
+  document.getElementById("cancelBtn").addEventListener("click", closeAddWindow, closeEditWindow);
   document.getElementById("submitBtn").addEventListener("click", addContact);
   document.getElementById("openMenu").addEventListener("click", closeOpenMenu);
+  document.getElementById("editContactForm").addEventListener("submit", handleEditSubmit);
   loadShowContact();
 });
 
@@ -33,6 +36,10 @@ function openEditWindow() {
 
 function closeEditWindow() {
   document.getElementById(`editWindow`).classList.add("dp-none");
+  document.querySelector("#editWindow #contactName").value = "";
+  document.querySelector("#editWindow #contactEmail").value = "";
+  document.querySelector("#editWindow #contactPhone").value = "";
+  currentlyEditingId = null;
 }
 
 function closeOpenMenu(){
@@ -54,7 +61,7 @@ async function addContact(event) {
   const id = contactIdCounter++;
   const contact = { name, email, phone, initials, id };
   contactList.push(contact);
-
+  
   contactCreated(contact, name, email, phone, initials, firstLetter, id);
 }
 
@@ -117,17 +124,26 @@ function renderSingleContact(name, email, phone, initials, id) {
   const bigContactRef = document.getElementById("bigContact");
   bigContactRef.innerHTML = singleContact(name, email, phone, initials, id);
   bindDeleteButton(bigContactRef);
+  bindEditButton(bigContactRef);
+}
+
+function bindActionButton(container, buttonClass, callback) {
+  const button = container.querySelector(buttonClass);
+
+  if(!button) return;
+
+  button.addEventListener("click", () => {
+    const id = parseInt(button.dataset.id);
+    callback(id);
+  });
 }
 
 function bindDeleteButton(container) {
-  const deleteButton = container.querySelector(".deleteBtn");
+  bindActionButton(container, ".deleteBtn", deleteContact);
+}
 
-  if (!deleteButton) return;
-
-  deleteButton.addEventListener("click", () => {
-    const id = parseInt(deleteButton.dataset.id);
-    deleteContact(id);
-  });
+function bindEditButton(container) {
+  bindActionButton(container, ".editBtn", editContact);
 }
 
 function loadShowContact(){
@@ -192,4 +208,69 @@ function showContact(id) {
       contact.id
     );
   }
+}
+
+function findContactById(id) {
+  return contactList.find(c => c.id === id);
+}
+
+function editContact(id) {
+  const contact = findContactById(id);
+  if (!contact) return;
+
+  currentlyEditingId = id;
+  fillEditForm(contact);
+  openEditWindow();
+}
+
+function fillEditForm(contact) {
+  const map = {
+    contactName: contact.name,
+    contactEmail: contact.email,
+    contactPhone: contact.phone,
+  };
+
+  for (const [fieldId, value] of Object.entries(map)) {
+    const input = document.querySelector(`#editWindow #${fieldId}`);
+    if (input) input.value = value;
+  }
+}
+
+function getEditContactInput() {
+  return {
+    name: getValueFromEdit("contactName"),
+    email: getValueFromEdit("contactEmail"),
+    phone: getValueFromEdit("contactPhone"),
+  };
+}
+
+function getValueFromEdit(id) {
+  return document.querySelector(`#editWindow #${id}`).value.trim();
+}
+
+function handleEditSubmit(event) {
+  event.preventDefault();
+
+  const contact = findContactById(currentlyEditingId);
+  if (!contact) return;
+
+  const updated = getEditContactInput();
+  updateContact(contact, updated);
+  rerenderAfterEdit(currentlyEditingId);
+  showContact(currentlyEditingId)
+  closeEditWindow();
+}
+
+function updateContact(contact, updated) {
+  Object.assign(contact, updated, {
+    initials: getInitials(updated.name),
+  });
+}
+
+function rerenderAfterEdit(id) {
+  clearContactListUI();
+  renderAllContacts(contactList);
+
+  const updatedContact = findContactById(id);
+  if (updatedContact) renderSingleContact(updatedContact);
 }

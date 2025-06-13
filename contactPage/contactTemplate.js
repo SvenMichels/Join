@@ -6,7 +6,7 @@ export function singleContact(name, email, phone, initials, id) {
               <div class="nameBtns">
                 <p id="profileName" class="profileName">${name}</p>
                 <div class="btns">
-                  <p id="edit" class="editBtn">
+                  <p id="edit" class="editBtn" data-id="${id}">
                     <img src="../assets/icons/edit.svg" alt="" />Edit
                   </p>
                   <p id="delete" class="deleteBtn" data-id="${id}">
