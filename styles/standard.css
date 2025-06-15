@@ -129,7 +129,6 @@ body {
 }
 
 .menu3 {
-  width: 232px;
   height: 229px;
   display: flex;
   flex-direction: column;
@@ -139,7 +138,6 @@ body {
 .navBtnLogIn {
   background-color: #2a3647;
   color: #cdcdcd;
-  width: 232px;
   height: 46px;
   border: none;
   display: flex;
@@ -149,35 +147,16 @@ body {
 }
 
 .taskSummary {
-  width: 232px;
   height: 46px;
 }
 
 .taskFrame9 {
-  width: 232px;
   height: 46px;
-}
-.taskBoard {
-  width: 232px;
-  height: 46px;
-  border-radius: 8px;
-}
-.taskContacts {
-  width: 232px;
-  height: 46px;
-  border-radius: 8px;
 }
 
-.navBtnBoard {
-  background-color: #2a3647;
-  color: #cdcdcd;
-  width: 232px;
+.taskContacts {
   height: 46px;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
+  border-radius: 8px;
 }
 
 .navBtn {
@@ -190,11 +169,6 @@ body {
   align-items: center;
   justify-content: center;
   gap: 8px;
-}
-
-.navBtnBoard:hover {
-  cursor: pointer;
-  background-color: #091931;
 }
 
 .navBtn:hover {
