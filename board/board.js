@@ -1,3 +1,4 @@
+// board.js
 import { requestData } from "../scripts/firebase.js";
 
 const statusMap = {
@@ -7,14 +8,18 @@ const statusMap = {
   done: "doneList",
 };
 
-window.addEventListener("DOMContentLoaded", fetchTasks);
+let loadedTasks = {};
+
+window.addEventListener("DOMContentLoaded", () => {
+  fetchTasks();
+  setupDragAndDrop();
+});
 
 async function fetchTasks() {
   try {
     const { data: tasks } = await requestData("GET", "/tasks/");
-    console.table("Tasks geladen:", tasks);
-    renderTasks(Object.values(tasks));
-    setupDragAndDrop();
+    loadedTasks = tasks || {};
+    renderTasks(Object.values(loadedTasks));
   } catch (error) {
     console.error("Fehler beim Laden der Tasks:", error);
   }
@@ -22,7 +27,6 @@ async function fetchTasks() {
 
 function renderTasks(tasks) {
   if (!Array.isArray(tasks)) return;
-
   tasks.forEach((task) => {
     const element = createTaskElement(task);
     const listId = statusMap[task.status];
@@ -33,20 +37,10 @@ function renderTasks(tasks) {
 
 function createTaskElement(task) {
   const element = document.createElement("article");
-  configureTaskElement(element, task);
-  return element;
-}
-
-function configureTaskElement(element, task) {
   element.className = `task prio-${(task.prio || "low").toLowerCase()}`;
   element.draggable = true;
   element.id = `task-${task.id}`;
-  element.innerHTML = buildTaskHTML(task);
-  element.addEventListener("dragstart", handleDragStart);
-}
-
-function buildTaskHTML(task) {
-  return `
+  element.innerHTML = `
     <h3>${task.title}</h3>
     <p>${task.description}</p>
     <div class="meta">
@@ -54,17 +48,29 @@ function buildTaskHTML(task) {
       <span>Prio: ${task.prio}</span>
     </div>
   `;
+  element.addEventListener("dragstart", handleDragStart);
+  return element;
 }
 
 function handleDragStart(event) {
   event.dataTransfer.setData("text/plain", event.target.id);
 }
 
+function setupDragAndDrop() {
+  Object.values(statusMap).forEach((id) => {
+    const column = document.getElementById(id);
+    if (column) {
+      column.addEventListener("dragover", allowDrop);
+      column.addEventListener("drop", handleDrop);
+    }
+  });
+}
+
 function allowDrop(event) {
   event.preventDefault();
 }
 
-function drop(event) {
+function handleDrop(event) {
   event.preventDefault();
   const taskId = event.dataTransfer.getData("text/plain");
   const taskElement = document.getElementById(taskId);
@@ -73,29 +79,28 @@ function drop(event) {
 
   if (!taskElement || !newStatus) return;
 
+  const id = taskId.replace("task-", "");
+  const task = loadedTasks[id];
+
+  if (!task) {
+    console.warn("Task nicht im Speicher – Drop wird ignoriert.");
+    return;
+  }
+
+  task.status = newStatus;
   event.currentTarget.appendChild(taskElement);
-  updateTaskStatus(taskId.replace("task-", ""), newStatus);
+  updateTask(task);
 }
 
 function getStatusFromElementId(id) {
-  return Object.keys(statusMap).find((key) => statusMap[key] === id);
+  return Object.entries(statusMap).find(([_, listId]) => listId === id)?.[0] || null;
 }
 
-async function updateTaskStatus(id, newStatus) {
+async function updateTask(task) {
   try {
-    await requestData("PUT", `/tasks/${id}`, { status: newStatus });
-    console.log(`Task ${id} auf Status ${newStatus} gesetzt`);
+    await requestData("PUT", `/tasks/${task.id}`, task);
+    console.log("Task aktualisiert:", task);
   } catch (error) {
-    console.error(`Fehler beim Aktualisieren von Task ${id}:`, error);
+    console.error("Fehler beim Aktualisieren des Tasks:", error);
   }
-}
-
-function setupDragAndDrop() {
-  Object.values(statusMap).forEach((id) => {
-    const list = document.getElementById(id);
-    if (list) {
-      list.addEventListener("dragover", allowDrop);
-      list.addEventListener("drop", drop);
-    }
-  });
 }

@@ -1,146 +1,108 @@
 import { requestData } from "../scripts/firebase.js";
 
+let currentActivePriority = "";
+
 const priorityIcons = {
   urgent: ["../assets/icons/urgent_red.svg", "../assets/icons/urgent_white.svg"],
   medium: ["../assets/icons/medium_yellow.svg", "../assets/icons/medium_white.svg"],
   low: ["../assets/icons/low_green.svg", "../assets/icons/low_white.svg"]
 };
 
-let currentActivePriority = null;
-
 window.addEventListener("DOMContentLoaded", () => {
-  initializeForm();
-  initializePriorityButtons();
+  initForm();
 });
 
-function initializeForm() {
-  const form = document.getElementById("taskForm");
-  form.addEventListener("submit", handleFormSubmit);
-}
+function initForm() {
+  document.getElementById("taskForm").addEventListener("submit", handleFormSubmit);
 
-function initializePriorityButtons() {
   ["urgent", "medium", "low"].forEach(priority => {
     const button = document.getElementById(`${priority}-task`);
-    button.addEventListener("click", event => handlePrioritySelection(event, priority));
+    if (button) {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        selectPriority(priority);
+      });
+    }
   });
+
+  const categorySelect = document.getElementById("category");
+  const submitButton = document.querySelector(".createButton");
+  submitButton.disabled = true;
+  categorySelect.addEventListener("change", () => {
+    submitButton.disabled = categorySelect.value.trim() === "";
+  });
+}
+
+function selectPriority(priority) {
+  currentActivePriority = priority;
+
+  const priorityMap = {
+    urgent: "urgent-task",
+    medium: "medium-task",
+    low: "low-task"
+  };
+
+  Object.entries(priorityMap).forEach(([key, id]) => {
+    const btn = document.getElementById(id);
+    const img = document.getElementById(`${key}-task-img`);
+    if (btn) {
+      btn.classList.remove("prioUrgentBtnActive", "prioMediumBtnActive", "prioLowBtnActive");
+    }
+    if (img) img.src = priorityIcons[key][0];
+  });
+
+  const activeBtn = document.getElementById(priorityMap[priority]);
+  const activeImg = document.getElementById(`${priority}-task-img`);
+
+  if (activeBtn) {
+    const className = {
+      urgent: "prioUrgentBtnActive",
+      medium: "prioMediumBtnActive",
+      low: "prioLowBtnActive"
+    }[priority];
+    activeBtn.classList.add(className);
+  }
+
+  if (activeImg) activeImg.src = priorityIcons[priority][1];
 }
 
 function handleFormSubmit(event) {
   event.preventDefault();
-
   const form = event.target;
   const task = collectTaskData(form);
-
-  if (!isTaskValid(task)) {
-    alert("Bitte alle Pflichtfelder ausfüllen!");
-    return;
-  }
-
-  submitTask(task);
-  resetFormState(form);
+  if (!isTaskValid(task)) return;
+  saveTask(task);
 }
 
 function collectTaskData(form) {
   return {
     id: Date.now(),
-    title: getValue(form, "taskTitle"),
-    description: getValue(form, "taskDescription"),
-    dueDate: form.elements["taskDate"].value,
-    category: form.elements["category"].value,
-    assigned: form.elements["assignedUsers"].value,
-    subtasks: parseSubtasks(form.elements["subtask"].value),
-    prio: getSelectedPriority(),
+    title: form.taskTitle.value,
+    description: form.taskDescription.value,
+    dueDate: form.taskDate.value,
+    category: form.category.value,
+    prio: currentActivePriority,
+    assigned: form.assignedUsers.value,
+    subtask: form.subtask.value,
     status: "todo"
   };
 }
 
-function getValue(form, name) {
-  return form.elements[name].value.trim();
-}
-
-function parseSubtasks(subtasks) {
-  return subtasks
-    .split(",")
-    .map(subtask => subtask.trim())
-    .filter(Boolean);
-}
-
-function getSelectedPriority() {
-  if (isPrioritySelected("urgent")) return "Urgent";
-  if (isPrioritySelected("medium")) return "Medium";
-  if (isPrioritySelected("low")) return "Low";
-  return null;
-}
-
-function isPrioritySelected(priority) {
-  const button = document.getElementById(`${priority}-task`);
-  return button.classList.contains(getPriorityClass(priority));
-}
-
 function isTaskValid(task) {
-  return task.title && task.description && task.category;
+  if (!task.title || !task.description || !task.category || task.category.trim() === "") {
+    alert("Bitte fülle alle Pflichtfelder aus und wähle eine Kategorie.");
+    return false;
+  }
+  return true;
 }
 
-async function submitTask(task) {
-  console.log("Neue Aufgabe:", task);
-  await requestData("POST", "/tasks/", task);
-}
-
-function resetFormState(form) {
-  form.reset();
-  resetPrioritySelection();
-  alert("Aufgabe erfolgreich erstellt!");
-}
-
-function handlePrioritySelection(event, priority) {
-  event.preventDefault();
-  resetPrioritySelection();
-  activatePriority(priority);
-  updatePriorityIcon(priority);
-}
-
-function activatePriority(priority) {
-  const button = document.getElementById(`${priority}-task`);
-  button.classList.add(getPriorityClass(priority));
-}
-
-function updatePriorityIcon(priority) {
-  const icon = getPriorityIcon(priority);
-  if (!icon) return;
-
-  const [inactive, active] = priorityIcons[priority];
-  const isActive = currentActivePriority === priority;
-
-  icon.src = isActive ? inactive : active;
-  currentActivePriority = isActive ? null : priority;
-}
-
-function resetPrioritySelection() {
-  ["urgent", "medium", "low"].forEach(priority => {
-    deactivatePriority(priority);
-    resetPriorityIcon(priority);
-  });
-  currentActivePriority = null;
-}
-
-function deactivatePriority(priority) {
-  const button = document.getElementById(`${priority}-task`);
-  button.classList.remove(getPriorityClass(priority));
-}
-
-function resetPriorityIcon(priority) {
-  const icon = getPriorityIcon(priority);
-  if (icon) icon.src = priorityIcons[priority][0];
-}
-
-function getPriorityClass(priority) {
-  return `prio${capitalize(priority)}BtnActive`;
-}
-
-function getPriorityIcon(priority) {
-  return document.getElementById(`${priority}-task-img`) || document.getElementById(`${priority}-task`);
-}
-
-function capitalize(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
+async function saveTask(task) {
+  try {
+    const path = `/tasks/${task.id}`;
+    await requestData("PUT", path, task);
+    alert("Task erfolgreich gespeichert!");
+  } catch (error) {
+    console.error("Fehler beim Speichern des Tasks:", error);
+    alert("Fehler beim Speichern des Tasks.");
+  }
 }

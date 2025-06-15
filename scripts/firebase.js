@@ -59,7 +59,6 @@ export async function putData(path = "", data = {}) {
 // einschließlich GET, POST, PUT und DELETE. Sie kann verwendet werden, um Daten von der Firebase-Datenbank
 // anzufordern oder zu senden, indem der entsprechende HTTP-Methodenname und der Pfad angegeben werden.
 export async function requestData(method = "GET", path = "", data = {}) {
-  
   const options = {
     method,
     headers: {
