@@ -1,4 +1,5 @@
 body {
+  font-family: 'Inter';
   margin: 0;
   width: 100vw;
   height: 100vh;
@@ -282,4 +283,8 @@ a:hover {
 
 h2 {
     margin: 0;
+}
+
+.txtDeco-none{
+    text-decoration: none;
 }
