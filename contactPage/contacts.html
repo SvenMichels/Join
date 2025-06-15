@@ -5,6 +5,7 @@
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
   <link href="./contacts.css" rel="stylesheet"/>
   <link href="hoverWindow.css" rel="stylesheet"/>
+  <link href="../styles/standard.css" rel="stylesheet">
   <script src="./contacts.js" type="module">
   </script>
   <title>
@@ -114,50 +115,48 @@
    </div>
   </div>
 
-  <section class="sidebar">
-   <div class="navSidebar" id="">
-    <img alt="Bild" class="logo" src="../assets/icons/join_white.svg">
-     <div class="navbar"><a class="txtDeco-none" href="../startPage/startpage.html">
-      <div class="navLinks">
-       <img alt="Bild" src="../assets/icons/summary_2.svg"/>
-       <p>
-        Summary
-       </p>
-      </div></a><a class="txtDeco-none" href="../addTask/addtask.html">
-      <div class="navLinks">
-       <img alt="Bild" src="../assets/icons/add_task.svg"/>
-       <p>
-        Add Task
-       </p>
-      </div></a><a class="txtDeco-none" href="../board/board.html">
-      <div class="navLinks">
-       <img alt="Bild" src="../assets/icons/board.svg"/>
-       <p>
-        Board
-       </p>
-      </div></a><a class="txtDeco-none" href="../contactPage/contacts.html">
-      <div class="navLinks">
-       <img alt="Bild" src="../assets/icons/contacts.svg"/>
-       <p>
-        Contacts
-       </p>
-      </div></a>
-     </div>
-     <div class="legalSites">
-        <a class="a" href="../privatpolicy.html">
-      <p class="txt">
-       Privacy Policy
-      </p></a>
-      <a class="a" href="../legalnotice.html">
-      <p class="txt">
-       Legal notice
-      </p></a>
-     </div>
-    </img>
-   </div>
-  </section> 
+<nav class="navBarStyle">
+    <img alt="Logo" class="logo" src="/assets/icons/join_white.svg" />
+    <div class="menu3">
+      <button class="navBtnLogIn d_none">
+        <img alt="Bild" class="navIcons" src="/assets/icons/login.svg" /> Log In
+      </button>
+      <a class="txtDeco-none" href="../startPage/startpage.html">
+        <div class="taskSummary">
+          <button class="navBtn">
+            <img alt="Bild" class="navIcons" src="/assets/icons/summary_2.svg" /> Summary
+          </button>
+        </div>
+      </a>
+      <div class="taskFrame9">
+        <a class="txtDeco-none" href="../addTask/addtask.html">
+        <button class="navBtn">
+          <img alt="Bild" class="navIcons" src="/assets/icons/add_task.svg" /> Add Task
+        </button>
+        </a>
+      </div>
+      <a class="txtDeco-none" href="../board/board.html">
+        <div class="taskBoard">
+          <button class="navBtnBoard">
+            <img alt="Bild" class="navIcons" src="/assets/icons/board.svg" /> Board
+          </button>
+        </div>
+      </a>
+      <a class="txtDeco-none" href="../contactPage/contacts.html">
+        <div class="taskContacts">
+          <button class="navBtn">
+            <img alt="Bild" class="navIcons" src="/assets/icons/contacts.svg" /> Contacts
+          </button>
+        </div>
+      </a>
+    </div>
+    <div class="taskFrame22">
+      <a class="taskFrameLink" href="../privatpolicy.html">Privacy Policy</a>
+      <a class="taskFrameLink" href="../legalnotice.html">Legal notice</a>
+    </div>
+  </nav>
 
-  <header class="header" id="">
+  <header class="headerStyle" id="">
    <p class="headerTxt">
     Kanban Project Management Tool
    </p>

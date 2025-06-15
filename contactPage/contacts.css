@@ -18,16 +18,6 @@ body{
     height: 24px;
 }
 
-.header{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    box-shadow: 4px 0px 4px 0px #000000;
-    max-width: 1440px;
-    height: 96px;
-    padding: 20px 40px 20px 348px;
-}
-
 .headerTxt{
     font-family: 'Inter';
     font-weight: 400;
@@ -69,58 +59,6 @@ body{
     display: flex;
     flex-direction: column;
     
-}
-
-.navSidebar{
-    position: absolute;
-    width: 232px;
-    height: 93vh;
-    background-color: #2a3647;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    justify-content: space-between;
-    padding:64px 0px 64px 0px;
-}
-
-.navLinks{
-    display: flex;
-    justify-content: start;
-    gap: 20px;
-    color: #CDCDCD;
-    padding: 8px 0px 8px 18px;
-}
-
-.navbar{
-    width: 100%;
-    cursor: pointer;
-    text-decoration: none;
-}
-
-.navLinks:hover{
-    color: #FFFFFF;
-    background-color: #091931;
-}
-
-.logo{
-    width: 100px;
-    height: 122px
-}
-
-.legalSites{
-    color: #A8A8A8;
-    display: flex;
-    flex-direction: column;
-    text-decoration: none;
-}
-
-.a{
-    text-decoration: none;
-    color: #A8A8A8;
-}
-
-.txt:hover{
-    cursor: pointer;
 }
 
 .contactList{
