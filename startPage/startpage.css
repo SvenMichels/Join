@@ -5,6 +5,7 @@ body{
     flex-direction: row;
     height: 100vh;
     width: 100vw;
+    max-width: 1440px;
     /* overflow-y: hidden; */
     font-family: Inter;
     background-color: #F6F7F8;
