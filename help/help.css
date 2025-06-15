@@ -1,5 +1,7 @@
 body {
+  font-family: 'Inter';
   margin: 0;
+  max-width: 1440px;
   width: 100vw;
   height: 100vh;
   background-color: #f6f7f8;
@@ -282,4 +284,8 @@ a:hover {
 
 h2 {
     margin: 0;
+}
+
+.txtDeco-none{
+    text-decoration: none;
 }
