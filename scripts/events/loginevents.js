@@ -1,4 +1,6 @@
 import { loginUser, loginAsGuest } from "../auth/login.js";
+import { collectUserInput } from "../../signup/signup.js";
+import { requestData } from "../firebase.js";
 
 export async function loginListeners() {
   const loginForm = document.getElementById("loginForm");
@@ -27,13 +29,14 @@ export async function loginListeners() {
 
 export async function signupListeners() {
   const form = document.getElementById("signUpForm");
-
+  console.log("test");
   if (!form) return console.log("signUpForm not found");
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
     console.log("Submit triggered");
-    await getNewUserInput();
+    const userdata = await collectUserInput();
+  requestData("POST","/users/", userdata);
   });
 
   const checkBox = document.getElementById("checkBox");

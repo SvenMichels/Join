@@ -56,11 +56,12 @@ function setupSignupHandler() {
   });
 }
 
-function collectUserInput() {
+export async function collectUserInput() {
   const userName = document.getElementById("inputName").value.trim();
   const userEmail = document.getElementById("inputEmail").value.trim();
   const password = passwordInput.value;
   const confirmPassword = confirmPasswordInput.value;
+  console.log("TEst");
 
   if (!userName || !userEmail) {
     alert("Name and email are required");
