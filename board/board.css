@@ -1,16 +1,7 @@
 body {
   max-width: 1440px;
-  margin: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: #f6f7f8;
-  overflow-x: hidden;
-   font-family: 'Inter';
 }
 
-/* HEADER */
-
-/* NavBar */
 .taskh1Container {
   width: 100%;
   max-width: calc(1440px - 308px);
