@@ -68,6 +68,7 @@ body{
     flex-direction: column;
     width: 456px;
     margin-left: 232px;
+    margin-top: 96px;
     height: 92vh;
     box-shadow: 0px 4px 4px #000000;
 }
