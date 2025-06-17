@@ -371,3 +371,7 @@ h2{
 .txt:hover{
     color: #29ABE2;
 }
+
+.margin-top{
+    margin-top: 20px !important;
+}

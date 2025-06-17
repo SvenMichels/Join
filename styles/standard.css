@@ -4,6 +4,8 @@ body {
   height: 100vh;
   background-color: #f6f7f8;
   overflow-x: hidden;
+  font-family: 'Inter';
+  color: #000000;
 }
 
 .d_none {
@@ -224,4 +226,37 @@ p {
   font-weight: 400;
   size: 20px;
   line-height: 120%;
+}
+
+.dropDownMenu{
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    background-color: #2a3647;
+    width: 150px;
+    height: 158px;
+    border: 1px solid #2a3647;
+    border-radius: 20px 0px 20px 20px;
+    padding: 10px;
+    margin-top: 276px;
+    left: 70%;
+}
+ 
+.dropDownTxt{
+    margin-left: 20px;
+     font-family: 'Inter';
+    font-size: 16px;
+    padding-bottom: 10px;
+    font-weight: 400px;
+    color: #cdcdcd;
+}
+
+.dropDownTxt:hover{
+    color: #29abe2;
+    cursor: pointer;
+}
+
+.txtDeco-none{
+    text-decoration: none;
 }

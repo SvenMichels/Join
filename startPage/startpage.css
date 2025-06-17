@@ -143,7 +143,6 @@ main {
   color: #2a3647;
 }
 
-/* BUTTON STYLING */
 .btn {
   background-color: white;
   padding: 36px 65px;
@@ -188,38 +187,6 @@ main {
   font-weight: 700;
   color: #29abe2;
   font-size: 64px;
-}
-
-.dropDownMenu {
-  position: absolute;
-  z-index: 1000;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  background-color: #2a3647;
-  width: 150px;
-  height: 158px;
-  border: 1px solid #2a3647;
-  border-radius: 20px 0px 20px 20px;
-  padding: 10px;
-  margin-top: 40px;
-  top: 5.3%;
-  left: 85%;
-}
-
-.dropDownTxt {
-  z-index: 1000;
-  margin-top: 20px;
-  font-family: "Inter";
-  font-size: 16px;
-  font-weight: 400px;
-  color: #cdcdcd;
-  padding-left: 20px;
-}
-
-.dropDownTxt:hover {
-  color: #29abe2;
-  cursor: pointer;
 }
 
 .txtDeco-none {
