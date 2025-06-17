@@ -1,3 +1,12 @@
+body{ 
+    margin: 0;
+    font-family: 'Inter';
+    max-width: 1440px;
+    max-height: 1990px;
+    width: 100%;
+    height: 1024px;
+}
+
 /* TaskContent */
 .taskh1Container {
   width: 278px;

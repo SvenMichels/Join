@@ -1,4 +1,12 @@
 /* (=^.^=) */
+body{ 
+    margin: 0;
+    font-family: 'Inter';
+    max-width: 1440px;
+    max-height: 1990px;
+    width: 100%;
+    height: 1024px;
+}
 
 a {
   color: white;
@@ -6,17 +14,17 @@ a {
 }
 
 p {
+  font-size: 20px;
+  font-weight: 200;
   margin: 0;
 }
 
-/* MAIN_SECTION */
 main {
   height: 100%;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
   gap: 50px;
-  /* padding-left: 116px; */
 }
 
 .profile {
@@ -26,7 +34,6 @@ main {
   gap: 20px;
 }
 
-/* FRONT_PAGE */
 .frontPage {
   display: flex;
   flex-direction: column;
@@ -176,8 +183,6 @@ main {
   background-color: white;
   border-radius: 50%;
 }
-
-/* GREETING_SECTION  */
 
 .greetings p:first-child {
   font-weight: 500;
