@@ -118,9 +118,13 @@
       </div>
 
       <div class="prioAssignedContainer">
+        <div>
         <label for="assignedUsers">assignedUsers</label>
-        <select class="prioAssignInput" id="assignedUsers" name="assignedUsers"></select>
-        <div id="selectedUser"></div>
+        <input placeholder="Select contact to assign" name="assignedUsers" class="prioAssignInput" type="text"/>
+        <img id="assignedBtnImg" class="assignedInputImg" src="../assets/icons/arrow_drop_down.svg">
+        </div>
+    <div id="assignedUserList" class="assigned-user-list"></div>
+    <div id="selectedUser"></div>
       </div>
 
       <div class="prioCategoryContainer">
@@ -135,8 +139,6 @@
       <div class="prioSubtaskContainer">
         <label for="subtask">Subtasks</label>
         <input class="prioSubtaskInput" name="subtask" id="subtask" type="text" />
-        <li></li>
-        <li></li>
       </div>
     </div>
 
@@ -160,3 +162,4 @@
 </body>
 
 </html>
+

@@ -1,6 +1,7 @@
 import { requestData } from "../scripts/firebase.js";
 
 let currentActivePriority = "";
+const assignedBtnImg = document.getElementById('assignedBtnImg');
 
 const priorityIcons = {
   urgent: ["../assets/icons/urgent_red.svg", "../assets/icons/urgent_white.svg"],
@@ -13,6 +14,7 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 function initForm() {
+  loadAndRenderUsers();
   document.getElementById("taskForm").addEventListener("submit", handleFormSubmit);
 
   ["urgent", "medium", "low"].forEach(priority => {
@@ -82,7 +84,7 @@ function collectTaskData(form) {
     dueDate: form.taskDate.value,
     category: form.category.value,
     prio: currentActivePriority,
-    assigned: form.assignedUsers.value,
+    assigned: collectAssignedUsers().join(', '),
     subtask: form.subtask.value,
     status: "todo"
   };
@@ -106,3 +108,92 @@ async function saveTask(task) {
     alert("Fehler beim Speichern des Tasks.");
   }
 }
+
+// Neue Funktionen für Benutzerzuweisung (Checkbox-Logik)
+
+async function loadAndRenderUsers() {
+  try {
+    const response = await requestData("GET", "/users");
+    const usersData = response.data;
+
+    const allUsers = Object.entries(usersData || {}).map(([id, user]) => ({
+      id,
+      ...user,
+    }));
+
+    renderUserCheckboxes(allUsers);
+  } catch (error) {
+    console.error("Fehler beim Laden der Nutzer:", error);
+  }
+}
+
+function renderUserCheckboxes(users) {
+  const container = document.getElementById("assignedUserList");
+  container.innerHTML = "";
+
+  users.forEach((user, index) => {
+    if (index >= 5) return;
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.id = `user-${user.id}`;
+    checkbox.value = user.userName;
+    checkbox.className = "user-checkbox";
+
+    const label = document.createElement("label");
+    label.htmlFor = checkbox.id;
+    label.textContent = user.userName;
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "user-checkbox-wrapper";
+    wrapper.appendChild(checkbox);
+    wrapper.appendChild(label);
+
+    container.appendChild(wrapper);
+
+    checkbox.addEventListener("change", updateSelectedUserDisplay);
+  });
+
+  updateSelectedUserDisplay(); // Initial leer
+}
+
+function collectAssignedUsers() {
+  const checkboxes = document.querySelectorAll(".user-checkbox");
+  const selected = Array.from(checkboxes)
+    .filter((cb) => cb.checked)
+    .map((cb) => cb.value);
+  return selected;
+}
+
+function updateSelectedUserDisplay() {
+  const selectedContainer = document.getElementById("selectedUser");
+  selectedContainer.innerHTML = "";
+
+  const selected = collectAssignedUsers();
+
+  selected.forEach((name) => {
+    const initials = getInitials(name);
+    const color = getRandomColor();
+    const chip = document.createElement("div");
+    chip.className = "selected-contact-chip";
+    chip.textContent = initials;
+    chip.style.backgroundColor = color;
+    selectedContainer.appendChild(chip);
+  });
+}
+
+function getInitials(name) {
+  const parts = name.trim().split(" ");
+  const first = parts[0]?.[0] || "";
+  const last = parts.length > 1 ? parts[parts.length - 1][0] : "";
+  return (first + last).toUpperCase();
+}
+
+function getRandomColor() {
+  const hue = Math.floor(Math.random() * 360);
+  return `hsl(${hue}, 70%, 80%)`;
+}
+
+assignedBtnImg.addEventListener('click', () => {
+  userList.classList.toggle('visible');
+})
