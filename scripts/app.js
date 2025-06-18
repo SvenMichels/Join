@@ -12,3 +12,15 @@ export async function init() {
 
 init();
 
+window.addEventListener("DOMContentLoaded", () => {
+   document.getElementById("openMenu").addEventListener("click", closeOpenMenu);
+});
+
+function closeOpenMenu(){
+  const element = document.getElementById("dropDownMenu");
+  if (element.classList.contains("dp-none")) {
+      document.getElementById(`dropDownMenu`).classList.remove("dp-none");
+  } else {
+    document.getElementById(`dropDownMenu`).classList.add("dp-none");
+  }
+} 

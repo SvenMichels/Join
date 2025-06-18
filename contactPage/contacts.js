@@ -147,7 +147,6 @@ function bindEditButton(container) {
 }
 
 function loadShowContact(){
-  // console.log("loadShowContact: Eventlistener registriert");
   document.getElementById("allContacts").addEventListener("click", function (event) {
     const contactCard = event.target.closest(".contact");
     if (contactCard) {

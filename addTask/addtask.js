@@ -11,6 +11,7 @@ const priorityIcons = {
 };
 
 window.addEventListener("DOMContentLoaded", () => {
+   document.getElementById("openMenu").addEventListener("click", closeOpenMenu);
   initForm();
 });
 
@@ -110,6 +111,14 @@ async function saveTask(task) {
   }
 }
 
+function closeOpenMenu(){
+  const element = document.getElementById("dropDownMenu");
+  if (element.classList.contains("dp-none")) {
+      document.getElementById(`dropDownMenu`).classList.remove("dp-none");
+  } else {
+    document.getElementById(`dropDownMenu`).classList.add("dp-none");
+  }
+} 
 // Neue Funktionen für Benutzerzuweisung (Checkbox-Logik)
 
 async function loadAndRenderUsers() {
