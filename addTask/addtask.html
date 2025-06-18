@@ -117,15 +117,17 @@
         </div>
       </div>
 
-      <div class="prioAssignedContainer">
-        <div>
-        <label for="assignedUsers">assignedUsers</label>
-        <input placeholder="Select contact to assign" name="assignedUsers" class="prioAssignInput" type="text"/>
-        <img id="assignedBtnImg" class="assignedInputImg" src="../assets/icons/arrow_drop_down.svg">
-        </div>
-    <div id="assignedUserList" class="assigned-user-list"></div>
-    <div id="selectedUser"></div>
-      </div>
+<div class="prioAssignedContainer">
+  <label for="assignedUsers">assignedUsers</label>
+
+  <div class="assignedInputWrapper">
+    <input placeholder="Select contact to assign" name="assignedUsers" class="prioAssignInput" type="text"/>
+    <img id="assignedBtnImg" class="assignedInputImg" src="../assets/icons/arrow_drop_down.svg">
+    <div id="assignedUserList" class="assigned-user-list">...</div>
+  </div>
+
+  <div id="selectedUser" class="selectedUserContainer">...</div>
+</div>
 
       <div class="prioCategoryContainer">
         <label for="category">Category <span style="color: #ff8190">*</span></label>
