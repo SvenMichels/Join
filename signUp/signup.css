@@ -168,3 +168,19 @@ footer a {
   height: 1px;
   overflow: hidden;
 }
+
+.userFeedback{
+  margin-top: 25px;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #2a3647;
+  width: 312px;
+  height: 74px;
+  padding: left right 25px; ;
+  border: 1px solid #2a3647;
+  border-radius: 20px;
+  color: #ffffff;
+  font-weight: 400;
+  font-size: 20px;
+}
