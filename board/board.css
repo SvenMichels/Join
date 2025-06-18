@@ -8,7 +8,7 @@ body {
   height: 73px;
   position: absolute;
   top: 206px;
-  left: 328px;
+  left: 275px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -16,6 +16,7 @@ body {
 
 .searchAddContainer {
   display: flex;
+  gap: 32px;
 }
 
 .board {
@@ -37,12 +38,9 @@ body {
 }
 
 .searchField {
+  z-index: -100;
   width: 312px;
   height: 48px;
-  /* padding-top: 8px; */
-  /* padding-right: 16px; */
-  /* padding-bottom: 8px; */
-  /* padding-left: 16px; */
   gap: 10px;
   border-radius: 10px;
   border-width: 1px;
@@ -98,7 +96,7 @@ body {
   right: 12px;
   top: 50%;
   transform: translateY(-50%);
-
+  z-index: -100;
   cursor: pointer;
   opacity: 0.6;
 }

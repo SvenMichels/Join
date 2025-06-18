@@ -11,6 +11,7 @@ const statusMap = {
 let loadedTasks = {};
 
 window.addEventListener("DOMContentLoaded", () => {
+   document.getElementById("openMenu").addEventListener("click", closeOpenMenu);
   fetchTasks();
   setupDragAndDrop();
 });
@@ -81,7 +82,7 @@ function handleDrop(event) {
 
   const id = taskId.replace("task-", "");
   const task = loadedTasks[id];
-
+ 
   if (!task) {
     console.warn("Task nicht im Speicher – Drop wird ignoriert.");
     return;
@@ -104,3 +105,12 @@ async function updateTask(task) {
     console.error("Fehler beim Aktualisieren des Tasks:", error);
   }
 }
+
+function closeOpenMenu(){
+  const element = document.getElementById("dropDownMenu");
+  if (element.classList.contains("dp-none")) {
+      document.getElementById(`dropDownMenu`).classList.remove("dp-none");
+  } else {
+    document.getElementById(`dropDownMenu`).classList.add("dp-none");
+  }
+} 
