@@ -165,16 +165,20 @@ input:valid + .error-message {
   height: 80px;
 }
 
+.assignedInputWrapper{
+  position: relative;
+  width: 100%;
+}
+
 .prioAssignInput {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 16px;
+  width: 100%;
+  padding: 12px 40px 12px 16px; /* Rechts genug Platz für das Icon */
   border: 1px solid #d1d1d1;
   border-radius: 10px;
   background-color: white;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-  cursor: pointer;
+  font-size: 16px;
+  box-sizing: border-box;
 }
 
 .assignInput {
@@ -182,6 +186,28 @@ input:valid + .error-message {
   outline: none;
   width: 100%;
   font-size: 16px;
+}
+
+.assigned-user-list {
+  display: none;
+  margin-top: 8px;
+}
+
+.assigned-user-list.visible {
+  display: block;
+}
+
+.assignedInputImg {
+  position: absolute;
+  right: 16px;
+  top: 39%;
+  transform: translateY(-50%);
+  width: 14px;
+}
+
+.assignedInputImg:hover {
+  cursor: pointer;
+  background: #D1D1D1;
 }
 
 .prioCategoryContainer {
@@ -314,10 +340,6 @@ textarea::placeholder {
   padding-left: 10px;
 }
 
-.taskTitleInput:focus {
-  border-color: #29abe2;
-  border: 1px solid #29abe2;
-}
 
 .d_none {
   display: none;
@@ -345,4 +367,8 @@ textarea::placeholder {
 .prioLowBtnActive {
   background-color: #7AE229;
   color: white;
+}
+
+.user-dropdown div:hover {
+  background-color: #c51515;
 }
