@@ -2,6 +2,7 @@ import { requestData } from "../scripts/firebase.js";
 
 let currentActivePriority = "";
 const assignedBtnImg = document.getElementById('assignedBtnImg');
+const userList = document.getElementById('assignedUserList');
 
 const priorityIcons = {
   urgent: ["../assets/icons/urgent_red.svg", "../assets/icons/urgent_white.svg"],
@@ -141,7 +142,7 @@ function renderUserCheckboxes(users) {
   container.innerHTML = "";
 
   users.forEach((user, index) => {
-    if (index >= 5) return;
+    if (index >= 6) return;
 
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";

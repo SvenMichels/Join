@@ -1,9 +1,9 @@
-body{ 
-    margin: 0;
-    max-width: 1440px;
-    max-height: 1990px;
-    width: 100%;
-    height: 1024px;
+body {
+  margin: 0;
+  max-width: 1440px;
+  max-height: 1990px;
+  width: 100%;
+  height: 1024px;
 }
 
 /* TaskContent */
@@ -125,13 +125,13 @@ body{
   gap: 16px;
 }
 
-.prioButtons{
+.prioButtons {
   width: 136px;
   height: 56px;
   border-style: none;
   border-radius: 10px;
-  background: #FFFFFF;
-  box-shadow: 0px 0px 4px 0px #0000001A;
+  background: #ffffff;
+  box-shadow: 0px 0px 4px 0px #0000001a;
 }
 
 .prioButtons:hover {
@@ -160,19 +160,18 @@ input:valid + .error-message {
 .prioAssignedContainer {
   display: flex;
   flex-direction: column;
-  gap: 8px;
   width: 440px;
-  height: 80px;
+  height: auto;
 }
 
-.assignedInputWrapper{
+.assignedInputWrapper {
   position: relative;
   width: 100%;
 }
 
 .prioAssignInput {
   width: 100%;
-  padding: 12px 40px 12px 16px; /* Rechts genug Platz für das Icon */
+  padding: 12px 40px 12px 16px;
   border: 1px solid #d1d1d1;
   border-radius: 10px;
   background-color: white;
@@ -189,8 +188,15 @@ input:valid + .error-message {
 }
 
 .assigned-user-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  z-index: 10;
   display: none;
-  margin-top: 8px;
+  background-color: #ffffff;
+  border: 1px solid #d1d1d1;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .assigned-user-list.visible {
@@ -200,14 +206,14 @@ input:valid + .error-message {
 .assignedInputImg {
   position: absolute;
   right: 16px;
-  top: 39%;
+  top: 50%;
   transform: translateY(-50%);
   width: 14px;
 }
 
 .assignedInputImg:hover {
   cursor: pointer;
-  background: #D1D1D1;
+  background: #d1d1d1;
 }
 
 .prioCategoryContainer {
@@ -340,35 +346,53 @@ textarea::placeholder {
   padding-left: 10px;
 }
 
-
 .d_none {
   display: none;
 }
 
-.txtDeco-none{
-    text-decoration: none;
+.txtDeco-none {
+  text-decoration: none;
 }
 
-.prioUrgentBtnActive{
-  background-color: #FF3D00;
+.prioUrgentBtnActive {
+  background-color: #ff3d00;
   color: white;
 }
 
-.prioUrgentBtnActive{
-  background-color: #FF3D00;
+.prioUrgentBtnActive {
+  background-color: #ff3d00;
   color: white;
 }
 
 .prioMediumBtnActive {
-  background-color: #FFA800;
+  background-color: #ffa800;
   color: white;
 }
 
 .prioLowBtnActive {
-  background-color: #7AE229;
+  background-color: #7ae229;
   color: white;
 }
 
 .user-dropdown div:hover {
   background-color: #c51515;
+}
+
+.selectedUserContainer {
+  display: flex;
+  justify-content: flex-start;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.selected-contact-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-width: 2px;
+  border-radius: 16px;
+  border: 2px solid #ffffff;
 }
