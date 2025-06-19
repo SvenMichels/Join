@@ -3,6 +3,9 @@ import { requestData } from "../scripts/firebase.js";
 let currentActivePriority = "";
 const assignedBtnImg = document.getElementById('assignedBtnImg');
 const userList = document.getElementById('assignedUserList');
+const subtaskInput = document.getElementById('subtask');
+const subtaskList = document.getElementById('subtaskList');
+let subtask = [];
 
 const priorityIcons = {
   urgent: ["../assets/icons/urgent_red.svg", "../assets/icons/urgent_white.svg"],
@@ -88,7 +91,7 @@ function collectTaskData(form) {
     category: form.category.value,
     prio: currentActivePriority,
     assigned: collectAssignedUsers().join(', '),
-    subtask: form.subtask.value,
+    subtask: subtasks,
     status: "todo"
   };
 }
@@ -208,3 +211,24 @@ function getRandomColor() {
 assignedBtnImg.addEventListener('click', () => {
   userList.classList.toggle('visible');
 })
+
+subtaskInput.addEventListener('keydown', function (e) {
+  if (e.key === "Enter" && subtaskInput.value.trim() !== "") {
+    e.preventDefault();
+    const taskText = subtaskInput.value.trim();
+    subtask.push(taskText);
+    subtaskInput.value = "";
+    renderSubtasks();
+  }
+});
+
+function renderSubtasks() {
+  subtaskList.innerHTML = "";
+
+  subtask.forEach((task, index) => {
+    const taskItem = document.createElement('div');
+    taskItem.className = 'subtaskItem';
+    taskItem.textContent = `• ${task}`;
+    subtaskList.appendChild(taskItem);
+  });
+}

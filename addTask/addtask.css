@@ -407,3 +407,25 @@ select {
   border: 1px solid #ccc;
   border-radius: 4px;
 }
+
+
+#subtaskList {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 14px;
+  color: #2a3647;
+}
+
+.subtaskItem {
+  padding: 6px 12px;
+  background-color: #f0f0f0;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.subtaskItem:hover {
+  background-color: #d1d1d1;
+  text-decoration: line-through;
+}
