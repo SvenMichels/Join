@@ -396,3 +396,14 @@ textarea::placeholder {
   border-radius: 16px;
   border: 2px solid #ffffff;
 }
+
+select {
+  appearance: none; /* für moderne Browser */
+  -webkit-appearance: none; /* für Safari/Chrome */
+  -moz-appearance: none; /* für Firefox */
+  background: url('../assets/icons/arrow_drop_down.svg') no-repeat right 0.75rem center;
+  background-size: 1rem;
+  padding-right: 2rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}

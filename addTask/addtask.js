@@ -35,6 +35,7 @@ function initForm() {
   categorySelect.addEventListener("change", () => {
     submitButton.disabled = categorySelect.value.trim() === "";
   });
+  selectPriority("medium");
 }
 
 function selectPriority(priority) {
