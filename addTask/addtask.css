@@ -1,11 +1,3 @@
-body {
-  margin: 0;
-  max-width: 1440px;
-  max-height: 1990px;
-  width: 100%;
-  height: 1024px;
-}
-
 /* TaskContent */
 .taskh1Container {
   width: 278px;
@@ -68,24 +60,6 @@ body {
 .taskDescriptionInput {
   width: 440px;
   height: 120px;
-  border-radius: 10px;
-  border: 1px solid #d1d1d1;
-}
-
-.taskDate {
-  display: flex;
-  flex-direction: column;
-  width: 440px;
-  height: 96px;
-  top: 296px;
-  left: 0.25px;
-  gap: 8px;
-}
-
-.taskDateInput {
-  padding-left: 10px;
-  width: 440px;
-  height: 48px;
   border-radius: 10px;
   border: 1px solid #d1d1d1;
 }
@@ -180,6 +154,10 @@ input:valid + .error-message {
   box-sizing: border-box;
 }
 
+.prioAssignInput:hover {
+  border: 1px solid #a8a8a8;
+}
+
 .assignInput {
   border: none;
   outline: none;
@@ -243,24 +221,14 @@ input:valid + .error-message {
   font-size: 16px;
 }
 
-.prioSubtaskContainer {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  width: 440px;
-  height: 80px;
-}
-
 .prioSubtaskInput {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 16px;
+  padding: 0;
+  width: 100%;
+  height: 40px;
   border: 1px solid #d1d1d1;
   border-radius: 10px;
   background-color: white;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-  cursor: pointer;
 }
 
 .subtaskInput {
@@ -401,13 +369,13 @@ select {
   appearance: none; /* für moderne Browser */
   -webkit-appearance: none; /* für Safari/Chrome */
   -moz-appearance: none; /* für Firefox */
-  background: url('../assets/icons/arrow_drop_down.svg') no-repeat right 0.75rem center;
+  background: url("../assets/icons/arrow_drop_down.svg") no-repeat right 0.75rem
+    center;
   background-size: 1rem;
   padding-right: 2rem;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
-
 
 #subtaskList {
   margin-top: 8px;
@@ -418,14 +386,124 @@ select {
   color: #2a3647;
 }
 
-.subtaskItem {
-  padding: 6px 12px;
-  background-color: #f0f0f0;
-  border-radius: 6px;
+.subtaskAddContainer {
+  max-width: 100%;
+  position: relative;
+}
+
+.subtaskAddButton {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  padding: 5px;
+  transform: translateY(-50%);
+  background-color: transparent;
+  border: none;
+}
+
+.subtaskAddButton:hover {
+  cursor: pointer;
+  background: #d1d1d1;
+  border-radius: 50%;
+}
+
+.subtaskAddButton img.subtaskAdd {
+  width: 14px;
+  height: 14px;
+}
+
+input {
+  padding-left: 12px;
+}
+
+input:focus {
+  padding-left: 12px;
+}
+
+input:focus::placeholder {
+  color: transparent;
+}
+
+textarea {
+  padding-left: 12px;
+  padding-top: 12px;
+}
+
+textarea:focus {
+  padding-left: 12px;
+  padding-top: 12px;
+  border: 1px solid #29abe2;
+  outline: 1px solid #29abe2;
+}
+
+textarea:focus::placeholder {
+  color: transparent;
+}
+
+/* Calender */
+.datepicker-wrapper {
+  position: relative;
+  display: inline-block;
+  padding: 12px 40px 12px 16px;
+  border: 1px solid #d1d1d1;
+  border-radius: 10px;
+  background-color: white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+#customDateInput {
+  padding-left: 0;
+  border: 0;
+}
+
+#calendarIcon {
+  position: absolute;
+  right: 10px;
+  top: 8px;
+  width: 24px;
+  height: 24px;
   cursor: pointer;
 }
 
-.subtaskItem:hover {
-  background-color: #d1d1d1;
-  text-decoration: line-through;
+.calendar {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  background: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  z-index: 100;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.calendar.hidden {
+  display: none;
+}
+
+.calendar button {
+  width: 30px;
+  height: 30px;
+  margin: 2px;
+  border: none;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.calendar button:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+.taskDate {
+  display: flex;
+  flex-direction: column;
+  width: 440px;
+  height: 96px;
+  top: 296px;
+  left: 0.25px;
+  gap: 8px;
 }

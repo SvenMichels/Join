@@ -87,12 +87,17 @@
 
     <div class="taskDescription">
       <label for="taskDescription">Description</label>
-      <input class="taskDescriptionInput" name="taskDescription" id="taskDescription" placeholder="Enter a Description" type="text" />
+      <textarea class="taskDescriptionInput" name="taskDescription" id="taskDescription" placeholder="Enter a Description" type="text"></textarea>
     </div>
 
     <div class="taskDate">
       <label for="taskDate">Due Date <span style="color: #ff8190">*</span></label>
-      <input class="taskDateInput" name="taskDate" id="taskDate" placeholder="dd/mm/yyyy" type="date" />
+      <div class="datepicker-wrapper">
+      <input type="text" id="customDateInput" placeholder="Datum wählen" readonly />
+      <img src="../assets/icons/event.svg" alt="Kalender öffnen" id="calendarIcon" />
+
+      <div id="calendar" class="calendar hidden"></div>
+      </div>
       <span style="color: #ff8190">This field is required</span>
     </div>
 
@@ -114,17 +119,17 @@
         </div>
       </div>
 
-<div class="prioAssignedContainer">
-  <label for="assignedUsers">assignedUsers</label>
+  <div class="prioAssignedContainer">
+    <label for="assignedUsers">assignedUsers</label>
 
-  <div class="assignedInputWrapper">
-    <input placeholder="Select contact to assign" name="assignedUsers" class="prioAssignInput" type="text"/>
-    <img id="assignedBtnImg" class="assignedInputImg" src="../assets/icons/arrow_drop_down.svg">
-    <div id="assignedUserList" class="assigned-user-list">...</div>
+   <div class="assignedInputWrapper">
+     <input placeholder="Select contact to assign" name="assignedUsers" class="prioAssignInput" type="text"/>
+     <img id="assignedBtnImg" class="assignedInputImg" src="../assets/icons/arrow_drop_down.svg">
+      <div id="assignedUserList" class="assigned-user-list">...</div>
+    </div>
+
+    <div id="selectedUser" class="selectedUserContainer">...</div>
   </div>
-
-  <div id="selectedUser" class="selectedUserContainer">...</div>
-</div>
 
       <div class="prioCategoryContainer">
         <label for="category">Category <span style="color: #ff8190">*</span></label>

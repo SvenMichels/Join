@@ -91,7 +91,7 @@ function collectTaskData(form) {
     category: form.category.value,
     prio: currentActivePriority,
     assigned: collectAssignedUsers().join(', '),
-    subtask: subtasks,
+    subtask: form.subtasks,
     status: "todo"
   };
 }
@@ -231,4 +231,58 @@ function renderSubtasks() {
     taskItem.textContent = `• ${task}`;
     subtaskList.appendChild(taskItem);
   });
+}
+
+// Calender
+
+const input = document.getElementById("customDateInput");
+const calendar = document.getElementById("calendar");
+const calendarIcon = document.getElementById("calendarIcon");
+
+// Toggle calendar on icon click
+calendarIcon.addEventListener("click", () => {
+  calendar.classList.toggle("hidden");
+  if (!calendar.classList.contains("hidden")) {
+    renderCalendar();
+  }
+});
+
+// Close calendar when clicking outside
+document.addEventListener("click", (e) => {
+  if (!e.target.closest(".datepicker-wrapper")) {
+    calendar.classList.add("hidden");
+  }
+});
+
+function renderCalendar() {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  calendar.innerHTML = ""; // Clear previous
+
+  for (let day = 1; day <= daysInMonth; day++) {
+    const date = new Date(year, month, day);
+    const isPast = date < new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+    const btn = document.createElement("button");
+    btn.textContent = day;
+    if (isPast) {
+      btn.disabled = true;
+    } else {
+      btn.addEventListener("click", () => {
+        input.value = formatDate(date);
+        calendar.classList.add("hidden");
+      });
+    }
+    calendar.appendChild(btn);
+  }
+}
+
+function formatDate(date) {
+  const day = `${date.getDate()}`.padStart(2, "0");
+  const month = `${date.getMonth() + 1}`.padStart(2, "0");
+  const year = date.getFullYear();
+  return `${day}.${month}.${year}`;
 }
