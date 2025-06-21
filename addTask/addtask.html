@@ -92,12 +92,7 @@
 
     <div class="taskDate">
       <label for="taskDate">Due Date <span style="color: #ff8190">*</span></label>
-      <div class="datepicker-wrapper">
-      <input type="text" id="customDateInput" placeholder="Datum wählen" readonly />
-      <img src="../assets/icons/event.svg" alt="Kalender öffnen" id="calendarIcon" />
-
-      <div id="calendar" class="calendar hidden"></div>
-      </div>
+      <input class="taskDateInput" name="taskDate" id="taskDate" placeholder="dd/mm/yyyy" type="date" min="2025-06-21" required/>
       <span style="color: #ff8190">This field is required</span>
     </div>
 
@@ -120,11 +115,13 @@
       </div>
 
   <div class="prioAssignedContainer">
-    <label for="assignedUsers">assignedUsers</label>
+    <label for="assignedUsers">Assigned to</label>
 
    <div class="assignedInputWrapper">
+    <div class="assignedContainer">
      <input placeholder="Select contact to assign" name="assignedUsers" class="prioAssignInput" type="text"/>
-     <img id="assignedBtnImg" class="assignedInputImg" src="../assets/icons/arrow_drop_down.svg">
+     <button class="assignUserListBtn"><img id="assignedBtnImg" class="assignedInputImg" src="../assets/icons/arrow_drop_down.svg"></button>
+    </div>
       <div id="assignedUserList" class="assigned-user-list">...</div>
     </div>
 
@@ -142,7 +139,10 @@
 
       <div class="prioSubtaskContainer">
         <label for="subtask">Subtasks</label>
+        <div class="subtaskWrapper">
         <input class="prioSubtaskInput" name="subtask" id="subtask" type="text" />
+        <button class="subtaskAddButton"><img src="../assets/icons/add.svg" ></button>
+        </div>
         <div id="subtaskList"></div>
       </div>
     </div>

@@ -16,6 +16,12 @@ const priorityIcons = {
 window.addEventListener("DOMContentLoaded", () => {
    document.getElementById("openMenu").addEventListener("click", closeOpenMenu);
   initForm();
+  
+  const dateInput = document.getElementById('taskDate');
+  if (dateInput) {
+    const today = new Date().toISOString().split('T')[0];
+    dateInput.setAttribute('min', today);
+  }
 });
 
 function initForm() {
@@ -97,7 +103,7 @@ function collectTaskData(form) {
 }
 
 function isTaskValid(task) {
-  if (!task.title || !task.description || !task.category || task.category.trim() === "") {
+  if (!task.title || !task.description || !validateDate() || !task.category || task.category.trim() === "") {
     alert("Bitte fülle alle Pflichtfelder aus und wähle eine Kategorie.");
     return false;
   }
@@ -233,56 +239,15 @@ function renderSubtasks() {
   });
 }
 
-// Calender
-
-const input = document.getElementById("customDateInput");
-const calendar = document.getElementById("calendar");
-const calendarIcon = document.getElementById("calendarIcon");
-
-// Toggle calendar on icon click
-calendarIcon.addEventListener("click", () => {
-  calendar.classList.toggle("hidden");
-  if (!calendar.classList.contains("hidden")) {
-    renderCalendar();
-  }
-});
-
-// Close calendar when clicking outside
-document.addEventListener("click", (e) => {
-  if (!e.target.closest(".datepicker-wrapper")) {
-    calendar.classList.add("hidden");
-  }
-});
-
-function renderCalendar() {
+function validateDate() {
+  const dateInput = document.getElementById('taskDate');
+  const selectedDate = new Date(dateInput.value);
   const today = new Date();
-  const year = today.getFullYear();
-  const month = today.getMonth();
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  today.setHours(0, 0, 0, 0);
 
-  calendar.innerHTML = ""; // Clear previous
-
-  for (let day = 1; day <= daysInMonth; day++) {
-    const date = new Date(year, month, day);
-    const isPast = date < new Date(today.getFullYear(), today.getMonth(), today.getDate());
-
-    const btn = document.createElement("button");
-    btn.textContent = day;
-    if (isPast) {
-      btn.disabled = true;
-    } else {
-      btn.addEventListener("click", () => {
-        input.value = formatDate(date);
-        calendar.classList.add("hidden");
-      });
-    }
-    calendar.appendChild(btn);
+  if(selectedDate < today) {
+    alert('Set valid Date');
+    return false;
   }
-}
-
-function formatDate(date) {
-  const day = `${date.getDate()}`.padStart(2, "0");
-  const month = `${date.getMonth() + 1}`.padStart(2, "0");
-  const year = date.getFullYear();
-  return `${day}.${month}.${year}`;
+  return true;
 }

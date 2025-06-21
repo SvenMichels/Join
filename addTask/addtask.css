@@ -64,6 +64,24 @@
   border: 1px solid #d1d1d1;
 }
 
+.taskDate {
+  display: flex;
+  flex-direction: column;
+  width: 440px;
+  height: 96px;
+  top: 296px;
+  left: 0.25px;
+  gap: 8px;
+}
+
+.taskDateInput {
+  padding-left: 10px;
+  width: 440px;
+  height: 48px;
+  border-radius: 10px;
+  border: 1px solid #d1d1d1;
+}
+
 .spaceContainer {
   position: fixed;
   width: 0px;
@@ -79,7 +97,6 @@
   display: flex;
   flex-direction: column;
   width: 440px;
-  height: 400px;
   top: 327px;
   left: 864.25px;
   gap: 24px;
@@ -143,6 +160,11 @@ input:valid + .error-message {
   width: 100%;
 }
 
+.assignedContainer {
+  position: relative;
+  width: 100%;
+}
+
 .prioAssignInput {
   width: 100%;
   padding: 12px 40px 12px 16px;
@@ -152,6 +174,23 @@ input:valid + .error-message {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
   font-size: 16px;
   box-sizing: border-box;
+}
+
+.assignUserListBtn {
+  display: flex;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  padding: 5px;
+  transform: translateY(-50%);
+  background-color: transparent;
+  border: none;
+}
+
+.assignUserListBtn:hover {
+    cursor: pointer;
+    background: #d1d1d1;
+    border-radius: 50%;
 }
 
 .prioAssignInput:hover {
@@ -182,11 +221,8 @@ input:valid + .error-message {
 }
 
 .assignedInputImg {
-  position: absolute;
-  right: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 14px;
+  width: 15px;
+  height: 14px;
 }
 
 .assignedInputImg:hover {
@@ -222,20 +258,14 @@ input:valid + .error-message {
 }
 
 .prioSubtaskInput {
-  padding: 0;
   width: 100%;
-  height: 40px;
+  padding: 12px 40px 12px 16px;
   border: 1px solid #d1d1d1;
   border-radius: 10px;
   background-color: white;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-}
-
-.subtaskInput {
-  border: none;
-  outline: none;
-  width: 100%;
   font-size: 16px;
+  box-sizing: border-box;
 }
 
 .taskPrioIcons {
@@ -377,21 +407,18 @@ select {
   border-radius: 4px;
 }
 
-#subtaskList {
-  margin-top: 8px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  font-size: 14px;
-  color: #2a3647;
-}
-
 .subtaskAddContainer {
   max-width: 100%;
   position: relative;
 }
 
+.subtaskWrapper {
+  position: relative;
+  width: 100%;
+}
+
 .subtaskAddButton {
+  display: flex;
   position: absolute;
   right: 10px;
   top: 50%;
@@ -412,11 +439,12 @@ select {
   height: 14px;
 }
 
-input {
-  padding-left: 12px;
+.subtaskList {
+  margin-top: 4px;
+  display: flex;
 }
 
-input:focus {
+input {
   padding-left: 12px;
 }
 
@@ -438,72 +466,4 @@ textarea:focus {
 
 textarea:focus::placeholder {
   color: transparent;
-}
-
-/* Calender */
-.datepicker-wrapper {
-  position: relative;
-  display: inline-block;
-  padding: 12px 40px 12px 16px;
-  border: 1px solid #d1d1d1;
-  border-radius: 10px;
-  background-color: white;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-  font-size: 16px;
-  box-sizing: border-box;
-}
-
-#customDateInput {
-  padding-left: 0;
-  border: 0;
-}
-
-#calendarIcon {
-  position: absolute;
-  right: 10px;
-  top: 8px;
-  width: 24px;
-  height: 24px;
-  cursor: pointer;
-}
-
-.calendar {
-  position: absolute;
-  top: 110%;
-  left: 0;
-  background: white;
-  border: 1px solid #ccc;
-  padding: 10px;
-  z-index: 100;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.calendar.hidden {
-  display: none;
-}
-
-.calendar button {
-  width: 30px;
-  height: 30px;
-  margin: 2px;
-  border: none;
-  background-color: #f0f0f0;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.calendar button:hover {
-  background-color: #007bff;
-  color: white;
-}
-
-.taskDate {
-  display: flex;
-  flex-direction: column;
-  width: 440px;
-  height: 96px;
-  top: 296px;
-  left: 0.25px;
-  gap: 8px;
 }
