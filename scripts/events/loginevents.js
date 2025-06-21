@@ -1,4 +1,4 @@
-import { loginUser, loginAsGuest } from "../auth/login.js";
+import { loginAsGuest, loginUser } from "../auth/login.js";
 import { collectUserInput } from "../../signup/signup.js";
 import { requestData } from "../firebase.js";
 

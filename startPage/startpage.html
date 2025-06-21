@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
- <!-- (=^.^=) -->
- <head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<!-- (=^.^=) -->
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
   <title>
-   Join – Kanban Board
+    Join – Kanban Board
   </title>
   <link rel="icon" href="../assets/icons/join_logo_2.svg" type="image/x-icon" />
-  <link href="/styles/fonts.css" rel="stylesheet"/>
-  <link href="startpage.css" rel="stylesheet"/>
+  <link href="/styles/fonts.css" rel="stylesheet" />
+  <link href="startpage.css" rel="stylesheet" />
   <link rel="stylesheet" href="../styles/standard.css">
   <script type="module" src="../scripts/app.js">
   </script>
- </head>
- <body>
+</head>
+
+<body>
   <header class="headerStyle">
     <div class="headerContainer">
       <p>Kanban Project Management Tool</p>
@@ -23,13 +25,19 @@
           <img alt="Bild" class="helpIcon" src="../assets/icons/help.svg" />
         </a>
         <button id="openMenu" class="profileBtn">
-     MK
-    </button>
-        </div>
+          MK
+        </button>
+      </div>
       <div id="dropDownMenu" class="dropDownMenu dp-none">
-        <a class="txtDeco-none" href="../legalnotice.html"><p class="dropDownTxt">Legal Notice</p></a>
-        <a class="txtDeco-none" href="../privatpolicy.html"><p class="dropDownTxt">Privacy Policy</p></a>
-        <a class="txtDeco-none" href="../index.html"><p class="dropDownTxt">Log out</p></a>
+        <a class="txtDeco-none" href="../legalnotice.html">
+          <p class="dropDownTxt">Legal Notice</p>
+        </a>
+        <a class="txtDeco-none" href="../privatpolicy.html">
+          <p class="dropDownTxt">Privacy Policy</p>
+        </a>
+        <a class="txtDeco-none" href="../index.html">
+          <p class="dropDownTxt">Log out</p>
+        </a>
       </div>
     </div>
   </header>
@@ -46,9 +54,9 @@
       </a>
       <div class="taskFrame9">
         <a class="txtDeco-none" href="../addTask/addtask.html">
-        <button class="navBtn">
-          <img alt="Bild" class="navIcons" src="/assets/icons/add_task.svg" /> Add Task
-        </button>
+          <button class="navBtn">
+            <img alt="Bild" class="navIcons" src="/assets/icons/add_task.svg" /> Add Task
+          </button>
         </a>
       </div>
       <a class="txtDeco-none" href="../board/board.html">
@@ -71,115 +79,113 @@
       <a class="taskFrameLink" href="../legalnotice.html">Legal notice</a>
     </div>
   </nav>
-   <div class="frontPage">
+  <div class="frontPage">
     <div class="headline">
-     <h1>
-      Join 360
-     </h1>
-     <div class="divider">
-     </div>
-     <p>
-      Key Metrics at a Glance
-     </p>
+      <h1>
+        Join 360
+      </h1>
+      <div class="divider">
+      </div>
+      <p>
+        Key Metrics at a Glance
+      </p>
     </div>
     <div class="mainContent">
-     <div class="info">
-      <div class="row">
-       <div class="toDo btn" onclick="">
-        <img alt="Bild" class="icon defaultIcon" src="/assets/icons/edit_bg.svg"/>
-        <img alt="Bild" class="icon invertedIcon" id="" src="/assets/icons/edit_inverted.svg"/>
-        <div class="taskInfo">
-         <p class="counter todoTaskAmount">
-          0
-         </p>
-         <p class="taskText">
-          To-Do
-         </p>
+      <div class="info">
+        <div class="row">
+          <div class="toDo btn" onclick="">
+            <img alt="Bild" class="icon defaultIcon" src="/assets/icons/edit_bg.svg" />
+            <img alt="Bild" class="icon invertedIcon" id="" src="/assets/icons/edit_inverted.svg" />
+            <div class="taskInfo">
+              <p class="counter todoTaskAmount">
+                0
+              </p>
+              <p class="taskText">
+                To-Do
+              </p>
+            </div>
+          </div>
+          <div class="done btn" onclick="">
+            <img alt="Bild" class="icon defaultIcon" src="/assets/icons/check_bg.svg" />
+            <img alt="Bild" class="icon invertedIcon" src="/assets/icons/check_inverted.svg" />
+            <div class="taskInfo">
+              <p class="counter doneTaskAmount">
+                1
+              </p>
+              <p class="taskText">
+                Done
+              </p>
+            </div>
+          </div>
         </div>
-       </div>
-       <div class="done btn" onclick="">
-        <img alt="Bild" class="icon defaultIcon" src="/assets/icons/check_bg.svg"/>
-        <img alt="Bild" class="icon invertedIcon" src="/assets/icons/check_inverted.svg"/>
-        <div class="taskInfo">
-         <p class="counter doneTaskAmount">
-          1
-         </p>
-         <p class="taskText">
-          Done
-         </p>
+        <div class="row">
+          <div class="urgent btn" onclick="">
+            <div class="urgentAmount">
+              <img alt="Bild" class="icon" src="/assets/icons/prio_alta_big.svg" />
+              <div class="taskInfo">
+                <p class="counter urgentTaskAmount">
+                  2
+                </p>
+                <p class="taskText">
+                  Urgent
+                </p>
+              </div>
+            </div>
+            <p class="divider">
+            </p>
+            <div class="urgentDate taskInfo">
+              <p class="urgentTaskDate">
+                May 31, 2025
+              </p>
+              <p class="urgentTaskDateText">
+                Upcoming Deadline
+              </p>
+            </div>
+          </div>
         </div>
-       </div>
+        <div class="row">
+          <div class="stats">
+            <div>
+              <div class="taskInfo btn">
+                <p class="counter taskInBoard">
+                  3
+                </p>
+                <p class="taskText">
+                  Tasks in Board
+                </p>
+              </div>
+            </div>
+            <div>
+              <div class="taskInfo btn">
+                <p class="counter taskInProgress">
+                  4
+                </p>
+                <p class="taskText">
+                  Tasks in Progress
+                </p>
+              </div>
+            </div>
+            <div>
+              <div class="taskInfo btn">
+                <p class="counter awaitingFeedback">
+                  5
+                </p>
+                <p class="taskText">
+                  Awaiting Feedback
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="row">
-       <div class="urgent btn" onclick="">
-        <div class="urgentAmount">
-         <img alt="Bild" class="icon" src="/assets/icons/prio_alta_big.svg"/>
-         <div class="taskInfo">
-          <p class="counter urgentTaskAmount">
-           2
-          </p>
-          <p class="taskText">
-           Urgent
-          </p>
-         </div>
-        </div>
-        <p class="divider">
-        </p>
-        <div class="urgentDate taskInfo">
-         <p class="urgentTaskDate">
-          May 31, 2025
-         </p>
-         <p class="urgentTaskDateText">
-          Upcoming Deadline
-         </p>
-        </div>
-       </div>
-      </div>
-      <div class="row">
-       <div class="stats">
-        <div>
-         <div class="taskInfo btn">
-          <p class="counter taskInBoard">
-           3
-          </p>
-          <p class="taskText">
-           Tasks in Board
-          </p>
-         </div>
-        </div>
-        <div>
-         <div class="taskInfo btn">
-          <p class="counter taskInProgress">
-           4
-          </p>
-          <p class="taskText">
-           Tasks in Progress
-          </p>
-         </div>
-        </div>
-        <div>
-         <div class="taskInfo btn">
-          <p class="counter awaitingFeedback">
-           5
-          </p>
-          <p class="taskText">
-           Awaiting Feedback
-          </p>
-         </div>
-        </div>
-       </div>
-      </div>
-     </div>
-     <div class="greetings">
-      <p>
-       Good Morning,
-      </p>
-      <p class="username">
-       Johnny Test
-      </p>
-     </div>
+      <section class="greetings">
+        <p>Good Morning,</p>
+        <p class="username">Johnny Test</p>
+      </section>
     </div>
-   </div>
+  </div>
   </main>
- </body>
+  <script type="module" src="startpage.js"></script>
+</body>
+
 </html>

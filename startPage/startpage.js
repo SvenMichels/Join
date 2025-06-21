@@ -1,52 +1,4 @@
-// login.js
-import { requestData } from "../firebase.js";
-
-const loginForm = document.getElementById("loginForm");
-loginForm?.addEventListener("submit", async function (event) {
-  event.preventDefault();
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-});
-
-export async function loginUser(email, password) {
-  try {
-    const { data: users } = await requestData("GET", "/users/");
-    const userList = Object.entries(users || {}).map(([id, data]) => ({ id, ...data }));
-    const user = userList.find(
-      (user) => user.userEmail === email && user.password === password
-    );
-
-    if (user) {
-      localStorage.setItem("currentUser", JSON.stringify(user));
-      return user;
-    } else {
-      alert("Ungültige Anmeldedaten");
-      throw new Error("Invalid credentials");
-    }
-  } catch (error) {
-    console.error("Fehler beim Login:", error);
-    alert("Login fehlgeschlagen. Bitte versuche es erneut.");
-    throw error; 
-  }
-}
-
-
-export async function loginAsGuest() {
-  try {
-    const { data: users } = await requestData("GET", "/users/");
-    const userList = Object.values(users);
-    const guest = userList.find((u) => u.userName.toLowerCase() === "guest");
-
-    if (guest) {
-      localStorage.setItem("currentUser", JSON.stringify(guest));
-      window.location.href = "startpage.html";
-    } else {
-      alert("Gast-Zugang nicht gefunden.");
-    }
-  } catch (err) {
-    console.error("Fehler beim Gast-Login:", err);
-  }
-};
+import { requestData } from "../scripts/firebase.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   updateUserGreeting();
@@ -63,6 +15,7 @@ function updateUserGreeting() {
 
     const greetingEl = document.querySelector(".greetings > p:first-child");
     const nameEl = document.querySelector(".greetings .username");
+    const profileBtn = document.getElementById("openMenu");
 
     const hour = new Date().getHours();
     let greeting = "Hello";
@@ -73,6 +26,7 @@ function updateUserGreeting() {
 
     if (greetingEl) greetingEl.textContent = `${greeting},`;
     if (nameEl) nameEl.textContent = name;
+    if (profileBtn) profileBtn.textContent = getInitials(name);
   } catch (err) {
     console.warn("Fehler beim Parsen des Benutzers:", err);
   }
@@ -104,7 +58,9 @@ function countByStatus(tasks, status) {
 }
 
 function countByPriority(tasks, prio) {
-  return tasks.filter((t) => (t.prio || "").toLowerCase() === prio.toLowerCase()).length;
+  return tasks.filter(
+    (t) => (t.prio || "").toLowerCase() === prio.toLowerCase()
+  ).length;
 }
 
 function getEarliestUrgentDueDate(tasks) {
@@ -122,4 +78,11 @@ function getEarliestUrgentDueDate(tasks) {
 function setText(selector, text) {
   const el = document.querySelector(selector);
   if (el) el.textContent = text;
+}
+
+function getInitials(name) {
+  const parts = name.trim().split(" ");
+  const first = parts[0]?.[0] || "";
+  const last = parts.length > 1 ? parts[parts.length - 1][0] : "";
+  return (first + last).toUpperCase();
 }
