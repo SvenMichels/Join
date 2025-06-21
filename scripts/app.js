@@ -7,7 +7,7 @@ export async function init() {
   console.log("App initialized");
   loginListeners();
   signupListeners();
-  // requestData("POST","/users/", {name: "Daniel", deinemail: "test123@web.de"});
+   requestData("POST","/users/", {userEmail: "test@guest.com", userName: "guest"});
 }
 
 init();
