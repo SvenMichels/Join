@@ -23,7 +23,7 @@ body {
   display: flex;
   width: 1208px;
   height: 688px;
-  top: 336px;  /* Umändern, dann scrollt es auch nicht mehr nach unten */
+  top: 336px; /* Umändern, dann scrollt es auch nicht mehr nach unten */
   left: 232px;
   padding-right: 64px;
   padding-left: 64px;
@@ -105,6 +105,52 @@ body {
   height: 500px;
 }
 
-.txtDeco-none{
-    text-decoration: none;
+.txtDeco-none {
+  text-decoration: none;
+}
+
+.task {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  margin: 15px 0 5px 0;
+  gap: 16px;
+  background-color: rgba(255, 255, 255, 1);
+  cursor: pointer;
+  width: 100%;
+  img {
+    width: 113px;
+    height: 27px;
+  }
+}
+
+.task-list {
+  min-height: 120px;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #f5f5f5;
+  border: 2px dashed transparent;
+  transition: border-color 0.2s ease;
+}
+
+.task-list.drag-over {
+  border-color: #007cee;
+}
+
+.selected-contact-chip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px;
+  border-radius: 16px;
+  border: 2px solid #ffffff;
+}
+
+.assigned-chips {
+  display: flex;
+  
 }

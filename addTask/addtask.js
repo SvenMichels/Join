@@ -91,7 +91,7 @@ function collectTaskData(form) {
     category: form.category.value,
     prio: currentActivePriority,
     assigned: collectAssignedUsers().join(', '),
-    subtask: subtasks,
+    subtask: form.subtasks,
     status: "todo"
   };
 }
