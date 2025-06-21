@@ -188,9 +188,9 @@ input:valid + .error-message {
 }
 
 .assignUserListBtn:hover {
-    cursor: pointer;
-    background: #d1d1d1;
-    border-radius: 50%;
+  cursor: pointer;
+  background: #d1d1d1;
+  border-radius: 50%;
 }
 
 .prioAssignInput:hover {
@@ -205,19 +205,42 @@ input:valid + .error-message {
 }
 
 .assigned-user-list {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 100%;
-  z-index: 10;
-  display: none;
   background-color: #ffffff;
   border: 1px solid #d1d1d1;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  max-height: 0;
+  opacity: 0;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0px 0px 14px 3px #0000000A;
+  border-radius: 10px;
+}
+
+.dropdown-arrow {
+  transition: transform 0.3s ease;
+}
+
+.rotated {
+  transform: rotate(180deg);
+}
+
+.assigned-user-list.visible ~ .assignedContainer .dropdown-arrow {
+  transform: rotate(180deg);
+}
+
+#assignedBtnImg {
+  transition: transform 0.3s ease;
+}
+
+#assignedBtnImg.rotated {
+  transform: rotate(180deg);
 }
 
 .assigned-user-list.visible {
-  display: block;
+  max-height: 500px;
+  opacity: 1;
+  visibility: visible;
 }
 
 .assignedInputImg {

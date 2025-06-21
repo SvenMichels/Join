@@ -152,7 +152,7 @@ function renderUserCheckboxes(users) {
   container.innerHTML = "";
 
   users.forEach((user, index) => {
-    if (index >= 6) return;
+    if (index >= 5) return;
 
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
@@ -214,10 +214,6 @@ function getRandomColor() {
   return `hsl(${hue}, 70%, 80%)`;
 }
 
-assignedBtnImg.addEventListener('click', () => {
-  userList.classList.toggle('visible');
-})
-
 subtaskInput.addEventListener('keydown', function (e) {
   if (e.key === "Enter" && subtaskInput.value.trim() !== "") {
     e.preventDefault();
@@ -251,3 +247,22 @@ function validateDate() {
   }
   return true;
 }
+
+document.querySelector('.assignUserListBtn', 'assignedBtnImg').addEventListener('click', function (e) {
+  e.preventDefault();
+  
+  const userList = document.getElementById('assignedUserList');
+  const arrow = document.getElementById('assignedBtnImg');
+  const isVisible = userList.classList.toggle('visible');
+
+  if(isVisible) {
+    arrow.classList.add('rotated');
+  } else {
+    arrow.classList.remove('rotated');
+  }
+});
+
+document.querySelector('.subtaskAddButton').addEventListener('click', function (e) {
+  e.preventDefault();
+  // add subtask input data to subtaskList
+})
