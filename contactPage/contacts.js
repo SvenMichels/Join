@@ -3,23 +3,28 @@ import {
   contactCard,
   singleContact,
 } from "./contactTemplate.js";
-import { requestData } from "../scripts/firebase.js";
-import { createUser } from "../scripts/users/users.js";
+
+import {
+  createContact,
+  loadContacts,
+  updateContactInFirebase,
+  deleteContactFromFirebase,
+} from "../contactPage/contactService.js";
 
 let contactList = [];
-let contactIdCounter = 0; 
 let currentlyEditingId = null;
 const usedLetters = new Set();
 
 window.contactList = contactList;
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("addBtn").addEventListener("click", openAddWindow);
   document.getElementById("cancelBtn").addEventListener("click", closeAddWindow, closeEditWindow);
   document.getElementById("submitBtn").addEventListener("click", addContact);
   document.getElementById("openMenu").addEventListener("click", closeOpenMenu);
   document.getElementById("editContactForm").addEventListener("submit", handleEditSubmit);
   loadShowContact();
+  loadContactsFromFirebase();
 });
 
 function openAddWindow() {
@@ -42,14 +47,19 @@ function closeEditWindow() {
   currentlyEditingId = null;
 }
 
-function closeOpenMenu(){
+function closeOpenMenu() {
   const element = document.getElementById("dropDownMenu");
   if (element.classList.contains("dp-none")) {
       document.getElementById(`dropDownMenu`).classList.remove("dp-none");
   } else {
     document.getElementById(`dropDownMenu`).classList.add("dp-none");
   }
-} 
+}
+
+async function loadContactsFromFirebase() {
+  contactList = await loadContacts();
+  renderAllContacts(contactList);
+}
 
 async function addContact(event) {
   event.preventDefault();
@@ -58,17 +68,13 @@ async function addContact(event) {
   const phone = getPhone();
   const initials = getInitials(name);
   const firstLetter = getFirstLetter(name);
-  const id = contactIdCounter++;
-  const contact = { name, email, phone, initials, id };
-  contactList.push(contact);
-  
-  contactCreated(contact, name, email, phone, initials, firstLetter, id);
-}
+  const contact = { name, email, phone, initials };
 
-async function contactCreated(contact, name, email, phone, initials, firstLetter, id){
   try {
-    await createUser(contact);
-    renderContact(name, email, phone, initials, firstLetter, id);
+    const result = await createContact(contact);
+    contact.id = result.name;
+    contactList.push(contact);
+    renderContact(name, email, phone, initials, firstLetter, contact.id);
     emptyInput();
     closeAddWindow();
   } catch (error) {
@@ -130,10 +136,10 @@ function renderSingleContact(name, email, phone, initials, id) {
 function bindActionButton(container, buttonClass, callback) {
   const button = container.querySelector(buttonClass);
 
-  if(!button) return;
+  if (!button) return;
 
   button.addEventListener("click", () => {
-    const id = parseInt(button.dataset.id);
+    const id = button.dataset.id;
     callback(id);
   });
 }
@@ -147,10 +153,12 @@ function bindEditButton(container) {
 }
 
 function loadShowContact(){
-  document.getElementById("allContacts").addEventListener("click", function (event) {
+  document
+  .getElementById("allContacts")
+  .addEventListener("click", function (event) {
     const contactCard = event.target.closest(".contact");
     if (contactCard) {
-      const id = parseInt(contactCard.dataset.id);
+      const id = contactCard.dataset.id;
       console.log("Click on contactCard ID:", id);
       showContact(id);
     }
@@ -163,7 +171,9 @@ function emptyInput() {
   document.getElementById("contactPhone").value = "";
 }
 
-function deleteContact(id) {
+async function deleteContact(id) {
+  await deleteContactFromFirebase(id);
+
   contactList = removeContactById(contactList, id);
   clearContactListUI();
   renderAllContacts(contactList);
@@ -171,7 +181,7 @@ function deleteContact(id) {
 }
 
 function removeContactById(list, id) {
-  return list.filter(contact => contact.id !== id);
+  return list.filter((contact) => contact.id !== id);
 }
 
 function clearContactListUI() {
@@ -210,7 +220,7 @@ function showContact(id) {
 }
 
 function findContactById(id) {
-  return contactList.find(c => c.id === id);
+  return contactList.find(c => String(c.id) === String(id));
 }
 
 function editContact(id) {
@@ -247,23 +257,24 @@ function getValueFromEdit(id) {
   return document.querySelector(`#editWindow #${id}`).value.trim();
 }
 
-function handleEditSubmit(event) {
+async function handleEditSubmit(event) {
   event.preventDefault();
 
   const contact = findContactById(currentlyEditingId);
   if (!contact) return;
-
+  
   const updated = getEditContactInput();
-  updateContact(contact, updated);
+  await updateContact(contact, updated); 
   rerenderAfterEdit(currentlyEditingId);
-  showContact(currentlyEditingId)
+  showContact(currentlyEditingId);
   closeEditWindow();
 }
 
-function updateContact(contact, updated) {
+async function updateContact(contact, updated) {
   Object.assign(contact, updated, {
     initials: getInitials(updated.name),
   });
+  await updateContactInFirebase(contact);
 }
 
 function rerenderAfterEdit(id) {
