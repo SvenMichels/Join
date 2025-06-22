@@ -3,6 +3,7 @@ import {
   contactCard,
   singleContact,
 } from "./contactTemplate.js";
+// import { requestData } from "../scripts/firebase.js";
 
 import {
   createContact,
@@ -19,12 +20,16 @@ window.contactList = contactList;
 
 document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("addBtn").addEventListener("click", openAddWindow);
-  document.getElementById("cancelBtn").addEventListener("click", closeAddWindow, closeEditWindow);
+  document
+    .getElementById("cancelBtn")
+    .addEventListener("click", closeAddWindow, closeEditWindow);
   document.getElementById("submitBtn").addEventListener("click", addContact);
   document.getElementById("openMenu").addEventListener("click", closeOpenMenu);
-  document.getElementById("editContactForm").addEventListener("submit", handleEditSubmit);
+  document
+    .getElementById("editContactForm")
+    .addEventListener("submit", handleEditSubmit);
   loadShowContact();
-  loadContactsFromFirebase();
+  await loadContactsFromFirebase();
 });
 
 function openAddWindow() {
@@ -50,7 +55,7 @@ function closeEditWindow() {
 function closeOpenMenu() {
   const element = document.getElementById("dropDownMenu");
   if (element.classList.contains("dp-none")) {
-      document.getElementById(`dropDownMenu`).classList.remove("dp-none");
+    document.getElementById(`dropDownMenu`).classList.remove("dp-none");
   } else {
     document.getElementById(`dropDownMenu`).classList.add("dp-none");
   }
@@ -152,17 +157,17 @@ function bindEditButton(container) {
   bindActionButton(container, ".editBtn", editContact);
 }
 
-function loadShowContact(){
+function loadShowContact() {
   document
-  .getElementById("allContacts")
-  .addEventListener("click", function (event) {
-    const contactCard = event.target.closest(".contact");
-    if (contactCard) {
-      const id = contactCard.dataset.id;
-      console.log("Click on contactCard ID:", id);
-      showContact(id);
-    }
-  });
+    .getElementById("allContacts")
+    .addEventListener("click", function (event) {
+      const contactCard = event.target.closest(".contact");
+      if (contactCard) {
+        const id = contactCard.dataset.id;
+        console.log("Click on contactCard ID:", id);
+        showContact(id);
+      }
+    });
 }
 
 function emptyInput() {
@@ -173,7 +178,6 @@ function emptyInput() {
 
 async function deleteContact(id) {
   await deleteContactFromFirebase(id);
-
   contactList = removeContactById(contactList, id);
   clearContactListUI();
   renderAllContacts(contactList);
@@ -205,7 +209,7 @@ function renderAllContacts(contacts) {
 function clearBigContactView() {
   document.getElementById("bigContact").innerHTML = "";
 }
-//(=^.^=)
+
 function showContact(id) {
   const contact = contactList.find((contact) => contact.id === id);
   if (contact) {
@@ -257,14 +261,14 @@ function getValueFromEdit(id) {
   return document.querySelector(`#editWindow #${id}`).value.trim();
 }
 
-async function handleEditSubmit(event) {
+function handleEditSubmit(event) {
   event.preventDefault();
 
   const contact = findContactById(currentlyEditingId);
   if (!contact) return;
-  
+
   const updated = getEditContactInput();
-  await updateContact(contact, updated); 
+  updateContact(contact, updated);
   rerenderAfterEdit(currentlyEditingId);
   showContact(currentlyEditingId);
   closeEditWindow();
