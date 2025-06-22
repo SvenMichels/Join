@@ -302,11 +302,15 @@ h2{
     width: 352px;
     height: 78px;
     gap: 35px;
-    border: 1px solid #2a3647;
     border-radius: 10px;
-    background-color: #2a3647;
     margin: 15px 35px 15px 36px;
     padding-left: 5px;
+}
+
+.active{
+    background-color: #2a3647;
+    /* border: 1px solid #2a3647; */
+    color: #FFFFFF;
 }
 
 .pic{
@@ -327,7 +331,6 @@ h2{
     font-family: 'Inter';
     font-weight: 400;
     font-size: 20px;
-    color: #FFFFFF;
     display: flex;
     align-items: center;
     

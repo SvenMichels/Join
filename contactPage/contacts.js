@@ -64,6 +64,15 @@ function closeOpenMenu() {
 async function loadContactsFromFirebase() {
   contactList = await loadContacts();
   renderAllContacts(contactList);
+
+  if (contactList.length > 0) {
+    const firstId = contactList[0].id;
+    showContact(firstId);
+    const firstCard = document.querySelector(`.contact[data-id="${firstId}"]`);
+    if (firstCard) {
+      firstCard.classList.add("active");
+    }
+  }
 }
 
 async function addContact(event) {
@@ -163,6 +172,10 @@ function loadShowContact() {
     .addEventListener("click", function (event) {
       const contactCard = event.target.closest(".contact");
       if (contactCard) {
+        document
+          .querySelectorAll("#allContacts .contact.active")
+          .forEach((el) => el.classList.remove("active"));
+        contactCard.classList.add("active");
         const id = contactCard.dataset.id;
         console.log("Click on contactCard ID:", id);
         showContact(id);
