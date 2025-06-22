@@ -186,21 +186,8 @@ function renderUserCheckboxes(users) {
     const label = document.createElement("label");
     label.htmlFor = checkbox.id;
     label.textContent = user.userName;
-
-    label.addEventListener("click", function (e) {
-      e.preventDefault();
-
-      checkbox.checked = !checkbox.checked;
-      if (checkbox.checked) {
-        wrapper.classList.add("user-selected");
-        updateSelectedUserDisplay();
-      } else {
-        wrapper.classList.remove("user-selected");
-        updateSelectedUserDisplay();
-      }
-
-      updateSelectedUserDisplay();
-    });
+    
+    label.addEventListener("click", (e) => e.preventDefault());
 
     const namesDiv = document.createElement("div");
     namesDiv.className = "userInfoWrapper";
@@ -217,14 +204,11 @@ function renderUserCheckboxes(users) {
     checkbox.addEventListener("change", updateSelectedUserDisplay);
 
     wrapper.addEventListener("click", function (e) {
-      if (e.target.tagName !== "INPUT" && e.target.tagName !== "LABEL") {
+      if (e.target.tagName !== "INPUT") {
         checkbox.checked = !checkbox.checked;
-        wrapper.classList.toggle("active user-selected");
-        updateSelectedUserDisplay();
-      } else {
-        wrapper.classList.toggle("active user-selected");
-        updateSelectedUserDisplay();
       }
+        wrapper.classList.toggle("active");
+        updateSelectedUserDisplay();
     });
 
     updateSelectedUserDisplay(); // Initial leer
