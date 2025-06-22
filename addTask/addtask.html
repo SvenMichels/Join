@@ -119,8 +119,8 @@
 
    <div class="assignedInputWrapper">
     <div class="assignedContainer">
-     <input placeholder="Select contact to assign" name="assignedUsers" class="prioAssignInput" type="text"/>
-     <button class="assignUserListBtn"><img id="assignedBtnImg" class="assignedInputImg dropdown-arrow" src="../assets/icons/arrow_drop_down.svg"></button>
+     <input id="searchUser" placeholder="Select contact to assign" name="assignedUsers" class="prioAssignInput" type="text"/>
+     <button class="assignUserListBtn" type="button"><img id="assignedBtnImg" class="assignedInputImg dropdown-arrow" src="../assets/icons/arrow_drop_down.svg"></button>
     </div>
       <div id="assignedUserList" class="assigned-user-list">...</div>
     </div>
@@ -141,7 +141,7 @@
         <label for="subtask">Subtasks</label>
         <div class="subtaskWrapper">
         <input class="prioSubtaskInput" name="subtask" id="subtask" type="text" />
-        <button class="subtaskAddButton"><img src="../assets/icons/add.svg" ></button>
+        <button  type="button" class="subtaskAddButton"><img src="../assets/icons/add.svg" ></button>
         </div>
         <div id="subtaskList"></div>
       </div>

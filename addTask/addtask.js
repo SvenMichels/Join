@@ -1,11 +1,12 @@
 import { requestData } from "../scripts/firebase.js";
 
 let currentActivePriority = "";
-const assignedBtnImg = document.getElementById("assignedBtnImg");
-const userList = document.getElementById("assignedUserList");
+// const assignedBtnImg = document.getElementById("assignedBtnImg");
+// const userList = document.getElementById("assignedUserList");
 const subtaskInput = document.getElementById("subtask");
 const subtaskList = document.getElementById("subtaskList");
 let subtask = [];
+let allUsers = [];
 
 const priorityIcons = {
   urgent: [
@@ -22,6 +23,7 @@ const priorityIcons = {
 window.addEventListener("DOMContentLoaded", () => {
   document.getElementById("openMenu").addEventListener("click", closeOpenMenu);
   initForm();
+  eventHandleSearch();
 
   const dateInput = document.getElementById("taskDate");
   if (dateInput) {
@@ -154,7 +156,7 @@ async function loadAndRenderUsers() {
     const response = await requestData("GET", "/users");
     const usersData = response.data;
 
-    const allUsers = Object.entries(usersData || {}).map(([id, user]) => ({
+    allUsers = Object.entries(usersData || {}).map(([id, user]) => ({
       id,
       ...user,
     }));
@@ -169,9 +171,7 @@ function renderUserCheckboxes(users) {
   const container = document.getElementById("assignedUserList");
   container.innerHTML = "";
 
-  users.forEach((user, index) => {
-    if (index >= 5) return;
-
+  users.forEach((user) => {
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
     checkbox.id = `user-${user.id}`;
@@ -187,6 +187,21 @@ function renderUserCheckboxes(users) {
     label.htmlFor = checkbox.id;
     label.textContent = user.userName;
 
+    label.addEventListener("click", function (e) {
+      e.preventDefault();
+
+      checkbox.checked = !checkbox.checked;
+      if (checkbox.checked) {
+        wrapper.classList.add("user-selected");
+        updateSelectedUserDisplay();
+      } else {
+        wrapper.classList.remove("user-selected");
+        updateSelectedUserDisplay();
+      }
+
+      updateSelectedUserDisplay();
+    });
+
     const namesDiv = document.createElement("div");
     namesDiv.className = "userInfoWrapper";
     namesDiv.appendChild(initialsDiv);
@@ -200,13 +215,26 @@ function renderUserCheckboxes(users) {
     container.appendChild(wrapper);
 
     checkbox.addEventListener("change", updateSelectedUserDisplay);
-  });
 
-  updateSelectedUserDisplay(); // Initial leer
+    wrapper.addEventListener("click", function (e) {
+      if (e.target.tagName !== "INPUT" && e.target.tagName !== "LABEL") {
+        checkbox.checked = !checkbox.checked;
+        wrapper.classList.toggle("active user-selected");
+        updateSelectedUserDisplay();
+      } else {
+        wrapper.classList.toggle("active user-selected");
+        updateSelectedUserDisplay();
+      }
+    });
+
+    updateSelectedUserDisplay(); // Initial leer
+  });
 }
 
 function collectAssignedUsers() {
-  const checkboxes = document.querySelectorAll(".user-checkbox");
+  const checkboxes = document.querySelectorAll(
+    ".user-checkbox-wrapper .user-checkbox"
+  );
   const selected = Array.from(checkboxes)
     .filter((cb) => cb.checked)
     .map((cb) => cb.value);
@@ -298,3 +326,31 @@ document
     e.preventDefault();
     // add subtask input data to subtaskList
   });
+
+function eventHandleSearch() {
+  let searchBar = document.getElementById("searchUser");
+  searchBar.addEventListener("input", function () {
+    let searchTerm = searchBar.value.toLowerCase();
+    filteredUsers(searchTerm);
+  });
+}
+
+function handleEmptySearch(searchTerm) {
+  if (searchTerm.length === 0) {
+    renderUserCheckboxes(allUsers);
+  }
+}
+
+function filteredUsers(searchTerm) {
+  handleEmptySearch(searchTerm);
+  if (searchTerm.length < 3) {
+    return;
+  } else {
+    document.getElementById("assignedUserList").classList.add("visible");
+  }
+  console.log(allUsers);
+  const filtered = allUsers.filter((user) =>
+    user.userName.toLowerCase().includes(searchTerm)
+  );
+  renderUserCheckboxes(filtered);
+}

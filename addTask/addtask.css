@@ -238,7 +238,7 @@ input:valid + .error-message {
 }
 
 .assigned-user-list.visible {
-  max-height: 500px;
+  max-height: 230px;
   opacity: 1;
   visibility: visible;
 }
@@ -495,15 +495,31 @@ textarea:focus::placeholder {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 0 8px;
+  height: 56px;
+}
+
+.user-checkbox-wrapper.active {
+  background: #2a3647;
+  color: white;
+  border-radius: 10px;
 }
 
 .user-checkbox-wrapper:hover {
-  background: #2A3647;
+  background: #2a3647;
   color: white;
+  cursor: pointer;
+  border-radius: 10px;
 }
 
 .userInfoWrapper {
   display: flex;
   align-items: center;
   gap: 10px;
+}
+
+.user-checkbox-wrapper.user-selected {
+  background: #2a3647;
+  color: white;
+  border-radius: 10px;
 }
