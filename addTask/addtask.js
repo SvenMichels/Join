@@ -5,7 +5,7 @@ let currentActivePriority = "";
 // const userList = document.getElementById("assignedUserList");
 const subtaskInput = document.getElementById("subtask");
 const subtaskList = document.getElementById("subtaskList");
-let subtask = [];
+
 let allUsers = [];
 
 const priorityIcons = {
@@ -111,7 +111,7 @@ function collectTaskData(form) {
     category: form.category.value,
     prio: currentActivePriority,
     assigned: collectAssignedUsers().join(", "),
-    subtask: form.subtasks,
+    subtasks: form.subtasks,
     status: "todo",
   };
 }
@@ -167,6 +167,18 @@ async function loadAndRenderUsers() {
   }
 }
 
+let subtasks = [];
+
+document.querySelector(".subtaskAddButton").addEventListener("click", () => {
+  const input = document.getElementById("subtask");
+  const value = input.value.trim();
+  if (value) {
+    subtasks.push(value);
+    input.value = "";
+    renderSubtasks(subtasks);
+  }
+});
+
 function renderUserCheckboxes(users) {
   const container = document.getElementById("assignedUserList");
   container.innerHTML = "";
@@ -186,7 +198,7 @@ function renderUserCheckboxes(users) {
     const label = document.createElement("label");
     label.htmlFor = checkbox.id;
     label.textContent = user.userName;
-    
+
     label.addEventListener("click", (e) => e.preventDefault());
 
     const namesDiv = document.createElement("div");
@@ -207,8 +219,8 @@ function renderUserCheckboxes(users) {
       if (e.target.tagName !== "INPUT") {
         checkbox.checked = !checkbox.checked;
       }
-        wrapper.classList.toggle("active");
-        updateSelectedUserDisplay();
+      wrapper.classList.toggle("active");
+      updateSelectedUserDisplay();
     });
 
     updateSelectedUserDisplay(); // Initial leer
@@ -258,21 +270,71 @@ subtaskInput.addEventListener("keydown", function (e) {
   if (e.key === "Enter" && subtaskInput.value.trim() !== "") {
     e.preventDefault();
     const taskText = subtaskInput.value.trim();
-    subtask.push(taskText);
+    subtasks.push(taskText);
     subtaskInput.value = "";
     renderSubtasks();
   }
 });
 
 function renderSubtasks() {
+  const subtaskList = document.getElementById("subtaskList");
   subtaskList.innerHTML = "";
 
-  subtask.forEach((task, index) => {
-    const taskItem = document.createElement("div");
-    taskItem.className = "subtaskItem";
-    taskItem.textContent = `• ${task}`;
-    subtaskList.appendChild(taskItem);
+  subtasks.forEach((subtask, index) => {
+    const container = document.createElement("list");
+    container.className = "subtaskContainer";
+
+    const textElement = document.createElement("list");
+    textElement.textContent = subtask;
+    textElement.className = "subtaskDisplayText";
+
+    textElement.addEventListener("click", () => {
+      renderEditableSubtask(container, index);
+    });
+
+    container.appendChild(textElement);
+    subtaskList.appendChild(container);
   });
+}
+
+function renderEditableSubtask(container, index) {
+  container.innerHTML = "";
+
+  const wrapper = document.createElement('div');
+  wrapper.className = 'subtaskEditWrapper';
+
+  const input = document.createElement("input");
+  input.type = "text";
+  input.value = subtasks[index];
+  input.className = "subtaskTextInput";
+
+  const saveBtn = document.createElement("button");
+  saveBtn.innerHTML = '<img class="subtaskSaveBtnImg" src="../assets/icons/check.svg" alt="Save"> ';
+  saveBtn.className = 'subtaskSaveBtn' ;
+
+  const deleteBtn = document.createElement("button");
+  deleteBtn.innerHTML = '<img class="subtaskDeleteBtnImg" src="../assets/icons/delete.svg" alt="Delete"> ';
+  deleteBtn.className = 'subtaskDeleteBtn';
+
+  const spacer = document.createElement('div');
+  spacer.innerHTML = '';
+  spacer.className = 'subtaskSpacer'
+
+  saveBtn.addEventListener("click", () => {
+    subtasks[index] = input.value.trim();
+    renderSubtasks();
+  });
+
+  deleteBtn.addEventListener("click", () => {
+    subtasks.splice(index, 1);
+    renderSubtasks();
+  });
+
+  wrapper.appendChild(input);
+  wrapper.appendChild(deleteBtn);
+  wrapper.appendChild(spacer);
+  wrapper.appendChild(saveBtn);
+  container.appendChild(wrapper)
 }
 
 function validateDate() {
