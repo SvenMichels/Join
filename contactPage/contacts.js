@@ -21,8 +21,8 @@ window.contactList = contactList;
 document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("addBtn").addEventListener("click", openAddWindow);
   document
-    .getElementById("cancelBtn")
-    .addEventListener("click", closeAddWindow, closeEditWindow);
+    .querySelectorAll("#cancelBtn, #closeBtn")
+    .forEach(btn => btn.addEventListener("click", handleClose));
   document.getElementById("submitBtn").addEventListener("click", addContact);
   document.getElementById("openMenu").addEventListener("click", closeOpenMenu);
   document
@@ -31,6 +31,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   loadShowContact();
   await loadContactsFromFirebase();
 });
+
+function handleClose() {
+  closeAddWindow();
+  closeEditWindow();
+}
 
 function openAddWindow() {
   document.getElementById(`addWindow`).classList.remove("dp-none");
