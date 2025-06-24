@@ -21,8 +21,8 @@ window.contactList = contactList;
 document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("addBtn").addEventListener("click", openAddWindow);
   document
-    .getElementById("cancelBtn")
-    .addEventListener("click", closeAddWindow, closeEditWindow);
+    .querySelectorAll("#cancelBtn, #closeBtn")
+    .forEach(btn => btn.addEventListener("click", handleClose));
   document.getElementById("submitBtn").addEventListener("click", addContact);
   document.getElementById("openMenu").addEventListener("click", closeOpenMenu);
   document
@@ -30,7 +30,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     .addEventListener("submit", handleEditSubmit);
   loadShowContact();
   await loadContactsFromFirebase();
+  loadUserInitials();
 });
+
+function handleClose() {
+  closeAddWindow();
+  closeEditWindow();
+}
 
 function openAddWindow() {
   document.getElementById(`addWindow`).classList.remove("dp-none");
@@ -88,7 +94,8 @@ async function addContact(event) {
     const result = await createContact(contact);
     contact.id = result.name;
     contactList.push(contact);
-    renderContact(name, email, phone, initials, firstLetter, contact.id);
+    clearContactListUI();
+    renderAllContacts(contactList);
     emptyInput();
     closeAddWindow();
   } catch (error) {
@@ -207,7 +214,8 @@ function clearContactListUI() {
 }
 
 function renderAllContacts(contacts) {
-  for (const contact of contacts) {
+  const sortedContacts = sortContactsAlphabetically(contacts)
+  for (const contact of sortedContacts) {
     renderContact(
       contact.name,
       contact.email,
@@ -300,4 +308,19 @@ function rerenderAfterEdit(id) {
 
   const updatedContact = findContactById(id);
   if (updatedContact) renderSingleContact(updatedContact);
+}
+
+function loadUserInitials(){
+  const userString = localStorage.getItem("currentUser");
+  if (!userString) return;
+  const user = JSON.parse(userString);
+  const name = user.userName || "Guest";
+  const profileBtn = document.getElementById("openMenu");
+  if (profileBtn) profileBtn.textContent = getInitials(name);
+}
+
+function sortContactsAlphabetically(list) {
+  return [...list].sort((a, b) =>
+    a.name.localeCompare(b.name, "de", { sensitivity: "base" })
+  );
 }

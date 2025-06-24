@@ -76,8 +76,10 @@
 }
 
 .rightSide{
+    position: relative;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     height: 594px;
     width: 745px;
     background-color: #ffffff;
@@ -88,13 +90,15 @@
 .closeBtn{
     width: 32px;
     height: 32px;
-    margin-top: 48px;
+    margin: 0;
+    position: absolute;
+    top: 50px;
+    right: 50px;
+    /* margin-top: 48px;
     margin-right: 48px;
-    margin-left: 652px;
+    margin-left: 652px; */
     font-family: 'Inter';
     font-size: 32px;
-    display: flex;
-    justify-content: end;
 }
 
 .closeBtn:hover{

@@ -14,6 +14,7 @@ window.addEventListener("DOMContentLoaded", () => {
   document.getElementById("openMenu").addEventListener("click", closeOpenMenu);
   fetchTasks();
   setupDragAndDrop();
+  loadUserInitials();
 });
 
 async function fetchTasks() {
@@ -156,4 +157,13 @@ async function updateTask(task) {
 function closeOpenMenu() {
   const element = document.getElementById("dropDownMenu");
   element.classList.toggle("dp-none");
+}
+
+function loadUserInitials(){
+  const userString = localStorage.getItem("currentUser");
+  if (!userString) return;
+  const user = JSON.parse(userString);
+  const name = user.userName || "Guest";
+  const profileBtn = document.getElementById("openMenu");
+  if (profileBtn) profileBtn.textContent = getInitials(name);
 }

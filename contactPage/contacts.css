@@ -305,6 +305,14 @@ h2{
     border-radius: 10px;
     margin: 15px 35px 15px 36px;
     padding-left: 5px;
+    transition: transform 0.2s ease;
+    cursor: pointer;
+}
+
+.contact:hover{
+    transform: scale(1.05);
+    background-color: #2a3647;
+    color: white;
 }
 
 .active{

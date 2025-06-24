@@ -9,6 +9,14 @@
   gap: 1px;
 }
 
+.redSpan {
+  font-family: Inter;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 120%;
+  letter-spacing: 0%;
+}
+
 .taskContainer {
   position: absolute;
   width: 440px;
@@ -52,14 +60,16 @@
 .taskDescription {
   display: flex;
   flex-direction: column;
-  width: 440px;
+  max-width: 440px;
   height: 168px;
   gap: 8px;
 }
 
 .taskDescriptionInput {
-  width: 440px;
-  height: 120px;
+  min-width: 440px;
+  max-width: 440px;
+  min-height: 120px;
+  max-height: 120px;
   border-radius: 10px;
   border: 1px solid #d1d1d1;
 }
@@ -85,7 +95,7 @@
 .spaceContainer {
   position: fixed;
   width: 0px;
-  height: 424px;
+  height: inherit;
   top: 327px;
   left: 816.25px;
   border: solid 1px;
@@ -463,7 +473,7 @@ select {
 }
 
 .subtaskList {
-  margin-top: 4px;
+  margin-top: 8px;
   display: flex;
 }
 
@@ -522,4 +532,164 @@ textarea:focus::placeholder {
   background: #2a3647;
   color: white;
   border-radius: 10px;
+}
+
+.subtaskDisplayText {
+  position: relative;
+  padding-left: 20px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 32px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.subtaskDisplayContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+  gap: 8px;
+}
+
+.subtaskDisplayText::before {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  background-color: #2a3647;
+  border-radius: 50%;
+}
+
+.subtaskTextInput {
+  width: 440px;
+  height: 32px;
+  padding: 12px 6px 12px 6px;
+  justify-content: space-between;
+  border-left: 0;
+  border-top: 0;
+  border-right: 0;
+  border-bottom: 1px solid #29abe2;
+  box-sizing: border-box;
+}
+
+.subtaskSpacer {
+  height: 24px;
+  border-width: 1px;
+  border: 1px solid #a8a8a8;
+}
+
+.subtaskSpacerSecond {
+  height: 12px;
+  border-width: 1px;
+  border: 1px solid #a8a8a8;
+}
+
+.subtaskEditWrapper {
+  display: flex;
+  align-items: center;
+  height: 32px;
+  width: -webkit-fill-available;
+  padding: 0 5px 0 5px;
+  gap: 8px;
+  background-color: white;
+  border-bottom: 1px solid #005dff;
+}
+
+.subtaskEditWrapper input {
+  border: none;
+  outline: none;
+  flex: 1;
+  font-size: 16px;
+  padding: 8px;
+}
+
+.subtaskEditWrapper input:focus {
+  outline: none;
+}
+
+.subtaskSaveBtn,
+.subtaskDeleteBtn {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 0px;
+  background-color: white;
+  border-radius: 50%;
+}
+
+.subtaskSaveBtn:hover,
+.subtaskDeleteBtn:hover {
+  cursor: pointer;
+  background: #d1d1d1;
+}
+
+.subtaskSaveBtnImg,
+.subtaskDeleteBtnImg {
+  width: 15.49px;
+  height: 11.23;
+}
+
+.subtaskContainer:hover {
+  background: #eeeeee;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.subtaskEditBtn {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 0px;
+  border-radius: 50%;
+}
+
+.subtaskEditBtn:hover {
+  cursor: pointer;
+  border-radius: 50px;
+  color: #eeeeeea8;
+}
+
+.subtaskDeleteBtnSecond {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 0px;
+  border-radius: 50%;
+}
+
+.subtaskControls {
+  display: none;
+  gap: 8px;
+  align-items: center;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.subtaskContainer {
+  display: flex;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.subtaskContainer:hover .subtaskControls {
+  display: flex;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.subtaskDeleteBtnImgSecond,
+.subtaskEditBtnImg {
+  width: 16px;
+  height: 16px;
 }
