@@ -1,10 +1,7 @@
 import { requestData } from "../scripts/firebase.js";
 
 let currentActivePriority = "";
-// const assignedBtnImg = document.getElementById("assignedBtnImg");
-// const userList = document.getElementById("assignedUserList");
 const subtaskInput = document.getElementById("subtask");
-const subtaskList = document.getElementById("subtaskList");
 
 let allUsers = [];
 
@@ -290,10 +287,41 @@ function renderSubtasks() {
     textElement.className = "subtaskDisplayText";
 
     textElement.addEventListener("click", () => {
+    renderEditableSubtask(container, index);
+    });
+
+    const controls = document.createElement("div");
+    controls.className = "subtaskControls";
+
+    const editElement = document.createElement("button");
+    editElement.innerHTML =
+      '<img class="subtaskEditBtnImg" src="../assets/icons/edit.svg" alt="edit"> ';
+    editElement.className = "subtaskEditBtn";
+
+    editElement.addEventListener("click", (e) => {
+      e.preventDefault();
       renderEditableSubtask(container, index);
     });
 
+    const spacer = document.createElement("div");
+    spacer.innerHTML = "";
+    spacer.className = "subtaskSpacerSecond";
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.innerHTML =
+      '<img class="subtaskDeleteBtnImgSecond" src="../assets/icons/delete.svg" alt="Delete"> ';
+    deleteBtn.className = "subtaskDeleteBtnSecond";
+
+    deleteBtn.addEventListener("click", () => {
+      subtasks.splice(index, 1);
+      renderSubtasks();
+    });
+    controls.appendChild(editElement);
+    controls.appendChild(spacer);
+    controls.appendChild(deleteBtn);
+
     container.appendChild(textElement);
+    container.appendChild(controls);
     subtaskList.appendChild(container);
   });
 }
@@ -301,8 +329,8 @@ function renderSubtasks() {
 function renderEditableSubtask(container, index) {
   container.innerHTML = "";
 
-  const wrapper = document.createElement('div');
-  wrapper.className = 'subtaskEditWrapper';
+  const wrapper = document.createElement("div");
+  wrapper.className = "subtaskEditWrapper";
 
   const input = document.createElement("input");
   input.type = "text";
@@ -310,16 +338,18 @@ function renderEditableSubtask(container, index) {
   input.className = "subtaskTextInput";
 
   const saveBtn = document.createElement("button");
-  saveBtn.innerHTML = '<img class="subtaskSaveBtnImg" src="../assets/icons/check.svg" alt="Save"> ';
-  saveBtn.className = 'subtaskSaveBtn' ;
+  saveBtn.innerHTML =
+    '<img class="subtaskSaveBtnImg" src="../assets/icons/check.svg" alt="Save"> ';
+  saveBtn.className = "subtaskSaveBtn";
 
   const deleteBtn = document.createElement("button");
-  deleteBtn.innerHTML = '<img class="subtaskDeleteBtnImg" src="../assets/icons/delete.svg" alt="Delete"> ';
-  deleteBtn.className = 'subtaskDeleteBtn';
+  deleteBtn.innerHTML =
+    '<img class="subtaskDeleteBtnImg" src="../assets/icons/delete.svg" alt="Delete"> ';
+  deleteBtn.className = "subtaskDeleteBtn";
 
-  const spacer = document.createElement('div');
-  spacer.innerHTML = '';
-  spacer.className = 'subtaskSpacer'
+  const spacer = document.createElement("div");
+  spacer.innerHTML = "";
+  spacer.className = "subtaskSpacer";
 
   saveBtn.addEventListener("click", () => {
     subtasks[index] = input.value.trim();
@@ -335,7 +365,7 @@ function renderEditableSubtask(container, index) {
   wrapper.appendChild(deleteBtn);
   wrapper.appendChild(spacer);
   wrapper.appendChild(saveBtn);
-  container.appendChild(wrapper)
+  container.appendChild(wrapper);
 }
 
 function validateDate() {
@@ -402,7 +432,7 @@ function filteredUsers(searchTerm) {
   renderUserCheckboxes(filtered);
 }
 
-function loadUserInitials(){
+function loadUserInitials() {
   const userString = localStorage.getItem("currentUser");
   if (!userString) return;
   const user = JSON.parse(userString);

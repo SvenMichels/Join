@@ -9,6 +9,14 @@
   gap: 1px;
 }
 
+.redSpan {
+  font-family: Inter;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 120%;
+  letter-spacing: 0%;
+}
+
 .taskContainer {
   position: absolute;
   width: 440px;
@@ -52,14 +60,16 @@
 .taskDescription {
   display: flex;
   flex-direction: column;
-  width: 440px;
+  max-width: 440px;
   height: 168px;
   gap: 8px;
 }
 
 .taskDescriptionInput {
-  width: 440px;
-  height: 120px;
+  min-width: 440px;
+  max-width: 440px;
+  min-height: 120px;
+  max-height: 120px;
   border-radius: 10px;
   border: 1px solid #d1d1d1;
 }
@@ -527,21 +537,20 @@ textarea:focus::placeholder {
 .subtaskDisplayText {
   position: relative;
   padding-left: 20px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 32px;
   cursor: pointer;
   transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.subtaskDisplayContainer{
+.subtaskDisplayContainer {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-top: 8px;
   gap: 8px;
-}
-
-.subtaskContainer:hover {
-  background: #EEEEEE;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .subtaskDisplayText::before {
@@ -574,6 +583,12 @@ textarea:focus::placeholder {
   border: 1px solid #a8a8a8;
 }
 
+.subtaskSpacerSecond {
+  height: 12px;
+  border-width: 1px;
+  border: 1px solid #a8a8a8;
+}
+
 .subtaskEditWrapper {
   display: flex;
   align-items: center;
@@ -582,7 +597,7 @@ textarea:focus::placeholder {
   padding: 0 5px 0 5px;
   gap: 8px;
   background-color: white;
-  border-bottom: 1px solid #005DFF
+  border-bottom: 1px solid #005dff;
 }
 
 .subtaskEditWrapper input {
@@ -616,9 +631,65 @@ textarea:focus::placeholder {
 }
 
 .subtaskSaveBtnImg,
-.subtaskDeleteBtnImg{
+.subtaskDeleteBtnImg {
   width: 15.49px;
   height: 11.23;
 }
 
+.subtaskContainer:hover {
+  background: #eeeeee;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  border-radius: 10px;
+}
 
+.subtaskEditBtn {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 0px;
+  border-radius: 50%;
+}
+
+.subtaskEditBtn:hover {
+  cursor: pointer;
+  border-radius: 50px;
+  color: #eeeeeea8;
+}
+
+.subtaskDeleteBtnSecond {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 0px;
+  border-radius: 50%;
+}
+
+.subtaskControls {
+  display: none;
+  gap: 8px;
+  align-items: center;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.subtaskContainer {
+  display: flex;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.subtaskContainer:hover .subtaskControls {
+  display: flex;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.subtaskDeleteBtnImgSecond,
+.subtaskEditBtnImg {
+  width: 16px;
+  height: 16px;
+}
