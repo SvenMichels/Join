@@ -94,7 +94,8 @@ async function addContact(event) {
     const result = await createContact(contact);
     contact.id = result.name;
     contactList.push(contact);
-    renderContact(name, email, phone, initials, firstLetter, contact.id);
+    clearContactListUI();
+    renderAllContacts(contactList);
     emptyInput();
     closeAddWindow();
   } catch (error) {
@@ -213,7 +214,8 @@ function clearContactListUI() {
 }
 
 function renderAllContacts(contacts) {
-  for (const contact of contacts) {
+  const sortedContacts = sortContactsAlphabetically(contacts)
+  for (const contact of sortedContacts) {
     renderContact(
       contact.name,
       contact.email,
@@ -315,4 +317,10 @@ function loadUserInitials(){
   const name = user.userName || "Guest";
   const profileBtn = document.getElementById("openMenu");
   if (profileBtn) profileBtn.textContent = getInitials(name);
+}
+
+function sortContactsAlphabetically(list) {
+  return [...list].sort((a, b) =>
+    a.name.localeCompare(b.name, "de", { sensitivity: "base" })
+  );
 }
