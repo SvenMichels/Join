@@ -30,6 +30,7 @@ window.addEventListener("DOMContentLoaded", () => {
     const today = new Date().toISOString().split("T")[0];
     dateInput.setAttribute("min", today);
   }
+  loadUserInitials();
 });
 
 function initForm() {
@@ -399,4 +400,13 @@ function filteredUsers(searchTerm) {
     user.userName.toLowerCase().includes(searchTerm)
   );
   renderUserCheckboxes(filtered);
+}
+
+function loadUserInitials(){
+  const userString = localStorage.getItem("currentUser");
+  if (!userString) return;
+  const user = JSON.parse(userString);
+  const name = user.userName || "Guest";
+  const profileBtn = document.getElementById("openMenu");
+  if (profileBtn) profileBtn.textContent = getInitials(name);
 }

@@ -30,6 +30,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     .addEventListener("submit", handleEditSubmit);
   loadShowContact();
   await loadContactsFromFirebase();
+  loadUserInitials();
 });
 
 function handleClose() {
@@ -305,4 +306,13 @@ function rerenderAfterEdit(id) {
 
   const updatedContact = findContactById(id);
   if (updatedContact) renderSingleContact(updatedContact);
+}
+
+function loadUserInitials(){
+  const userString = localStorage.getItem("currentUser");
+  if (!userString) return;
+  const user = JSON.parse(userString);
+  const name = user.userName || "Guest";
+  const profileBtn = document.getElementById("openMenu");
+  if (profileBtn) profileBtn.textContent = getInitials(name);
 }
