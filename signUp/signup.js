@@ -11,6 +11,10 @@ if (window.location.pathname.endsWith("signup.html")) {
   initSignup();
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("signUpBtn").addEventListener("click", showUserFeedback);
+});
+
 function initSignup() {
   setupPasswordValidation();
   setupPasswordToggle();
@@ -84,3 +88,19 @@ async function submitUser(userData) {
     alert("Registration failed. Please try again.");
   }
 }
+
+function showUserFeedback() {
+  const feedback = document.getElementById("userFeedback");
+  if (!feedback) return;
+
+  feedback.classList.remove("dp-none");
+  feedback.classList.add("centerFeedback");
+
+  feedback.addEventListener("animationend", () => {
+    setTimeout(() => {
+      feedback.classList.add("dp-none");
+      feedback.classList.remove("centerFeedback");
+    }, 1500);
+  });
+}
+

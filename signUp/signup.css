@@ -169,18 +169,37 @@ footer a {
   overflow: hidden;
 }
 
-.userFeedback{
-  margin-top: 25px;
-  display:flex;
+.userFeedback {
+  display: flex;
   justify-content: center;
   align-items: center;
   background-color: #2a3647;
-  width: 312px;
-  height: 74px;
-  padding: left right 25px; ;
-  border: 1px solid #2a3647;
-  border-radius: 20px;
   color: #ffffff;
   font-weight: 400;
   font-size: 20px;
+  width: 312px;
+  height: 74px;
+  border: 1px solid #2a3647;
+  border-radius: 20px;
+  position: fixed;
+  bottom: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+  opacity: 0;
+}
+
+.centerFeedback {
+  animation: slideUpFadeIn 0.6s ease-out forwards;
+}
+
+@keyframes slideUpFadeIn {
+  from {
+    bottom: -100px;
+    opacity: 0;
+  }
+  to {
+    bottom: 40%;
+    opacity: 1;
+  }
 }
