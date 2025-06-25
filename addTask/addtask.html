@@ -1,168 +1,272 @@
 <!DOCTYPE html>
 <html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Join – Kanban Board</title>
+    <link
+      rel="icon"
+      href="../assets/icons/join_logo_2.svg"
+      type="image/x-icon"
+    />
+    <link href="./addtask.css" rel="stylesheet" />
+    <link href="../styles/standard.css" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&amp;display=swap"
+      rel="stylesheet"
+    />
+  </head>
 
-<head>
-  <meta charset="utf-8" />
-  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-  <title>Join – Kanban Board</title>
-  <link rel="icon" href="../assets/icons/join_logo_2.svg" type="image/x-icon" />
-  <link href="./addtask.css" rel="stylesheet" />
-  <link href="../styles/standard.css" rel="stylesheet">
-   <link
-        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&amp;display=swap"
-        rel="stylesheet" />
-</head>
+  <body>
+    <header class="headerStyle">
+      <div class="headerContainer">
+        <p>Kanban Project Management Tool</p>
+        <div class="helpContainer">
+          <a href="../help/help.html">
+            <img alt="Bild" class="helpIcon" src="../assets/icons/help.svg" />
+          </a>
+          <button id="openMenu" class="profileBtn"></button>
+        </div>
+        <div id="dropDownMenu" class="dropDownMenu dp-none">
+          <a class="txtDeco-none" href="../legalnotice.html"
+            ><p class="dropDownTxt">Legal Notice</p></a
+          >
+          <a class="txtDeco-none" href="../privatpolicy.html"
+            ><p class="dropDownTxt">Privacy Policy</p></a
+          >
+          <a class="txtDeco-none" href="../index.html"
+            ><p class="dropDownTxt">Log out</p></a
+          >
+        </div>
+      </div>
+    </header>
 
-<body>
-  <header class="headerStyle">
-    <div class="headerContainer">
-      <p>Kanban Project Management Tool</p>
-      <div class="helpContainer">
-        <a href="../help/help.html">
-          <img alt="Bild" class="helpIcon" src="../assets/icons/help.svg" />
+    <nav class="navBarStyle">
+      <img alt="Logo" class="logo" src="/assets/icons/join_white.svg" />
+      <div class="menu3">
+        <button class="navBtnLogIn d_none">
+          <img alt="Bild" class="navIcons" src="/assets/icons/login.svg" /> Log
+          In
+        </button>
+        <a class="txtDeco-none" href="../startPage/startpage.html">
+          <div class="taskSummary">
+            <button class="navBtn">
+              <img
+                alt="Bild"
+                class="navIcons"
+                src="/assets/icons/summary_2.svg"
+              />
+              Summary
+            </button>
+          </div>
         </a>
-         <button id="openMenu" class="profileBtn"></button>
-      </div>
-      <div id="dropDownMenu" class="dropDownMenu dp-none">
-        <a class="txtDeco-none" href="../legalnotice.html"><p class="dropDownTxt">Legal Notice</p></a>
-        <a class="txtDeco-none" href="../privatpolicy.html"><p class="dropDownTxt">Privacy Policy</p></a>
-        <a class="txtDeco-none" href="../index.html"><p class="dropDownTxt">Log out</p></a>
-      </div>
-    </div>
-  </header>
-
-  <nav class="navBarStyle">
-    <img alt="Logo" class="logo" src="/assets/icons/join_white.svg" />
-    <div class="menu3">
-      <button class="navBtnLogIn d_none">
-        <img alt="Bild" class="navIcons" src="/assets/icons/login.svg" /> Log In
-      </button>
-      <a class="txtDeco-none" href="../startPage/startpage.html">
-        <div class="taskSummary">
-          <button class="navBtn">
-            <img alt="Bild" class="navIcons" src="/assets/icons/summary_2.svg" /> Summary
-          </button>
+        <div class="taskFrame9">
+          <a class="txtDeco-none" href="../addTask/addtask.html">
+            <button class="navBtn">
+              <img
+                alt="Bild"
+                class="navIcons"
+                src="/assets/icons/add_task.svg"
+              />
+              Add Task
+            </button>
+          </a>
         </div>
-      </a>
-      <div class="taskFrame9">
-        <a class="txtDeco-none" href="../addTask/addtask.html">
-        <button class="navBtn">
-          <img alt="Bild" class="navIcons" src="/assets/icons/add_task.svg" /> Add Task
-        </button>
+        <a class="txtDeco-none" href="../board/board.html">
+          <div class="taskBoard">
+            <button class="navBtn">
+              <img alt="Bild" class="navIcons" src="/assets/icons/board.svg" />
+              Board
+            </button>
+          </div>
+        </a>
+        <a class="txtDeco-none" href="../contactPage/contacts.html">
+          <div class="taskContacts">
+            <button class="navBtn">
+              <img
+                alt="Bild"
+                class="navIcons"
+                src="/assets/icons/contacts.svg"
+              />
+              Contacts
+            </button>
+          </div>
         </a>
       </div>
-      <a class="txtDeco-none" href="../board/board.html">
-        <div class="taskBoard">
-          <button class="navBtn">
-            <img alt="Bild" class="navIcons" src="/assets/icons/board.svg" /> Board
+      <div class="taskFrame22">
+        <a class="taskFrameLink" href="../privatpolicy.html">Privacy Policy</a>
+        <a class="taskFrameLink" href="../legalnotice.html">Legal notice</a>
+      </div>
+    </nav>
+
+    <div class="taskh1Container">
+      <h1>Add Task</h1>
+    </div>
+
+    <form novalidate class="taskContainer" id="taskForm">
+      <div class="taskTitle">
+        <label for="taskTitle"
+          >Title <span style="color: #ff8190">*</span></label
+        >
+        <input
+          class="taskTitleInput"
+          name="taskTitle"
+          id="taskTitle"
+          placeholder="Enter a title"
+          type="text"
+        />
+        <span
+          id="titleAlert"
+          class="redSpan"
+          style="display: none; color: #ff8190"
+          >This field is required</span
+        >
+      </div>
+
+      <div class="taskDescription">
+        <label for="taskDescription">Description</label>
+        <textarea
+          class="taskDescriptionInput"
+          name="taskDescription"
+          id="taskDescription"
+          placeholder="Enter a Description"
+          type="text"
+        ></textarea>
+      </div>
+
+      <div class="taskDate">
+        <label for="taskDate"
+          >Due Date <span style="color: #ff8190">*</span></label
+        >
+        <input
+          class="taskDateInput"
+          name="taskDate"
+          id="taskDate"
+          placeholder="dd/mm/yyyy"
+          type="date"
+          min="2025-06-21"
+        />
+        <span
+          id="dateAlert"
+          class="redSpan"
+          style="display: none; color: #ff8190"
+          >This field is required</span
+        >
+      </div>
+
+      <div class="spaceContainer"></div>
+
+      <div class="prioContainer">
+        <div class="prioContent">
+          <label for="taskPriority">Priority</label>
+          <div class="prioButtonContainer">
+            <button id="urgent-task" class="prioButtons">
+              Urgent
+              <img
+                id="urgent-task-img"
+                src="../assets/icons/urgent_red.svg"
+                alt="urgent"
+              />
+            </button>
+            <button id="medium-task" class="prioButtons">
+              Medium
+              <img
+                id="medium-task-img"
+                src="../assets/icons/medium_yellow.svg"
+                alt="medium"
+              />
+            </button>
+            <button id="low-task" class="prioButtons">
+              Low
+              <img
+                id="low-task-img"
+                src="../assets/icons/low_green.svg"
+                alt="low"
+              />
+            </button>
+          </div>
+        </div>
+
+        <div class="prioAssignedContainer">
+          <label for="assignedUsers">Assigned to</label>
+
+          <div class="assignedInputWrapper">
+            <div class="assignedContainer">
+              <input
+                id="searchUser"
+                placeholder="Select contact to assign"
+                name="assignedUsers"
+                class="prioAssignInput"
+                type="text"
+              />
+              <button class="assignUserListBtn" type="button">
+                <img
+                  id="assignedBtnImg"
+                  class="assignedInputImg dropdown-arrow"
+                  src="../assets/icons/arrow_drop_down.svg"
+                />
+              </button>
+            </div>
+            <div id="assignedUserList" class="assigned-user-list">...</div>
+          </div>
+
+          <div id="selectedUser" class="selectedUserContainer">...</div>
+        </div>
+
+        <div class="prioCategoryContainer">
+          <label for="category"
+            >Category <span style="color: #ff8190">*</span></label
+          >
+          <select class="prioCategoryInput" id="category" name="category">
+            <option value="">Bitte auswählen</option>
+            <option value="Technical_Task">Technical Task</option>
+            <option value="User_Story">User Story</option>
+          </select>
+          <span
+            id="categoryAlert"
+            class="redSpan"
+            style="display: none; color: #ff8190"
+            >This field is required</span
+          >
+        </div>
+
+        <div class="prioSubtaskContainer">
+          <label for="subtask">Subtasks</label>
+          <div class="subtaskWrapper">
+            <input
+              class="prioSubtaskInput"
+              name="subtask"
+              id="subtask"
+              type="text"
+            />
+            <button type="button" class="subtaskAddButton">
+              <img src="../assets/icons/add.svg" />
+            </button>
+          </div>
+          <div id="subtaskList"></div>
+        </div>
+      </div>
+
+      <div class="requiredContainer">
+        <div>
+          <span style="color: #ff8190">*</span>
+          <span>This field is required</span>
+        </div>
+        <div class="createContainer">
+          <button class="clearButton" id="clearBtn" type="reset">
+            Clear <img alt="Bild" src="../assets/icons/iconoir_cancel.svg" />
+          </button>
+          <button class="createButton" type="submit">
+            Create Task <img alt="Bild" src="../assets/icons/check.svg" />
           </button>
         </div>
-      </a>
-      <a class="txtDeco-none" href="../contactPage/contacts.html">
-        <div class="taskContacts">
-          <button class="navBtn">
-            <img alt="Bild" class="navIcons" src="/assets/icons/contacts.svg" /> Contacts
-          </button>
-        </div>
-      </a>
-    </div>
-    <div class="taskFrame22">
-      <a class="taskFrameLink" href="../privatpolicy.html">Privacy Policy</a>
-      <a class="taskFrameLink" href="../legalnotice.html">Legal notice</a>
-    </div>
-  </nav>
-
-  <div class="taskh1Container">
-    <h1>Add Task</h1>
-  </div>
-
-  <form class="taskContainer" id="taskForm">
-    <div class="taskTitle">
-      <label for="taskTitle">Title <span style="color: #ff8190">*</span></label>
-      <input class="taskTitleInput" name="taskTitle" id="taskTitle" placeholder="Enter a title" type="text" />
-      <span class="redSpan" style="color: #ff8190">This field is required</span>
-    </div>
-
-    <div class="taskDescription">
-      <label for="taskDescription">Description</label>
-      <textarea class="taskDescriptionInput" name="taskDescription" id="taskDescription" placeholder="Enter a Description" type="text"></textarea>
-    </div>
-
-    <div class="taskDate">
-      <label for="taskDate">Due Date <span style="color: #ff8190">*</span></label>
-      <input class="taskDateInput" name="taskDate" id="taskDate" placeholder="dd/mm/yyyy" type="date" min="2025-06-21" required/>
-      <span class="redSpan" style="color: #ff8190">This field is required</span>
-    </div>
-
-    <div class="spaceContainer"></div>
-
-    <div class="prioContainer">
-      <div class="prioContent">
-        <label for="taskPriority">Priority</label>
-        <div class="prioButtonContainer">
-          <button id="urgent-task" class="prioButtons">
-            Urgent <img id="urgent-task-img" src="../assets/icons/urgent_red.svg" alt="urgent">
-          </button>
-          <button id="medium-task" class="prioButtons">
-            Medium <img id="medium-task-img" src="../assets/icons/medium_yellow.svg" alt="medium">
-          </button>
-          <button id="low-task" class="prioButtons">
-            Low <img id="low-task-img" src="../assets/icons/low_green.svg" alt="low">
-          </button>
-        </div>
       </div>
+    </form>
+    <!-- <article id="userFeedback" class="d_none userFeedback">
+      <p>Task added to Board <img class="navBtn" src="../assets/icons/board.svg" ></p>
+    </article> -->
 
-  <div class="prioAssignedContainer">
-    <label for="assignedUsers">Assigned to</label>
-    
-   <div class="assignedInputWrapper">
-    <div class="assignedContainer">
-     <input id="searchUser" placeholder="Select contact to assign" name="assignedUsers" class="prioAssignInput" type="text"/>
-     <button class="assignUserListBtn" type="button"><img id="assignedBtnImg" class="assignedInputImg dropdown-arrow" src="../assets/icons/arrow_drop_down.svg"></button>
-    </div>
-      <div id="assignedUserList" class="assigned-user-list">...</div>
-    </div>
-
-    <div id="selectedUser" class="selectedUserContainer">...</div>
-  </div>
-
-      <div class="prioCategoryContainer">
-        <label for="category">Category <span style="color: #ff8190">*</span></label>
-        <select class="prioCategoryInput" id="category" name="category">
-          <option value="">Bitte auswählen</option>
-          <option value="Technical_Task">Technical Task</option>
-          <option value="User_Story">User Story</option>
-        </select>
-      </div>
-
-      <div class="prioSubtaskContainer">
-        <label for="subtask">Subtasks</label>
-        <div class="subtaskWrapper">
-        <input class="prioSubtaskInput" name="subtask" id="subtask" type="text" />
-        <button  type="button" class="subtaskAddButton"><img src="../assets/icons/add.svg" ></button>
-        </div>
-        <div id="subtaskList"></div>
-      </div>
-    </div>
-
-    <div class="requiredContainer">
-      <div>
-        <span style="color: #ff8190">*</span> <span>This field is required</span>
-      </div>
-      <div class="createContainer">
-        <button class="clearButton" id="clearBtn" type="reset">
-          Clear <img alt="Bild" src="../assets/icons/iconoir_cancel.svg" />
-        </button>
-        <button class="createButton" type="submit">
-          Create Task <img alt="Bild" src="../assets/icons/check.svg" />
-        </button>
-      </div>
-    </div>
-  </form>
-
-  <footer></footer>
-  <script type="module" src="addtask.js"></script>
-</body>
-
+    <footer></footer>
+    <script type="module" src="addtask.js"></script>
+  </body>
 </html>
-

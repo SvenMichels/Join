@@ -22,25 +22,25 @@ window.addEventListener("DOMContentLoaded", () => {
   initForm();
   eventHandleSearch();
 
-  const dateInput = document.getElementById("taskDate");
-  if (dateInput) {
-    const today = new Date().toISOString().split("T")[0];
-    dateInput.setAttribute("min", today);
-  }
+  document.getElementById('taskDate').min = new Date().toISOString().split('T')[0];
   loadUserInitials();
 });
 
 function initForm() {
   loadAndRenderUsers();
-  document
-    .getElementById("taskForm")
-    .addEventListener("submit", handleFormSubmit);
+  let form = document.getElementById('taskForm');
+  form.addEventListener('submit', (event) => {
+    console.log('listener click');
+    handleFormSubmit(event);
+  });
+  // document
+  //   .getElementById("taskForm")
+  //   .addEventListener("submit", handleFormSubmit);
 
   ["urgent", "medium", "low"].forEach((priority) => {
     const button = document.getElementById(`${priority}-task`);
     if (button) {
       button.addEventListener("click", (event) => {
-        event.preventDefault();
         selectPriority(priority);
       });
     }
@@ -93,11 +93,15 @@ function selectPriority(priority) {
 }
 
 function handleFormSubmit(event) {
-  event.preventDefault();
+  console.log('click');
   const form = event.target;
   const task = collectTaskData(form);
-  if (!isTaskValid(task)) return;
-  saveTask(task);
+  let valid = isTaskValid(task);
+  if (valid) {
+    saveTask(task);
+    // showUserFeedback();
+  }else;
+  isTaskValid(task);
 }
 
 function collectTaskData(form) {
@@ -115,24 +119,38 @@ function collectTaskData(form) {
 }
 
 function isTaskValid(task) {
-  if (
-    !task.title ||
-    !task.description ||
-    !validateDate() ||
-    !task.category ||
-    task.category.trim() === ""
-  ) {
-    alert("Bitte fülle alle Pflichtfelder aus und wähle eine Kategorie.");
-    return false;
+  let isValid = true;
+ console.log('check', task, 'valid:', isValid);
+  const titleAlert = document.getElementById('titleAlert');
+  if (!task.title || task.title.trim() === '') {
+    titleAlert.style.display = 'inline';
+    isValid = false;
+  } else {
+    titleAlert.style.display = 'none';
   }
-  return true;
+
+  const dateAlert = document.getElementById('dateAlert');
+  if (!task.dueDate) {
+    dateAlert.style.display = 'inline';
+    isValid = false;
+  } else {
+    dateAlert.style.display = 'none';
+  }
+
+  const categoryAlert = document.getElementById('categoryAlert');
+  if (!task.category) {
+    categoryAlert.style.display = 'inline';
+    isValid = false;
+  } else {
+    categoryAlert.style.display = 'none';
+  }
+  return isValid;
 }
 
 async function saveTask(task) {
   try {
     const path = `/tasks/${task.id}`;
     await requestData("PUT", path, task);
-    alert("Task erfolgreich gespeichert!");
   } catch (error) {
     console.error("Fehler beim Speichern des Tasks:", error);
     alert("Fehler beim Speichern des Tasks.");
@@ -221,7 +239,7 @@ function renderUserCheckboxes(users) {
       updateSelectedUserDisplay();
     });
 
-    updateSelectedUserDisplay(); // Initial leer
+    updateSelectedUserDisplay();
   });
 }
 
@@ -440,3 +458,18 @@ function loadUserInitials() {
   const profileBtn = document.getElementById("openMenu");
   if (profileBtn) profileBtn.textContent = getInitials(name);
 }
+
+// function showUserFeedback() {
+//   const feedback = document.getElementById("userFeedback");
+//   if (!feedback) return;
+
+//   feedback.classList.remove("d_none");
+//   feedback.classList.add("centerFeedback");
+
+//   feedback.addEventListener("animationend", () => {
+//     setTimeout(() => {
+//       feedback.classList.add("d_none");
+//       feedback.classList.remove("centerFeedback");
+//     }, 1500);
+//   });
+// }
