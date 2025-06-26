@@ -62,24 +62,25 @@ function createTaskElement(task) {
     <div class="assigned-chips">${assignedHTML}</div>
   `;
 
-  // WICHTIG: draggable + Event NACH innerHTML setzen!
   element.draggable = true;
   element.addEventListener("dragstart", handleDragStart);
 
   return element;
 }
 
-function generateAssignedChips(assignedString) {
-  if (!assignedString) return "";
+function generateAssignedChips(assigned) {
+  if (!assigned || (Array.isArray(assigned) && assigned.length === 0)) return "";
 
-  return assignedString
-    .split(",")
-    .map(name => name.trim())
-    .filter(name => name.length > 0)
-    .map(name => {
+  const names = Array.isArray(assigned)
+    ? assigned.map(item =>
+        typeof item === "string"
+          ? item : item.name || item.fullName || "") : String(assigned).split(",");
+
+  return names
+    .map(name => name.trim()).filter(name => name.length > 0).map(name => {
       const initials = getInitials(name);
       const color = getRandomColor();
-      return `<div class="selected-contact-chip" style="background-color: ${color};">${initials}</div>`;
+      return `<div class="selected-contact-chip" style="background-color:${color};">${initials}</div>`;
     })
     .join("");
 }

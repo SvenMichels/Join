@@ -1,199 +1,159 @@
 import { requestData } from "../scripts/firebase.js";
 
-let currentActivePriority = "";
-const subtaskInput = document.getElementById("subtask");
 
+let currentActivePriority = "medium"; // default
 let allUsers = [];
+let subtasks = [];
 
 const priorityIcons = {
-  urgent: [
-    "../assets/icons/urgent_red.svg",
-    "../assets/icons/urgent_white.svg",
-  ],
-  medium: [
-    "../assets/icons/medium_yellow.svg",
-    "../assets/icons/medium_white.svg",
-  ],
+  urgent: ["../assets/icons/urgent_red.svg", "../assets/icons/urgent_white.svg"],
+  medium: ["../assets/icons/medium_yellow.svg", "../assets/icons/medium_white.svg"],
   low: ["../assets/icons/low_green.svg", "../assets/icons/low_white.svg"],
 };
 
-window.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("openMenu").addEventListener("click", closeOpenMenu);
+document.addEventListener("DOMContentLoaded", () => {
+  cacheDom();
   initForm();
-  eventHandleSearch();
-
-  document.getElementById('taskDate').min = new Date().toISOString().split('T')[0];
   loadUserInitials();
+  eventHandleSearch();
 });
+
+const $ = {};
+
+function cacheDom() {
+  $.openMenuBtn = document.getElementById("openMenu");
+  $.form = document.getElementById("taskForm");
+  $.taskDate = document.getElementById("taskDate");
+  $.subtaskInput = document.getElementById("subtask");
+  $.subtaskAddBtn = document.querySelector(".subtaskAddButton");
+  $.assignUserListBtn = document.querySelector(".assignUserListBtn");
+  $.assignedBtnImg = document.getElementById("assignedBtnImg");
+
+  /* Mindestdatum für Date‑Picker */
+  $.taskDate.min = new Date().toISOString().split("T")[0];
+
+  /* Event‑Listener */
+  $.openMenuBtn?.addEventListener("click", toggleMenu);
+  $.form?.addEventListener("submit", handleFormSubmit);
+  $.subtaskAddBtn?.addEventListener("click", addSubtask);
+  $.subtaskInput?.addEventListener("keydown", addSubtaskOnEnter);
+  $.assignUserListBtn?.addEventListener("click", toggleUserList);
+}
+
+function toggleMenu() {
+  document.getElementById("dropDownMenu").classList.toggle("dp-none");
+}
+
+function toggleUserList(e) {
+  e.preventDefault();
+  const list = document.getElementById("assignedUserList");
+  const arrow = $.assignedBtnImg;
+  const visible = list.classList.toggle("visible");
+  arrow?.classList.toggle("rotated", visible);
+}
+
+function selectPriority(priority) {
+  currentActivePriority = priority;
+  const map = {
+    urgent: "urgent-task",
+    medium: "medium-task",
+    low: "low-task",
+  };
+
+  Object.entries(map).forEach(([key, id]) => {
+    const btn = document.getElementById(id);
+    const img = document.getElementById(`${key}-task-img`);
+    btn?.classList.remove("prioUrgentBtnActive", "prioMediumBtnActive", "prioLowBtnActive");
+    if (img) img.src = priorityIcons[key][0];
+  });
+
+  const activeBtn = document.getElementById(map[priority]);
+  const activeImg = document.getElementById(`${priority}-task-img`);
+  activeBtn?.classList.add({ urgent: "prioUrgentBtnActive", medium: "prioMediumBtnActive", low: "prioLowBtnActive" }[priority]);
+  if (activeImg) activeImg.src = priorityIcons[priority][1];
+}
 
 function initForm() {
   loadAndRenderUsers();
-  let form = document.getElementById('taskForm');
-  form.addEventListener('submit', (event) => {
-    console.log('listener click');
-    handleFormSubmit(event);
-  });
-  // document
-  //   .getElementById("taskForm")
-  //   .addEventListener("submit", handleFormSubmit);
+  selectPriority("medium"); // default
 
-  ["urgent", "medium", "low"].forEach((priority) => {
-    const button = document.getElementById(`${priority}-task`);
-    if (button) {
-      button.addEventListener("click", (event) => {
-        selectPriority(priority);
-      });
-    }
-  });
-
+  // Kategorie muss gesetzt sein, bevor der Button aktiv wird
   const categorySelect = document.getElementById("category");
   const submitButton = document.querySelector(".createButton");
   submitButton.disabled = true;
   categorySelect.addEventListener("change", () => {
     submitButton.disabled = categorySelect.value.trim() === "";
   });
-  selectPriority("medium");
-}
 
-function selectPriority(priority) {
-  currentActivePriority = priority;
-
-  const priorityMap = {
-    urgent: "urgent-task",
-    medium: "medium-task",
-    low: "low-task",
-  };
-
-  Object.entries(priorityMap).forEach(([key, id]) => {
-    const btn = document.getElementById(id);
-    const img = document.getElementById(`${key}-task-img`);
-    if (btn) {
-      btn.classList.remove(
-        "prioUrgentBtnActive",
-        "prioMediumBtnActive",
-        "prioLowBtnActive"
-      );
-    }
-    if (img) img.src = priorityIcons[key][0];
+  ["urgent", "medium", "low"].forEach((prio) => {
+    document.getElementById(`${prio}-task`)?.addEventListener("click", () => selectPriority(prio));
   });
-
-  const activeBtn = document.getElementById(priorityMap[priority]);
-  const activeImg = document.getElementById(`${priority}-task-img`);
-
-  if (activeBtn) {
-    const className = {
-      urgent: "prioUrgentBtnActive",
-      medium: "prioMediumBtnActive",
-      low: "prioLowBtnActive",
-    }[priority];
-    activeBtn.classList.add(className);
-  }
-
-  if (activeImg) activeImg.src = priorityIcons[priority][1];
 }
 
 function handleFormSubmit(event) {
-  console.log('click');
-  const form = event.target;
-  const task = collectTaskData(form);
-  let valid = isTaskValid(task);
-  if (valid) {
-    saveTask(task);
-    // showUserFeedback();
-  }else;
-  isTaskValid(task);
+  event.preventDefault();
+  const task = collectTaskData(event.target);
+  if (!isTaskValid(task)) return; // Ungültig → UI‑Warnungen sind schon gesetzt
+
+  saveTask(task)
+    .then(() => {
+      showUserFeedback();
+      event.target.reset();
+      selectPriority("medium");
+      subtasks = [];
+      renderSubtasks();
+    })
+    .catch((err) => console.error(err));
 }
 
 function collectTaskData(form) {
   return {
     id: Date.now(),
-    title: form.taskTitle.value,
-    description: form.taskDescription.value,
+    title: form.taskTitle.value.trim(),
+    description: form.taskDescription.value.trim(),
     dueDate: form.taskDate.value,
     category: form.category.value,
     prio: currentActivePriority,
-    assigned: collectAssignedUsers().join(", "),
-    subtasks: form.subtasks,
+    assigned: collectAssignedUsers(),
+    subtasks: [...subtasks],
     status: "todo",
   };
 }
 
 function isTaskValid(task) {
-  let isValid = true;
- console.log('check', task, 'valid:', isValid);
-  const titleAlert = document.getElementById('titleAlert');
-  if (!task.title || task.title.trim() === '') {
-    titleAlert.style.display = 'inline';
-    isValid = false;
-  } else {
-    titleAlert.style.display = 'none';
-  }
+  let valid = true;
+  const show = (id, condition) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.style.display = condition ? "inline" : "none";
+    if (condition) valid = false;
+  };
 
-  const dateAlert = document.getElementById('dateAlert');
-  if (!task.dueDate) {
-    dateAlert.style.display = 'inline';
-    isValid = false;
-  } else {
-    dateAlert.style.display = 'none';
-  }
+  show("titleAlert", !task.title);
+  show("dateAlert", !task.dueDate);
+  show("categoryAlert", !task.category);
 
-  const categoryAlert = document.getElementById('categoryAlert');
-  if (!task.category) {
-    categoryAlert.style.display = 'inline';
-    isValid = false;
-  } else {
-    categoryAlert.style.display = 'none';
-  }
-  return isValid;
+  return valid;
 }
 
 async function saveTask(task) {
   try {
-    const path = `/tasks/${task.id}`;
-    await requestData("PUT", path, task);
+    await requestData("PUT", `/tasks/${task.id}`, task);
   } catch (error) {
-    console.error("Fehler beim Speichern des Tasks:", error);
     alert("Fehler beim Speichern des Tasks.");
+    throw error;
   }
 }
-
-function closeOpenMenu() {
-  const element = document.getElementById("dropDownMenu");
-  if (element.classList.contains("dp-none")) {
-    document.getElementById(`dropDownMenu`).classList.remove("dp-none");
-  } else {
-    document.getElementById(`dropDownMenu`).classList.add("dp-none");
-  }
-}
-// Neue Funktionen für Benutzerzuweisung (Checkbox-Logik)
 
 async function loadAndRenderUsers() {
   try {
-    const response = await requestData("GET", "/users");
-    const usersData = response.data;
-
-    allUsers = Object.entries(usersData || {}).map(([id, user]) => ({
-      id,
-      ...user,
-    }));
-
+    const { data = {} } = await requestData("GET", "/users");
+    allUsers = Object.entries(data).map(([id, user]) => ({ id, ...user }));
     renderUserCheckboxes(allUsers);
   } catch (error) {
     console.error("Fehler beim Laden der Nutzer:", error);
   }
 }
-
-let subtasks = [];
-
-document.querySelector(".subtaskAddButton").addEventListener("click", () => {
-  const input = document.getElementById("subtask");
-  const value = input.value.trim();
-  if (value) {
-    subtasks.push(value);
-    input.value = "";
-    renderSubtasks(subtasks);
-  }
-});
 
 function renderUserCheckboxes(users) {
   const container = document.getElementById("assignedUserList");
@@ -202,7 +162,6 @@ function renderUserCheckboxes(users) {
   users.forEach((user) => {
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
-    checkbox.id = `user-${user.id}`;
     checkbox.value = user.userName;
     checkbox.className = "user-checkbox";
 
@@ -212,143 +171,101 @@ function renderUserCheckboxes(users) {
     initialsDiv.style.backgroundColor = getRandomColor();
 
     const label = document.createElement("label");
-    label.htmlFor = checkbox.id;
     label.textContent = user.userName;
-
-    label.addEventListener("click", (e) => e.preventDefault());
 
     const namesDiv = document.createElement("div");
     namesDiv.className = "userInfoWrapper";
-    namesDiv.appendChild(initialsDiv);
-    namesDiv.appendChild(label);
+    namesDiv.append(initialsDiv, label);
 
     const wrapper = document.createElement("div");
     wrapper.className = "user-checkbox-wrapper";
-    wrapper.appendChild(namesDiv);
-    wrapper.appendChild(checkbox);
+    wrapper.append(namesDiv, checkbox);
 
     container.appendChild(wrapper);
 
-    checkbox.addEventListener("change", updateSelectedUserDisplay);
-
-    wrapper.addEventListener("click", function (e) {
-      if (e.target.tagName !== "INPUT") {
-        checkbox.checked = !checkbox.checked;
-      }
-      wrapper.classList.toggle("active");
+    // vollständige Klickfläche
+    wrapper.addEventListener("click", (e) => {
+      if (e.target !== checkbox) checkbox.checked = !checkbox.checked;
+      wrapper.classList.toggle("active", checkbox.checked);
       updateSelectedUserDisplay();
     });
-
-    updateSelectedUserDisplay();
   });
+
+  updateSelectedUserDisplay();
 }
 
 function collectAssignedUsers() {
-  const checkboxes = document.querySelectorAll(
-    ".user-checkbox-wrapper .user-checkbox"
-  );
-  const selected = Array.from(checkboxes)
-    .filter((cb) => cb.checked)
-    .map((cb) => cb.value);
-  return selected;
+  return Array.from(document.querySelectorAll(".user-checkbox-wrapper .user-checkbox:checked")).map((cb) => cb.value);
 }
 
 function updateSelectedUserDisplay() {
   const selectedContainer = document.getElementById("selectedUser");
   selectedContainer.innerHTML = "";
-
-  const selected = collectAssignedUsers();
-
-  selected.forEach((name) => {
-    const initials = getInitials(name);
-    const color = getRandomColor();
+  collectAssignedUsers().forEach((name) => {
     const chip = document.createElement("div");
     chip.className = "selected-contact-chip";
-    chip.textContent = initials;
-    chip.style.backgroundColor = color;
+    chip.textContent = getInitials(name);
+    chip.style.backgroundColor = getRandomColor();
     selectedContainer.appendChild(chip);
   });
 }
 
-function getInitials(name) {
-  const parts = name.trim().split(" ");
-  const first = parts[0]?.[0] || "";
-  const last = parts.length > 1 ? parts[parts.length - 1][0] : "";
-  return (first + last).toUpperCase();
+function addSubtask(element) {
+  element.preventDefault();
+  const value = $.subtaskInput.value.trim();
+  if (!value) return;
+  subtasks.push(value);
+  $.subtaskInput.value = "";
+  renderSubtasks();
 }
 
-function getRandomColor() {
-  const hue = Math.floor(Math.random() * 360);
-  return `hsl(${hue}, 70%, 80%)`;
-}
-
-subtaskInput.addEventListener("keydown", function (e) {
-  if (e.key === "Enter" && subtaskInput.value.trim() !== "") {
-    e.preventDefault();
-    const taskText = subtaskInput.value.trim();
-    subtasks.push(taskText);
-    subtaskInput.value = "";
-    renderSubtasks();
+function addSubtaskOnEnter(element) {
+  if (element.key === "Enter") {
+    element.preventDefault();
+    addSubtask(element);
   }
-});
+}
 
 function renderSubtasks() {
-  const subtaskList = document.getElementById("subtaskList");
-  subtaskList.innerHTML = "";
+  const list = document.getElementById("subtaskList");
+  list.innerHTML = "";
 
-  subtasks.forEach((subtask, index) => {
-    const container = document.createElement("list");
+  subtasks.forEach((text, index) => {
+    const container = document.createElement("div");
     container.className = "subtaskContainer";
 
-    const textElement = document.createElement("list");
-    textElement.textContent = subtask;
+    const textElement = document.createElement("span");
     textElement.className = "subtaskDisplayText";
-
-    textElement.addEventListener("click", () => {
-    renderEditableSubtask(container, index);
-    });
+    textElement.textContent = text;
+    textElement.addEventListener("click", () => makeSubtaskEditable(index));
 
     const controls = document.createElement("div");
     controls.className = "subtaskControls";
+    controls.innerHTML = `
+      <button class="subtaskEditBtn"><img class="subtaskEditBtnImg" src="../assets/icons/edit.svg" alt="edit"></button>
+      <div class="subtaskSpacerSecond"></div>
+      <button class="subtaskDeleteBtnSecond"><img class="subtaskDeleteBtnImgSecond" src="../assets/icons/delete.svg" alt="delete"></button>`;
 
-    const editElement = document.createElement("button");
-    editElement.innerHTML =
-      '<img class="subtaskEditBtnImg" src="../assets/icons/edit.svg" alt="edit"> ';
-    editElement.className = "subtaskEditBtn";
-
-    editElement.addEventListener("click", (e) => {
+    const [editBtn, , deleteBtn] = controls.children;
+    editBtn.addEventListener("click", (e) => {
       e.preventDefault();
-      renderEditableSubtask(container, index);
+      makeSubtaskEditable(index);
     });
-
-    const spacer = document.createElement("div");
-    spacer.innerHTML = "";
-    spacer.className = "subtaskSpacerSecond";
-
-    const deleteBtn = document.createElement("button");
-    deleteBtn.innerHTML =
-      '<img class="subtaskDeleteBtnImgSecond" src="../assets/icons/delete.svg" alt="Delete"> ';
-    deleteBtn.className = "subtaskDeleteBtnSecond";
-
-    deleteBtn.addEventListener("click", () => {
+    deleteBtn.addEventListener("click", (e) => {
+      e.preventDefault();
       subtasks.splice(index, 1);
       renderSubtasks();
     });
-    controls.appendChild(editElement);
-    controls.appendChild(spacer);
-    controls.appendChild(deleteBtn);
 
-    container.appendChild(textElement);
-    container.appendChild(controls);
-    subtaskList.appendChild(container);
+    container.append(textElement, controls);
+    list.appendChild(container);
   });
 }
 
-function renderEditableSubtask(container, index) {
+function makeSubtaskEditable(index) {
+  const list = document.getElementById("subtaskList");
+  const container = list.children[index];
   container.innerHTML = "";
-
-  const wrapper = document.createElement("div");
-  wrapper.className = "subtaskEditWrapper";
 
   const input = document.createElement("input");
   input.type = "text";
@@ -356,120 +273,68 @@ function renderEditableSubtask(container, index) {
   input.className = "subtaskTextInput";
 
   const saveBtn = document.createElement("button");
-  saveBtn.innerHTML =
-    '<img class="subtaskSaveBtnImg" src="../assets/icons/check.svg" alt="Save"> ';
+  saveBtn.innerHTML = `<img class="subtaskSaveBtnImg" src="../assets/icons/check.svg" alt="save">`;
   saveBtn.className = "subtaskSaveBtn";
 
   const deleteBtn = document.createElement("button");
-  deleteBtn.innerHTML =
-    '<img class="subtaskDeleteBtnImg" src="../assets/icons/delete.svg" alt="Delete"> ';
+  deleteBtn.innerHTML = `<img class="subtaskDeleteBtnImg" src="../assets/icons/delete.svg" alt="delete">`;
   deleteBtn.className = "subtaskDeleteBtn";
 
   const spacer = document.createElement("div");
-  spacer.innerHTML = "";
   spacer.className = "subtaskSpacer";
 
   saveBtn.addEventListener("click", () => {
     subtasks[index] = input.value.trim();
     renderSubtasks();
   });
-
   deleteBtn.addEventListener("click", () => {
     subtasks.splice(index, 1);
     renderSubtasks();
   });
 
-  wrapper.appendChild(input);
-  wrapper.appendChild(deleteBtn);
-  wrapper.appendChild(spacer);
-  wrapper.appendChild(saveBtn);
-  container.appendChild(wrapper);
+  container.append(input, deleteBtn, spacer, saveBtn);
 }
 
-function validateDate() {
-  const dateInput = document.getElementById("taskDate");
-  const selectedDate = new Date(dateInput.value);
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  if (selectedDate < today) {
-    alert("Set valid Date");
-    return false;
-  }
-  return true;
+function getInitials(name) {
+  const parts = name.trim().split(" ");
+  return ((parts[0]?.[0] || "") + (parts.at(-1)?.[0] || "")).toUpperCase();
 }
 
-document
-  .querySelector(".assignUserListBtn", "assignedBtnImg")
-  .addEventListener("click", function (e) {
-    e.preventDefault();
-
-    const userList = document.getElementById("assignedUserList");
-    const arrow = document.getElementById("assignedBtnImg");
-    const isVisible = userList.classList.toggle("visible");
-
-    if (isVisible) {
-      arrow.classList.add("rotated");
-    } else {
-      arrow.classList.remove("rotated");
-    }
-  });
-
-document
-  .querySelector(".subtaskAddButton")
-  .addEventListener("click", function (e) {
-    e.preventDefault();
-    // add subtask input data to subtaskList
-  });
-
-function eventHandleSearch() {
-  let searchBar = document.getElementById("searchUser");
-  searchBar.addEventListener("input", function () {
-    let searchTerm = searchBar.value.toLowerCase();
-    filteredUsers(searchTerm);
-  });
-}
-
-function handleEmptySearch(searchTerm) {
-  if (searchTerm.length === 0) {
-    renderUserCheckboxes(allUsers);
-  }
-}
-
-function filteredUsers(searchTerm) {
-  handleEmptySearch(searchTerm);
-  if (searchTerm.length < 3) {
-    return;
-  } else {
-    document.getElementById("assignedUserList").classList.add("visible");
-  }
-  console.log(allUsers);
-  const filtered = allUsers.filter((user) =>
-    user.userName.toLowerCase().includes(searchTerm)
-  );
-  renderUserCheckboxes(filtered);
+function getRandomColor() {
+  return `hsl(${Math.floor(Math.random() * 360)}, 70%, 80%)`;
 }
 
 function loadUserInitials() {
   const userString = localStorage.getItem("currentUser");
   if (!userString) return;
-  const user = JSON.parse(userString);
-  const name = user.userName || "Guest";
-  const profileBtn = document.getElementById("openMenu");
-  if (profileBtn) profileBtn.textContent = getInitials(name);
+  const { userName = "Guest" } = JSON.parse(userString);
+  document.getElementById("openMenu").textContent = getInitials(userName);
 }
 
-// function showUserFeedback() {
-//   const feedback = document.getElementById("userFeedback");
-//   if (!feedback) return;
+function eventHandleSearch() {
+  const searchBar = document.getElementById("searchUser");
+  searchBar.addEventListener("input", () => {
+    const term = searchBar.value.toLowerCase();
+    if (term.length < 3) {
+      if (!term.length) renderUserCheckboxes(allUsers);
+      return;
+    }
+    document.getElementById("assignedUserList").classList.add("visible");
+    renderUserCheckboxes(allUsers.filter((u) => u.userName.toLowerCase().includes(term)));
+  });
+}
 
-//   feedback.classList.remove("d_none");
-//   feedback.classList.add("centerFeedback");
+function showUserFeedback() {
+  const feedback = document.getElementById("userFeedback");
+  if (!feedback) return;
 
-//   feedback.addEventListener("animationend", () => {
-//     setTimeout(() => {
-//       feedback.classList.add("d_none");
-//       feedback.classList.remove("centerFeedback");
-//     }, 1500);
-//   });
-// }
+  feedback.classList.remove("d_none");
+  feedback.classList.add("centerFeedback");
+
+  feedback.addEventListener("animationend", () => {
+    setTimeout(() => {
+      feedback.classList.add("d_none");
+      feedback.classList.remove("centerFeedback");
+    }, 1500);
+  });
+}

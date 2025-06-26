@@ -4,15 +4,23 @@ const passwordInput = document.getElementById("inputPassword");
 const confirmPasswordInput = document.getElementById("inputConfirmPassword");
 const checkbox = document.getElementById("checkBox");
 const signUpBtn = document.getElementById("signUpBtn");
-const togglePasswordIcon = document.querySelector("#inputPassword + .toggle-password");
-const toggleConfirmIcon = document.querySelector("#inputConfirmPassword + .toggle-password");
+const togglePasswordIcon = document.querySelector(
+  "#inputPassword + .toggle-password"
+);
+const toggleConfirmIcon = document.querySelector(
+  "#inputConfirmPassword + .toggle-password"
+);
 
 if (window.location.pathname.endsWith("signup.html")) {
   initSignup();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("signUpBtn").addEventListener("click", showUserFeedback);
+  const signUpBtn = document.getElementById("signUpBtn");
+  if (!signUpBtn) {
+    return;
+  }
+  signUpBtn.addEventListener("click", showUserFeedback);
 });
 
 function initSignup() {
@@ -28,7 +36,9 @@ function setupPasswordValidation() {
 
 function validatePasswordsMatch() {
   const mismatch = passwordInput.value !== confirmPasswordInput.value;
-  confirmPasswordInput.setCustomValidity(mismatch ? "Passwords do not match" : "");
+  confirmPasswordInput.setCustomValidity(
+    mismatch ? "Passwords do not match" : ""
+  );
 }
 
 function setupPasswordToggle() {
@@ -103,4 +113,3 @@ function showUserFeedback() {
     }, 1500);
   });
 }
-

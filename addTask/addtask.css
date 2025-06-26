@@ -693,7 +693,7 @@ textarea:focus::placeholder {
   height: 16px;
 }
 
-/* .userFeedback {
+.userFeedback {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -726,4 +726,4 @@ textarea:focus::placeholder {
     bottom: 40%;
     opacity: 1;
   }
-} */
+}
