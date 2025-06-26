@@ -6,6 +6,7 @@
   <link href="./contacts.css" rel="stylesheet"/>
   <link href="hoverWindow.css" rel="stylesheet"/>
   <link href="../styles/standard.css" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/fonts.css">
   <script src="./contacts.js" type="module">
   </script>
   <title>
@@ -40,15 +41,15 @@
       </div>
       <form class="addContactForm" id="addContactForm">
        <div class="pers">
-        <textarea id="contactName" placeholder="Name" required="" type="text"></textarea>
+        <input id="contactName" placeholder="Name" required type="text"></input>
         <img alt="Bild" class="inputIconPers" src="../assets/icons/person.svg"/>
        </div>
        <div class="mail">
-        <textarea id="contactEmail" placeholder="Email" required="" src="../assets/icons/" type="email"></textarea>
+        <input id="contactEmail" placeholder="Email" required src="../assets/icons/" type="email"></input>
         <img alt="Bild" class="inputIconMail" src="../assets/icons/mail.svg"/>
        </div>
        <div class="call">
-        <textarea id="contactPhone" placeholder="Phone" required="" src="../assets/icons/" type="tel"></textarea>
+        <input id="contactPhone" placeholder="Phone" required src="../assets/icons/" type="tel"></input>
         <img alt="Bild" class="inputIconCall" src="../assets/icons/call.svg"/>
        </div>
        <div class="formBtns">
@@ -92,19 +93,19 @@
       </div>
       <form class="editContactForm" id="editContactForm">
        <div class="pers">
-        <textarea id="contactName" placeholder="Name" required="" type="text"></textarea>
+        <input id="contactName" placeholder="Name" required type="text"></input>
         <img alt="Bild" class="inputIconPers" src="../assets/icons/person.svg"/>
        </div>
        <div class="mail">
-        <textarea id="contactEmail" placeholder="Email" required="" src="../assets/icons/" type="email"></textarea>
+        <input id="contactEmail" placeholder="Email" required src="../assets/icons/" type="email"></input>
         <img alt="Bild" class="inputIconMail" src="../assets/icons/mail.svg"/>
        </div>
        <div class="call">
-        <textarea id="contactPhone" placeholder="Phone" required="" src="../assets/icons/" type="tel"></textarea>
+        <input id="contactPhone" placeholder="Phone" required src="../assets/icons/" type="tel"></input>
         <img alt="Bild" class="inputIconCall" src="../assets/icons/call.svg"/>
        </div>
        <div class="formBtns">
-        <button class="cancelBtn">
+        <button class="cancelBtn" type="button">
          Cancel x
         </button>
         <button class="submitBtn" id="editSubmitBtn" type="submit">
