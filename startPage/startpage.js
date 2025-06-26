@@ -15,7 +15,7 @@ function updateUserGreeting() {
 
     const greetingEl = document.querySelector(".greetings > p:first-child");
     const nameEl = document.querySelector(".greetings .username");
-    const profileBtn = document.getElementById("openMenu");
+    const profile-button = document.getElementById("openMenu");
 
     const hour = new Date().getHours();
     let greeting = "Hello";
@@ -26,7 +26,7 @@ function updateUserGreeting() {
 
     if (greetingEl) greetingEl.textContent = `${greeting},`;
     if (nameEl) nameEl.textContent = name;
-    if (profileBtn) profileBtn.textContent = getInitials(name);
+    if (profile-button) profile-button.textContent = getInitials(name);
   } catch (err) {
     console.warn("Fehler beim Parsen des Benutzers:", err);
   }
