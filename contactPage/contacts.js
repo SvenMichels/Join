@@ -3,7 +3,6 @@ import {
   contactCard,
   singleContact,
 } from "./contactTemplate.js";
-// import { requestData } from "../scripts/firebase.js";
 
 import {
   createContact,
@@ -97,12 +96,17 @@ async function addContact(event) {
     clearContactListUI();
     renderAllContacts(contactList);
     emptyInput();
-    closeAddWindow();
+    
   } catch (error) {
     console.error("Fehler beim Erstellen des Kontakts:", error);
     alert("Kontakt konnte nicht gespeichert werden.");
   }
-}
+
+   setTimeout(() => {
+     closeAddWindow();
+    }, 800);
+  };
+
 
 function getName() {
   return document.getElementById("contactName").value.trim();
@@ -323,4 +327,27 @@ function sortContactsAlphabetically(list) {
   return [...list].sort((a, b) =>
     a.name.localeCompare(b.name, "de", { sensitivity: "base" })
   );
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const signUpBtn = document.getElementById("submitBtn");
+  if (!signUpBtn) {
+    return;
+  }
+  signUpBtn.addEventListener("click", showUserFeedback);
+});
+
+function showUserFeedback() {
+  const feedback = document.getElementById("userFeedback");
+  if (!feedback) return;
+
+  feedback.classList.remove("dp-none");
+  feedback.classList.add("centerFeedback");
+
+  feedback.addEventListener("animationend", () => {
+    setTimeout(() => {
+      feedback.classList.add("dp-none");
+      feedback.classList.remove("centerFeedback");
+    }, 1500);
+  });
 }
