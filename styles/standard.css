@@ -237,9 +237,11 @@ p {
   background-color: #2a3d59;
 }
 
-/* .footerBox {
+.footerBox {
+  justify-content: space-between;
   display: flex;
   width: 100%;
+  padding: 16px;
   max-width: 1440px;
   margin-top: auto;
   align-items: center;
@@ -269,6 +271,3 @@ p {
     display: none !important;
   }
 }
-  justify-content: space-between;
-  padding: 16px;
-} */
