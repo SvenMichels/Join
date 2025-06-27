@@ -9,3 +9,4 @@ window.addEventListener("DOMContentLoaded", () => {
     bigLogo.remove();
   });
 });
+ 

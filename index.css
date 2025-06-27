@@ -39,13 +39,13 @@ body{
     font-size: 20px;
 }
 
-.nav-logo{
+.logo{
     width: 100px;
     height: 122px;
 
 }
 
-.bignav-logo {
+.bigLogo {
     z-index: 999;
     position: absolute;
     display: flex;
@@ -59,7 +59,7 @@ body{
     transition: all 0.5s ease;
 }
 
-.bignav-logo.shrinkTonav-logo{
+.bigLogo.shrinkToLogo{
     position: absolute;
     width: 100px;
     height: 122px;
