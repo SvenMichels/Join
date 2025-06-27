@@ -165,6 +165,6 @@ function loadUserInitials(){
   if (!userString) return;
   const user = JSON.parse(userString);
   const name = user.userName || "Guest";
-  const profileBtn = document.getElementById("openMenu");
-  if (profileBtn) profileBtn.textContent = getInitials(name);
+  const profileButton = document.getElementById("openMenu");
+  if (profileButton) profileButton.textContent = getInitials(name);
 }

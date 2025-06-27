@@ -1,4 +1,3 @@
-/* TaskContent */
 .taskh1Container {
   width: 278px;
   height: 73px;
@@ -666,6 +665,10 @@ textarea:focus::placeholder {
   align-items: center;
   border: 0px;
   border-radius: 50%;
+}
+
+.subtaskDeleteBtnSecond:hover {
+  cursor: pointer;
 }
 
 .subtaskControls {

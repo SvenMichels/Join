@@ -1,0 +1,182 @@
+/* 320px–575px */
+@media (max-width: 575px) {
+  .header-style {
+    width: 100vw;
+    height: 80px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 2;
+  }
+  .header-container {
+    width: 40px;
+    height: 40px;
+    padding-right: 16px;
+  }
+
+  .header-nav-logo {
+    width: 32px;
+    height: 39px;
+    padding-left: 16px;
+  }
+
+  .help-container {
+    padding-right: 16px;
+  }
+
+  .profile-button {
+    width: 40px;
+    height: 40px;
+  }
+
+  .helpIcon {
+    display: none;
+  }
+
+  .media-d-none {
+    display: none;
+  }
+
+  .nav-bar {
+    display: flex;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+  }
+
+  .nav-menu {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100vw;
+  height: 80px;
+  gap: 15px;
+  background-color: #2a3647;
+}
+
+.nav-buttons {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 0px;
+    width: 60px;
+    height: 76px;
+    gap: 16px;
+    border-radius: 16px;
+    font-size: 12px;
+}
+
+  .nav-logo,
+  .legal-privat-container {
+    display: none;
+  }
+}
+
+/* 576px-767px */
+@media (min-width: 576px) and (max-width: 767px) {
+  .header-style {
+    justify-content: space-between;
+    height: 80px;
+  }
+
+  .header-nav-logo {
+    padding-left: 16px;
+  }
+
+  .header-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .help-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding-right: 16px;
+  }
+
+  .profile-button {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* 768px-991px */
+@media (min-width: 768px) and (max-width: 991px) {
+  .header-nav-logo {
+    display: none;
+  }
+
+  .header-container {
+    padding-left: 216px;
+  }
+
+  .help-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding-right: 40px;
+    width: 104px;
+    height: 56px;
+  }
+
+  .profile-button {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+/* 992px-1199px */
+@media (min-width: 992px) and (max-width: 1199px) {
+  .header-nav-logo {
+    display: none;
+  }
+
+  .header-container {
+    padding-left: 216px;
+  }
+
+  .help-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding-right: 40px;
+    width: 104px;
+    height: 56px;
+  }
+
+  .profile-button {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+/* 1200px-1439px */
+@media (min-width: 1200px) and (max-width: 1439px) {
+  .header-nav-logo {
+    display: none;
+  }
+
+  .header-container {
+    padding-left: 216px;
+  }
+
+  .help-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding-right: 40px;
+    width: 104px;
+    height: 56px;
+  }
+
+  .profile-button {
+    width: 48px;
+    height: 48px;
+  }
+}

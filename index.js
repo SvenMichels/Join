@@ -1,11 +1,11 @@
 window.addEventListener("DOMContentLoaded", () => {
-  const bigLogo = document.querySelector(".bigLogo");
+  const bignav-logo = document.querySelector(".bignav-logo");
 
-  if (!bigLogo) return;
+  if (!bignav-logo) return;
 
-  bigLogo.classList.add("shrinkToLogo");
+  bignav-logo.classList.add("shrinkTonav-logo");
 
-  bigLogo.addEventListener("animationend", () => {
-    bigLogo.remove();
+  bignav-logo.addEventListener("animationend", () => {
+    bignav-logo.remove();
   });
 });
