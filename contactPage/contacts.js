@@ -24,9 +24,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     .forEach(btn => btn.addEventListener("click", handleClose));
   document.getElementById("addContactForm").addEventListener("submit", addContact);
   document.getElementById("openMenu").addEventListener("click", closeOpenMenu);
-  document
-    .getElementById("editContactForm")
-    .addEventListener("submit", handleEditSubmit);
+  document.getElementById("editContactForm").addEventListener("submit", handleEditSubmit);
+  document.getElementById("edit").addEventListener("click", openEditWindow);
   loadShowContact();
   await loadContactsFromFirebase();
   loadUserInitials();
@@ -45,7 +44,7 @@ function closeAddWindow() {
   document.getElementById(`addWindow`).classList.add("dp-none");
 }
 
-function openEditWindow() {
+export function openEditWindow() {
   document.getElementById(`editWindow`).classList.remove("dp-none");
 }
 
@@ -120,7 +119,7 @@ function getPhone() {
   return document.getElementById("contactPhone").value.trim();
 }
 
-function getInitials(name) {
+export function getInitials(name) {
   const words = name.split(" ").filter(Boolean);
   const first = words[0]?.[0]?.toUpperCase() || "";
   const second = words[1]?.[0]?.toUpperCase() || "";
