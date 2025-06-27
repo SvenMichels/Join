@@ -8,7 +8,7 @@ loginForm?.addEventListener("submit", async function (event) {
   const password = document.getElementById("password").value;
 });
 
-export async function loginUser(email, password) {
+async function loginUser(email, password) {
   try {
     const { data: users } = await requestData("GET", "/users/");
     const userList = Object.entries(users || {}).map(([id, data]) => ({ id, ...data }));

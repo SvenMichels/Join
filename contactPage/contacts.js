@@ -131,7 +131,7 @@ function getFirstLetter(name) {
   return name[0]?.toUpperCase() || "";
 }
 
-function renderContact(name, email, phone, initials, firstLetter, id) {
+export function renderContact(name, email, phone, initials, firstLetter, id) {
   renderAlphabetFilter(firstLetter);
   renderContactCard(name, email, initials, id);
   renderSingleContact(name, email, phone, initials, id);
@@ -147,8 +147,6 @@ function renderAlphabetFilter(firstLetter) {
 function renderContactCard(name, email, initials, id) {
   const allContactsRef = document.getElementById("allContacts");
   allContactsRef.innerHTML += contactCard(name, email, initials, id);
-
-  console.log("Rendering contact card with ID:", id);
 }
 
 function renderSingleContact(name, email, phone, initials, id) {
