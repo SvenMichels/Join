@@ -1,7 +1,7 @@
-.taskh1Container {
+.task-h1-container {
   width: 278px;
   height: 73px;
-  position: absolute;
+  /* position: absolute; */
   top: 206px;
   left: 328px;
   display: flex;
@@ -15,19 +15,11 @@
   line-height: 120%;
 }
 
-.taskContainer {
-  position: absolute;
-  width: 440px;
-  height: 376px;
-  top: 327px;
-  left: 328px;
-}
-
-.taskTitle {
+.task-title {
   display: flex;
   flex-direction: column;
-  width: 440px;
   height: 96px;
+  max-width: 440px;
   gap: 8px;
 }
 
@@ -36,7 +28,7 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  position: absolute;
+  /* position: absolute; */
   top: 50vw;
   left: 50vh;
   gap: 10px;
@@ -48,50 +40,48 @@
   color: #ffffff;
 }
 
-.taskTitleInput {
-  width: 440px;
+.task-title-input {
   height: 48px;
+  max-width: 440px;
   border-radius: 10px;
   border: 1px solid #d1d1d1;
 }
 
-.taskDescription {
+.task-description {
   display: flex;
   flex-direction: column;
   max-width: 440px;
-  height: 168px;
+  height: 88px;
+  padding-bottom: 10px;
   gap: 8px;
 }
 
-.taskDescriptionInput {
-  min-width: 440px;
-  max-width: 440px;
-  min-height: 120px;
-  max-height: 120px;
+.task-description-input {
+  height: 50px;
   border-radius: 10px;
   border: 1px solid #d1d1d1;
 }
 
-.taskDate {
+.task-date {
   display: flex;
   flex-direction: column;
-  width: 440px;
+  max-width: 440px;
   height: 96px;
   top: 296px;
   left: 0.25px;
   gap: 8px;
 }
 
-.taskDateInput {
-  padding-left: 10px;
-  width: 440px;
+.task-dateInput {
+  padding-right: 10px;
+  max-width: 440px;
   height: 48px;
   border-radius: 10px;
   border: 1px solid #d1d1d1;
 }
 
-.spaceContainer {
-  position: fixed;
+.space-container {
+  /* position: fixed; */
   width: 0px;
   height: inherit;
   top: 327px;
@@ -100,27 +90,25 @@
   color: #d1d1d1;
 }
 
-.prioContainer {
-  position: fixed;
+.prio-container {
   display: flex;
   flex-direction: column;
-  width: 440px;
-  top: 327px;
-  left: 864.25px;
+  max-width: 440px;
   gap: 24px;
 }
 
-.prioContent {
+.prio-content {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  width: 440px;
+  max-width: 440px;
   height: 88px;
 }
 
-.prioButtonContainer {
+.prio-button-container {
   display: flex;
   justify-content: space-between;
+  max-width: 440px;
   gap: 16px;
 }
 
@@ -156,21 +144,26 @@ input:valid + .error-message {
   display: none;
 }
 
-.prioAssignedContainer {
+.prio-assigned-container {
   display: flex;
   flex-direction: column;
-  width: 440px;
+  max-width: 440px;
   height: auto;
 }
 
-.assignedInputWrapper {
+.assigned-input-wrapper {
+  width: 100%;
+}
+
+.assigned-container {
   position: relative;
   width: 100%;
 }
 
-.assignedContainer {
-  position: relative;
+#searchUser{
   width: 100%;
+  padding-right: 40px; /* Platz für den Button */
+  box-sizing: border-box;
 }
 
 .prioAssignInput {
@@ -185,14 +178,19 @@ input:valid + .error-message {
 }
 
 .assignUserListBtn {
-  display: flex;
   position: absolute;
-  right: 10px;
   top: 50%;
-  padding: 5px;
+  right: 10px;
   transform: translateY(-50%);
-  background-color: transparent;
+  background: transparent;
   border: none;
+  cursor: pointer;
+  height: 24px;
+  width: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
 }
 
 .assignUserListBtn:hover {
@@ -233,7 +231,7 @@ input:valid + .error-message {
   transform: rotate(180deg);
 }
 
-.assigned-user-list.visible ~ .assignedContainer .dropdown-arrow {
+.assigned-user-list.visible ~ .assigned-container .dropdown-arrow {
   transform: rotate(180deg);
 }
 
@@ -261,11 +259,11 @@ input:valid + .error-message {
   background: #d1d1d1;
 }
 
-.prioCategoryContainer {
+.prio-category-container {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  width: 440px;
+  max-width: 440px;
   height: 80px;
 }
 
@@ -297,6 +295,9 @@ input:valid + .error-message {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
   font-size: 16px;
   box-sizing: border-box;
+  width: 100%;
+  padding-right: 40px; /* Platz für den Button */
+  box-sizing: border-box;
 }
 
 .taskPrioIcons {
@@ -304,20 +305,15 @@ input:valid + .error-message {
   height: 14px;
 }
 
-.requiredContainer {
-  width: 170px;
-  height: 27px;
-  position: fixed;
-  top: 810px;
-  left: 328px;
+.required-container {
+  padding-top: 20px;
 }
 
-.createContainer {
+.create-container {
   display: flex;
   gap: 16px;
   width: 309px;
   height: 56px;
-  position: fixed;
   top: 810px;
   left: 995.25px;
 }
@@ -440,7 +436,6 @@ select {
 
 .subtaskAddContainer {
   max-width: 100%;
-  position: relative;
 }
 
 .subtaskWrapper {
@@ -448,24 +443,29 @@ select {
   width: 100%;
 }
 
-.subtaskAddButton {
-  display: flex;
+.subtask-add-button {
   position: absolute;
-  right: 10px;
   top: 50%;
-  padding: 5px;
+  right: 10px;
   transform: translateY(-50%);
-  background-color: transparent;
+  background: transparent;
   border: none;
+  cursor: pointer;
+  height: 24px;
+  width: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
 }
 
-.subtaskAddButton:hover {
+.subtask-add-button:hover {
   cursor: pointer;
   background: #d1d1d1;
   border-radius: 50%;
 }
 
-.subtaskAddButton img.subtaskAdd {
+.subtask-add-button img.subtaskAdd {
   width: 14px;
   height: 14px;
 }
@@ -533,7 +533,7 @@ textarea:focus::placeholder {
 }
 
 .subtaskDisplayText {
-  position: relative;
+  /* position: relative; */
   padding-left: 20px;
   display: flex;
   align-items: center;
@@ -553,7 +553,7 @@ textarea:focus::placeholder {
 
 .subtaskDisplayText::before {
   content: "";
-  position: absolute;
+  /* position: absolute; */
   left: 6px;
   top: 50%;
   transform: translateY(-50%);
@@ -634,7 +634,7 @@ textarea:focus::placeholder {
   height: 11.23;
 }
 
-.subtaskContainer:hover {
+.subtask-container:hover {
   background: #eeeeee;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   cursor: pointer;
@@ -679,12 +679,12 @@ textarea:focus::placeholder {
   transition: opacity 0.2s ease;
 }
 
-.subtaskContainer {
+.subtask-container {
   display: flex;
   transition: background-color 0.2s ease-in-out;
 }
 
-.subtaskContainer:hover .subtaskControls {
+.subtask-container:hover .subtaskControls {
   display: flex;
   pointer-events: auto;
   cursor: pointer;
@@ -708,7 +708,7 @@ textarea:focus::placeholder {
   height: 74px;
   border: 1px solid #2a3647;
   border-radius: 20px;
-  position: fixed;
+  /* position: fixed; */
   bottom: -100px;
   left: 50%;
   transform: translateX(-50%);

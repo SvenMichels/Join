@@ -86,36 +86,38 @@
     </div>
   </nav>
 
-  <div class="taskh1Container">
+  <div class="task-h1-container">
     <h1>Add Task</h1>
   </div>
 
-  <form novalidate class="taskContainer" id="taskForm">
-    <div class="taskTitle">
-      <label for="taskTitle">Title <span style="color: #ff8190">*</span></label>
-      <input class="taskTitleInput" name="taskTitle" id="taskTitle" placeholder="Enter a title" type="text" />
+  <div class="form-wrapper">
+  <div class="form-container">
+  <form class="task-container" id="taskForm">
+    <div class="task-title">
+      <label for="task-title">Title <span style="color: #ff8190">*</span></label>
+      <input class="task-title-input" name="task-title" id="task-title" placeholder="Enter a title" type="text" />
       <span id="titleAlert" class="redSpan" style="display: none; color: #ff8190">This field is required</span>
     </div>
 
-    <div class="taskDescription">
-      <label for="taskDescription">Description</label>
-      <textarea class="taskDescriptionInput" name="taskDescription" id="taskDescription"
+    <div class="task-description">
+      <label for="task-description">Description</label>
+      <textarea class="task-description-input" name="task-description" id="task-description"
         placeholder="Enter a Description" type="text"></textarea>
     </div>
 
-    <div class="taskDate">
-      <label for="taskDate">Due Date <span style="color: #ff8190">*</span></label>
-      <input class="taskDateInput" name="taskDate" id="taskDate" placeholder="dd/mm/yyyy" type="date"
+    <div class="task-date">
+      <label for="task-date">Due Date <span style="color: #ff8190">*</span></label>
+      <input class="task-dateInput" name="task-date" id="task-date" placeholder="dd/mm/yyyy" type="date"
         min="2025-06-21" />
       <span id="dateAlert" class="redSpan" style="display: none; color: #ff8190">This field is required</span>
     </div>
 
-    <div class="spaceContainer"></div>
+    <div class="space-container"></div>
 
-    <div class="prioContainer">
-      <div class="prioContent">
+    <div class="prio-container">
+      <div class="prio-content">
         <label for="taskPriority">Priority</label>
-        <div class="prioButtonContainer">
+        <div class="prio-button-container">
           <button id="urgent-task" class="prioButtons">
             Urgent
             <img id="urgent-task-img" src="../assets/icons/urgent_red.svg" alt="urgent" />
@@ -131,11 +133,11 @@
         </div>
       </div>
 
-      <div class="prioAssignedContainer">
+      <div class="prio-assigned-container">
         <label for="assignedUsers">Assigned to</label>
 
-        <div class="assignedInputWrapper">
-          <div class="assignedContainer">
+        <div class="assigned-input-wrapper">
+          <div class="assigned-container">
             <input id="searchUser" placeholder="Select contact to assign" name="assignedUsers" class="prioAssignInput"
               type="text" />
             <button class="assignUserListBtn" type="button">
@@ -149,7 +151,7 @@
         <div id="selectedUser" class="selectedUserContainer">...</div>
       </div>
 
-      <div class="prioCategoryContainer">
+      <div class="prio-category-container">
         <label for="category">Category <span style="color: #ff8190">*</span></label>
         <select class="prioCategoryInput" id="category" name="category">
           <option value="">Bitte auswählen</option>
@@ -159,11 +161,11 @@
         <span id="categoryAlert" class="redSpan" style="display: none; color: #ff8190">This field is required</span>
       </div>
 
-      <div class="prioSubtaskContainer">
+      <div class="prio-subtask-container">
         <label for="subtask">Subtasks</label>
         <div class="subtaskWrapper">
           <input class="prioSubtaskInput" name="subtask" id="subtask" type="text" />
-          <button type="button" class="subtaskAddButton">
+          <button type="button" class="subtask-add-button">
             <img src="../assets/icons/add.svg" />
           </button>
         </div>
@@ -171,12 +173,12 @@
       </div>
     </div>
 
-    <div class="requiredContainer">
+    <div class="required-container">
       <div>
         <span style="color: #ff8190">*</span>
         <span>This field is required</span>
       </div>
-      <div class="createContainer">
+      <div class="create-container">
         <button class="clearButton" id="clearBtn" type="reset">
           Clear <img alt="Bild" src="../assets/icons/iconoir_cancel.svg" />
         </button>
@@ -186,6 +188,8 @@
       </div>
     </div>
   </form>
+</div>
+</div>
   <!-- <article id="userFeedback" class="d_none userFeedback">
       <p>Task added to Board <img class="nav-buttons" src="../assets/icons/board.svg" ></p>
     </article> -->
