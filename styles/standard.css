@@ -266,6 +266,46 @@ p {
     cursor: pointer;
 }
 
+.color-1 {
+  background-color: #F44336; /* Rot */
+}
+
+.color-2 {
+  background-color: #E91E63; /* Pink */
+}
+
+.color-3 {
+  background-color: #9C27B0; /* Lila */
+}
+
+.color-4 {
+  background-color: #4CAF50; /* Grün */
+}
+
+.color-5 {
+  background-color: #CDDC39; /* Limette */
+}
+
+.color-6 {
+  background-color: #FF9800; /* Orange */
+}
+
+.color-7 {
+  background-color: #FF5722; /* Dunkel-Orange */
+}
+
+.color-8 {
+  background-color: #795548; /* Braun */
+}
+
+.color-9 {
+  background-color: #A1887F; /* Hellbraun / Taupe */
+}
+
+.color-10 {
+  background-color: #FFC107; /* Bernstein */
+}
+
 @media screen and (orientation: landscape) and (max-width: 1390px) and (max-height: 950px){
   body {
     display: none !important;

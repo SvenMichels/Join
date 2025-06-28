@@ -1,8 +1,8 @@
-export function singleContact(name, email, phone, initials, id) {
+export function singleContact(name, email, phone, initials, id, colorClass) {
   return `
 <div id = "bigContactCard">
             <div class="profileHeader">
-              <div class="profilePic">${initials}</div>
+              <div class="profilePic ${colorClass}">${initials}</div>
               <div class="nameBtns">
                 <p id="profileName" class="profileName">${name}</p>
                 <div class="btns">
@@ -37,9 +37,9 @@ export function alphabetfilter(letter){
           <div class="stripe"></div>`
 }
 
-export function contactCard(name, email, initials, id){
+export function contactCard(name, email, initials, id, colorClass){
     return` <div class="contact" data-id="${id}">
-              <div class="pic">${initials}</div>
+              <div class="pic ${colorClass}">${initials}</div>
               <div class="nameAdressContainer">
                 <div id="profileName" class="contactName">${name}</div>
                 <div class="email">${email}</div>

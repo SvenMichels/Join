@@ -28,6 +28,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("edit").addEventListener("click", openEditWindow);
   loadShowContact();
   await loadContactsFromFirebase();
+  await ensureColorClassForAllContacts();
   loadUserInitials();
 });
 
@@ -85,8 +86,9 @@ async function addContact(event) {
   const email = getEmail();
   const phone = getPhone();
   const initials = getInitials(name);
+  const colorClass = getRandomColorClass();
   const firstLetter = getFirstLetter(name);
-  const contact = { name, email, phone, initials };
+  const contact = { name, email, phone, initials, colorClass };
 
   try {
     const result = await createContact(contact);
@@ -130,10 +132,10 @@ function getFirstLetter(name) {
   return name[0]?.toUpperCase() || "";
 }
 
-export function renderContact(name, email, phone, initials, firstLetter, id) {
+export function renderContact(name, email, phone, initials, firstLetter, id, colorClass) {
   renderAlphabetFilter(firstLetter);
-  renderContactCard(name, email, initials, id);
-  renderSingleContact(name, email, phone, initials, id);
+  renderContactCard(name, email, initials, id, colorClass);
+  renderSingleContact(name, email, phone, initials, id, colorClass);
 }
 
 function renderAlphabetFilter(firstLetter) {
@@ -143,14 +145,14 @@ function renderAlphabetFilter(firstLetter) {
     alphabetfilter(firstLetter);
 }
 
-function renderContactCard(name, email, initials, id) {
+function renderContactCard(name, email, initials, id, colorClass) {
   const allContactsRef = document.getElementById("allContacts");
-  allContactsRef.innerHTML += contactCard(name, email, initials, id);
+  allContactsRef.innerHTML += contactCard(name, email, initials, id, colorClass);
 }
 
-function renderSingleContact(name, email, phone, initials, id) {
+function renderSingleContact(name, email, phone, initials, id, colorClass) {
   const bigContactRef = document.getElementById("bigContact");
-  bigContactRef.innerHTML = singleContact(name, email, phone, initials, id);
+  bigContactRef.innerHTML = singleContact(name, email, phone, initials, id, colorClass);
   bindDeleteButton(bigContactRef);
   bindEditButton(bigContactRef);
 }
@@ -217,13 +219,15 @@ function clearContactListUI() {
 function renderAllContacts(contacts) {
   const sortedContacts = sortContactsAlphabetically(contacts)
   for (const contact of sortedContacts) {
+    const safeColorClass = contact.colorClass || getRandomColorClass();
     renderContact(
       contact.name,
       contact.email,
       contact.phone,
       contact.initials,
       getFirstLetter(contact.name),
-      contact.id
+      contact.id,
+      safeColorClass,
     );
   }
 }
@@ -235,12 +239,14 @@ function clearBigContactView() {
 function showContact(id) {
   const contact = contactList.find((contact) => contact.id === id);
   if (contact) {
+    const safeColorClass = contact.colorClass || getRandomColorClass();
     renderSingleContact(
       contact.name,
       contact.email,
       contact.phone,
       contact.initials,
-      contact.id
+      contact.id,
+      safeColorClass,
     );
   }
 }
@@ -347,4 +353,19 @@ function showUserFeedback() {
       feedback.classList.remove("centerFeedback");
     }, 1500);
   });
+}
+
+function getRandomColorClass() {
+  const totalColors = 10;
+  const randomIndex = Math.floor(Math.random() * totalColors) + 1;
+  return `color-${randomIndex}`;
+}
+
+async function ensureColorClassForAllContacts() {
+  for (const contact of contactList) {
+    if (!contact.colorClass) {
+      contact.colorClass = getRandomColorClass();
+      await updateContactInFirebase(contact);
+    }
+  }
 }
