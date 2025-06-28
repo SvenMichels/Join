@@ -30,7 +30,7 @@ function cacheDom() {
   $.assignedBtnImg = document.getElementById("assignedBtnImg");
 
   /* Mindestdatum für Date‑Picker */
-  $.taskDate.min = new Date().toISOString().split("T")[0];
+  document.getElementById('task-date').min = new Date().toISOString().split("T")[0];
 
   /* Event‑Listener */
   $.openMenuBtn?.addEventListener("click", toggleMenu);
