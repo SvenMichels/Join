@@ -86,7 +86,7 @@ p {
 }
 
 /* Navigation */
-/* .nav-bar {
+.nav-bar {
   width: 232px;
   height: 100vh;
   display: flex;
@@ -97,7 +97,7 @@ p {
   top: 0;
   left: 0;
   background-color: #2a3647;
-} */
+}
 
 .nav-logo {
   width: 100.03px;
