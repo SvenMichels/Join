@@ -25,11 +25,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("addContactForm").addEventListener("submit", addContact);
   document.getElementById("openMenu").addEventListener("click", closeOpenMenu);
   document.getElementById("editContactForm").addEventListener("submit", handleEditSubmit);
-  document.getElementById("edit").addEventListener("click", openEditWindow);
   loadShowContact();
   await loadContactsFromFirebase();
   await ensureColorClassForAllContacts();
   loadUserInitials();
+  document.getElementById("edit").addEventListener("click", openEditWindow);
 });
 
 function handleClose() {
