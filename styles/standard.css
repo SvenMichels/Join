@@ -90,19 +90,6 @@ p {
 }
 
 /* Navigation */
-.nav-bar {
-  width: 232px;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  position: fixed;
-  top: 0;
-  left: 0;
-  background-color: #2a3647;
-}
-
 .nav-logo {
   width: 100.03px;
   height: 121.97px;

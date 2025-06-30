@@ -102,8 +102,6 @@
     box-sizing: border-box;
   }
 
-  
-
   .task-container {
     overflow: hidden;
   }
@@ -178,7 +176,6 @@
   }
 }
 
-
 @media (min-width: 992px) and (max-width: 1199px) {
   .header-nav-logo {
     display: none;
@@ -201,6 +198,19 @@
   .profile-button {
     width: 48px;
     height: 48px;
+  }
+
+  .nav-bar {
+    width: 232px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #2a3647;
   }
 }
 
@@ -227,4 +237,17 @@
     width: 48px;
     height: 48px;
   }
+
+    .nav-bar {
+  width: 232px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #2a3647;
+}
 }
