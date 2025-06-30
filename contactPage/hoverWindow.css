@@ -247,7 +247,7 @@ textarea::placeholder, input::placeholder{
     color: #2a3647;
 }
 
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
     .hoverWindow {
       flex-direction: column;
       width: 95vw;
@@ -262,7 +262,7 @@ textarea::placeholder, input::placeholder{
       border-radius:   0 0 30px 30px;
       width: 100%;
     }
-  }
+  } */
 
   @media (max-width: 1240px){
     .windowH1{
@@ -281,3 +281,89 @@ textarea::placeholder, input::placeholder{
         width: 60px;
     }
 }
+
+@media (max-width: 900px) {
+    .hoverWindow {
+      flex-direction: column;
+      height: 100vh;     
+      max-height: 100vh;
+      width: 100vw;        
+      border-radius: 0;
+      position: relative;
+    }
+  
+    /* 2) Obere (dark) und untere (white) Hälfte je 50% Höhe */
+    .leftSide,
+    .rightSide {
+      flex: none;
+      width: 100%;
+      height: 50%;
+    }
+  
+    /* 3) Rundungen nur oben bzw. unten */
+    .leftSide {
+      border-radius: 0;
+      border: none;
+    }
+    .rightSide {
+      border-radius: 0;
+      border: none;
+      position: relative;
+    }
+  
+    .profileIcon {
+        position: absolute;
+        top: 0;                    
+        left: 50%;
+        transform: translate(-50%, -50%); 
+        z-index: 10; 
+        width: 120px !important;
+        height: unset !important;
+        aspect-ratio: 1 !important;            
+    }
+  
+    .leftnav-logo{
+        display: none;
+    }
+
+    .leftContent{
+        width: unset;
+    }
+
+    .windowH1{
+        font-size: 47px;
+        width: unset;
+    }
+
+    .rightContent{
+        width: 100%;
+    }
+
+    .addContactIcon{
+        width: 80px;
+        aspect-ratio: 1;
+    }
+
+    .hoverWindow form{
+        width: 95%;
+    }
+
+    .hoverWindow form > div, input{
+        width: 100%;
+    }
+
+    .formBtns{
+        display: flex;
+        justify-content: space-evenly;
+    }
+
+    .rightSide > .closeBtn{
+        display: none;
+    }
+
+    .leftSide > .closeBtn{
+        display: block !important;
+        color: #D9D9D9;
+    }
+
+  }
