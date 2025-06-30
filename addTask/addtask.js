@@ -25,7 +25,7 @@ function cacheDom() {
   $.form = document.getElementById("taskForm");
   $.taskDate = document.getElementById("taskDate");
   $.subtaskInput = document.getElementById("subtask");
-  $.subtaskAddBtn = document.querySelector(".subtaskAddButton");
+  $.subtaskAddBtn = document.querySelector(".subtask-add-button");
   $.assignUserListBtn = document.querySelector(".assignUserListBtn");
   $.assignedBtnImg = document.getElementById("assignedBtnImg");
 
@@ -232,18 +232,18 @@ function renderSubtasks() {
 
   subtasks.forEach((text, index) => {
     const container = document.createElement("div");
-    container.className = "subtaskContainer";
+    container.className = "subtask-container";
 
     const textElement = document.createElement("span");
-    textElement.className = "subtaskDisplayText";
+    textElement.className = "subtask-display-text";
     textElement.textContent = text;
     textElement.addEventListener("click", () => makeSubtaskEditable(index));
 
     const controls = document.createElement("div");
-    controls.className = "subtaskControls";
+    controls.className = "subtask-controls";
     controls.innerHTML = `
       <button class="subtaskEditBtn"><img class="subtaskEditBtnImg" src="../assets/icons/edit.svg" alt="edit"></button>
-      <div class="subtaskSpacerSecond"></div>
+      <div class="subtask-spacer-second"></div>
       <button class="subtaskDeleteBtnSecond"><img class="subtaskDeleteBtnImgSecond" src="../assets/icons/delete.svg" alt="delete"></button>`;
 
     const [editBtn, , deleteBtn] = controls.children;
@@ -270,7 +270,7 @@ function makeSubtaskEditable(index) {
   const input = document.createElement("input");
   input.type = "text";
   input.value = subtasks[index];
-  input.className = "subtaskTextInput";
+  input.className = "subtask-text-input";
 
   const saveBtn = document.createElement("button");
   saveBtn.innerHTML = `<img class="subtaskSaveBtnImg" src="../assets/icons/check.svg" alt="save">`;
@@ -281,7 +281,7 @@ function makeSubtaskEditable(index) {
   deleteBtn.className = "subtaskDeleteBtn";
 
   const spacer = document.createElement("div");
-  spacer.className = "subtaskSpacer";
+  spacer.className = "subtask-spacer";
 
   saveBtn.addEventListener("click", () => {
     subtasks[index] = input.value.trim();

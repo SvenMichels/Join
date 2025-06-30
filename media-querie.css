@@ -33,7 +33,7 @@
     height: 40px;
   }
 
-  .helpIcon {
+  .help-icon {
     display: none;
   }
 
@@ -120,11 +120,11 @@
     padding-bottom: 10px;
   }
 
-  .subtaskControls {
+  .subtask-controls {
     display: block;
   }
 
-  .subtaskDisplayText::before {
+  .subtask-display-text::before {
     content: "";
     left: 6px;
     top: 50%;
@@ -140,7 +140,7 @@
     align-items: center;
   }
 
-  .subtaskTextInput {
+  .subtask-text-input {
     width: 100%;
   }
 
@@ -148,42 +148,113 @@
     flex: 1; 
   }
 
-  .subtaskSpacer {
+  .subtask-spacer {
     display: none;
   }
 
-  .subtaskSpacerSecond {
+  .subtask-spacer-second {
     display: none;
   }
 }
 
 @media (min-width: 576px) and (max-width: 767px) {
-  .header-style {
-    justify-content: space-between;
-    height: 80px;
-  }
-
   .header-nav-logo {
+    width: 32px;
+    height: 39px;
     padding-left: 16px;
   }
 
-  .header-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
   .help-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
     padding-right: 16px;
   }
 
-  .profile-button {
-    width: 40px;
-    height: 40px;
+  .nav-bar {
+    display: flex;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+  }
+
+  .nav-menu {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    width: 100vw;
+    height: 80px;
+    gap: 15px;
+    background-color: #2a3647;
+  }
+
+  .nav-buttons {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 0px;
+    width: 60px;
+    height: 76px;
+    gap: 16px;
+    border-radius: 16px;
+    font-size: 12px;
+  }
+
+    .create-container {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding-bottom: 10px;
+  }
+
+  .nav-logo,
+  .legal-privat-container {
+    display: none;
+  }
+
+  h1 {
+    padding-left: 16px;
+    margin: 0;
+  }
+
+  .form-wrapper {
+    position: absolute;
+    top: 140px;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 440px;
+    overflow-y: auto;
+    padding: 0 16px;
+    box-sizing: border-box;
+  }
+
+  .subtask-display-text::before {
+    content: "";
+    left: 6px;
+    top: 50%;
+    width: 6px;
+    height: 6px;
+    background-color: #2a3647;
+    border-radius: 50%;
+  }
+
+  .subtask-controls {
+    display: flex !important;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .subtask-text-input {
+    width: 100%;
+  }
+
+  .subtask-display-text {
+    flex: 1; 
+  }
+
+  .subtask-spacer-second {
+    display: none;
   }
 }
 
