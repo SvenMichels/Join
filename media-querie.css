@@ -145,7 +145,7 @@
   }
 
   .subtask-display-text {
-    flex: 1; 
+    flex: 1;
   }
 
   .subtask-spacer {
@@ -197,7 +197,7 @@
     font-size: 12px;
   }
 
-    .create-container {
+  .create-container {
     display: flex;
     width: 100%;
     justify-content: space-between;
@@ -250,7 +250,7 @@
   }
 
   .subtask-display-text {
-    flex: 1; 
+    flex: 1;
   }
 
   .subtask-spacer-second {
@@ -259,12 +259,33 @@
 }
 
 @media (min-width: 768px) and (max-width: 991px) {
+  .nav-bar {
+    width: 232px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #2a3647;
+  }
   .header-nav-logo {
     display: none;
   }
 
   .header-container {
     padding-left: 216px;
+  }
+
+  .required-container {
+  padding-bottom: 64px;
+}
+
+  .header-style {
+    justify-content: end;
+    gap: 80px;
   }
 
   .help-container {
@@ -277,6 +298,14 @@
     height: 56px;
   }
 
+  .task-h1-container {
+    padding-left: 328px;
+  }
+
+  .form-wrapper {
+    padding-left: 328px;
+  }
+
   .profile-button {
     width: 48px;
     height: 48px;
@@ -284,6 +313,17 @@
 }
 
 @media (min-width: 992px) and (max-width: 1199px) {
+  .nav-bar {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #2a3647;
+  }
   .header-nav-logo {
     display: none;
   }
@@ -291,6 +331,8 @@
   .header-container {
     padding-left: 216px;
   }
+
+  .task-h1-container {}
 
   .help-container {
     display: flex;
@@ -319,6 +361,14 @@
     left: 0;
     background-color: #2a3647;
   }
+
+  .form-wrapper {
+    padding-left: 328px;
+  }
+
+  .required-container {
+  padding-bottom: 64px;
+}
 }
 
 @media (min-width: 1200px) and (max-width: 1439px) {
@@ -356,5 +406,9 @@
     top: 0;
     left: 0;
     background-color: #2a3647;
+  }
+
+  .form-wrapper {
+    padding-left: 328px;
   }
 }

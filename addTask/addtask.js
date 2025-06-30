@@ -1,7 +1,7 @@
 import { requestData } from "../scripts/firebase.js";
 
 
-let currentActivePriority = "medium"; // default
+let currentActivePriority = "medium";
 let allUsers = [];
 let subtasks = [];
 
@@ -29,10 +29,8 @@ function cacheDom() {
   $.assignUserListBtn = document.querySelector(".assignUserListBtn");
   $.assignedBtnImg = document.getElementById("assignedBtnImg");
 
-  /* Mindestdatum für Date‑Picker */
   document.getElementById('task-date').min = new Date().toISOString().split("T")[0];
 
-  /* Event‑Listener */
   $.openMenuBtn?.addEventListener("click", toggleMenu);
   $.form?.addEventListener("submit", handleFormSubmit);
   $.subtaskAddBtn?.addEventListener("click", addSubtask);
@@ -75,9 +73,8 @@ function selectPriority(priority) {
 
 function initForm() {
   loadAndRenderUsers();
-  selectPriority("medium"); // default
+  selectPriority("medium");
 
-  // Kategorie muss gesetzt sein, bevor der Button aktiv wird
   const categorySelect = document.getElementById("category");
   const submitButton = document.querySelector(".createButton");
   submitButton.disabled = true;
@@ -93,7 +90,7 @@ function initForm() {
 function handleFormSubmit(event) {
   event.preventDefault();
   const task = collectTaskData(event.target);
-  if (!isTaskValid(task)) return; // Ungültig → UI‑Warnungen sind schon gesetzt
+  if (!isTaskValid(task)) return;
 
   saveTask(task)
     .then(() => {
@@ -183,7 +180,6 @@ function renderUserCheckboxes(users) {
 
     container.appendChild(wrapper);
 
-    // vollständige Klickfläche
     wrapper.addEventListener("click", (e) => {
       if (e.target !== checkbox) checkbox.checked = !checkbox.checked;
       wrapper.classList.toggle("active", checkbox.checked);

@@ -1,9 +1,6 @@
 .task-h1-container {
   width: 278px;
   height: 73px;
-  /* position: absolute; */
-  top: 206px;
-  left: 328px;
   display: flex;
   gap: 1px;
 }
@@ -307,15 +304,14 @@ input:valid + .error-message {
 
 .required-container {
   padding-top: 20px;
+  max-width: 440px;
 }
 
 .create-container {
   display: flex;
+  justify-content: space-between;
   gap: 16px;
-  width: 309px;
-  height: 56px;
-  top: 810px;
-  left: 995.25px;
+  max-width: 100%;
 }
 
 .clearButton {
@@ -625,6 +621,14 @@ textarea:focus::placeholder {
   height: 11.23;
 }
 
+.form-container {
+  max-width: 1440px;
+}
+
+.task-container {
+  max-width: 1440px;
+}
+
 .subtask-container:hover {
   background: #eeeeee;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -672,7 +676,6 @@ textarea:focus::placeholder {
 
 .subtask-container {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   gap: 8px;
   transition: background-color 0.2s ease-in-out;
