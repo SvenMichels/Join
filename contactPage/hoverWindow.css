@@ -2,31 +2,31 @@
     display: none !important;
 }
 
-.hoverPosition{
+.hoverPosition {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    position: absolute;
-    width: 1990px;  
-    height: 98vh;
-    z-index: 1000;
     background-color: rgba(128, 128, 128, 0.527);
+    z-index: 1000;
 }
 
 .hoverWindow {
+    position: relative;   
+    margin: 0;             
+    width: 90vw;           
+    max-width: 1200px;     
+    height: auto;
+    max-height: 90vh;      
     display: flex;
     flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    margin-top: 50px;
-    margin-left: 42px;
-    z-index: 10000;
-    width: 1212px;
-    height: 592px; 
-    border: 1px solid transparent;
     border-radius: 30px;
-    box-shadow: 2px 2px 2px 2px grey;
-}
+    box-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+    overflow: auto;       
+  }
 
 .leftSide{
     display: flex;
@@ -38,9 +38,13 @@
     background-color: #2a3647;
     border: 1px solid transparent;
     border-radius: 30px 0px 0px 30px;
+    flex: 1;              
+    min-width: 250px;    
 }
 
 .leftContent{
+    width: 100%;
+    padding-left: 20px;
     gap: 12px;
 }
 
@@ -52,7 +56,7 @@
 .windowH1{
     margin: 0;
     width: 366px;
-    height: 73px;
+    /* height: 73px; */
     font-family: 'Inter';
     font-size: 61px;
     font-weight: 700;
@@ -85,6 +89,8 @@
     background-color: #ffffff;
     border: 1px solid transparent;
     border-radius: 0px 30px 30px 0px;
+    flex: 2;               
+    min-width: 300px;
 }
 
 .closeBtn{
@@ -239,4 +245,39 @@ textarea::placeholder, input::placeholder{
     width: 15px;
     height: 11px;
     color: #2a3647;
+}
+
+@media (max-width: 768px) {
+    .hoverWindow {
+      flex-direction: column;
+      width: 95vw;
+      max-width: none;
+      max-height: 95vh;
+    }
+    .leftSide {
+      border-radius: 30px 30px 0 0;
+      width: 100%;
+    }
+    .rightSide {
+      border-radius:   0 0 30px 30px;
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 1240px){
+    .windowH1{
+        font-size: 51px;
+    }
+    .underline{
+        width: 75px;
+        border: 2px solid #29abe2;
+    }
+  }
+@media (max-width: 1050px){
+    .windowH1{
+        font-size: 41px;
+    }
+    .underline{
+        width: 60px;
+    }
 }
