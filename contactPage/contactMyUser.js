@@ -4,6 +4,7 @@ import { renderContact, getInitials, openEditWindow} from "./contacts.js"; //ren
 document.addEventListener("DOMContentLoaded", async() =>  {
     currentUserCards();
     document.getElementById("edit").addEventListener("click", openEditWindow);
+    document.getElementById("editSubmitBtn").addEventListener("click", storeNewData);
 });
 
 function currentUserCards() {
@@ -25,4 +26,24 @@ function pushUserDataToTemplate(currentUser){
 
     renderContact(name, email, phone, initials, firstLetter, id);
 }
-// daten verarbeiten und ins Template einsetzen
+
+function storeNewData(name, email, phone) {
+    let currentUserJSON = localStorage.getItem("currentUser");
+    let currentUser = JSON.parse(currentUserJSON);
+
+    currentUser.userName = name;
+    currentUser.userEmail = email;
+    currentUser.phoneNumber = phone;
+
+    updateUser(currentUser.id, currentUser)
+        .then(() => {
+            localStorage.setItem("currentUser", JSON.stringify(currentUser));
+            pushUserDataToTemplate(currentUser);
+            alert("Daten erfolgreich aktualisiert!");
+        })
+        .catch((error) => {
+            console.error("Fehler beim Aktualisieren der Daten:", error);
+            alert("Fehler beim Aktualisieren der Daten. Bitte versuche es erneut.");
+        });
+    
+}
