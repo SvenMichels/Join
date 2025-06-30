@@ -92,7 +92,7 @@
   .form-wrapper {
     position: absolute;
     top: 140px;
-    bottom: 120px;
+    bottom: 80px;
     left: 50%;
     transform: translateX(-50%);
     width: 100%;
@@ -118,6 +118,42 @@
     align-items: center;
     gap: 16px;
     padding-bottom: 10px;
+  }
+
+  .subtaskControls {
+    display: block;
+  }
+
+  .subtaskDisplayText::before {
+    content: "";
+    left: 6px;
+    top: 50%;
+    width: 6px;
+    height: 6px;
+    background-color: #2a3647;
+    border-radius: 50%;
+  }
+
+  .subtask-controls {
+    display: flex !important;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .subtaskTextInput {
+    width: 100%;
+  }
+
+  .subtask-display-text {
+    flex: 1; 
+  }
+
+  .subtaskSpacer {
+    display: none;
+  }
+
+  .subtaskSpacerSecond {
+    display: none;
   }
 }
 
@@ -238,16 +274,16 @@
     height: 48px;
   }
 
-    .nav-bar {
-  width: 232px;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  position: fixed;
-  top: 0;
-  left: 0;
-  background-color: #2a3647;
-}
+  .nav-bar {
+    width: 232px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #2a3647;
+  }
 }
