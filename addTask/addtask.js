@@ -171,7 +171,7 @@ function renderUserCheckboxes(users) {
     label.textContent = user.userName;
 
     const namesDiv = document.createElement("div");
-    namesDiv.className = "userInfoWrapper";
+    namesDiv.className = "user-info-wrapper";
     namesDiv.append(initialsDiv, label);
 
     const wrapper = document.createElement("div");
@@ -238,9 +238,9 @@ function renderSubtasks() {
     const controls = document.createElement("div");
     controls.className = "subtask-controls";
     controls.innerHTML = `
-      <button class="subtaskEditBtn"><img class="subtaskEditBtnImg" src="../assets/icons/edit.svg" alt="edit"></button>
+      <button class="subtask-edit-button"><img class="subtask-edit-buttonImg" src="../assets/icons/edit.svg" alt="edit"></button>
       <div class="subtask-spacer-second"></div>
-      <button class="subtaskDeleteBtnSecond"><img class="subtaskDeleteBtnImgSecond" src="../assets/icons/delete.svg" alt="delete"></button>`;
+      <button class="subtask-delete-buttonSecond"><img class="subtask-delete-buttonImgSecond" src="../assets/icons/delete.svg" alt="delete"></button>`;
 
     const [editBtn, , deleteBtn] = controls.children;
     editBtn.addEventListener("click", (e) => {
@@ -269,12 +269,12 @@ function makeSubtaskEditable(index) {
   input.className = "subtask-text-input";
 
   const saveBtn = document.createElement("button");
-  saveBtn.innerHTML = `<img class="subtaskSaveBtnImg" src="../assets/icons/check.svg" alt="save">`;
-  saveBtn.className = "subtaskSaveBtn";
+  saveBtn.innerHTML = `<img class="subtask-save-buttonImg" src="../assets/icons/check.svg" alt="save">`;
+  saveBtn.className = "subtask-save-button";
 
   const deleteBtn = document.createElement("button");
-  deleteBtn.innerHTML = `<img class="subtaskDeleteBtnImg" src="../assets/icons/delete.svg" alt="delete">`;
-  deleteBtn.className = "subtaskDeleteBtn";
+  deleteBtn.innerHTML = `<img class="subtask-delete-buttonImg" src="../assets/icons/delete.svg" alt="delete">`;
+  deleteBtn.className = "subtask-delete-button";
 
   const spacer = document.createElement("div");
   spacer.className = "subtask-spacer";

@@ -20,23 +20,6 @@
   gap: 8px;
 }
 
-.taskAddBoardContainer {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  /* position: absolute; */
-  top: 50vw;
-  left: 50vh;
-  gap: 10px;
-  width: 326px;
-  height: 74px;
-  background-color: #2a3647;
-  box-shadow: 0px 0px 4px 0px #00000026;
-  border-radius: 20px;
-  color: #ffffff;
-}
-
 .task-title-input {
   height: 48px;
   max-width: 440px;
@@ -419,9 +402,9 @@ textarea::placeholder {
 }
 
 select {
-  appearance: none; /* für moderne Browser */
-  -webkit-appearance: none; /* für Safari/Chrome */
-  -moz-appearance: none; /* für Firefox */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
   background: url("../assets/icons/arrow_drop_down.svg") no-repeat right 0.75rem
     center;
   background-size: 1rem;
@@ -434,13 +417,13 @@ select {
   max-width: 100%;
 }
 
-.subtaskWrapper {
+.subtask-wrapper {
   position: relative;
   width: 100%;
 }
 
 .subtask-add-button {
-  position: absolute;
+  /* position: absolute;
   top: 50%;
   right: 10px;
   transform: translateY(-50%);
@@ -452,7 +435,7 @@ select {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0;
+  padding: 0; */
 }
 
 .subtask-add-button:hover {
@@ -464,11 +447,6 @@ select {
 .subtask-add-button img.subtaskAdd {
   width: 14px;
   height: 14px;
-}
-
-.subtaskList {
-  margin-top: 8px;
-  display: flex;
 }
 
 input {
@@ -516,7 +494,7 @@ textarea:focus::placeholder {
   border-radius: 10px;
 }
 
-.userInfoWrapper {
+.user-info-wrapper {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -538,17 +516,17 @@ textarea:focus::placeholder {
   transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.subtaskDisplayContainer {
+/* .subtask-display-container {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-top: 8px;
   gap: 8px;
-}
-
-/* .subtask-display-text::before {
-  transform: translateY(-50%);
 } */
+
+.subtask-display-text::before {
+  transform: translateY(-50%);
+}
 
 .subtask-text-input {
   max-width: 440px;
@@ -574,7 +552,7 @@ textarea:focus::placeholder {
   border: 1px solid #a8a8a8;
 }
 
-.subtaskEditWrapper {
+.subtask-edit-wrapper {
   display: flex;
   align-items: center;
   height: 32px;
@@ -585,7 +563,7 @@ textarea:focus::placeholder {
   border-bottom: 1px solid #005dff;
 }
 
-.subtaskEditWrapper input {
+.subtask-edit-wrapper input {
   border: none;
   outline: none;
   flex: 1;
@@ -593,12 +571,12 @@ textarea:focus::placeholder {
   padding: 8px;
 }
 
-.subtaskEditWrapper input:focus {
+.subtask-edit-wrapper input:focus {
   outline: none;
 }
 
-.subtaskSaveBtn,
-.subtaskDeleteBtn {
+.subtask-save-button,
+.subtask-delete-button {
   width: 24px;
   height: 24px;
   display: flex;
@@ -609,20 +587,21 @@ textarea:focus::placeholder {
   border-radius: 50%;
 }
 
-.subtaskSaveBtn:hover,
-.subtaskDeleteBtn:hover {
+.subtask-save-button:hover,
+.subtask-delete-button:hover {
   cursor: pointer;
   background: #d1d1d1;
 }
 
-.subtaskSaveBtnImg,
-.subtaskDeleteBtnImg {
+.subtask-save-buttonImg,
+.subtask-delete-buttonImg {
   width: 15.49px;
   height: 11.23;
 }
 
 .form-container {
   max-width: 1440px;
+  width: 90%;
 }
 
 .task-container {
@@ -636,7 +615,7 @@ textarea:focus::placeholder {
   border-radius: 10px;
 }
 
-.subtaskEditBtn {
+.subtask-edit-button {
   width: 24px;
   height: 24px;
   display: flex;
@@ -646,13 +625,13 @@ textarea:focus::placeholder {
   border-radius: 50%;
 }
 
-.subtaskEditBtn:hover {
+.subtask-edit-button:hover {
   cursor: pointer;
   border-radius: 50px;
   color: #eeeeeea8;
 }
 
-.subtaskDeleteBtnSecond {
+.subtask-delete-buttonSecond {
   width: 24px;
   height: 24px;
   display: flex;
@@ -662,7 +641,7 @@ textarea:focus::placeholder {
   border-radius: 50%;
 }
 
-.subtaskDeleteBtnSecond:hover {
+.subtask-delete-buttonSecond:hover {
   cursor: pointer;
 }
 
@@ -677,6 +656,7 @@ textarea:focus::placeholder {
 .subtask-container {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 8px;
   transition: background-color 0.2s ease-in-out;
 }
@@ -687,8 +667,8 @@ textarea:focus::placeholder {
   cursor: pointer;
 }
 
-.subtaskDeleteBtnImgSecond,
-.subtaskEditBtnImg {
+.subtask-delete-buttonImgSecond,
+.subtask-edit-buttonImg {
   width: 16px;
   height: 16px;
 }

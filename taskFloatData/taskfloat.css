@@ -245,7 +245,7 @@ input:valid + .error-message {
   height: 80px;
 }
 
-.prioSubtaskInput {
+.prio-subtask-input {
   width: 440px;
   height: 48px;
   display: flex;

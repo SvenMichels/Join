@@ -4,6 +4,7 @@
     height: 100vh;
     position: relative;
   }
+
   .header-style {
     width: 100vw;
     height: 80px;
@@ -276,15 +277,15 @@
   }
 
   .header-container {
-    padding-left: 216px;
+    padding-left: 318px;
   }
 
   .required-container {
-  padding-bottom: 64px;
-}
+    padding-bottom: 64px;
+  }
 
   .header-style {
-    justify-content: end;
+    justify-content: space-between;
     gap: 80px;
   }
 
@@ -329,10 +330,12 @@
   }
 
   .header-container {
-    padding-left: 216px;
+    padding-left: 328px;
   }
 
-  .task-h1-container {}
+  .task-h1-container {
+    padding-left: 328px;
+  }
 
   .help-container {
     display: flex;
@@ -367,8 +370,8 @@
   }
 
   .required-container {
-  padding-bottom: 64px;
-}
+    padding-bottom: 64px;
+  }
 }
 
 @media (min-width: 1200px) and (max-width: 1439px) {
@@ -377,7 +380,7 @@
   }
 
   .header-container {
-    padding-left: 216px;
+    padding-left: 328px;
   }
 
   .help-container {
@@ -410,5 +413,21 @@
 
   .form-wrapper {
     padding-left: 328px;
+  }
+
+   .task-h1-container {
+    padding-left: 328px;
+  }
+
+  .create-container {
+    padding-bottom: 64px;
+  }
+
+  .space-container {
+    display: block;
+  }
+
+  .task-title {
+    max-width: 50%;
   }
 }
