@@ -93,6 +93,7 @@
   <div class="form-wrapper">
   <div class="form-container">
   <form class="task-container" id="taskForm">
+    <div class="task-wrapper">
     <div class="task-title">
       <label for="task-title">Title <span style="color: #ff8190">*</span></label>
       <input class="task-title-input" name="task-title" id="task-title" placeholder="Enter a title" type="text" />
@@ -110,6 +111,7 @@
       <input class="task-dateInput" name="task-date" id="task-date" placeholder="dd/mm/yyyy" type="date"
         min="2025-06-21" />
       <span id="dateAlert" class="redSpan" style="display: none; color: #ff8190">This field is required</span>
+    </div>
     </div>
 
     <div class="space-container"></div>
@@ -163,8 +165,8 @@
 
       <div class="prio-subtask-container">
         <label for="subtask">Subtasks</label>
-        <div class="subtaskWrapper">
-          <input class="prioSubtaskInput" name="subtask" id="subtask" type="text" />
+        <div class="subtask-wrapper">
+          <input class="prio-subtask-input" name="subtask" id="subtask" type="text" />
           <button type="button" class="subtask-add-button">
             <img src="../assets/icons/add.svg" />
           </button>

@@ -268,6 +268,9 @@ function makeSubtaskEditable(index) {
   input.value = subtasks[index];
   input.className = "subtask-text-input";
 
+  const buttonWrapper = document.createElement("div");
+  buttonWrapper.className = "subtask-button-wrapper";
+
   const saveBtn = document.createElement("button");
   saveBtn.innerHTML = `<img class="subtask-save-buttonImg" src="../assets/icons/check.svg" alt="save">`;
   saveBtn.className = "subtask-save-button";
@@ -288,7 +291,9 @@ function makeSubtaskEditable(index) {
     renderSubtasks();
   });
 
-  container.append(input, deleteBtn, spacer, saveBtn);
+  buttonWrapper.append(deleteBtn, spacer, saveBtn);
+  container.appendChild(input);
+  container.appendChild(buttonWrapper);
 }
 
 function getInitials(name) {

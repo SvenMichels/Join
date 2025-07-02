@@ -121,10 +121,6 @@
     padding-bottom: 10px;
   }
 
-  .subtask-controls {
-    display: block;
-  }
-
   .subtask-display-text::before {
     content: "";
     left: 6px;
@@ -287,6 +283,9 @@
   .header-style {
     justify-content: space-between;
     gap: 80px;
+    position: fixed;
+    top: 0;
+    left: 0;
   }
 
   .help-container {
@@ -371,6 +370,30 @@
 
   .required-container {
     padding-bottom: 64px;
+    position: absolute;
+    bottom: 0;
+  }
+
+  .task-container {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .task-title,
+  .task-description,
+  .task-date {
+    width: 100%;
+  }
+
+  .prio-container {
+    width: 45%;
+  }
+
+  .task-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
   }
 }
 
@@ -415,7 +438,7 @@
     padding-left: 328px;
   }
 
-   .task-h1-container {
+  .task-h1-container {
     padding-left: 328px;
   }
 
@@ -425,9 +448,5 @@
 
   .space-container {
     display: block;
-  }
-
-  .task-title {
-    max-width: 50%;
   }
 }
