@@ -285,9 +285,6 @@
   .header-style {
     justify-content: space-between;
     gap: 80px;
-    /* position: fixed; */
-    top: 0;
-    left: 0;
   }
 
   .help-container {
@@ -312,7 +309,6 @@
     width: 48px;
     height: 48px;
   }
-
 }
 
 @media (min-width: 992px) and (max-width: 1199px) {
@@ -454,11 +450,34 @@
   }
 
   .create-container {
-    padding-bottom: 64px;
-    max-width: 440px;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
   }
 
   .space-container {
     display: block;
+  }
+
+  .task-container {
+    display: flex;
+    gap: 16px;
+  }
+
+  .task-wrapper {
+    display: flex;
+    flex-direction: column;
+    max-height: 382px;
+    width: 100%;
+    max-width: 440px;
+    justify-content: space-between;
+    gap: 30px;
+  }
+
+  .required-container {
+    padding-bottom: 64px;
+    position: absolute;
+    bottom: 0;
+    width: 63%;
   }
 }
