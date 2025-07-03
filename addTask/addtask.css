@@ -31,13 +31,13 @@
   display: flex;
   flex-direction: column;
   max-width: 440px;
-  height: 88px;
+  height: 120px;
   padding-bottom: 10px;
   gap: 8px;
 }
 
 .task-description-input {
-  height: 50px;
+  height: 120px;
   border-radius: 10px;
   border: 1px solid #d1d1d1;
 }
@@ -47,8 +47,6 @@
   flex-direction: column;
   max-width: 440px;
   height: 96px;
-  top: 296px;
-  left: 0.25px;
   gap: 8px;
 }
 
@@ -61,11 +59,7 @@
 }
 
 .space-container {
-  /* position: fixed; */
   width: 0px;
-  height: inherit;
-  top: 327px;
-  left: 816.25px;
   border: solid 1px;
   color: #d1d1d1;
 }
@@ -287,14 +281,12 @@ input:valid + .error-message {
 
 .required-container {
   padding-top: 20px;
-  max-width: 440px;
 }
 
 .create-container {
   display: flex;
   justify-content: space-between;
   gap: 16px;
-  max-width: 100%;
 }
 
 .clearButton {

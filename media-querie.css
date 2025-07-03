@@ -278,6 +278,7 @@
 
   .required-container {
     padding-bottom: 64px;
+    max-width: 440px;
   }
 
   .header-style {
@@ -310,6 +311,7 @@
     width: 48px;
     height: 48px;
   }
+
 }
 
 @media (min-width: 992px) and (max-width: 1199px) {
@@ -372,7 +374,7 @@
     padding-bottom: 64px;
     position: absolute;
     bottom: 0;
-    width: 100%;
+    width: 65%;
   }
 
   .task-container {
@@ -394,8 +396,14 @@
   .task-wrapper {
     display: flex;
     flex-direction: column;
+    max-height: 382px;
     width: 100%;
     justify-content: space-between;
+    gap: 30px;
+  }
+
+  .space-container {
+    height: 382px;
   }
 }
 
@@ -446,6 +454,7 @@
 
   .create-container {
     padding-bottom: 64px;
+    max-width: 440px;
   }
 
   .space-container {
