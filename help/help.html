@@ -8,41 +8,74 @@
   </title>
   <link rel="icon" href="../assets/icons/join_nav-logo_2.svg" type="image/x-icon" />
   <link href="help.css" rel="stylesheet"/>
-  <link href="../styles/standard.css" rel="stylesheet">
+    <link href="../styles/standard.css" rel="stylesheet" />
+  <link href="../media-querie.css" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&amp;display=swap"
+    rel="stylesheet" />
  </head>
  <body>
-    <header class="header-style">
+    <header class="header-style" id="">
+    <img class="header-nav-logo" src="../assets/icons/Capa 3.svg" />
     <div class="header-container">
-      <p>Kanban Project Management Tool</p>
+      <p class="media-d-none">Kanban Project Management Tool</p>
+    </div>
+      <div class="help-container">
+        <a href="../help/help.html">
+          <img alt="Bild" class="help-icon d_none" src="../assets/icons/help.svg" />
+        </a>
+        <button id="openMenu" class="profile-button d_none"></button>
+      </div>
+      <div id="dropDownMenu" class="dropDownMenu dp-none">
+        <a class="txtDeco-none" href="../legalnotice.html">
+          <p class="dropDownTxt">Legal Notice</p>
+        </a>
+        <a class="txtDeco-none" href="../privatpolicy.html">
+          <p class="dropDownTxt">Privacy Policy</p>
+        </a>
+        <a class="txtDeco-none" href="../index.html">
+          <p class="dropDownTxt">Log out</p>
+        </a>
+      </div>
+    </div>
   </header>
 
   <nav class="nav-bar">
     <img alt="nav-logo" class="nav-logo" src="/assets/icons/join_white.svg" />
     <div class="nav-menu">
       <button class="nav-button-login d_none">
-        <img alt="Bild" class="nav-icons" src="/assets/icons/login.svg" /> Log In
+        <img alt="Bild" class="nav-icons" src="/assets/icons/login.svg" /> Log
+        In
       </button>
       <a class="txtDeco-none" href="../startPage/startpage.html">
         <div class="taskSummary">
           <button class="nav-buttons">
-            <img alt="Bild" class="nav-icons" src="/assets/icons/summary_2.svg" /> Summary
+            <img alt="Bild" class="nav-icons" src="/assets/icons/summary_2.svg" />
+            Summary
           </button>
         </div>
       </a>
       <div class="taskFrame9">
-        <button class="nav-buttons">
-          <img alt="Bild" class="nav-icons" src="/assets/icons/add_task.svg" /> Add Task
-        </button>
+        <a class="txtDeco-none" href="../addTask/addtask.html">
+          <button class="nav-buttons">
+            <img alt="Bild" class="nav-icons" src="/assets/icons/add_task.svg" />
+            Add Task
+          </button>
+        </a>
       </div>
       <a class="txtDeco-none" href="../board/board.html">
+        <div class="taskBoard">
           <button class="nav-buttons">
-            <img alt="Bild" class="nav-icons" src="/assets/icons/board.svg" /> Board
+            <img alt="Bild" class="nav-icons" src="/assets/icons/board.svg" />
+            Board
           </button>
+        </div>
       </a>
       <a class="txtDeco-none" href="../contactPage/contacts.html">
         <div class="taskContacts">
           <button class="nav-buttons">
-            <img alt="Bild" class="nav-icons" src="/assets/icons/contacts.svg" /> Contacts
+            <img alt="Bild" class="nav-icons" src="/assets/icons/contacts.svg" />
+            Contacts
           </button>
         </div>
       </a>
@@ -52,12 +85,12 @@
       <a class="taskFrameLink" href="../legalnotice.html">Legal notice</a>
     </div>
   </nav>
-  <div class="helpSection">
-   <div class="helpH1">
+  <div class="help-section">
+   <div class="help-h1">
     <h1>
      Help
     </h1>
-    <img alt="Bild" class="h1Image" src="../assets/icons/arrow-left-line.svg"/>
+    <img alt="Bild" class="h1-1mage" src="../assets/icons/arrow-left-line.svg"/>
    </div>
    <span>
     Welcome to the help page for
@@ -111,7 +144,7 @@
     </span>
     .
    </span>
-   <h2 class="helpHow">
+   <h2>
     How to use it
    </h2>
    <span>
@@ -120,7 +153,6 @@
      Join
     </span>
    </span>
-   <div class="helper">
     <h2>
      1.
     </h2>
@@ -137,8 +169,6 @@
               and contains four default lists: "To Do", "In Progress", “Await
               feedback” and "Done".
     </span>
-   </div>
-   <div class="helper">
     <h2>
      2.
     </h2>
@@ -156,8 +186,7 @@
               added, these contacts can be assigned tasks and they can interact
               with the tasks on the board.
     </span>
-   </div>
-   <div class="helper">
+
     <h2>
      3.
     </h2>
@@ -171,8 +200,6 @@
               the card, like task name, description, due date, assignees,
               etc.
     </span>
-   </div>
-   <div class="helper">
     <h2>
      4.
     </h2>
@@ -184,8 +211,6 @@
               on the board by dragging and dropping the card from one list to
               another.
     </span>
-   </div>
-   <div class="helper">
     <h2>
      5.
     </h2>
@@ -214,10 +239,8 @@
      </a>
      . We're here to help you!
     </span>
-   </div>
-   <span class="enjoy">
+   <span>
     Enjoy using Join!
    </span>
-  </div>
  </body>
 </html>
