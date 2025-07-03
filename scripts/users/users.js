@@ -3,7 +3,7 @@ import { requestData } from "../firebase.js";
 
 export async function createUser(userData) {
   // try {
-    const response = await requestData("POST", "/users", userData); // Firebase erzeugt automatisch eine ID
+    const response = await requestData("POST", "users", userData); // Firebase erzeugt automatisch eine ID
 
   //   const customId = response.data.name; // 'name' enthält die Firebase-ID
   //   const userWithId = { ...userData, id: customId };
@@ -21,7 +21,7 @@ export async function getUser(userId) {
 }
 
 export async function updateUser(userId, updatedData) {
-  return await requestData("PATCH", `/users/${userId}`, updatedData);
+  return await requestData("PATCH", `users/${userId}`, updatedData);
 }
 
 export async function deleteUser(userId) {

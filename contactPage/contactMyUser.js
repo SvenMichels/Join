@@ -4,7 +4,7 @@ import { renderContact, getInitials, openEditWindow} from "./contacts.js"; //ren
 document.addEventListener("DOMContentLoaded", async() =>  {
     currentUserCards();
     document.getElementById("edit").addEventListener("click", openEditWindow);
-    document.getElementById("editSubmitBtn").addEventListener("click", storeNewData);
+    document.getElementById("editSubmitBtn").addEventListener("click", getDataToStoreNewData);
 });
 
 function currentUserCards() {
@@ -12,32 +12,36 @@ let currentUserJSON = localStorage.getItem("currentUser");
 let currentUser = JSON.parse(currentUserJSON);
 
 pushUserDataToTemplate(currentUser);
-console.log("currentUser.id:", currentUser.userName);
-console.log("currentUser:", currentUser);
 }
 
 function pushUserDataToTemplate(currentUser){
     const name = currentUser.userName;
     const email = currentUser.userEmail;
-    const phone = currentUser.phoneNumber;
+    // const phone = currentUser.phoneNumber;
     const initials = getInitials(name);
     const firstLetter = name[0].toUpperCase();
     const id = currentUser.id;
 
-    renderContact(name, email, phone, initials, firstLetter, id);
+    renderContact(name, email,  /*phone*/"", initials, firstLetter, id);
 }
 
-function storeNewData(name, email, phone) {
+function getDataToStoreNewData() {
     let currentUserJSON = localStorage.getItem("currentUser");
     let currentUser = JSON.parse(currentUserJSON);
+ const id = currentUser.id;
 
-    currentUser.userName = name;
-    currentUser.userEmail = email;
-    currentUser.phoneNumber = phone;
+    const name = currentUser.userName;
+    const email = currentUser.userEmail;
+    // const phone = currentUser.phoneNumber;
 
-    updateUser(currentUser)
+    storeNewData (id, name, email, /*phone*/);
+}
+
+function storeNewData(name, email,  /*phone*/) {
+
+    updateUser(name, email,  /*phone*/)
         .then(() => {
-            localStorage.setItem("currentUser", JSON.stringify(currentUser));
+            localStorage.setItem("currentUser", JSON.stringify(fdgsgg));
             pushUserDataToTemplate(currentUser);
             alert("Daten erfolgreich aktualisiert!");
         })
