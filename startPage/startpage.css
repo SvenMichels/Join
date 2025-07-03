@@ -1,12 +1,26 @@
 /* (=^.^=) */
-body{ 
-    margin: 0;
-    font-family: 'Inter';
-    max-width: 1440px;
-    max-height: 1024px;
-    width: 100%;
-    height: 1024px;
+*:not(.nav-bar):not(.profile-button):not(.help-container):not(.nav-menu),
+*:not(.nav-bar):not(.profile-button):not(.nav-menu):not(.help-container)::before,
+*:not(.nav-bar):not(.profile-button):not(.nav-menu):not(.help-container)::after {
+  box-sizing: border-box;
 }
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Inter';
+}
+
+/* body{ 
+    margin: 0;
+    
+    max-width: 1440px;
+    width: 100%;
+    min-height: 100vh;
+} */
 
 a {
   color: white;
@@ -33,7 +47,22 @@ main {
   flex-direction: column;
   justify-content: center;
   gap: 50px;
-  padding-left: 116px;
+  /* padding-left: 326px; */
+  /* padding-inline-start: 23%; */
+}
+
+.frontPage {
+  position: absolute;
+  top: 96px;
+  left: 326px;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* gap: 50px; */
+  padding: 0 24px;
+  /* overflow: hidden; */
 }
 
 .headline {
@@ -41,6 +70,23 @@ main {
   align-items: center;
   gap: 20px;
 }
+
+/* .header-style {
+  position: fixed;
+  top: 0;
+  left: 232px;
+  right: 0;
+  height: 96px;
+  z-index: 10;
+}
+
+.nav-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 232px;
+} */
 
 .headline h1 {
   font-family: Inter;
@@ -67,16 +113,15 @@ main {
 }
 
 .mainContent {
+  position: static;
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 100px;
-  position: fixed;
-  top: 206px;
-  left: 328px;
+  gap: 80px;
 }
 .counter {
-  font-size: 64px;
+  /* font-size: 64px; */
+  font-size: clamp(2rem, 5vw, 4rem);
   font-weight: bold;
   text-align: center;
 }
@@ -96,8 +141,45 @@ main {
 
 .row {
   display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
   justify-content: space-between;
   height: fit-content;
+}
+
+.info > .row:first-of-type {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.info > .row:nth-of-type(2) > .urgent {
+  flex: 1 1 100%;
+}
+
+.stats {
+  display: flex;    
+  gap: 20px;
+  width: 100%;       
+}
+
+.stats > div {
+  flex: 1 1 calc((100% - 40px) / 3);
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.stats > div > .btn {
+  width: 100%;
+}
+
+.stats > div > .btn {
+  width: 100%;
+  padding: 24px 40px; 
 }
 
 .toDo,
@@ -147,6 +229,7 @@ main {
   background-color: white;
   padding: 36px 65px;
   border-radius: 30px;
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
 }
 
 .invertedIcon {
