@@ -69,7 +69,7 @@ body{
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 352px;
+    width: 90%;
     height: 56px;
     gap: 16px;
     padding: 12px 0px 12px 0px;
@@ -304,16 +304,18 @@ h2{
     color: #000000;
     display: flex;
     align-items: center;
-    width: 352px;
+    width: 90%;
+    margin: auto;
     height: 58px;
     padding: 17px 36px 17px 36px;
 }
 
 .stripe{
-    width: 352px;
+    width: 90%;
     border: 1px solid #D1D1D1;
     border-radius: 3px;
-    margin: 8px 36px 8px 36px;
+    /* margin: 8px 36px 8px 36px; */
+    margin: auto;
     gap: 10px;
 }
 
@@ -321,11 +323,12 @@ h2{
     display: flex;
     flex-direction: row;
     align-items: center;
-    width: 352px;
+    width: 90%;
     height: 78px;
     gap: 35px;
     border-radius: 10px;
-    margin: 15px 35px 15px 36px;
+    /* margin: 15px 35px 15px 36px; */
+    margin: auto;
     padding-left: 5px;
     transition: transform 0.2s ease;
     cursor: pointer;
@@ -408,6 +411,20 @@ h2{
   animation: slideUpFadeIn 0.6s ease-out forwards;
 }
 
+.closeSingleMobile {
+  display: none;
+  position: absolute;
+  top: 0px;
+  right: 16px;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 20;
+}
+
+.fab-container {
+  display: none;
+}
+
 @keyframes slideUpFadeIn {
   from {
     bottom: -100px;
@@ -419,14 +436,179 @@ h2{
   }
 }
 
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0%);
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+.singleContact.slide-in {
+  position: fixed;
+  top: 96px;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 96px);
+  background-color: white;
+  z-index: 10;
+  animation: slideIn 0.3s ease-out forwards;
+  display: block !important;
+}
+
+.singleContact.slide-out {
+  animation: slideOut 0.3s ease-in forwards;
+}
+
 @media (max-width:1350px) {
     .contactHeader{
         margin-left: 20px;
     }
 }
 
-@media (max-width:1100px){
+
+@media (max-width: 767px){
     .profileName{
         font-size: 35px;
     }
+
+    .contactList, .allContacts{
+        width: 100%;
+    }
+
+    .closeSingleMobile{
+        display: block;
+    }
+    .singleContact{
+        display: none;
+        overflow-x: hidden !important;
+    }
+
+    .singleContact.slide-in{
+        height: calc(100% - 96px - 80px);
+    }
+    .newContact {
+    position: fixed ;
+    bottom: 100px;
+    right: 24px ;
+    left: auto;
+    margin: 0;
+    width: 56px;
+    height: 56px;
+    padding: 0;
+    border-radius: 50%;
+    background-color: #2a3647;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .newContact p {
+    display: none;
+  }
+
+  .newContactIcon {
+    width: 24px;
+    height: 24px;
+    margin: 0;
+  }
+
+  .contactList {
+    margin-left: 0;
+    width: 100%;
+    position: static;
+  }
+  .singleContact.slide-in .fab-container {
+    display: block;
+    position: fixed;
+    bottom: 32px;
+    right: 16px;
+    z-index: 100;
+  }
+
+
+  .fab-btn {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background-color: #2a3647;
+    color: #ffffff;
+    font-size: 24px;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    cursor: pointer;
+  }
+
+  .fab-menu {
+    position: absolute;
+    bottom: 70px;   
+    right: 0;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    overflow: hidden;
+    transform: translateX(calc(100% + 24px));
+    transition: transform 0.3s ease;
+  }
+
+  .fab-container.open .fab-menu {
+    transform: translateX(0);
+  }
+
+  .fab-menu-item {
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+  .fab-menu-item:hover {
+    background-color: #f2f2f2;
+  }
+
+  .contactHeader {
+    display: flex;              
+    flex-direction: column;      
+    align-items: flex-start;    
+    gap: 4px;                   
+    margin-top: 0px;         
+    margin-left: 16px;           
+  }
+
+  .contactHeader h1  { order: 1; }
+  .contactHeader h2  { order: 2; }
+  .contactHeader .bar { order: 3; }
+
+  .contactHeader .bar {
+    border: none;
+    height: 3px;
+    width: 90px;            
+    background-color: #29ABE2;
+    margin: 0;             
+  }
+
+  .contactHeader h1 {
+    font-size: 47px;
+    padding: 0;
+  }
+  .contactHeader h2 {
+    font-size: 20px;
+    font-weight: 400;
+  }
 }
+
+
