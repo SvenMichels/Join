@@ -9,6 +9,7 @@
   <link href="./board.css" rel="stylesheet" />
   <link href="../styles/standard.css" rel="stylesheet">
   <link href="../media-querie.css" rel="stylesheet" />
+  <link href="../taskfloatdata/taskfloat.css" rel="stylesheet"/>
   <script type="module" src="./board.js"></script>
 </head>
 
@@ -86,7 +87,7 @@
     <h1>Board</h1>
     <div class="searchAddContainer">
       <div class="searchContainer input-wrapper">
-        <input class="searchField" placeholder="Find Task" type="text" />
+        <input class="searchField" placeholder="Find Task" type="text" id="searchFieldInput"/>
         <img alt="Bild" class="input-icon" src="../assets/icons/search.svg" />
       </div>
       <img alt="Bild" class="add_btn_default" src="../assets/icons/add_task_default.svg" />
@@ -125,6 +126,7 @@
       <div class="task-list" id="doneList"></div>
     </section>
   </main>
+  <div id="modal-overlay" class="d_none"></div>
 </body>
 
 </html>

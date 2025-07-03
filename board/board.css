@@ -38,7 +38,7 @@ body {
 }
 
 .searchField {
-  z-index: -100;
+  /* z-index: -100; */
   width: 312px;
   height: 48px;
   gap: 10px;
@@ -154,3 +154,30 @@ body {
   display: flex;
   
 }
+
+.empty-placeholder {
+  padding: 1rem;
+  text-align: center;
+  font-style: italic;
+  color: #666;
+  pointer-events: none;   /* damit man nicht aus Versehen klickt */
+}
+
+#modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+#modal-overlay.d_none {
+  display: none;
+}
+
+.prioButtonUrgent.active  { background:#FF3D00; color:#fff; }
+.prioButtonMedium.active  { background:#FFA800; color:#fff; }
+.prioButtonLow.active     { background:#7AE229; color:#fff; }
+

@@ -297,6 +297,8 @@ function makeSubtaskEditable(index) {
 }
 
 function getInitials(name) {
+  if (typeof name !== "string") return "";
+
   const parts = name.trim().split(" ");
   return ((parts[0]?.[0] || "") + (parts.at(-1)?.[0] || "")).toUpperCase();
 }
