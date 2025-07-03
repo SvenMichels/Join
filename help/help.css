@@ -6,20 +6,16 @@ p {
   letter-spacing: 0%;
 }
 
-/* Help Section */
-
-.helpSection {
-    display: flex;
-    flex-direction: column;
-    padding-top: 215px;
-    padding-left: 328px;
-    max-width: 1016px;
-    margin-right: 50px;
-    overflow-y: auto;
-    gap: 24px;
+.help-section {
+  display: flex;
+  flex-direction: column;
+  padding-top: 115px;
+  padding-left: 328px;
+  max-width: 1016px;
+  margin-right: 50px;
 }
 
-.helpH1 {
+.help-h1 {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -27,7 +23,7 @@ p {
   height: 73px;
 }
 
-.h1Image {
+.h1-image {
   width: 32px;
   height: 32px;
 }
@@ -39,75 +35,34 @@ p {
   border-radius: 35px;
 }
 
-.helpContent {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-  gap: 24px;
-}
-
-.helpWelcome {
-  height: 38px;
-}
-
-.helpWhatIs {
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-  gap: 16px;
-}
-
-.helpHow {
-  width: 346px;
-  height: 32px;
-}
-
-.helpStep {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-  gap: 16px;
-  height: 556px;
-}
-
-.helper {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: flex-start;
-  height: 61px;
-  gap: 35px;
-}
-
-.helperNumber{
-    width: 21px;
-    height: 32px;
-}
-
-h3{
-    margin: 0;
-}
-
-.helpEnjoy{
-    width: 346px;
-    height: 64px;
-}
-
 a:hover {
   color: #29abe2;
 }
 
-.enjoy {
-  margin-top: 50px;
-  margin-bottom: 10px;
+.txtDeco-none {
+  text-decoration: none;
 }
 
-h2 {
-    margin: 0;
+@media (max-width: 575px) {
+  .help-section {
+    position: absolute;
+    top: 90px;
+    bottom: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 440px;
+    overflow-y: auto;
+    padding: 0 30px;
+    box-sizing: border-box;
+  }
 }
 
-.txtDeco-none{
-    text-decoration: none;
+@media (min-width: 576px) and (max-width: 767px) {
+  .help-section {
+    display: flex;
+    flex-direction: column;
+    padding-top: 20px;
+    padding-left: 20px;
+  }
 }

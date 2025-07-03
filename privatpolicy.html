@@ -14,11 +14,30 @@
       <link href="media-querie.css" rel="stylesheet" />
   </head>
   <body>
-    <header class="header-style">
-      <div>
-        <p>Kanban Project Management Tool</p>
+    <header class="header-style" id="">
+    <img class="header-nav-logo" src="../assets/icons/Capa 3.svg" />
+    <div class="header-container">
+      <p class="media-d-none">Kanban Project Management Tool</p>
+    </div>
+      <div class="help-container">
+        <a href="../help/help.html">
+          <img alt="Bild" class="help-icon" src="../assets/icons/help.svg" />
+        </a>
+        <button id="openMenu" class="profile-button d_none"></button>
       </div>
-    </header>
+      <div id="dropDownMenu" class="dropDownMenu dp-none">
+        <a class="txtDeco-none" href="../legalnotice.html">
+          <p class="dropDownTxt">Legal Notice</p>
+        </a>
+        <a class="txtDeco-none" href="../privatpolicy.html">
+          <p class="dropDownTxt">Privacy Policy</p>
+        </a>
+        <a class="txtDeco-none" href="../index.html">
+          <p class="dropDownTxt">Log out</p>
+        </a>
+      </div>
+    </div>
+  </header>
     <nav class="nav-bar">
       <img alt="nav-logo" class="nav-logo" src="/assets/icons/join_white.svg" />
       <div class="nav-menu">
@@ -72,7 +91,7 @@
         <a class="taskFrameLink" href="../legalnotice.html">Legal notice</a>
       </div>
     </nav>
-    <div class="policyContainer">
+    <div class="policy-container">
       <h1>Privat Policy</h1>
       <h4>
         The responsible party for data collection and processing in this

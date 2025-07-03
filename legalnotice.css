@@ -1,8 +1,7 @@
-/* Policy Section */
-.legalContainer {
+.legal-container {
   display: flex;
   flex-direction: column;
-  padding-top: 215px;
+  padding-top: 115px;
   padding-left: 328px;
   max-width: 1016px;
   margin-right: 50px;
@@ -17,10 +16,40 @@ a:hover {
   display: none;
 }
 
-h3{
-    margin-bottom: 0px;
+h3 {
+  margin-bottom: 0px;
 }
 
 .txtDeco-none {
   text-decoration: none;
+}
+
+@media (max-width: 575px) {
+  .legal-container {
+    position: absolute;
+    top: 140px;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 440px;
+    overflow-y: auto;
+    padding: 0 30px;
+    box-sizing: border-box;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 767px) {
+  .legal-container {
+    position: absolute;
+    top: 140px;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 440px;
+    overflow-y: auto;
+    padding: 0 30px;
+    box-sizing: border-box;
+  }
 }
