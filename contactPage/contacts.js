@@ -237,43 +237,86 @@ function clearBigContactView() {
 }
 
 function showContact(id) {
-  const contact = contactList.find((contact) => contact.id === id);
+  const contact = getContactById(id);
   if (!contact) return;
 
-  const safeColorClass = contact.colorClass || getRandomColorClass();
+  const safeColorClass = getSafeColorClass(contact);
 
+  displayContactDetail(contact, safeColorClass);
+  animateMobileView();
+  initializeFabMenu(id);
+  initializeBackButton();
+}
+
+function getContactById(id) {
+  return contactList.find(contact => contact.id === id);
+}
+
+function getSafeColorClass(contact) {
+  return contact.colorClass || getRandomColorClass();
+}
+
+function displayContactDetail(contact, colorClass) {
   renderSingleContact(
     contact.name,
     contact.email,
     contact.phone,
     contact.initials,
     contact.id,
-    safeColorClass
+    colorClass
   );
-
-  const singleContactEl = document.querySelector('.singleContact');
-
-  if (window.innerWidth <= 1100 && singleContactEl) {
-    // slideinanim
-    singleContactEl.classList.remove('slide-out');
-    singleContactEl.classList.add('slide-in');
-    singleContactEl.style.display = 'block';
-
-    // closebtn
-    const closeBtn = document.getElementById('closeSingleMobile');
-    if (closeBtn) {
-      closeBtn.addEventListener('click', () => {
-        singleContactEl.classList.remove('slide-in');
-        singleContactEl.classList.add('slide-out');
-
-        setTimeout(() => {
-          singleContactEl.classList.remove('slide-out');
-          singleContactEl.style.display = 'none';
-        }, 300); 
-      });
-    }
-  }
 }
+
+function animateMobileView() {
+  const singleContactEl = document.querySelector('.singleContact');
+  if (window.innerWidth > 767 || !singleContactEl) return;
+
+  singleContactEl.classList.remove('slide-out');
+  singleContactEl.classList.add('slide-in');
+  singleContactEl.style.display = 'block';
+}
+
+function initializeFabMenu(id) {
+  const fabContainer = document.getElementById('fabContainer');
+  if (!fabContainer || window.innerWidth > 767) return;
+
+  const fabToggle = document.getElementById('fabToggle');
+  const fabEdit = document.getElementById('fabEdit');
+  const fabDelete = document.getElementById('fabDelete');
+
+  fabContainer.classList.remove('open');
+  fabToggle.addEventListener('click', () => {
+    fabContainer.classList.toggle('open');
+  });
+
+  fabEdit.addEventListener('click', () => {
+    openEditWindow();
+    fabContainer.classList.remove('open');
+  });
+
+  fabDelete.addEventListener('click', async () => {
+    await deleteContact(id);
+    fabContainer.classList.remove('open');
+  });
+}
+
+function initializeBackButton() {
+  const singleContactEl = document.querySelector('.singleContact');
+  const backBtn = document.getElementById('closeSingleMobile');
+  const fabContainer = document.getElementById('fabContainer');
+  if (!backBtn) return;
+
+  backBtn.addEventListener('click', () => {
+    singleContactEl.classList.remove('slide-in');
+    singleContactEl.classList.add('slide-out');
+
+    setTimeout(() => {
+      singleContactEl.style.display = 'none';
+      if (fabContainer) fabContainer.style.display = 'none';
+    }, 300);
+  });
+}
+
 
 function findContactById(id) {
   return contactList.find(c => String(c.id) === String(id));
