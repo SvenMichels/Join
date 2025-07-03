@@ -102,6 +102,7 @@ body{
     display: flex;
     flex-direction: column;
     height: 100%;
+    padding-left: 25px;
 } 
 
 .contactList,
@@ -121,7 +122,7 @@ body{
     align-items: center;
     justify-content: flex-start;
     margin-top: 110px;
-    margin-left: 70px;
+    /* margin-left: 70px; */
     gap: 16px;
     max-width: 100%;
     /* height: 73px; */
@@ -147,7 +148,6 @@ h2{
 
 .bigContact{
     display: flex;
-    justify-content: center;
 }
 
 .profilePic{
@@ -237,7 +237,7 @@ h2{
     font-weight: 400;
     font-size: 20px;
     display: flex;
-    justify-content: center;
+    /* justify-content: center; */
     align-items: center;
     margin: 0;
 }
@@ -307,7 +307,7 @@ h2{
     width: 90%;
     margin: auto;
     height: 58px;
-    padding: 17px 36px 17px 36px;
+    /* padding: 17px 36px 17px 36px; */
 }
 
 .stripe{
@@ -356,6 +356,7 @@ h2{
     justify-content: center;
     align-items: center;
     background-color: #FF7A00;
+    flex-shrink: 0;
 }
 
 .contactName{
@@ -415,7 +416,7 @@ h2{
   display: none;
   position: absolute;
   top: 0px;
-  right: 16px;
+  right: 41px;
   font-size: 24px;
   cursor: pointer;
   z-index: 20;
@@ -423,6 +424,22 @@ h2{
 
 .fab-container {
   display: none;
+}
+
+.bigContactCard{
+    width: 90%;
+}
+
+.nameAdressContainer{
+    width: auto;
+    flex: 1 1 0;
+    min-width: 0;
+}
+
+.nameAdressContainer .email {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 @keyframes slideUpFadeIn {
@@ -470,9 +487,41 @@ h2{
   animation: slideOut 0.3s ease-in forwards;
 }
 
-@media (max-width:1350px) {
+@media (max-width: 1100px){
+    .profilePic{
+        width: 100px;
+    }
+    .profileName{
+        font-size: 32px;
+    }
+    .profileHeader{
+        /* gap: unset; */
+        justify-content: space-evenly;
+    }
+}
+
+@media (max-width:900px){
+    .profilePic{
+        font-size: 32px;
+        width: 75px;
+    }
+    .profileHeader{
+        gap: 20px;
+    }
+    h1{
+        font-size: 51px;
+    }
+    h2{
+        font-size: 22px;
+    }
     .contactHeader{
-        margin-left: 20px;
+        gap: 8px;
+    }
+}
+
+@media (max-width: 840px){
+    .profileHeader{
+        gap: 8px;
     }
 }
 
@@ -534,7 +583,7 @@ h2{
     display: block;
     position: fixed;
     bottom: 32px;
-    right: 16px;
+    right: 41px;
     z-index: 100;
   }
 
@@ -609,6 +658,18 @@ h2{
     font-size: 20px;
     font-weight: 400;
   }
+  .allContacts{
+        padding-bottom: 90px;
+    }
 }
 
+@media (max-width: 575px){
+    .singleContact.slide-in {
+        height: calc(100% - 80px - 80px);
+        top: 80px;
+    }
+    .allContacts{
+        padding-top: 90px;
+    }
+}
 

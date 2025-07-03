@@ -289,7 +289,7 @@ input:valid + .error-message {
   gap: 16px;
 }
 
-.clearButton {
+.clear-button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -303,12 +303,12 @@ input:valid + .error-message {
   background-color: #f6f7f8;
 }
 
-.clearButton:hover {
+.clear-button:hover {
   border: 2px solid #29abe2;
   box-shadow: 0px 4px 4px 0px #00000040;
 }
 
-.createButton {
+.create-button {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -323,7 +323,7 @@ input:valid + .error-message {
   border: 0px;
 }
 
-.createButton:hover {
+.create-button:hover {
   background: #29abe2;
   box-shadow: 0px 4px 4px 0px #00000040;
 }
@@ -403,10 +403,6 @@ select {
   padding-right: 2rem;
   border: 1px solid #ccc;
   border-radius: 4px;
-}
-
-.subtaskAddContainer {
-  max-width: 100%;
 }
 
 .subtask-wrapper {
