@@ -408,6 +408,16 @@ h2{
   animation: slideUpFadeIn 0.6s ease-out forwards;
 }
 
+.closeSingleMobile {
+  display: none;
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 20;
+}
+
 @keyframes slideUpFadeIn {
   from {
     bottom: -100px;
@@ -417,6 +427,40 @@ h2{
     bottom: 40%;
     opacity: 1;
   }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0%);
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+.singleContact.slide-in {
+  position: fixed;
+  top: 96px;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 96px);
+  background-color: white;
+  z-index: 10;
+  animation: slideIn 0.3s ease-out forwards;
+  display: block !important;
+}
+
+.singleContact.slide-out {
+  animation: slideOut 0.3s ease-in forwards;
 }
 
 @media (max-width:1350px) {
@@ -429,4 +473,55 @@ h2{
     .profileName{
         font-size: 35px;
     }
+    .singleContact{
+        display: none;
+    }
+
+    .contactList, .allContacts{
+        width: 100%;
+    }
+
+    .startLetter, .stripe, .contact{
+        width: auto;
+    }
+
+    .closeSingleMobile{
+        display: block;
+    }
+}
+
+@media (max-width: 767px){
+    .newContact {
+    position: fixed ;
+    bottom: 100px;
+    right: 24px ;
+    left: auto;
+    margin: 0;
+    width: 56px;
+    height: 56px;
+    padding: 0;
+    border-radius: 50%;
+    background-color: #2a3647;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .newContact p {
+    display: none;
+  }
+
+  .newContactIcon {
+    width: 24px;
+    height: 24px;
+    margin: 0;
+  }
+
+  .contactList {
+    margin-left: 0;
+    width: 100%;
+    position: static;
+  }
 }

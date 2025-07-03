@@ -238,16 +238,40 @@ function clearBigContactView() {
 
 function showContact(id) {
   const contact = contactList.find((contact) => contact.id === id);
-  if (contact) {
-    const safeColorClass = contact.colorClass || getRandomColorClass();
-    renderSingleContact(
-      contact.name,
-      contact.email,
-      contact.phone,
-      contact.initials,
-      contact.id,
-      safeColorClass,
-    );
+  if (!contact) return;
+
+  const safeColorClass = contact.colorClass || getRandomColorClass();
+
+  renderSingleContact(
+    contact.name,
+    contact.email,
+    contact.phone,
+    contact.initials,
+    contact.id,
+    safeColorClass
+  );
+
+  const singleContactEl = document.querySelector('.singleContact');
+
+  if (window.innerWidth <= 1100 && singleContactEl) {
+    // slideinanim
+    singleContactEl.classList.remove('slide-out');
+    singleContactEl.classList.add('slide-in');
+    singleContactEl.style.display = 'block';
+
+    // closebtn
+    const closeBtn = document.getElementById('closeSingleMobile');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => {
+        singleContactEl.classList.remove('slide-in');
+        singleContactEl.classList.add('slide-out');
+
+        setTimeout(() => {
+          singleContactEl.classList.remove('slide-out');
+          singleContactEl.style.display = 'none';
+        }, 300); 
+      });
+    }
   }
 }
 

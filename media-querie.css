@@ -267,6 +267,7 @@
     top: 0;
     left: 0;
     background-color: #2a3647;
+    z-index: 1;
   }
   .header-nav-logo {
     display: none;
@@ -283,7 +284,7 @@
   .header-style {
     justify-content: space-between;
     gap: 80px;
-    position: fixed;
+    /* position: fixed; */
     top: 0;
     left: 0;
   }
@@ -399,7 +400,7 @@
   }
 }
 
-@media (min-width: 1200px) and (max-width: 1439px) {
+@media (min-width: 1200px) {
   .header-nav-logo {
     display: none;
   }

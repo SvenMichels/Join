@@ -1,6 +1,9 @@
 export function singleContact(name, email, phone, initials, id, colorClass) {
   return `
 <div id = "bigContactCard">
+  <div class="closeSingleMobile" id="closeSingleMobile">
+    <img src="../assets/icons/arrow-left-line.svg" alt="">
+  </div>
             <div class="profileHeader">
               <div class="profilePic ${colorClass}">${initials}</div>
               <div class="nameBtns">
