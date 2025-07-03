@@ -76,7 +76,7 @@ function initForm() {
   selectPriority("medium");
 
   const categorySelect = document.getElementById("category");
-  const submitButton = document.querySelector(".createButton");
+  const submitButton = document.querySelector(".create-button");
   submitButton.disabled = true;
   categorySelect.addEventListener("change", () => {
     submitButton.disabled = categorySelect.value.trim() === "";
