@@ -35,7 +35,7 @@ function storeNewData(name, email, phone) {
     currentUser.userEmail = email;
     currentUser.phoneNumber = phone;
 
-    updateUser(currentUser.id, currentUser)
+    updateUser(currentUser)
         .then(() => {
             localStorage.setItem("currentUser", JSON.stringify(currentUser));
             pushUserDataToTemplate(currentUser);
