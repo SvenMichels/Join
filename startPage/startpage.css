@@ -1,7 +1,9 @@
 /* (=^.^=) */
-*:not(.nav-bar):not(.profile-button):not(.help-container):not(.nav-menu),
-*:not(.nav-bar):not(.profile-button):not(.nav-menu):not(.help-container)::before,
-*:not(.nav-bar):not(.profile-button):not(.nav-menu):not(.help-container)::after {
+:root {
+  --sidebar-width: 326px;
+}
+
+*:not(.nav-bar):not(.nav-bar *):not(.header-style):not(.header-style *) {
   box-sizing: border-box;
 }
 
@@ -10,17 +12,9 @@ body {
   margin: 0;
   padding: 0;
   height: 100%;
-  overflow: hidden;
+  overflow-x: hidden;
   font-family: 'Inter';
 }
-
-/* body{ 
-    margin: 0;
-    
-    max-width: 1440px;
-    width: 100%;
-    min-height: 100vh;
-} */
 
 a {
   color: white;
@@ -47,23 +41,22 @@ main {
   flex-direction: column;
   justify-content: center;
   gap: 50px;
-  /* padding-left: 326px; */
-  /* padding-inline-start: 23%; */
-}
-
-.frontPage {
+  max-width: 100vw;
+  box-sizing: border-box;
+  overflow-x: hidden;
   position: absolute;
   top: 96px;
-  left: 326px;
+  left: 0;
   right: 0;
   bottom: 0;
+  padding: 0 24px 0 var(--sidebar-width);
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  /* gap: 50px; */
-  padding: 0 24px;
-  /* overflow: hidden; */
+  justify-content: flex-start;
+  overflow-y: auto;       
+  box-sizing: border-box;
 }
+
 
 .headline {
   display: flex;
@@ -71,27 +64,11 @@ main {
   gap: 20px;
 }
 
-/* .header-style {
-  position: fixed;
-  top: 0;
-  left: 232px;
-  right: 0;
-  height: 96px;
-  z-index: 10;
-}
-
-.nav-bar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  width: 232px;
-} */
-
 .headline h1 {
   font-family: Inter;
   font-weight: 700;
-  font-size: 61px;
+  /* font-size: 61px; */
+  font-size: clamp(2.5rem, 5vw, 3.8rem);
   line-height: 120%;
   letter-spacing: 0%;
 }
@@ -104,7 +81,7 @@ main {
 }
 
 .headline p {
-  font-size: 27px;
+  font-size: clamp(1rem, 2.5vw, 1.7rem);
   color: #2a3647;
 }
 
@@ -115,12 +92,18 @@ main {
 .mainContent {
   position: static;
   display: flex;
+  /* flex-wrap: wrap; */
   flex-direction: row;
   align-items: center;
   gap: 80px;
 }
+
+.mainContent > * {
+  flex-shrink: 1;
+  min-width: 0;
+}
+
 .counter {
-  /* font-size: 64px; */
   font-size: clamp(2rem, 5vw, 4rem);
   font-weight: bold;
   text-align: center;
@@ -159,7 +142,10 @@ main {
 
 .stats {
   display: flex;    
-  gap: 20px;
+  /* gap: 20px; */
+  gap: clamp(12px, 2vw, 20px); 
+  flex-wrap: nowrap;
+  justify-content: space-between;
   width: 100%;       
 }
 
@@ -173,13 +159,23 @@ main {
   text-align: center;
 }
 
-.stats > div > .btn {
-  width: 100%;
+.stats > div .counter {
+  font-size: clamp(1.5rem, 4vw, 3rem);
+  line-height: 1.1;
+}
+
+.stats > div .taskText {
+  font-size: clamp(0.8rem, 1.5vw, 1.1rem);
+  text-align: center;
 }
 
 .stats > div > .btn {
   width: 100%;
   padding: 24px 40px; 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .toDo,
@@ -189,6 +185,7 @@ main {
 .stats {
   display: flex;
   align-items: center;
+  justify-content: space-evenly;
   gap: 18px;
 }
 
@@ -211,26 +208,41 @@ main {
   gap: 10px;
 }
 .urgentTaskDate {
-  font-size: 21px;
+  font-size: clamp(1rem, 2vw, 1.3rem);
   color: #2a3647;
 }
 
 .urgentTaskDateText {
-  font-size: 16px;
+  font-size: clamp(0.8rem, 1.5vw, 1rem);
   color: #2a3647;
 }
 
 .taskText {
-  font-size: 20px;
+  font-size: clamp(1rem, 2vw, 1.25rem);
   color: #2a3647;
 }
 
 .btn {
   background-color: white;
-  padding: 36px 65px;
+  /* padding: 36px 65px; */
+  flex: 1 1 auto;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 
+    clamp(0.75rem, 2vh, 1.5rem) /* oben/unten */
+    clamp(1rem, 3vw, 2.5rem);   /* links/rechts */
   border-radius: 30px;
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
 }
+
+.btn .defaultIcon,
+.btn .invertedIcon {
+  width: clamp(2rem, 5vw, 3.5rem);
+  height: clamp(2rem, 5vw, 3.5rem);
+}
+
+
 
 .invertedIcon {
   display: none;
@@ -263,15 +275,86 @@ main {
 .greetings p:first-child {
   font-weight: 500;
   color: #2a3647;
-  font-size: 47px;
+  font-size: clamp(1.5rem, 4vw, 3rem);
+  text-align: center;
 }
 
 .username {
   font-weight: 700;
   color: #29abe2;
-  font-size: 64px;
+  font-size: clamp(2.5rem, 6vw, 4rem);
 }
 
 .txtDeco-none {
   text-decoration: none;
+}
+
+.greetings .username {
+    font-size: clamp(2.5rem, 8vw, 4rem);
+    white-space: normal;
+    word-break: break-word;
+    text-align: center;
+  }
+
+@media (max-width: 1200px) {
+  :root {
+    --sidebar-width: 280px; 
+  }
+}
+
+@media (max-width: 1100px) {
+  :root {
+    --sidebar-width: 248px;
+  }
+}
+@media (max-width: 767px) {
+  :root {
+    --sidebar-width: 0;
+  }
+
+  .nav-bar, header{
+    z-index: 99999;
+  }
+  .frontPage {
+    top: 96px;
+    bottom: 80px;
+    left: 0;
+    right: 0;
+    padding-inline: 0 16px;
+  }
+
+  .mainContent {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+   .greetings {
+    position: fixed;
+    inset: 0 0 60px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
+    background: white;
+    z-index: 9999;
+    will-change: opacity, transform;
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    transform: translateY(0);
+  }
+
+  .greetings p:first-child {
+    font-size: clamp(1.8rem, 6vw, 3rem);
+    line-height: 1.2;
+    text-align: center;
+  }
+
+  
+
+  .greetings.hidden {
+    opacity: 0;
+    transform: translateY(-20px);
+    pointer-events: none;
+  }
 }
