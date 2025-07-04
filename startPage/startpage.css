@@ -55,6 +55,7 @@ main {
   justify-content: flex-start;
   overflow-y: auto;       
   box-sizing: border-box;
+  padding-top: 110px;
 }
 
 
@@ -146,11 +147,12 @@ main {
   gap: clamp(12px, 2vw, 20px); 
   flex-wrap: nowrap;
   justify-content: space-between;
+  align-items: unset !important;
   width: 100%;       
 }
 
 .stats > div {
-  flex: 1 1 calc((100% - 40px) / 3);
+  flex: 1 1 calc((100% - 2 * clamp(12px, 2vw, 20px)) / 3);
   min-width: 0;
   display: flex;
   flex-direction: column;
@@ -171,11 +173,13 @@ main {
 
 .stats > div > .btn {
   width: 100%;
+  height: 100%;
   padding: 24px 40px; 
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  flex: 1;
 }
 
 .toDo,
@@ -186,7 +190,7 @@ main {
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-  gap: 18px;
+  /* gap: 18px; */
 }
 
 .urgent,
@@ -300,11 +304,17 @@ main {
   :root {
     --sidebar-width: 280px; 
   }
+  .frontPage{
+    padding-top: 70px;
+  }
 }
 
 @media (max-width: 1100px) {
   :root {
     --sidebar-width: 248px;
+  }
+  .frontPage{
+    padding-top: 40px;
   }
 }
 @media (max-width: 767px) {
@@ -350,11 +360,13 @@ main {
     text-align: center;
   }
 
-  
-
   .greetings.hidden {
     opacity: 0;
     transform: translateY(-20px);
     pointer-events: none;
+  }
+
+  .urgent{
+    justify-content: space-evenly;
   }
 }
