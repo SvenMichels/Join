@@ -16,7 +16,8 @@ document.addEventListener("DOMContentLoaded", () => {
   initForm();
   loadUserInitials();
   eventHandleSearch();
-});
+  
+}); 
 
 const $ = {};
 
