@@ -16,6 +16,10 @@ body {
   font-family: 'Inter';
 }
 
+.nav-bar, header{
+    z-index: 99999;
+  }
+
 a {
   color: white;
   text-decoration: none;
@@ -204,6 +208,7 @@ main {
   height: 100%;
   background-color: #d1d1d1;
   border-radius: 999px;
+  margin: 0 10px;
 }
 
 .urgentDate {
@@ -322,9 +327,6 @@ main {
     --sidebar-width: 0;
   }
 
-  .nav-bar, header{
-    z-index: 99999;
-  }
   .frontPage {
     top: 96px;
     bottom: 80px;
