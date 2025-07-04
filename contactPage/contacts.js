@@ -94,7 +94,7 @@ async function addContact(event) {
     const result = await createContact(contact);
     contact.id = result.data.name;
     contactList.push(contact);
-    clearContactListUI();
+    ignoreMyContact(id)
     renderAllContacts(contactList);
     emptyInput();
     showUserFeedback();
@@ -202,8 +202,8 @@ function emptyInput() {
 async function deleteContact(id) {
   await deleteContactFromFirebase(id);
   contactList = removeContactById(contactList, id);
-  clearContactListUI();
   renderAllContacts(contactList);
+  clearContactListUI();
   clearBigContactView();
 }
 
@@ -399,14 +399,6 @@ function sortContactsAlphabetically(list) {
   );
 }
 
-// document.addEventListener("DOMContentLoaded", () => {
-//   const signUpBtn = document.getElementById("submitBtn");
-//   if (!signUpBtn) {
-//     return;
-//   }
-//   signUpBtn.addEventListener("click", showUserFeedback);
-// });
-
 function showUserFeedback() {
   const feedback = document.getElementById("userFeedback");
   if (!feedback) return;
@@ -434,5 +426,13 @@ async function ensureColorClassForAllContacts() {
       contact.colorClass = getRandomColorClass();
       await updateContactInFirebase(contact);
     }
+  }
+}
+
+function ignoreMyContact(id) {
+  const contactCard = id;
+  if (!contactCard) {
+    let addMyContactHtml = document.querySelector(`.contact[data-id="${firstId}"]`);
+   clearContactListUI(addMyContactHtml);
   }
 }

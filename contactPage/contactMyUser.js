@@ -17,37 +17,91 @@ pushUserDataToTemplate(currentUser);
 function pushUserDataToTemplate(currentUser){
     const name = currentUser.userName;
     const email = currentUser.userEmail;
-    // const phone = currentUser.phoneNumber;
+    const phone = currentUser.phoneNumber;
     const initials = getInitials(name);
     const firstLetter = name[0].toUpperCase();
     const id = currentUser.id;
 
-    renderContact(name, email,  /*phone*/"", initials, firstLetter, id);
+    renderContact(name, email,  phone, initials, firstLetter, id);
 }
 
 function getDataToStoreNewData() {
     let currentUserJSON = localStorage.getItem("currentUser");
     let currentUser = JSON.parse(currentUserJSON);
- const id = currentUser.id;
+    const id = currentUser.id;
 
     const name = currentUser.userName;
     const email = currentUser.userEmail;
-    // const phone = currentUser.phoneNumber;
+    const phone = currentUser.phoneNumber;
 
-    storeNewData (id, name, email, /*phone*/);
+    newDataToJson(name, email, phone, id);
 }
 
-function storeNewData(name, email,  /*phone*/) {
-
-    updateUser(name, email,  /*phone*/)
+function storeNewData(updatedUser) {
+console.log("Aktualisiere Daten für:", updatedUser);
+    updateUser(updatedUser.id, updatedUser.name, updatedUser.email, updatedUser.phoneNumber)
         .then(() => {
-            localStorage.setItem("currentUser", JSON.stringify(fdgsgg));
-            pushUserDataToTemplate(currentUser);
+            localStorage.setItem("currentUser", JSON.stringify(updatedUser.phoneNumber));
+            pushUserDataToTemplate(updatedUser);
             alert("Daten erfolgreich aktualisiert!");
         })
         .catch((error) => {
             console.error("Fehler beim Aktualisieren der Daten:", error);
             alert("Fehler beim Aktualisieren der Daten. Bitte versuche es erneut.");
         });
-    
+}
+
+function newDataToJson(name, email, phone, id) {
+    const initials = getInitials(name);
+    const firstLetter = name[0]?.toUpperCase() || "";
+    const updatedUser = {
+        userName: name,
+        userEmail: email,
+        phoneNumber: phone,
+        id: id,
+        initials: initials,
+        firstLetter: firstLetter,
+    };
+
+    localStorage.setItem("currentUser", JSON.stringify(updatedUser));
+    storeNewData (updatedUser);
+}
+
+function renderCurrentUserCard() {
+  const currentUser = getCurrentUserFromStorage();
+  if (!currentUser) return;
+
+  pushUserDataToTemplate(currentUser);
+}
+
+function handleEditSubmit() {
+  const currentUser = getCurrentUserFromStorage();
+  if (!currentUser) return;
+
+  const updatedUser = {
+    userName: document.getElementById("contactName").value.trim(),
+    userEmail: document.getElementById("contactEmail").value.trim(),
+    phoneNumber: document.getElementById("contactPhone").value.trim(),
+  };
+
+  updateUserData(currentUser.id, updatedUser);
+}
+
+async function updateUserData(id, updatedUser) {
+  try {
+    const result = await updateUser(id, updatedUser);
+
+    const updated = { ...updatedUser, id }; 
+    localStorage.setItem("currentUser", JSON.stringify(updated));
+    pushUserDataToTemplate(updated);
+
+    console.log("Daten erfolgreich aktualisiert:", result);
+  } catch (error) {
+    console.warn("Fehler beim Aktualisieren der Daten:", error);
+  }
+}
+
+function getCurrentUserFromStorage() {
+  const raw = localStorage.getItem("currentUser");
+  return raw ? JSON.parse(raw) : null;
 }
