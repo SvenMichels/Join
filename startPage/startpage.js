@@ -3,6 +3,7 @@ import { requestData } from "../scripts/firebase.js";
 document.addEventListener("DOMContentLoaded", () => {
   updateUserGreeting();
   updateSummary();
+  handleMobileGreetingFade();
 });
 
 function updateUserGreeting() {
@@ -85,4 +86,13 @@ function getInitials(name) {
   const first = parts[0]?.[0] || "";
   const last = parts.length > 1 ? parts[parts.length - 1][0] : "";
   return (first + last).toUpperCase();
+}
+
+function handleMobileGreetingFade() {
+  if (window.innerWidth < 767) {
+    const el = document.querySelector('.greetings');
+    if (el) {
+      setTimeout(() => el.classList.add('hidden'), 500);
+    }
+  }
 }
