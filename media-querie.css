@@ -85,10 +85,10 @@
     height: 60px;
   }
 
-  h1 {
+  /* h1 {
     padding-left: 16px;
     margin: 0;
-  }
+  } */
 
   .form-wrapper {
     position: absolute;
@@ -163,13 +163,16 @@
     gap: 16px;
     overflow-x: auto;
     overflow-y: hidden;
-    white-space: nowrap;
     padding: 8px;
   }
 
   .task {
     min-width: 200px;
     flex-shrink: 0;
+  }
+
+  .add-task-board-button-second {
+    display: block;
   }
 }
 
@@ -271,6 +274,10 @@
 
   .subtask-spacer-second {
     display: none;
+  }
+
+  .add-task-board-button-second {
+    display: block;
   }
 }
 
@@ -421,6 +428,10 @@
   .space-container {
     height: 382px;
   }
+
+  .add-task-board-button {
+    display: none;
+  }
 }
 
 @media (min-width: 1200px) {
@@ -498,5 +509,9 @@
     position: absolute;
     bottom: 0;
     width: 63%;
+  }
+
+  .add-task-board-button {
+    display: none;
   }
 }
