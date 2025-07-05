@@ -159,8 +159,11 @@ body {
   padding: 1rem;
   text-align: center;
   font-style: italic;
-  color: #666;
-  pointer-events: none;   /* damit man nicht aus Versehen klickt */
+  color: black;
+  background-color: rgba(168, 168, 168, 1);
+  border: gray 1px dashed;
+  border-radius: 8px;
+  pointer-events: none;
 }
 
 #modal-overlay {

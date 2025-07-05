@@ -20,8 +20,14 @@ window.addEventListener("DOMContentLoaded", () => {
 
 async function fetchTasks() {
   try {
-    const { data: tasks } = await requestData("GET", "/tasks/");
-    loadedTasks = tasks || {};
+    const { data: tasksData } = await requestData("GET", "/tasks/");
+    loadedTasks = {}; 
+
+    for (const [id, task] of Object.entries(tasksData || {})) {
+      task.id = id;
+      loadedTasks[id] = task;
+    }
+
     renderTasks(Object.values(loadedTasks));
     updateEmptyLists();
   } catch (error) {
