@@ -38,17 +38,24 @@ function getDataToStoreNewData() {
 }
 
 function storeNewData(updatedUser) {
-console.log("Aktualisiere Daten für:", updatedUser);
     updateUser(updatedUser.id, updatedUser.name, updatedUser.email, updatedUser.phoneNumber)
         .then(() => {
-            localStorage.setItem("currentUser", JSON.stringify(updatedUser.phoneNumber));
-            pushUserDataToTemplate(updatedUser);
-            alert("Daten erfolgreich aktualisiert!");
+         thenStoreNewData(updatedUser);
         })
         .catch((error) => {
-            console.error("Fehler beim Aktualisieren der Daten:", error);
-            alert("Fehler beim Aktualisieren der Daten. Bitte versuche es erneut.");
+            catchNewData(error);
         });
+}
+
+function thenStoreNewData(updatedUser){
+      localStorage.setItem("currentUser", JSON.stringify(updatedUser.phoneNumber));
+            pushUserDataToTemplate(updatedUser);
+            alert("Daten erfolgreich aktualisiert!");
+}
+
+function catchNewData(error){
+     console.error("Fehler beim Aktualisieren der Daten:", error);
+            alert("Fehler beim Aktualisieren der Daten. Bitte versuche es erneut.");
 }
 
 function newDataToJson(name, email, phone, id) {

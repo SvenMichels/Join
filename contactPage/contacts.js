@@ -19,17 +19,15 @@ window.contactList = contactList;
 
 document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("addBtn").addEventListener("click", openAddWindow);
-  document
-    .querySelectorAll(".cancelBtn, .closeBtn")
-    .forEach(btn => btn.addEventListener("click", handleClose));
+  document.querySelectorAll(".cancelBtn, .closeBtn").forEach(btn => btn.addEventListener("click", handleClose));
   document.getElementById("addContactForm").addEventListener("submit", addContact);
   document.getElementById("openMenu").addEventListener("click", closeOpenMenu);
   document.getElementById("editContactForm").addEventListener("submit", handleEditSubmit);
-  loadShowContact();
+  document.getElementById("edit").addEventListener("click", openEditWindow);
   await loadContactsFromFirebase();
   await ensureColorClassForAllContacts();
   loadUserInitials();
-  document.getElementById("edit").addEventListener("click", openEditWindow);
+  loadShowContact();
 });
 
 function handleClose() {
