@@ -46,7 +46,14 @@ function closeAddWindow() {
 }
 
 export function openEditWindow() {
-  document.getElementById(`editWindow`).classList.remove("dp-none");
+      let currentUserJSON = localStorage.getItem("currentUser");
+    let currentUser = JSON.parse(currentUserJSON);
+
+    document.getElementById("contactName").value = currentUser.userName;
+    document.getElementById("contactEmail").value = currentUser.userEmail;
+    document.getElementById("contactPhone").value = currentUser.phoneNumber;
+
+    document.getElementById("editWindow").classList.remove("dp-none");
 }
 
 function closeEditWindow() {
@@ -82,20 +89,24 @@ async function loadContactsFromFirebase() {
 
 async function addContact(event) {
   event.preventDefault();
-  const name = getName();
-  const email = getEmail();
-  const phone = getPhone();
-  const initials = getInitials(name);
-  const colorClass = getRandomColorClass();
+
+  const name        = getName();
+  const email       = getEmail();
+  const phone       = getPhone();
+  const initials    = getInitials(name);
+  const colorClass  = getRandomColorClass();
   const firstLetter = getFirstLetter(name);
+
   const contact = { name, email, phone, initials, colorClass };
 
   try {
-    const result = await createContact(contact);
-    contact.id = result.data.name;
+    const result   = await createContact(contact);
+    contact.id     = result.data.name;
     contactList.push(contact);
-    ignoreMyContact(id)
+
+    ignoreMyContact(contact.id);
     renderAllContacts(contactList);
+
     emptyInput();
     showUserFeedback();
   } catch (error) {
@@ -103,10 +114,8 @@ async function addContact(event) {
     alert("Kontakt konnte nicht gespeichert werden.");
   }
 
-   setTimeout(() => {
-     closeAddWindow();
-    }, 800);
-  };
+  setTimeout(closeAddWindow, 800);
+}
 
 
 function getName() {
@@ -436,3 +445,4 @@ function ignoreMyContact(id) {
    clearContactListUI(addMyContactHtml);
   }
 }
+
