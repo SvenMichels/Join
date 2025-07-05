@@ -121,6 +121,10 @@ p {
   background-color: #091931;
 }
 
+.nav-buttons:active{
+  background-color: #091931;
+}
+
 .nav-button-login {
   background-color: #2a3647;
   color: #cdcdcd;
@@ -189,11 +193,12 @@ p {
   height: 158px;
   border-radius: 20px 0px 20px 20px;
   padding: 10px;
+  z-index: 999999;
 }
 
 .dropDownMenu {
-  margin-top: 276px;
-  left: 70%;
+  top: 96px;
+  right: 25px;
 }
 
 .subMenuContainer {
@@ -218,7 +223,7 @@ p {
   border: none;
   background-color: transparent;
   padding: 8px 16px;
-  height: 46px;
+  /* height: 46px; */
   cursor: pointer;
 }
 

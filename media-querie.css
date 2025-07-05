@@ -152,6 +152,10 @@
   .subtask-spacer-second {
     display: none;
   }
+
+  .dropDownMenu{
+    top: 80px;
+  }
 }
 
 @media (min-width: 576px) and (max-width: 767px) {
