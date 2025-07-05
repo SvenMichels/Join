@@ -2,7 +2,7 @@ body {
   max-width: 1440px;
 }
 
-.taskh1Container {
+.task-h1-container {
   width: 100%;
   max-width: calc(1440px - 308px);
   height: 73px;
@@ -14,31 +14,18 @@ body {
   justify-content: space-between;
 }
 
-.searchAddContainer {
+.search-add-container {
   display: flex;
   gap: 32px;
-}
-
-.board {
-  display: flex;
-  width: 1208px;
-  height: 688px;
-  top: 336px; /* Umändern, dann scrollt es auch nicht mehr nach unten */
-  left: 232px;
-  padding-right: 64px;
-  padding-left: 64px;
-  gap: 26px;
-  position: absolute;
+  padding: 10px 0;
 }
 
 .column {
-  width: 246px;
-  height: 688px;
-  gap: 24px;
+  display: flex;
+  flex-direction: column;
 }
 
 .searchField {
-  /* z-index: -100; */
   width: 312px;
   height: 48px;
   gap: 10px;
@@ -46,28 +33,31 @@ body {
   border-width: 1px;
 }
 
-.board-wrapper h2 {
-  width: 100%;
-  padding-right: 40px;
-  padding-left: 12px;
-  height: 40px;
-  box-sizing: border-box;
+.board-container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  top: 80px;
+  padding: 16px;
 }
 
 .board-wrapper {
   position: relative;
-  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 32px;
 }
 
 .board-icon {
-  position: absolute;
+  /* position: absolute;
   right: 12px;
   top: 50%;
   transform: translateY(-50%);
   height: 20px;
   width: 20px;
   cursor: pointer;
-  opacity: 0.6;
+  opacity: 0.6; */
 }
 
 .input-wrapper {
@@ -152,7 +142,6 @@ body {
 
 .assigned-chips {
   display: flex;
-  
 }
 
 .empty-placeholder {
@@ -180,7 +169,15 @@ body {
   display: none;
 }
 
-.prioButtonUrgent.active  { background:#FF3D00; color:#fff; }
-.prioButtonMedium.active  { background:#FFA800; color:#fff; }
-.prioButtonLow.active     { background:#7AE229; color:#fff; }
-
+.prioButtonUrgent.active {
+  background: #ff3d00;
+  color: #fff;
+}
+.prioButtonMedium.active {
+  background: #ffa800;
+  color: #fff;
+}
+.prioButtonLow.active {
+  background: #7ae229;
+  color: #fff;
+}
