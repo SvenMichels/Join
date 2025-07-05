@@ -153,8 +153,23 @@
     display: none;
   }
 
-  .dropDownMenu{
+  .dropDownMenu {
     top: 80px;
+  }
+
+  .task-list {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    padding: 8px;
+  }
+
+  .task {
+    min-width: 200px;
+    flex-shrink: 0;
   }
 }
 
