@@ -15,14 +15,6 @@ if (window.location.pathname.endsWith("signup.html")) {
   initSignup();
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  const signUpBtn = document.getElementById("signUpBtn");
-  if (!signUpBtn) {
-    return;
-  }
-  signUpBtn.addEventListener("click", showUserFeedback);
-});
-
 function initSignup() {
   setupPasswordValidation();
   setupPasswordToggle();
@@ -93,6 +85,7 @@ export async function collectUserInput() {
 async function submitUser(userData) {
   try {
     await createUser(userData);
+    showUserFeedback()
   } catch (error) {
     console.error("User creation failed", error);
     alert("Registration failed. Please try again.");
@@ -110,6 +103,7 @@ function showUserFeedback() {
     setTimeout(() => {
       feedback.classList.add("dp-none");
       feedback.classList.remove("centerFeedback");
+      window.location.href = "../index.html"
     }, 1500);
   });
 }
