@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
   updateUserGreeting();
   updateSummary();
   handleMobileGreetingFade();
+  document.getElementById("openMenu").addEventListener("click", closeOpenMenu);
 });
 
 function updateUserGreeting() {
@@ -94,5 +95,16 @@ function handleMobileGreetingFade() {
     if (el) {
       setTimeout(() => el.classList.add('hidden'), 500);
     }
+  }
+}
+
+
+ 
+function closeOpenMenu() {
+  const element = document.getElementById("dropDownMenu");
+  if (element.classList.contains("dp-none")) {
+    document.getElementById(`dropDownMenu`).classList.remove("dp-none");
+  } else {
+    document.getElementById(`dropDownMenu`).classList.add("dp-none");
   }
 }

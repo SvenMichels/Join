@@ -19,418 +19,387 @@ window.contactList = contactList;
 
 document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("addBtn").addEventListener("click", openAddWindow);
-  document.querySelectorAll(".cancelBtn, .closeBtn").forEach(btn => btn.addEventListener("click", handleClose));
-  document.getElementById("addContactForm").addEventListener("submit", addContact);
-  document.getElementById("openMenu").addEventListener("click", closeOpenMenu);
-  document.getElementById("editContactForm").addEventListener("submit", handleEditSubmit);
-  document.getElementById("edit").addEventListener("click", openEditWindow);
+  document
+    .querySelectorAll(".cancelBtn, .closeBtn")
+    .forEach((btn) => btn.addEventListener("click", handleClose));
+  document
+    .getElementById("addContactForm")
+    .addEventListener("submit", addContact);
+  document.getElementById("openMenu").addEventListener("click", toggleMenu);
+  document
+    .getElementById("editContactForm")
+    .addEventListener("submit", handleEditSubmit);
+
+  loadShowContact();
   await loadContactsFromFirebase();
   await ensureColorClassForAllContacts();
   loadUserInitials();
-  loadShowContact();
 });
 
 function handleClose() {
   closeAddWindow();
   closeEditWindow();
 }
-
 function openAddWindow() {
-  document.getElementById(`addWindow`).classList.remove("dp-none");
+  document.getElementById("addWindow").classList.remove("dp-none");
 }
-
 function closeAddWindow() {
-  document.getElementById(`addWindow`).classList.add("dp-none");
+  document.getElementById("addWindow").classList.add("dp-none");
+}
+function closeEditWindow() {
+  document.getElementById("editWindow").classList.add("dp-none");
 }
 
 export function openEditWindow() {
-  document.getElementById(`editWindow`).classList.remove("dp-none");
-}
+  let contact = currentlyEditingId ? findContactById(currentlyEditingId) : null;
 
-function closeEditWindow() {
-  document.getElementById(`editWindow`).classList.add("dp-none");
-  document.querySelector("#editWindow #contactName").value = "";
-  document.querySelector("#editWindow #contactEmail").value = "";
-  document.querySelector("#editWindow #contactPhone").value = "";
-  currentlyEditingId = null;
-}
-
-function closeOpenMenu() {
-  const element = document.getElementById("dropDownMenu");
-  if (element.classList.contains("dp-none")) {
-    document.getElementById(`dropDownMenu`).classList.remove("dp-none");
-  } else {
-    document.getElementById(`dropDownMenu`).classList.add("dp-none");
+  if (!contact) {
+    const u = JSON.parse(localStorage.getItem("currentUser")) || {};
+    contact = {
+      id: u.id || null,
+      name: u.userName || "",
+      email: u.userEmail || "",
+      phone: u.phoneNumber || "",
+    };
   }
+  currentlyEditingId = contact.id;
+
+  ["Name", "Email", "Phone"].forEach((f) => {
+    const inp = document.querySelector(`#editWindow #contact${f}`);
+    if (inp) inp.value = contact[f.toLowerCase()];
+  });
+
+  document.getElementById("editWindow").classList.remove("dp-none");
+}
+
+function toggleMenu() {
+  document.getElementById("dropDownMenu").classList.toggle("dp-none");
 }
 
 async function loadContactsFromFirebase() {
+  const currentUser = JSON.parse(localStorage.getItem("currentUser")) || {};
+
   contactList = await loadContacts();
+
+  if (currentUser.id && !contactList.some((c) => c.id === currentUser.id)) {
+    contactList.push({
+      id: currentUser.id,
+      name: currentUser.userName,
+      email: currentUser.userEmail,
+      phone: currentUser.phoneNumber || "–",
+      initials: getInitials(currentUser.userName),
+      colorClass: currentUser.colorClass || getRandomColorClass(),
+    });
+  }
+
+  clearContactListUI();
   renderAllContacts(contactList);
 
-  if (contactList.length > 0) {
+  if (contactList.length) {
     const firstId = contactList[0].id;
     showContact(firstId);
-    const firstCard = document.querySelector(`.contact[data-id="${firstId}"]`);
-    if (firstCard) {
-      firstCard.classList.add("active");
-    }
+    document
+      .querySelector(`.contact[data-id="${firstId}"]`)
+      ?.classList.add("active");
   }
 }
 
-async function addContact(event) {
-  event.preventDefault();
-  const name = getName();
-  const email = getEmail();
-  const phone = getPhone();
-  const initials = getInitials(name);
-  const colorClass = getRandomColorClass();
-  const firstLetter = getFirstLetter(name);
-  const contact = { name, email, phone, initials, colorClass };
+async function addContact(e) {
+  e.preventDefault();
+
+  const contact = {
+    name: getName(),
+    email: getEmail(),
+    phone: getPhone(),
+    initials: getInitials(getName()),
+    colorClass: getRandomColorClass(),
+  };
 
   try {
     const result = await createContact(contact);
     contact.id = result.data.name;
     contactList.push(contact);
-    ignoreMyContact(id)
+
+    clearContactListUI();
     renderAllContacts(contactList);
     emptyInput();
     showUserFeedback();
-  } catch (error) {
-    console.error("Fehler beim Erstellen des Kontakts:", error);
+    setTimeout(closeAddWindow, 800);
+  } catch (err) {
+    console.error("Fehler beim Erstellen des Kontakts:", err);
     alert("Kontakt konnte nicht gespeichert werden.");
   }
+}
 
-   setTimeout(() => {
-     closeAddWindow();
-    }, 800);
-  };
-
-
+const $ = (id) => document.getElementById(id);
+const trimVal = (id) => $(id).value.trim();
 function getName() {
-  return document.getElementById("contactName").value.trim();
+  return trimVal("contactName");
 }
-
 function getEmail() {
-  return document.getElementById("contactEmail").value.trim();
+  return trimVal("contactEmail");
+}
+function getPhone() {
+  return trimVal("contactPhone");
 }
 
-function getPhone() {
-  return document.getElementById("contactPhone").value.trim();
+function emptyInput() {
+  ["contactName", "contactEmail", "contactPhone"].forEach((id) => {
+    const el = $(id);
+    if (el) el.value = "";
+  });
 }
 
 export function getInitials(name) {
-  const words = name.split(" ").filter(Boolean);
-  const first = words[0]?.[0]?.toUpperCase() || "";
-  const second = words[1]?.[0]?.toUpperCase() || "";
-  return first + second;
+  const [a = "", b = ""] = name.split(" ").filter(Boolean);
+  return (a[0] || "").toUpperCase() + (b[0] || "").toUpperCase();
 }
-
 function getFirstLetter(name) {
   return name[0]?.toUpperCase() || "";
 }
 
-export function renderContact(name, email, phone, initials, firstLetter, id, colorClass) {
+export function renderContact(
+  name,
+  email,
+  phone,
+  initials,
+  firstLetter,
+  id,
+  colorClass
+) {
   renderAlphabetFilter(firstLetter);
   renderContactCard(name, email, initials, id, colorClass);
   renderSingleContact(name, email, phone, initials, id, colorClass);
 }
-
-function renderAlphabetFilter(firstLetter) {
-  if (usedLetters.has(firstLetter)) return;
-  usedLetters.add(firstLetter);
-  document.getElementById("allContacts").innerHTML +=
-    alphabetfilter(firstLetter);
+function renderAlphabetFilter(letter) {
+  if (usedLetters.has(letter)) return;
+  usedLetters.add(letter);
+  $("allContacts").innerHTML += alphabetfilter(letter);
 }
-
 function renderContactCard(name, email, initials, id, colorClass) {
-  const allContactsRef = document.getElementById("allContacts");
-  allContactsRef.innerHTML += contactCard(name, email, initials, id, colorClass);
+  $("allContacts").innerHTML += contactCard(
+    name,
+    email,
+    initials,
+    id,
+    colorClass
+  );
 }
-
 function renderSingleContact(name, email, phone, initials, id, colorClass) {
-  const bigContactRef = document.getElementById("bigContact");
-  bigContactRef.innerHTML = singleContact(name, email, phone, initials, id, colorClass);
-  bindDeleteButton(bigContactRef);
-  bindEditButton(bigContactRef);
+  $("bigContact").innerHTML = singleContact(
+    name,
+    email,
+    phone || "–",
+    initials,
+    id,
+    colorClass
+  );
+  bindDeleteButton($("bigContact"));
+  bindEditButton($("bigContact"));
 }
 
-function bindActionButton(container, buttonClass, callback) {
-  const button = container.querySelector(buttonClass);
-
-  if (!button) return;
-
-  button.addEventListener("click", () => {
-    const id = button.dataset.id;
-    callback(id);
-  });
+function bindButton(container, selector, cb) {
+  const btn = container.querySelector(selector);
+  if (btn) btn.addEventListener("click", () => cb(btn.dataset.id));
 }
-
-function bindDeleteButton(container) {
-  bindActionButton(container, ".deleteBtn", deleteContact);
-}
-
-function bindEditButton(container) {
-  bindActionButton(container, ".editBtn", editContact);
-}
+const bindDeleteButton = (c) => bindButton(c, ".deleteBtn", deleteContact);
+const bindEditButton = (c) => bindButton(c, ".editBtn", editContact);
 
 function loadShowContact() {
-  document
-    .getElementById("allContacts")
-    .addEventListener("click", function (event) {
-      const contactCard = event.target.closest(".contact");
-      if (contactCard) {
-        document
-          .querySelectorAll("#allContacts .contact.active")
-          .forEach((el) => el.classList.remove("active"));
-        contactCard.classList.add("active");
-        const id = contactCard.dataset.id;
-        console.log("Click on contactCard ID:", id);
-        showContact(id);
-      }
-    });
-}
-
-function emptyInput() {
-  document.getElementById("contactName").value = "";
-  document.getElementById("contactEmail").value = "";
-  document.getElementById("contactPhone").value = "";
+  $("allContacts").addEventListener("click", (e) => {
+    const card = e.target.closest(".contact");
+    if (!card) return;
+    document
+      .querySelectorAll("#allContacts .contact.active")
+      .forEach((c) => c.classList.remove("active"));
+    card.classList.add("active");
+    showContact(card.dataset.id);
+  });
 }
 
 async function deleteContact(id) {
   await deleteContactFromFirebase(id);
-  contactList = removeContactById(contactList, id);
-  renderAllContacts(contactList);
+  contactList = contactList.filter((c) => c.id !== id);
+
   clearContactListUI();
+  renderAllContacts(contactList);
   clearBigContactView();
-}
-
-function removeContactById(list, id) {
-  return list.filter((contact) => contact.id !== id);
-}
-
-function clearContactListUI() {
-  document.getElementById("allContacts").innerHTML = "";
-  usedLetters.clear();
-}
-
-function renderAllContacts(contacts) {
-  const sortedContacts = sortContactsAlphabetically(contacts)
-  for (const contact of sortedContacts) {
-    const safeColorClass = contact.colorClass || getRandomColorClass();
-    renderContact(
-      contact.name,
-      contact.email,
-      contact.phone,
-      contact.initials,
-      getFirstLetter(contact.name),
-      contact.id,
-      safeColorClass,
-    );
-  }
-}
-
-function clearBigContactView() {
-  document.getElementById("bigContact").innerHTML = "";
-}
-
-function showContact(id) {
-  const contact = getContactById(id);
-  if (!contact) return;
-
-  const safeColorClass = getSafeColorClass(contact);
-
-  displayContactDetail(contact, safeColorClass);
-  animateMobileView();
-  initializeFabMenu(id);
-  initializeBackButton();
-}
-
-function getContactById(id) {
-  return contactList.find(contact => contact.id === id);
-}
-
-function getSafeColorClass(contact) {
-  return contact.colorClass || getRandomColorClass();
-}
-
-function displayContactDetail(contact, colorClass) {
-  renderSingleContact(
-    contact.name,
-    contact.email,
-    contact.phone,
-    contact.initials,
-    contact.id,
-    colorClass
-  );
-}
-
-function animateMobileView() {
-  const singleContactEl = document.querySelector('.singleContact');
-  if (window.innerWidth > 767 || !singleContactEl) return;
-
-  singleContactEl.classList.remove('slide-out');
-  singleContactEl.classList.add('slide-in');
-  singleContactEl.style.display = 'block';
-}
-
-function initializeFabMenu(id) {
-  const fabContainer = document.getElementById('fabContainer');
-  if (!fabContainer || window.innerWidth > 767) return;
-
-  const fabToggle = document.getElementById('fabToggle');
-  const fabEdit = document.getElementById('fabEdit');
-  const fabDelete = document.getElementById('fabDelete');
-
-  fabContainer.classList.remove('open');
-  fabToggle.addEventListener('click', () => {
-    fabContainer.classList.toggle('open');
-  });
-
-  fabEdit.addEventListener('click', () => {
-    openEditWindow();
-    fabContainer.classList.remove('open');
-  });
-
-  fabDelete.addEventListener('click', async () => {
-    await deleteContact(id);
-    fabContainer.classList.remove('open');
-  });
-}
-
-function initializeBackButton() {
-  const singleContactEl = document.querySelector('.singleContact');
-  const backBtn = document.getElementById('closeSingleMobile');
-  const fabContainer = document.getElementById('fabContainer');
-  if (!backBtn) return;
-
-  backBtn.addEventListener('click', () => {
-    singleContactEl.classList.remove('slide-in');
-    singleContactEl.classList.add('slide-out');
-
-    setTimeout(() => {
-      singleContactEl.style.display = 'none';
-      if (fabContainer) fabContainer.style.display = 'none';
-    }, 300);
-  });
-}
-
-
-function findContactById(id) {
-  return contactList.find(c => String(c.id) === String(id));
 }
 
 function editContact(id) {
   const contact = findContactById(id);
-  if (!contact) return;
+
+  if (!contact) {
+    currentlyEditingId = null;
+    openEditWindow();
+    return;
+  }
 
   currentlyEditingId = id;
   fillEditForm(contact);
   openEditWindow();
 }
 
-function fillEditForm(contact) {
+function fillEditForm(c) {
   const map = {
-    contactName: contact.name,
-    contactEmail: contact.email,
-    contactPhone: contact.phone,
+    contactName: c.name,
+    contactEmail: c.email,
+    contactPhone: c.phone,
   };
-
-  for (const [fieldId, value] of Object.entries(map)) {
-    const input = document.querySelector(`#editWindow #${fieldId}`);
-    if (input) input.value = value;
-  }
+  Object.entries(map).forEach(([id, val]) => {
+    const el = document.querySelector(`#editWindow #${id}`);
+    if (el) el.value = val;
+  });
 }
 
 function getEditContactInput() {
   return {
-    name: getValueFromEdit("contactName"),
-    email: getValueFromEdit("contactEmail"),
-    phone: getValueFromEdit("contactPhone"),
+    name: trimValEdit("contactName"),
+    email: trimValEdit("contactEmail"),
+    phone: trimValEdit("contactPhone"),
   };
 }
-
-function getValueFromEdit(id) {
+function trimValEdit(id) {
   return document.querySelector(`#editWindow #${id}`).value.trim();
 }
 
-function handleEditSubmit(event) {
-  event.preventDefault();
-
-  const contact = findContactById(currentlyEditingId);
-  if (!contact) return;
+function handleEditSubmit(e) {
+  e.preventDefault();
 
   const updated = getEditContactInput();
-  updateContact(contact, updated);
-  rerenderAfterEdit(currentlyEditingId);
-  showContact(currentlyEditingId);
-  closeEditWindow();
+  const contact = findContactById(currentlyEditingId);
+
+  if (contact) {
+    updateContact(contact, updated).then(() => {
+      rerenderAfterEdit(contact.id);
+      showContact(contact.id);
+      closeEditWindow();
+    });
+  } else {
+    updateCurrentUser(updated).then(() => {
+      loadUserInitials();
+      closeEditWindow();
+    });
+  }
 }
 
 async function updateContact(contact, updated) {
-  Object.assign(contact, updated, {
-    initials: getInitials(updated.name),
-  });
+  Object.assign(contact, updated, { initials: getInitials(updated.name) });
   await updateContactInFirebase(contact);
+}
+
+async function updateCurrentUser(updated) {
+  const user = JSON.parse(localStorage.getItem("currentUser")) || {};
+  const patched = {
+    ...user,
+    userName: updated.name,
+    userEmail: updated.email,
+    phoneNumber: updated.phone,
+  };
+  localStorage.setItem("currentUser", JSON.stringify(patched));
+
+  try {
+    const { updateUser } = await import("../scripts/users/users.js");
+    await updateUser(patched.id, patched);
+  } catch (_) {}
+
+  const card = document.querySelector(`.contact[data-id='${patched.id}']`);
+  if (card) {
+    card.querySelector(".contactName").textContent = patched.userName;
+    card.querySelector(".email").textContent = patched.userEmail;
+  }
+
+  if (document.querySelector("#profileName")?.textContent === user.userName) {
+    renderSingleContact(
+      patched.userName,
+      patched.userEmail,
+      patched.phoneNumber,
+      getInitials(patched.userName),
+      patched.id,
+      patched.colorClass || getRandomColorClass()
+    );
+  }
 }
 
 function rerenderAfterEdit(id) {
   clearContactListUI();
   renderAllContacts(contactList);
-
-  const updatedContact = findContactById(id);
-  if (updatedContact) renderSingleContact(updatedContact);
 }
 
-function loadUserInitials(){
-  const userString = localStorage.getItem("currentUser");
-  if (!userString) return;
-  const user = JSON.parse(userString);
-  const name = user.userName || "Guest";
-  const profileButton = document.getElementById("openMenu");
-  if (profileButton) profileButton.textContent = getInitials(name);
+function findContactById(id) {
+  return contactList.find((c) => String(c.id) === String(id));
 }
 
-function sortContactsAlphabetically(list) {
-  return [...list].sort((a, b) =>
+function showContact(id) {
+  const c = findContactById(id);
+  if (!c) return;
+  renderSingleContact(
+    c.name,
+    c.email,
+    c.phone,
+    c.initials,
+    c.id,
+    c.colorClass || getRandomColorClass()
+  );
+}
+
+function clearContactListUI() {
+  $("allContacts").innerHTML = "";
+  usedLetters.clear();
+}
+function clearBigContactView() {
+  $("bigContact").innerHTML = "";
+}
+
+function renderAllContacts(list) {
+  sortContactsAlphabetically(list).forEach((c) =>
+    renderContact(
+      c.name,
+      c.email,
+      c.phone,
+      c.initials,
+      getFirstLetter(c.name),
+      c.id,
+      c.colorClass || getRandomColorClass()
+    )
+  );
+}
+
+function sortContactsAlphabetically(arr) {
+  return [...arr].sort((a, b) =>
     a.name.localeCompare(b.name, "de", { sensitivity: "base" })
   );
 }
 
 function showUserFeedback() {
-  const feedback = document.getElementById("userFeedback");
-  if (!feedback) return;
-
-  feedback.classList.remove("dp-none");
-  feedback.classList.add("centerFeedback");
-
-  feedback.addEventListener("animationend", () => {
+  const el = $("userFeedback");
+  if (!el) return;
+  el.classList.remove("dp-none");
+  el.classList.add("centerFeedback");
+  el.addEventListener("animationend", () =>
     setTimeout(() => {
-      feedback.classList.add("dp-none");
-      feedback.classList.remove("centerFeedback");
-    }, 1500);
-  });
+      el.classList.add("dp-none");
+      el.classList.remove("centerFeedback");
+    }, 1500)
+  );
 }
 
 function getRandomColorClass() {
-  const totalColors = 10;
-  const randomIndex = Math.floor(Math.random() * totalColors) + 1;
-  return `color-${randomIndex}`;
+  return `color-${Math.floor(Math.random() * 10) + 1}`;
 }
 
 async function ensureColorClassForAllContacts() {
-  for (const contact of contactList) {
-    if (!contact.colorClass) {
-      contact.colorClass = getRandomColorClass();
-      await updateContactInFirebase(contact);
+  for (const c of contactList) {
+    if (!c.colorClass) {
+      c.colorClass = getRandomColorClass();
+      await updateContactInFirebase(c);
     }
   }
 }
 
-function ignoreMyContact(id) {
-  const contactCard = id;
-  if (!contactCard) {
-    let addMyContactHtml = document.querySelector(`.contact[data-id="${firstId}"]`);
-   clearContactListUI(addMyContactHtml);
-  }
+function loadUserInitials() {
+  const user = JSON.parse(localStorage.getItem("currentUser"));
+  if (!user) return;
+  const btn = $("openMenu");
+  if (btn) btn.textContent = getInitials(user.userName || "U");
 }

@@ -76,6 +76,8 @@ main {
   font-size: clamp(2.5rem, 5vw, 3.8rem);
   line-height: 120%;
   letter-spacing: 0%;
+  display: inline-block;
+  white-space: nowrap;
 }
 
 .headline .divider {
@@ -332,7 +334,7 @@ main {
     bottom: 80px;
     left: 0;
     right: 0;
-    padding-inline: 0 16px;
+    padding-inline: 0;
   }
 
   .mainContent {
@@ -370,5 +372,24 @@ main {
 
   .urgent{
     justify-content: space-evenly;
+  }
+}
+
+@media (max-width: 600px){
+  .frontPage{
+    margin: 0 16px;
+  }
+  h1{
+    padding-left: 0 !important;
+    font-size: 2rem !important;
+  }
+}
+
+@media (max-width: 425px){
+  .headline p{
+    font-size: 0.8rem;
+  }
+  .divider{
+    height: 40px !important;
   }
 }
