@@ -160,6 +160,7 @@
   .task-list {
     display: flex;
     flex-direction: row;
+    justify-content: flex-start;
     gap: 16px;
     overflow-x: auto;
     overflow-y: hidden;
@@ -168,11 +169,12 @@
 
   .task {
     min-width: 200px;
+    max-width: 256px;
     flex-shrink: 0;
   }
 
   .add-task-board-button-second {
-    display: block;
+    display: none;
   }
 }
 
@@ -276,8 +278,24 @@
     display: none;
   }
 
-  .add-task-board-button-second {
-    display: block;
+  .add-task-board-button {
+    display: none;
+  }
+
+  .task-list {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 16px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 8px;
+  }
+
+  .task {
+    min-width: 200px;
+    max-width: 256px;
+    flex-shrink: 0;
   }
 }
 
@@ -334,6 +352,34 @@
   .profile-button {
     width: 48px;
     height: 48px;
+  }
+
+  .add-task-board-button {
+    display: none;
+  }
+
+    .task-list {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 16px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 8px;
+  }
+
+  .board-container {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    padding-left: 328px;
+    position: absolute;
+    top: 96px;
+    bottom: 80px;
+    left: 0;
+    right: 0;
+    overflow-y: auto;
+    box-sizing: border-box;
   }
 }
 

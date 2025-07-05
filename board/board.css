@@ -36,10 +36,9 @@ body {
 .board-container {
   display: flex;
   flex-direction: column;
-  position: relative;
   padding: 16px;
   position: absolute;
-  top: 80px;
+  top: 96px;
   bottom: 80px;
   left: 0;
   right: 0;
@@ -119,6 +118,8 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  min-width: 200px;
+  max-width: 256px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
   border-radius: 10px;
   margin: 15px 0 5px 0;
@@ -130,6 +131,30 @@ body {
     width: 113px;
     height: 27px;
   }
+}
+
+.add-task-board-button-second {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #2a3647;
+  color: #ffffff;
+  border: 0px;
+  width: 160px;
+  height: 48px;
+  opacity: 1;
+  gap: 8px;
+  border-radius: 10px;
+  border-width: 1px;
+  padding-top: 8px;
+  padding-right: 16px;
+  padding-bottom: 8px;
+  padding-left: 16px;
+}
+
+.add-tasboard-button-second img {
+  width: 20px;
+  height: 20px;
 }
 
 .task-list {
@@ -167,6 +192,7 @@ body {
 
 .empty-placeholder {
   padding: 1rem;
+  height: 48px;
   text-align: center;
   font-style: italic;
   color: black;
