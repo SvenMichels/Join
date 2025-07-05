@@ -12,47 +12,53 @@ function updateUserGreeting() {
   if (!userString) return;
 
   try {
-    const user = JSON.parse(userString);
-    const name = user.userName || "Guest";
-
-    const greetingEl = document.querySelector(".greetings > p:first-child");
-    const nameEl = document.querySelector(".greetings .username");
-    const profileButton = document.getElementById("openMenu");
-
-    const hour = new Date().getHours();
-    let greeting = "Hello";
-
-    if (hour < 12) greeting = "Good Morning";
-    else if (hour < 18) greeting = "Good Afternoon";
-    else greeting = "Good Evening";
-
-    if (greetingEl) greetingEl.textContent = `${greeting},`;
-    if (nameEl) nameEl.textContent = name;
-    if (profileButton) profileButton.textContent = getInitials(name);
+    tryUpdateUserGreeting(userString)
   } catch (err) {
     console.warn("Fehler beim Parsen des Benutzers:", err);
   }
 }
 
+function tryUpdateUserGreeting(userString) {
+    const user = JSON.parse(userString);
+    const name = user.userName || "Guest";
+    const greetingEl = document.querySelector(".greetings > p:first-child");
+    const nameEl = document.querySelector(".greetings .username");
+    const profileButton = document.getElementById("openMenu");
+    const hour = new Date().getHours();
+    let greeting = "Hello";
+    
+    tryIfUpdateUserGreeting(greetingEl, nameEl, profileButton, name, greeting, hour, user);
+}
+
+function tryIfUpdateUserGreeting(greetingEl, nameEl, profileButton, name, greeting, hour, user) {
+  if (hour < 12) greeting = "Good Morning";
+    else if (hour < 18) greeting = "Good Afternoon";
+    else greeting = "Good Evening";
+    if (greetingEl) greetingEl.textContent = `${greeting},`;
+    if (nameEl) nameEl.textContent = name;
+    if (profileButton) profileButton.textContent = getInitials(name);
+    }
+
 async function updateSummary() {
   try {
     const { data: tasks } = await requestData("GET", "/tasks/");
     if (!tasks) return;
-
     const allTasks = Object.values(tasks);
+    setTextUpdateSummary(allTasks);
+  } catch (err) {
+    console.error("Fehler beim Laden der Summary:", err);
+  }
+}
 
+async function setTextUpdateSummary(allTasks) {
     setText(".todoTaskAmount", countByStatus(allTasks, "todo"));
     setText(".doneTaskAmount", countByStatus(allTasks, "done"));
     setText(".taskInProgress", countByStatus(allTasks, "in-progress"));
     setText(".awaitingFeedback", countByStatus(allTasks, "await"));
     setText(".taskInBoard", allTasks.length);
     setText(".urgentTaskAmount", countByPriority(allTasks, "High"));
-
     const earliestUrgentDate = getEarliestUrgentDueDate(allTasks);
     setText(".urgentTaskDate", earliestUrgentDate || "No deadline");
-  } catch (err) {
-    console.error("Fehler beim Laden der Summary:", err);
-  }
 }
 
 function countByStatus(tasks, status) {
@@ -98,8 +104,6 @@ function handleMobileGreetingFade() {
   }
 }
 
-
- 
 function closeOpenMenu() {
   const element = document.getElementById("dropDownMenu");
   if (element.classList.contains("dp-none")) {
