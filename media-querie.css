@@ -85,10 +85,13 @@
     height: 60px;
   }
 
-  /* h1 {
-    padding-left: 16px;
-    margin: 0;
-  } */
+  .board-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 32px;
+  }
 
   .form-wrapper {
     position: absolute;
@@ -175,6 +178,19 @@
 
   .add-task-board-button-second {
     display: none;
+  }
+
+  .board-container {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    position: absolute;
+    top: 96px;
+    bottom: 80px;
+    left: 0;
+    right: 0;
+    overflow-y: auto;
+    box-sizing: border-box;
   }
 }
 
@@ -297,6 +313,19 @@
     max-width: 256px;
     flex-shrink: 0;
   }
+
+  .board-container {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    position: absolute;
+    top: 96px;
+    bottom: 80px;
+    left: 0;
+    right: 0;
+    overflow-y: auto;
+    box-sizing: border-box;
+  }
 }
 
 @media (min-width: 768px) and (max-width: 991px) {
@@ -358,7 +387,7 @@
     display: none;
   }
 
-    .task-list {
+  .task-list {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
@@ -371,11 +400,12 @@
   .board-container {
     display: flex;
     flex-direction: column;
+    max-width: 1440px;
     padding: 16px;
     padding-left: 328px;
     position: absolute;
     top: 96px;
-    bottom: 80px;
+    bottom: 10px;
     left: 0;
     right: 0;
     overflow-y: auto;
@@ -478,6 +508,31 @@
   .add-task-board-button {
     display: none;
   }
+
+  .board-container {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    padding-left: 328px;
+    position: absolute;
+    top: 96px;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    overflow-y: auto;
+    box-sizing: border-box;
+    max-width: 1440px;
+  }
+
+  .task-list {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 16px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 8px;
+  }
 }
 
 @media (min-width: 1200px) {
@@ -559,5 +614,34 @@
 
   .add-task-board-button {
     display: none;
+  }
+
+  .board-container {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    padding-left: 328px;
+    position: absolute;
+    top: 96px;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    overflow-y: auto;
+    box-sizing: border-box;
+    max-width: 1440px;
+  }
+
+  .task-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 8px;
+  }
+
+  .board {
+    display: flex;
+    gap: 16px;
   }
 }

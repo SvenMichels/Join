@@ -33,7 +33,7 @@ body {
   border-width: 1px;
 }
 
-.board-container {
+/* .board-container {
   display: flex;
   flex-direction: column;
   padding: 16px;
@@ -44,7 +44,7 @@ body {
   right: 0;
   overflow-y: auto;
   box-sizing: border-box;
-}
+} */
 
 .board-add-wrapper {
   display: flex;
