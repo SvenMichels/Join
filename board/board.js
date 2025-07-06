@@ -12,6 +12,7 @@ const statusMap = {
 let loadedTasks = {};
 
 window.addEventListener("DOMContentLoaded", () => {
+  window.addEventListener("taskCreated", fetchTasks);
   document.getElementById("openMenu").addEventListener("click", closeOpenMenu);
   fetchTasks();
   setupDragAndDrop();
@@ -21,7 +22,7 @@ window.addEventListener("DOMContentLoaded", () => {
 async function fetchTasks() {
   try {
     const { data: tasksData } = await requestData("GET", "/tasks/");
-    loadedTasks = {}; 
+    loadedTasks = {};
 
     for (const [id, task] of Object.entries(tasksData || {})) {
       task.id = id;
@@ -193,79 +194,21 @@ document.querySelectorAll(".board-icon").forEach((icon) => {
 
 async function openTaskModal() {
   const overlay = document.getElementById("modal-overlay");
-  const response = await fetch("../taskfloatdata/taskfloat.html");
+
+  /* ---------- Modal-HTML laden ---------- */
+  const response = await fetch("../taskFloatData/taskfloat.html");   // korrekter Pfad
   overlay.innerHTML = await response.text();
   overlay.classList.remove("d_none");
 
+  /* ---------- Modal initialisieren (nach dem Render-Tick) ---------- */
+  setTimeout(() => {
+    window.initTaskFloat?.();        // Funktion kommt aus taskfloat.js
+  }, 0);
+
   /* ---------- Close-Button ---------- */
   const closeBtn = overlay.querySelector(".taskFloatButtonClose");
-  if (closeBtn)
-    closeBtn.addEventListener("click", () => {
-      overlay.classList.add("d_none");
-      overlay.innerHTML = ""; // Modal säubern
-    });
-
-  /* ---------- Submit-Button ---------- */
-  const submitBtn = overlay.querySelector(".createButton");
-  if (submitBtn) {
-    submitBtn.addEventListener("click", async () => {
-      const newTask = extractTaskFromForm(overlay);
-      if (!newTask) return; // Pflichtfelder fehlen → Abbruch
-
-      const { data } = await requestData("POST", "/tasks/", newTask);
-      newTask.id = data.name; // Firebase-ID
-      loadedTasks[newTask.id] = newTask;
-
-      const taskEl = createTaskElement(newTask);
-      document.getElementById(statusMap[newTask.status]).appendChild(taskEl);
-
-      updateEmptyLists();
-      overlay.classList.add("d_none");
-      overlay.innerHTML = "";
-    });
-  }
-
-  /* ---------- Prio-Buttons aktivieren ---------- */
-  const prioButtons = overlay.querySelectorAll(
-    ".prioButtonUrgent, .prioButtonMedium, .prioButtonLow"
-  );
-  prioButtons.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      prioButtons.forEach((b) => b.classList.remove("active")); // alle zurücksetzen
-      btn.classList.add("active"); // geklickten markieren
-    });
+  closeBtn?.addEventListener("click", () => {
+    overlay.classList.add("d_none");
+    overlay.innerHTML = "";          // Modal säubern
   });
-  // nachdem prioButtons definiert sind:
-  prioButtons[2]?.classList.add("active"); // Low vorselektieren
-}
-
-function extractTaskFromForm(root) {
-  const title = root.querySelector("#titleInput")?.value.trim();
-  const description = root.querySelector("#descriptionInput")?.value.trim();
-  const dueDate = root.querySelector("#dateInput")?.value;
-  const assigned = root.querySelector("prio-assign-input")?.value;
-  const category = root.querySelector(".prio-category-input-modal")?.value.trim();
-  const prio = getSelectedPriority(root);
-
-  if (!title || !dueDate || !category) {
-    alert("Bitte fülle alle Pflichtfelder aus.");
-    return null;
-  }
-
-  return {
-    title,
-    description,
-    dueDate,
-    assigned: assigned ? [assigned] : [],
-    category: category === "User Story" ? "User_Story" : "Technical_Task",
-    prio,
-    status: "todo", // Default
-  };
-}
-
-function getSelectedPriority(root) {
-  if (root.querySelector(".prioButtonUrgent.active")) return "Urgent";
-  if (root.querySelector(".prioButtonMedium.active")) return "Medium";
-  if (root.querySelector(".prioButtonLow.active")) return "Low";
-  return "Medium"; // Fallback, falls keiner aktiv
 }
