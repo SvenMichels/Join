@@ -140,7 +140,16 @@ input:valid + .error-message {
   box-sizing: border-box;
 }
 
-.prioAssignInput {
+.prio-assign-input {
+  width: 98%;
+  height: 48px;
+  display: flex;
+  justify-content: space-between;
+  border-radius: 10px;
+  border: 1px solid #d1d1d1;
+}
+
+.prio-assign-input {
   width: 100%;
   padding: 12px 40px 12px 16px;
   border: 1px solid #d1d1d1;
@@ -173,7 +182,7 @@ input:valid + .error-message {
   border-radius: 50%;
 }
 
-.prioAssignInput:hover {
+prio-assign-input:hover {
   border: 1px solid #a8a8a8;
 }
 
@@ -241,7 +250,7 @@ input:valid + .error-message {
   height: 80px;
 }
 
-.prioCategoryInput {
+.prio-category-input {
   display: flex;
   justify-content: space-between;
   align-items: center;

@@ -243,8 +243,8 @@ function extractTaskFromForm(root) {
   const title = root.querySelector("#titleInput")?.value.trim();
   const description = root.querySelector("#descriptionInput")?.value.trim();
   const dueDate = root.querySelector("#dateInput")?.value;
-  const assigned = root.querySelector(".prioAssignInput")?.value;
-  const category = root.querySelector(".prioCategoryInput")?.value.trim();
+  const assigned = root.querySelector("prio-assign-input")?.value;
+  const category = root.querySelector(".prio-category-input-modal")?.value.trim();
   const prio = getSelectedPriority(root);
 
   if (!title || !dueDate || !category) {

@@ -2,7 +2,7 @@ body {
   max-width: 1440px;
 }
 
-.task-h1-container {
+/* .task-h1-container {
   width: 100%;
   max-width: calc(1440px - 308px);
   height: 73px;
@@ -12,7 +12,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-}
+} */
 
 .search-add-container {
   display: flex;

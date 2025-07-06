@@ -3,122 +3,116 @@
  <head>
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>
-   Test
-  </title>
+  <link rel="stylesheet" href="../taskFloatData/task-float-modal.css">
 
  </head>
  <body>
-  <div class="taskFloatContainer">
-   <div class="task-h1-container">
-    <h1>
-     Add Task
-    </h1>
-    <img alt="Bild" class="taskFloatButtonClose" src="../assets/icons/close.svg"/>
-   </div>
-   <div class="taskFloatField">
-    <div class="task-container">
-     <form>
-      <div class="task-title">
-       <label for="titleInput">
-        Title
-        <span style="color: #ff8190">
-         *
-        </span>
-       </label>
-       <input class="task-title-input" id="titleInput" name="title" placeholder="Enter a title" required="" type="text"/>
-       <span class="error-message">
-        This field is required.
-       </span>
-      </div>
-      <div class="task-description">
-       <label for="descriptionInput">
-        Description
-       </label>
-       <input class="task-description-input" id="descriptionInput" placeholder="Enter a Description" type="text"/>
-      </div>
-      <div class="task-date">
-       <label for="dateInput">
-        Due date
-        <span style="color: #ff8190">
-         *
-        </span>
-       </label>
-       <input class="task-dateInput" content="dd.mm.yyyy" id="dateInput" required="" type="date"/>
-       <span class="error-message">
-        This field is required.
-       </span>
-      </div>
-     </form>
-    </div>
-    <div class="space-container">
-    </div>
-    <div class="prio-container">
-     <div class="prio-content">
-      <p>
-       Priority
-      </p>
-      <div class="prio-button-container">
-       <button class="prioButtonUrgent">
-        <p>
-         Urgent
-        </p>
-        <img alt="Bild" class="prioIcons" src="../assets/icons/urgent_red.svg">
-        </img>
-       </button>
-       <button class="prioButtonMedium">
-        Medium
-        <img alt="Bild" class="prioIcons" src="../assets/icons/medium_white.svg"/>
-       </button>
-       <button class="prioButtonLow">
-        Low
-        <img alt="Bild" class="prioIcons" src="../assets/icons/low_green.svg"/>
-       </button>
-      </div>
-     </div>
-     <div class="prio-assigned-container">
-      <p>
-       Assigned to
-      </p>
-      <input class="prioAssignInput" type="text"/>
-     </div>
-     <div class="prio-category-container">
-      <p>
-       Category
-       <span style="color: #ff8190">
-        *
-       </span>
-      </p>
-      <input class="prioCategoryInput" type="text"/>
-     </div>
-     <div class="prio-subtask-container">
-      <p>
-       Subtasks
-      </p>
-      <input class="prio-subtask-input" type="text"/>
-     </div>
-    </div>
-   </div>
-   <div class="taskFloatcreate-container">
-    <div class="required-container">
-     <span>
-      <span style="color: #ff8190">
-       *
-      </span>
-      This field is required
-     </span>
-    </div>
-    <div class="create-container">
-     <button class="clear-button">
-      Clear
-      <img alt="Bild" src="../assets/icons/iconoir_cancel.svg"/>
-     </button>
-     <button class="create-button">
-      Create Task
-      <img alt="Bild" src="../assets/icons/check.svg"/>
-     </button>
-    </div>
-   </div>
+
+  <div class="form-wrapper-modal">
+      <div class="task-h1-container-modal">
+    <h1>Add Task</h1>
+    <button>X</button>
   </div>
+  <div class="form-container">
+  <form class="task-container" id="taskForm">
+    <div class="task-wrapper-modal">
+    <div class="task-title">
+      <label for="task-title">Title <span style="color: #ff8190">*</span></label>
+      <input class="task-title-input" name="taskTitle" id="task-title" placeholder="Enter a title" type="text" />
+      <span id="titleAlert" class="redSpan" style="display: none; color: #ff8190">This field is required</span>
+    </div>
+
+    <div class="task-description">
+      <label for="task-description">Description</label>
+      <textarea class="task-description-input" name="taskDescription" id="task-description"
+        placeholder="Enter a Description" type="text"></textarea>
+    </div>
+
+    <div class="task-date">
+      <label for="task-date">Due Date <span style="color: #ff8190">*</span></label>
+      <input class="task-dateInput" name="taskDate" id="task-date" placeholder="dd/mm/yyyy" type="date"
+        min="2025-06-21" />
+      <span id="dateAlert" class="redSpan" style="display: none; color: #ff8190">This field is required</span>
+    </div>
+    </div>
+
+    <div class="space-container"></div>
+
+    <div class="prio-container-modal">
+      <div class="prio-content">
+        <label for="taskPriority">Priority</label>
+        <div class="prio-button-container">
+          <button id="urgent-task" class="prioButtons">
+            Urgent
+            <img id="urgent-task-img" src="../assets/icons/urgent_red.svg" alt="urgent" />
+          </button>
+          <button id="medium-task" class="prioButtons">
+            Medium
+            <img id="medium-task-img" src="../assets/icons/medium_yellow.svg" alt="medium" />
+          </button>
+          <button id="low-task" class="prioButtons">
+            Low
+            <img id="low-task-img" src="../assets/icons/low_green.svg" alt="low" />
+          </button>
+        </div>
+      </div>
+
+      <div class="prio-assigned-container">
+        <label for="assignedUsers">Assigned to</label>
+
+        <div class="assigned-input-wrapper">
+          <div class="assigned-container-modal">
+            <input id="searchUser" placeholder="Select contact to assign" name="assignedUsers" class="prio-assign-input"
+              type="text" />
+            <button class="assigned-userlist-button-modal" type="button">
+              <img id="assignedBtnImg" class="assigned-input-Img-modal dropdown-arrow"
+                src="../assets/icons/arrow_drop_down.svg" />
+            </button>
+          </div>
+          <div id="assignedUserList" class="assigned-user-list"></div>
+        </div>
+
+        <div id="selectedUser" class="selectedUserContainer"></div>
+      </div>
+
+      <div class="prio-category-container">
+        <label for="category">Category <span style="color: #ff8190">*</span></label>
+        <select class="prio-category-input-modal" id="category" name="category">
+          <option value="">Bitte auswählen</option>
+          <option value="Technical_Task">Technical Task</option>
+          <option value="User_Story">User Story</option>
+        </select>
+        <span id="categoryAlert" class="redSpan" style="display: none; color: #ff8190">This field is required</span>
+      </div>
+
+      <div class="prio-subtask-container">
+        <label for="subtask">Subtasks</label>
+        <div class="subtask-wrapper-modal">
+          <input class="prio-subtask-input" name="subtask" id="subtask" type="text" />
+          <button type="button" class="subtask-add-button-modal">
+            <img src="../assets/icons/add.svg" />
+          </button>
+        </div>
+        <div id="subtaskList"></div>
+      </div>
+    </div>
+
+    <div class="required-container-modal">
+      <div>
+        <span style="color: #ff8190">*</span>
+        <span>This field is required</span>
+      </div>
+      <div class="create-container-modal">
+        <button class="clear-button" id="clearBtn" type="reset">
+          Clear <img alt="Bild" src="../assets/icons/iconoir_cancel.svg" />
+        </button>
+        <button class="create-button" type="submit">
+          Create Task <img alt="Bild" src="../assets/icons/create_check.svg" />
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+</div>
  </body>
 </html>
