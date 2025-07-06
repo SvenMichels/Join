@@ -9,12 +9,13 @@ export async function loginListeners() {
     const email = document.querySelector("#loginEmail").value.trim();
     const password = document.querySelector("#loginPassword").value.trim();
 
-    try {
-      const user = await loginUser(email, password);
-      window.location.href = "../../startpage/startpage.html";
-    } catch (err) {
-      console.log(`Guest login failed: ${err.message}`);
-    }
+try {
+  await loginUser(email, password);
+  window.location.href = "../../startpage/startpage.html";
+} catch (err) {
+  console.warn(`Login failed: ${err.message}`);
+
+}
   });
 
   document.querySelector(".guestLogIn").addEventListener("click", async () => {
@@ -29,7 +30,6 @@ export async function loginListeners() {
 
 export async function signupListeners() {
   const form = document.getElementById("signUpForm");
-  console.log("test");
   if (!form) return console.log("signUpForm not found");
 
   form.addEventListener("submit", async (event) => {

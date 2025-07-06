@@ -1,78 +1,84 @@
-// login.js
 import { requestData } from "../firebase.js";
 
+// === LOGIN FORM HANDLING ===
 const loginForm = document.getElementById("loginForm");
-loginForm?.addEventListener("submit", async function (event) {
+
+loginForm?.addEventListener("submit", async (event) => {
   event.preventDefault();
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
+
+  try {
+    await loginUser(email, password);
+    window.location.href = "startpage.html";
+  } catch (err) {
+    console.warn("Login fehlgeschlagen:", err.message);
+  }
 });
 
+// === LOGIN-FUNKTION ===
 export async function loginUser(email, password) {
   try {
     const { data: users } = await requestData("GET", "/users/");
     const userList = Object.entries(users || {}).map(([id, data]) => ({ id, ...data }));
+
     const user = userList.find(
-      (user) => user.userEmail === email && user.password === password
+      (user) =>
+        user.userEmail?.toLowerCase() === email.toLowerCase() &&
+        user.password === password
     );
 
-    if (user) {
-      localStorage.setItem("currentUser", JSON.stringify(user));
-      return user;
-    } else {
-      alert("Ungültige Anmeldedaten");
-      throw new Error("Invalid credentials");
-    }
-  } catch (error) {
-    console.error("Fehler beim Login:", error);
-    alert("Login fehlgeschlagen. Bitte versuche es erneut.");
-    throw error; 
+    if (!user) throw new Error("Invalid credentials");
+
+    localStorage.setItem("currentUser", JSON.stringify(user));
+    return user;
+  } catch (err) {
+    console.warn("Fehler beim Login:", err);
+    throw err;
   }
 }
 
-
+// === GAST-LOGIN ===
 export async function loginAsGuest() {
   try {
     const { data: users } = await requestData("GET", "/users/");
-    const userList = Object.values(users);
-    const guest = userList.find((u) => u.userName.toLowerCase() === "guest");
+    const guest = Object.values(users || {}).find(
+      (user) => user.userName?.toLowerCase() === "guest"
+    );
 
-    if (guest) {
-      localStorage.setItem("currentUser", JSON.stringify(guest));
-      window.location.href = "startpage.html";
-    } else {
-      alert("Gast-Zugang nicht gefunden.");
-    }
+    if (!guest) return warn("Gast-Zugang nicht gefunden.");
+
+    localStorage.setItem("currentUser", JSON.stringify(guest));
+    window.location.href = "startpage.html";
   } catch (err) {
-    console.error("Fehler beim Gast-Login:", err);
+    console.warn("Fehler beim Gast-Login:", err);
   }
-};
+}
 
+// === INIT ON LOAD ===
 document.addEventListener("DOMContentLoaded", () => {
   updateUserGreeting();
   updateSummary();
 });
 
+// === BEGRÜSSUNG ===
 function updateUserGreeting() {
-  const userString = localStorage.getItem("currentUser");
-  if (!userString) return;
-
   try {
-    const user = JSON.parse(userString);
-    const name = user.userName || "Guest";
+    const user = JSON.parse(localStorage.getItem("currentUser"));
+    if (!user) return;
 
-    const greetingEl = document.querySelector(".greetings > p:first-child");
-    const nameEl = document.querySelector(".greetings .username");
+    const name = user.userName || "Guest";
+    const greetingElement = document.querySelector(".greetings > p:first-child");
+    const nameElement = document.querySelector(".greetings .username");
 
     const hour = new Date().getHours();
-    let greeting = "Hello";
+    const greeting =
+      hour < 12 ? "Good Morning" :
+      hour < 18 ? "Good Afternoon" :
+      "Good Evening";
 
-    if (hour < 12) greeting = "Good Morning";
-    else if (hour < 18) greeting = "Good Afternoon";
-    else greeting = "Good Evening";
-
-    if (greetingEl) greetingEl.textContent = `${greeting},`;
-    if (nameEl) nameEl.textContent = name;
+    if (greetingElement) greetingElement.textContent = `${greeting},`;
+    if (nameElement) nameElement.textContent = name;
   } catch (err) {
     console.warn("Fehler beim Parsen des Benutzers:", err);
   }
@@ -95,31 +101,35 @@ async function updateSummary() {
     const earliestUrgentDate = getEarliestUrgentDueDate(allTasks);
     setText(".urgentTaskDate", earliestUrgentDate || "No deadline");
   } catch (err) {
-    console.error("Fehler beim Laden der Summary:", err);
+    console.warn("Fehler beim Laden der Summary:", err);
   }
 }
 
+// === HELPER ===
 function countByStatus(tasks, status) {
   return tasks.filter((t) => t.status === status).length;
 }
 
-function countByPriority(tasks, prio) {
-  return tasks.filter((t) => (t.prio || "").toLowerCase() === prio.toLowerCase()).length;
+function countByPriority(tasks, priority) {
+  return tasks.filter((t) => (t.prio || "").toLowerCase() === priority.toLowerCase()).length;
 }
 
 function getEarliestUrgentDueDate(tasks) {
-  const urgentTasks = tasks
+  const urgentDates = tasks
     .filter((t) => (t.prio || "").toLowerCase() === "high" && t.dueDate)
     .map((t) => new Date(t.dueDate))
     .sort((a, b) => a - b);
 
-  if (urgentTasks.length === 0) return null;
+  if (!urgentDates.length) return null;
 
-  const options = { year: "numeric", month: "long", day: "numeric" };
-  return urgentTasks[0].toLocaleDateString("en-US", options);
+  return urgentDates[0].toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric"
+  });
 }
 
 function setText(selector, text) {
-  const el = document.querySelector(selector);
-  if (el) el.textContent = text;
+  const element = document.querySelector(selector);
+  if (element) element.textContent = text;
 }
