@@ -6,7 +6,12 @@ export async function loginListeners() {
   const loginForm = document.getElementById("loginForm");
   if (!loginForm) return console.log("loginForm not found");
   document.querySelector(".logIn").addEventListener("click", async () => {
-    const email = document.querySelector("#loginEmail").value.trim();
+    
+   loginListenersTry();
+  });
+
+  async function loginListenersTry(){
+     const email = document.querySelector("#loginEmail").value.trim();
     const password = document.querySelector("#loginPassword").value.trim();
 
     try {
@@ -15,7 +20,7 @@ export async function loginListeners() {
     } catch (err) {
       console.log(`Guest login failed: ${err.message}`);
     }
-  });
+  }
 
   document.querySelector(".guestLogIn").addEventListener("click", async () => {
     try {
@@ -32,12 +37,7 @@ export async function signupListeners() {
   console.log("test");
   if (!form) return console.log("signUpForm not found");
 
-  form.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    console.log("Submit triggered");
-    const userdata = await collectUserInput();
-  requestData("POST","/users/", userdata);
-  });
+ formEventListener();
 
   const checkBox = document.getElementById("checkBox");
   const signUpBtn = document.getElementById("signUpBtn");
@@ -46,4 +46,13 @@ export async function signupListeners() {
       signUpBtn.disabled = !checkBox.checked;
     });
   }
+}
+
+function formEventListener(){
+   form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    console.log("Submit triggered");
+    const userdata = await collectUserInput();
+  requestData("POST","/users/", userdata);
+  });
 }
