@@ -627,8 +627,13 @@
     left: 0;
     right: 0;
     overflow-y: auto;
+    scrollbar-width: none;
     box-sizing: border-box;
     max-width: 1440px;
+  }
+
+  .board-container::-webkit-scrollbar {
+    display: none;
   }
 
   .task-list {
