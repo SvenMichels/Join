@@ -1,13 +1,18 @@
 import { requestData } from "../scripts/firebase.js";
 
-
 let currentActivePriority = "medium";
 let allUsers = [];
 let subtasks = [];
 
 const priorityIcons = {
-  urgent: ["../assets/icons/urgent_red.svg", "../assets/icons/urgent_white.svg"],
-  medium: ["../assets/icons/medium_yellow.svg", "../assets/icons/medium_white.svg"],
+  urgent: [
+    "../assets/icons/urgent_red.svg",
+    "../assets/icons/urgent_white.svg",
+  ],
+  medium: [
+    "../assets/icons/medium_yellow.svg",
+    "../assets/icons/medium_white.svg",
+  ],
   low: ["../assets/icons/low_green.svg", "../assets/icons/low_white.svg"],
 };
 
@@ -16,8 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initForm();
   loadUserInitials();
   eventHandleSearch();
-  
-}); 
+});
 
 const $ = {};
 
@@ -30,7 +34,9 @@ function cacheDom() {
   $.assignUserListBtn = document.querySelector(".assignUserListBtn");
   $.assignedBtnImg = document.getElementById("assignedBtnImg");
 
-  document.getElementById('task-date').min = new Date().toISOString().split("T")[0];
+  document.getElementById("task-date").min = new Date()
+    .toISOString()
+    .split("T")[0];
 
   $.openMenuBtn?.addEventListener("click", toggleMenu);
   $.form?.addEventListener("submit", handleFormSubmit);
@@ -62,13 +68,23 @@ function selectPriority(priority) {
   Object.entries(map).forEach(([key, id]) => {
     const btn = document.getElementById(id);
     const img = document.getElementById(`${key}-task-img`);
-    btn?.classList.remove("prioUrgentBtnActive", "prioMediumBtnActive", "prioLowBtnActive");
+    btn?.classList.remove(
+      "prioUrgentBtnActive",
+      "prioMediumBtnActive",
+      "prioLowBtnActive"
+    );
     if (img) img.src = priorityIcons[key][0];
   });
 
   const activeBtn = document.getElementById(map[priority]);
   const activeImg = document.getElementById(`${priority}-task-img`);
-  activeBtn?.classList.add({ urgent: "prioUrgentBtnActive", medium: "prioMediumBtnActive", low: "prioLowBtnActive" }[priority]);
+  activeBtn?.classList.add(
+    {
+      urgent: "prioUrgentBtnActive",
+      medium: "prioMediumBtnActive",
+      low: "prioLowBtnActive",
+    }[priority]
+  );
   if (activeImg) activeImg.src = priorityIcons[priority][1];
 }
 
@@ -84,7 +100,9 @@ function initForm() {
   });
 
   ["urgent", "medium", "low"].forEach((prio) => {
-    document.getElementById(`${prio}-task`)?.addEventListener("click", () => selectPriority(prio));
+    document
+      .getElementById(`${prio}-task`)
+      ?.addEventListener("click", () => selectPriority(prio));
   });
 }
 
@@ -192,7 +210,9 @@ function renderUserCheckboxes(users) {
 }
 
 function collectAssignedUsers() {
-  return Array.from(document.querySelectorAll(".user-checkbox-wrapper .user-checkbox:checked")).map((cb) => cb.value);
+  return Array.from(
+    document.querySelectorAll(".user-checkbox-wrapper .user-checkbox:checked")
+  ).map((cb) => cb.value);
 }
 
 function updateSelectedUserDisplay() {
@@ -324,7 +344,9 @@ function eventHandleSearch() {
       return;
     }
     document.getElementById("assignedUserList").classList.add("visible");
-    renderUserCheckboxes(allUsers.filter((u) => u.userName.toLowerCase().includes(term)));
+    renderUserCheckboxes(
+      allUsers.filter((u) => u.userName.toLowerCase().includes(term))
+    );
   });
 }
 

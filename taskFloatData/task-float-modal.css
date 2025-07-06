@@ -304,6 +304,22 @@ input:valid + .error-message {
   height: 32px;
 }
 
+/* ----------  Prio-Button Farben ---------- */
+#urgent-task-modal.prioUrgentBtnActive  { background:#ff3d00; color:#fff; }
+#medium-task-modal.prioMediumBtnActive { background:#ffa800; color:#fff; }
+#low-task-modal.prioLowBtnActive       { background:#7ae229; color:#fff; }
+
+/* ----------  Assigned-Dropdown ---------- */
+.assigned-user-list        { display:none; }
+.assigned-user-list.visible{ display:block; max-height:230px; overflow-y:auto; }
+
+/* Auswahl im Dropdown markieren */
+.user-checkbox-wrapper-modal.active {
+  background:#2a3647;
+  color:#fff;
+  border-radius:10px;
+}
+
 select {
   -webkit-appearance: none;
   -moz-appearance: none;
