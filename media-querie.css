@@ -424,6 +424,7 @@
     top: 0;
     left: 0;
     background-color: #2a3647;
+    z-index: 1;
   }
   .header-nav-logo {
     display: none;
@@ -450,19 +451,6 @@
   .profile-button {
     width: 48px;
     height: 48px;
-  }
-
-  .nav-bar {
-    width: 232px;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    background-color: #2a3647;
   }
 
   .form-wrapper {
@@ -570,6 +558,7 @@
     top: 0;
     left: 0;
     background-color: #2a3647;
+    z-index: 1;
   }
 
   .form-wrapper {

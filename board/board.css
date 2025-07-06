@@ -105,7 +105,6 @@ body {
   right: 12px;
   top: 50%;
   transform: translateY(-50%);
-  z-index: -100;
   cursor: pointer;
   opacity: 0.6;
 }
@@ -209,7 +208,6 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
 }
 
 #modal-overlay.d_none {
