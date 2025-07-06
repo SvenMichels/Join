@@ -2,17 +2,6 @@ body {
   max-width: 1440px;
 }
 
-/* .task-h1-container {
-  width: 100%;
-  max-width: calc(1440px - 308px);
-  height: 73px;
-  position: absolute;
-  top: 206px;
-  left: 275px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-} */
 
 .search-add-container {
   display: flex;
@@ -32,19 +21,6 @@ body {
   border-radius: 10px;
   border-width: 1px;
 }
-
-/* .board-container {
-  display: flex;
-  flex-direction: column;
-  padding: 16px;
-  position: absolute;
-  top: 96px;
-  bottom: 80px;
-  left: 0;
-  right: 0;
-  overflow-y: auto;
-  box-sizing: border-box;
-} */
 
 .board-add-wrapper {
   display: flex;
@@ -208,6 +184,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 2;
 }
 
 #modal-overlay.d_none {
