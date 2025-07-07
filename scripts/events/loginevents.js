@@ -1,5 +1,5 @@
 import { loginAsGuest, loginUser } from "../auth/login.js";
-import { collectUserInput } from "../../signup/signup.js";
+import { collectUserInput } from "../../signUp/signup.js"
 import { requestData } from "../firebase.js";
 
 export async function loginListeners() {
@@ -14,27 +14,45 @@ export async function loginListeners() {
      const email = document.querySelector("#loginEmail").value.trim();
     const password = document.querySelector("#loginPassword").value.trim();
 
-    try {
-      const user = await loginUser(email, password);
-      window.location.href = "../../startpage/startpage.html";
-    } catch (err) {
-      console.log(`Guest login failed: ${err.message}`);
-    }
-  }
+try {
+  await loginUser(email, password);
+  window.location.href = "../../startpage/startpage.html";
+} catch (err) {
+  console.warn(`Login failed: ${err.message}`);
+
+}
+  });
 
   document.querySelector(".guestLogIn").addEventListener("click", async () => {
     try {
-      const guest = await loginAsGuest();
+      await loginAsGuest();
       window.location.href = "../../startpage/startpage.html";
     } catch (err) {
       console.log(`Guest login failed: ${err.message}`);
     }
   });
+  bindPolicyLinks();
+}
+
+function bindPolicyLinks() {
+  const selectors = [
+    'a[href$="privatpolicy.html"]',
+    'a[href$="legalnotice.html"]'
+  ].join()
+  const links = document.querySelectorAll(selectors)
+  links.forEach(async link => {
+    link.addEventListener("click", async event => {
+      if (!localStorage.getItem("token")) {
+        event.preventDefault()
+        await loginAsGuest()
+        window.location.href = link.href
+      }
+    })
+  })
 }
 
 export async function signupListeners() {
   const form = document.getElementById("signUpForm");
-  console.log("test");
   if (!form) return console.log("signUpForm not found");
 
  formEventListener();
@@ -46,6 +64,7 @@ export async function signupListeners() {
       signUpBtn.disabled = !checkBox.checked;
     });
   }
+  bindPolicyLinks();
 }
 
 function formEventListener(){

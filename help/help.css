@@ -35,6 +35,25 @@ p {
   border-radius: 35px;
 }
 
+.h1-image-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.h1-image-button img {
+  width: 32px;
+  height: 32px;
+  transition: transform 0.2s;
+}
+
+.h1-image-button:hover img {
+  transform: scale(1.1);
+  background-color: #eeeeee;
+  border-radius: 50%;
+}
+
 a:hover {
   color: #29abe2;
 }

@@ -85,10 +85,13 @@
     height: 60px;
   }
 
-  /* h1 {
-    padding-left: 16px;
-    margin: 0;
-  } */
+  .board-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 32px;
+  }
 
   .form-wrapper {
     position: absolute;
@@ -160,6 +163,7 @@
   .task-list {
     display: flex;
     flex-direction: row;
+    justify-content: flex-start;
     gap: 16px;
     overflow-x: auto;
     overflow-y: hidden;
@@ -168,11 +172,29 @@
 
   .task {
     min-width: 200px;
+    max-width: 256px;
     flex-shrink: 0;
   }
 
   .add-task-board-button-second {
-    display: block;
+    display: none;
+  }
+
+    .empty-placeholder {
+  width: 100%;
+}
+
+  .board-container {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    position: absolute;
+    top: 96px;
+    bottom: 80px;
+    left: 0;
+    right: 0;
+    overflow-y: auto;
+    box-sizing: border-box;
   }
 }
 
@@ -248,6 +270,10 @@
     box-sizing: border-box;
   }
 
+    .empty-placeholder {
+  width: 100%;
+}
+
   .subtask-display-text::before {
     content: "";
     left: 6px;
@@ -276,8 +302,37 @@
     display: none;
   }
 
-  .add-task-board-button-second {
-    display: block;
+  .add-task-board-button {
+    display: none;
+  }
+
+  .task-list {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 16px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 8px;
+  }
+
+  .task {
+    min-width: 200px;
+    max-width: 256px;
+    flex-shrink: 0;
+  }
+
+  .board-container {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    position: absolute;
+    top: 96px;
+    bottom: 80px;
+    left: 0;
+    right: 0;
+    overflow-y: auto;
+    box-sizing: border-box;
   }
 }
 
@@ -298,6 +353,10 @@
   .header-nav-logo {
     display: none;
   }
+
+    .empty-placeholder {
+  width: 100%;
+}
 
   .header-container {
     padding-left: 318px;
@@ -335,6 +394,35 @@
     width: 48px;
     height: 48px;
   }
+
+  .add-task-board-button {
+    display: none;
+  }
+
+  .task-list {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 16px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 8px;
+  }
+
+  .board-container {
+    display: flex;
+    flex-direction: column;
+    max-width: 1440px;
+    padding: 16px;
+    padding-left: 328px;
+    position: absolute;
+    top: 96px;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    overflow-y: auto;
+    box-sizing: border-box;
+  }
 }
 
 @media (min-width: 992px) and (max-width: 1199px) {
@@ -348,10 +436,15 @@
     top: 0;
     left: 0;
     background-color: #2a3647;
+    z-index: 1;
   }
   .header-nav-logo {
     display: none;
   }
+
+    .empty-placeholder {
+  width: 100%;
+}
 
   .header-container {
     padding-left: 328px;
@@ -374,19 +467,6 @@
   .profile-button {
     width: 48px;
     height: 48px;
-  }
-
-  .nav-bar {
-    width: 232px;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    background-color: #2a3647;
   }
 
   .form-wrapper {
@@ -432,6 +512,31 @@
   .add-task-board-button {
     display: none;
   }
+
+  .board-container {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    padding-left: 328px;
+    position: absolute;
+    top: 96px;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    overflow-y: auto;
+    box-sizing: border-box;
+    max-width: 1440px;
+  }
+
+  .task-list {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 16px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 8px;
+  }
 }
 
 @media (min-width: 1200px) {
@@ -469,6 +574,7 @@
     top: 0;
     left: 0;
     background-color: #2a3647;
+    z-index: 1;
   }
 
   .form-wrapper {
@@ -513,5 +619,39 @@
 
   .add-task-board-button {
     display: none;
+  }
+
+  .board-container {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    padding-left: 328px;
+    position: absolute;
+    top: 96px;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    overflow-y: auto;
+    scrollbar-width: none;
+    box-sizing: border-box;
+    max-width: 1440px;
+  }
+
+  .board-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .task-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 8px;
+  }
+
+  .board {
+    display: flex;
+    gap: 16px;
   }
 }

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../edittask/taskdetails.css">
+</head>
+
+<body>
+<div class="task-detail-modal">
+  <div class="detail-header">
+    <img id="detail-icon" src="../assets/icons/propertyuserstory.svg" alt="">
+    <button class="taskDetailCloseButton">X</button>
+  </div>
+
+  <h2   id="task-detail-title"></h2>
+  <p    id="detail-description"></p>
+
+  <div class="detail-row" id="task-detail-due-date-box"><strong>Due Date:</strong>
+       <span id="task-detail-due-date"></span></div>
+
+  <div class="detail-row" id="task-detail-priority-box"><strong>Priority:</strong>
+       <span id="task-detail-priority"></span></div>
+
+  <div class="detail-row" id="task-detail-assigned-box"><strong>Assigned To:</strong>
+       <span id="task-detail-assigned"></span></div>
+
+  <h3>Subtasks</h3>
+  <ul id="task-detail-subtasks"></ul>
+
+  <div class="detail-actions">
+    <button class="delete-btn"><img src="../assets/icons/delete.svg"> Delete</button>
+    <button class="edit-btn"><img   src="../assets/icons/edit.svg">   Edit</button>
+  </div>
+</div>
+</body>
+
+</html>

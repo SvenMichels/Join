@@ -1,4 +1,3 @@
-// board.js
 import { requestData } from "../scripts/firebase.js";
 import { updateEmptyLists } from "../scripts/utils/emptylisthelper.js";
 
@@ -8,10 +7,26 @@ const statusMap = {
   await: "awaitList",
   done: "doneList",
 };
-
+window.editingTaskId = null;
+window.isEditMode = false;
 let loadedTasks = {};
 
+const categoryIcons = {
+  User_Story: "propertyuserstory.svg",
+  Technical_Task: "propertytechnicaltask.svg",
+};
+
+function getCategoryIcon(category) {
+  return `../assets/icons/${categoryIcons[category] || "defaulticon.svg"}`;
+}
+
+async function deleteTask(id) {
+  await requestData("DELETE", `/tasks/${id}`);
+}
+
 window.addEventListener("DOMContentLoaded", () => {
+  window.addEventListener("taskCreated", fetchTasks);
+  window.addEventListener("taskUpdated", fetchTasks);
   document.getElementById("openMenu").addEventListener("click", closeOpenMenu);
   fetchTasks();
   setupDragAndDrop();
@@ -21,7 +36,7 @@ window.addEventListener("DOMContentLoaded", () => {
 async function fetchTasks() {
   try {
     const { data: tasksData } = await requestData("GET", "/tasks/");
-    loadedTasks = {}; 
+    loadedTasks = {};
 
     for (const [id, task] of Object.entries(tasksData || {})) {
       task.id = id;
@@ -37,13 +52,61 @@ async function fetchTasks() {
 
 function renderTasks(tasks) {
   if (!Array.isArray(tasks)) return;
+
+  clearTaskLists();
+
   tasks.forEach((task) => {
     const element = createTaskElement(task);
     const listId = statusMap[task.status];
     const list = document.getElementById(listId);
     if (list) list.appendChild(element);
   });
+
   updateEmptyLists();
+}
+
+function renderTaskDetailData(task) {
+  const $ = (sel) => document.querySelector(sel);
+
+  const iconEl = $("#detail-icon");
+  if (iconEl) {
+    iconEl.src = getCategoryIcon(task.category);
+    iconEl.alt = task.category || "Task Icon";
+  }
+
+  $("#task-detail-title").textContent = task.title;
+  $("#detail-description").textContent = task.description;
+  $("#task-detail-due-date").textContent = task.dueDate;
+  $("#task-detail-priority").innerHTML = getPriorityIcon(task.prio);
+  $("#task-detail-assigned").innerHTML = generateAssignedChips(task.assigned);
+  $("#task-detail-subtasks").innerHTML = (task.subtasks || [])
+    .map(
+      (
+        txt,
+        i
+      ) => `<li><input type="checkbox" id="sub-${i}" class="modalCheckBox">
+                     <label for="sub-${i}">${txt}</label></li>`
+    )
+    .join("");
+
+  setupEditAndDelete(task);
+}
+
+function setupEditAndDelete(task) {
+  const editBtn = document.querySelector(".edit-btn");
+  const deleteBtn = document.querySelector(".delete-btn");
+
+  if (editBtn) {
+    editBtn.addEventListener("click", () => openTaskModal(true, task));
+  }
+
+  if (deleteBtn) {
+    deleteBtn.addEventListener("click", async () => {
+      await deleteTask(task.id);
+      closeDetailModal();
+      fetchTasks();
+    });
+  }
 }
 
 function createTaskElement(task) {
@@ -61,7 +124,9 @@ function createTaskElement(task) {
   const assignedHTML = generateAssignedChips(task.assigned);
 
   element.innerHTML = `
+  <div class="task-icon">
     <img src="../assets/icons/${iconFile}" alt="${task.category}">
+    </div>
     <h3>${task.title}</h3>
     <p>${task.description}</p>
     <div class="meta">
@@ -73,8 +138,33 @@ function createTaskElement(task) {
 
   element.draggable = true;
   element.addEventListener("dragstart", handleDragStart);
+  element.addEventListener("click", () => openTaskDetails(task));
 
   return element;
+}
+
+function clearTaskLists() {
+  Object.values(statusMap).forEach((listId) => {
+    const list = document.getElementById(listId);
+    if (list) list.innerHTML = "";
+  });
+}
+
+async function openTaskDetails(task) {
+  const overlay = document.getElementById("modal-overlay");
+
+  const res = await fetch("../edittask/taskdetail.html");
+  overlay.innerHTML = await res.text();
+  overlay.classList.remove("d_none");
+
+  renderTaskDetailData(task);
+
+  overlay
+    .querySelector(".taskDetailCloseButton")
+    ?.addEventListener("click", () => {
+      overlay.classList.add("d_none");
+      overlay.innerHTML = "";
+    });
 }
 
 function generateAssignedChips(assigned) {
@@ -112,6 +202,16 @@ function getRandomColor() {
 
 function handleDragStart(event) {
   event.dataTransfer.setData("text/plain", event.target.id);
+}
+
+function getPriorityIcon(prio) {
+  const prioMap = {
+    low: "prio_overlay_low.svg",
+    medium: "prio_overlay_medium.svg",
+    urgent: "prio_overlay_urgent.svg",
+  };
+  const icon = prioMap[prio?.toLowerCase()] || prioMap.low;
+  return `<img src="../assets/icons/${icon}" alt="${prio}">`;
 }
 
 function setupDragAndDrop() {
@@ -191,81 +291,49 @@ document.querySelectorAll(".board-icon").forEach((icon) => {
   });
 });
 
-async function openTaskModal() {
+function closeDetailModal() {
   const overlay = document.getElementById("modal-overlay");
-  const response = await fetch("../taskfloatdata/taskfloat.html");
-  overlay.innerHTML = await response.text();
-  overlay.classList.remove("d_none");
-
-  /* ---------- Close-Button ---------- */
-  const closeBtn = overlay.querySelector(".taskFloatButtonClose");
-  if (closeBtn)
-    closeBtn.addEventListener("click", () => {
-      overlay.classList.add("d_none");
-      overlay.innerHTML = ""; // Modal säubern
-    });
-
-  /* ---------- Submit-Button ---------- */
-  const submitBtn = overlay.querySelector(".createButton");
-  if (submitBtn) {
-    submitBtn.addEventListener("click", async () => {
-      const newTask = extractTaskFromForm(overlay);
-      if (!newTask) return; // Pflichtfelder fehlen → Abbruch
-
-      const { data } = await requestData("POST", "/tasks/", newTask);
-      newTask.id = data.name; // Firebase-ID
-      loadedTasks[newTask.id] = newTask;
-
-      const taskEl = createTaskElement(newTask);
-      document.getElementById(statusMap[newTask.status]).appendChild(taskEl);
-
-      updateEmptyLists();
-      overlay.classList.add("d_none");
-      overlay.innerHTML = "";
-    });
-  }
-
-  /* ---------- Prio-Buttons aktivieren ---------- */
-  const prioButtons = overlay.querySelectorAll(
-    ".prioButtonUrgent, .prioButtonMedium, .prioButtonLow"
-  );
-  prioButtons.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      prioButtons.forEach((b) => b.classList.remove("active")); // alle zurücksetzen
-      btn.classList.add("active"); // geklickten markieren
-    });
-  });
-  // nachdem prioButtons definiert sind:
-  prioButtons[2]?.classList.add("active"); // Low vorselektieren
+  overlay.classList.add("d_none");
+  overlay.innerHTML = "";
 }
 
-function extractTaskFromForm(root) {
-  const title = root.querySelector("#titleInput")?.value.trim();
-  const description = root.querySelector("#descriptionInput")?.value.trim();
-  const dueDate = root.querySelector("#dateInput")?.value;
-  const assigned = root.querySelector(".prioAssignInput")?.value;
-  const category = root.querySelector(".prioCategoryInput")?.value.trim();
-  const prio = getSelectedPriority(root);
+function openTaskModal(isEdit = false, task = null) {
+  const overlay = document.getElementById("modal-overlay");
 
-  if (!title || !dueDate || !category) {
-    alert("Bitte fülle alle Pflichtfelder aus.");
-    return null;
-  }
+  fetch("../taskFloatData/taskfloat.html")
+    .then((r) => r.text())
+    .then((html) => {
+      overlay.innerHTML = html;
+      overlay.classList.remove("d_none");
 
-  return {
-    title,
-    description,
-    dueDate,
-    assigned: assigned ? [assigned] : [],
-    category: category === "User Story" ? "User_Story" : "Technical_Task",
-    prio,
-    status: "todo", // Default
-  };
-}
+      (async () => {
+        const p = window.initTaskFloat?.();
+        if (p instanceof Promise) await p;
 
-function getSelectedPriority(root) {
-  if (root.querySelector(".prioButtonUrgent.active")) return "Urgent";
-  if (root.querySelector(".prioButtonMedium.active")) return "Medium";
-  if (root.querySelector(".prioButtonLow.active")) return "Low";
-  return "Medium"; // Fallback, falls keiner aktiv
+        window.isEditMode = isEdit;
+        window.editingTaskId = isEdit && task ? task.id : null;
+
+        const form = overlay.querySelector("#taskForm-modal");
+
+        if (isEdit && task && form) {
+          form.dataset.taskId = task.id;
+          form.dataset.taskStatus = task.status;
+
+          window.prefillModalWithTaskData(task);
+
+          const okBtn = form.querySelector(".create-button");
+          if (okBtn) {
+            okBtn.innerHTML = 'OK <img src="../assets/icons/check.svg">';
+            okBtn.disabled = false;
+          }
+        }
+
+        overlay
+          .querySelector(".taskFloatButtonClose")
+          ?.addEventListener("click", () => {
+            overlay.classList.add("d_none");
+            overlay.innerHTML = "";
+          });
+      })();
+    });
 }

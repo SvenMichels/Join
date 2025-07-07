@@ -6,7 +6,7 @@
   <title>
    Help
   </title>
-  <link rel="icon" href="../assets/icons/join_nav-logo_2.svg" type="image/x-icon" />
+  <link rel="icon" href="../assets/icons/join_logo_2.svg" type="image/x-icon" />
   <link href="help.css" rel="stylesheet"/>
     <link href="../styles/standard.css" rel="stylesheet" />
   <link href="../media-querie.css" rel="stylesheet" />
@@ -90,7 +90,9 @@
     <h1>
      Help
     </h1>
-    <img alt="Bild" class="h1-1mage" src="../assets/icons/arrow-left-line.svg"/>
+    <button type="button" id="back-btn"class="h1-image-button">
+      <img alt="Bild" src="../assets/icons/arrow-left-line.svg"/>
+    </button>
    </div>
    <span>
     Welcome to the help page for
@@ -243,4 +245,17 @@
     Enjoy using Join!
    </span>
  </body>
+<script>
+  const backButton = document.getElementById('back-btn');
+
+  function navigateBack() {
+    if (history.length > 1) {
+      history.back();
+    } else {
+      window.location.href = '../startPage/startpage.html';
+    }
+  }
+
+  backButton.addEventListener('click', navigateBack);
+</script>
 </html>
