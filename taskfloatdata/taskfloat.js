@@ -2,15 +2,12 @@ import { requestData } from "../scripts/firebase.js";
 
 export function initTaskFloat() {
   cacheDom();
-  if (!$.modal) return; // Modal noch nicht eingefügt → einfach abbrechen
+  if (!$.modal) return;
   initFormModal();
   loadUserInitialsModal();
   eventHandleSearchModal();
 }
 
-/* ==========================================================
-   Cache DOM elements (all modal IDs end with “-modal”)
-   ========================================================== */
 const $ = {};
 document.addEventListener("DOMContentLoaded", initTaskFloat);
 
@@ -26,9 +23,9 @@ function cacheDom() {
   $.assignBtn = $.modal?.querySelector(".assigned-userlist-button-modal");
   $.assignImg = document.getElementById("assignedBtnImg-modal");
 
-  // min-Date für Date-Picker
+
   if ($.date) {
-    // ⬅️  nur setzen, wenn Element vorhanden
+
     $.date.min = new Date().toISOString().split("T")[0];
   }
 
@@ -39,14 +36,10 @@ function cacheDom() {
   $.assignBtn?.addEventListener("click", toggleUserListModal);
 }
 
-/* ========= State ========= */
 let currentPrioModal = "medium";
 let allUsersModal = [];
 let subtasksModal = [];
 
-/* ========= Priority handling ========= */
-
-/*  alles sichtbar machen, was board.js aufrufen muss  */
 window.selectPriorityModal = selectPriorityModal;
 window.updateSelectedModal = updateSelectedModal;
 window.renderSubtasksModal = renderSubtasksModal;
@@ -73,7 +66,6 @@ function selectPriorityModal(prio) {
     low: "low-task-modal",
   };
 
-  /* alle Buttons zurücksetzen */
   Object.entries(ids).forEach(([key, id]) => {
     const btn = document.getElementById(id);
     const img = document.getElementById(`${key}-task-img-modal`);
@@ -85,7 +77,6 @@ function selectPriorityModal(prio) {
     if (img) img.src = priorityIconsModal[key][0];
   });
 
-  /* aktiven Button markieren */
   const activeBtn = document.getElementById(ids[prio]);
   const activeImg = document.getElementById(`${prio}-task-img-modal`);
   activeBtn?.classList.add(
@@ -98,12 +89,10 @@ function selectPriorityModal(prio) {
   if (activeImg) activeImg.src = priorityIconsModal[prio][1];
 }
 
-/* ========= Form initialisation ========= */
 async function initFormModal() {
   await loadAndRenderUsersModal();
   selectPriorityModal("medium");
 
-  // Enable/disable submit depending on category
   const cat = document.getElementById("category-modal");
   const submit = $.form?.querySelector(".create-button");
   submit.disabled = true;
@@ -119,28 +108,19 @@ async function initFormModal() {
   );
 }
 
-/* ==========================================================
-   SUBMIT
-   ========================================================== */
-/**
- * Handles submit from modal form, validates & saves task, then
- * dispatches “taskCreated” and closes the modal.
- */
 async function handleSubmitModal(e) {
   e.preventDefault();
   const task = collectTaskDataModal(e.target);
   if (!validateTaskModal(task)) return;
 
   try {
-    await saveTaskModal(task);                       // <-- KEIN „t“, sondern task
+    await saveTaskModal(task);
 
-    /* Board informieren (erst nach erfolgreichem Speichern) */
     window.dispatchEvent(
       new CustomEvent(window.isEditMode ? "taskUpdated" : "taskCreated",
                       { detail: task })
     );
 
-    /* Aufräumen */
     window.editingTaskId = null;
     window.isEditMode    = false;
     subtasksModal        = [];
@@ -152,11 +132,10 @@ async function handleSubmitModal(e) {
   }
 }
 
-/* ========= Collect & Validate ========= */
 function collectTaskDataModal(form) {
   const id = window.isEditMode && window.editingTaskId
-           ? window.editingTaskId          // wir sind im Edit-Modus
-           : Date.now();                   // Neuer Task
+           ? window.editingTaskId
+           : Date.now();
 
   return {
     id,
@@ -180,19 +159,15 @@ function validateTaskModal(task) {
     if (condition) valid = false;
   };
 
-show("titleAlert-modal",    !task.title);      // statt titleAlertModal
-show("dateAlert-modal",     !task.dueDate);    // statt dateAlertModal
-show("categoryAlert-modal", !task.category);   // statt categoryAlertModal
+show("titleAlert-modal",    !task.title);
+show("dateAlert-modal",     !task.dueDate);
+show("categoryAlert-modal", !task.category);
 
   return valid;
 }
 
-/* ========= Save ========= */
 const saveTaskModal = (task) => requestData("PUT", `/tasks/${task.id}`, task);
 
-/* ==========================================================
-   USERS
-   ========================================================== */
 async function loadAndRenderUsersModal() {
   const { data = {} } = await requestData("GET", "/users");
   allUsersModal = Object.entries(data).map(([id, u]) => ({ id, ...u }));
@@ -250,9 +225,6 @@ function updateSelectedModal() {
   });
 }
 
-/* ==========================================================
-   SUBTASKS
-   ========================================================== */
 function addSubtaskModal(ev) {
   ev.preventDefault();
   const v = $.subInput.value.trim();
@@ -324,9 +296,6 @@ function makeSubtaskEditableModal(idx) {
   });
 }
 
-/* ==========================================================
-   UTIL
-   ========================================================== */
 const initials = (n) =>
   (n || "")
     .split(" ")
@@ -335,7 +304,6 @@ const initials = (n) =>
     .toUpperCase();
 const rndColor = () => `hsl(${Math.random() * 360},70%,80%)`;
 
-/** Close the modal overlay */
 function closeModal() {
   const overlay = document.getElementById("modal-overlay");
   if (overlay) {
@@ -344,14 +312,12 @@ function closeModal() {
   }
 }
 
-/** Load initials into profile-button inside Modal header */
 function loadUserInitialsModal() {
   const u = JSON.parse(localStorage.getItem("currentUser") || "{}");
   const btn = $.modal?.querySelector(".profile-button-modal");
   if (btn && u.userName) btn.textContent = initials(u.userName);
 }
 
-/* Search bar filtering */
 function eventHandleSearchModal() {
   const search = document.getElementById("searchUser-modal");
   search?.addEventListener("input", () => {
@@ -365,22 +331,17 @@ function eventHandleSearchModal() {
 }
 
 export function prefillModalWithTaskData(task) {
-  // Titel + Beschreibung
   document.getElementById("task-title-modal").value        = task.title;
   document.getElementById("task-description-modal").value  = task.description;
 
-  // Datum, Kategorie, Prio
   document.getElementById("task-date-modal").value         = task.dueDate;
   document.getElementById("category-modal").value          = task.category;
   selectPriorityModal(task.prio.toLowerCase());
 
-  /* -------- Assigned -------- */
-  // erst alle abhaken zurücksetzen
   document
     .querySelectorAll(".user-checkbox-modal")
     .forEach((cb) => (cb.checked = false));
 
-  // dann die passenden anhaken
   (task.assigned || []).forEach((name) => {
     const cb = [...document.querySelectorAll(".user-checkbox-modal")]
                 .find((c) => c.value === name);
@@ -392,24 +353,19 @@ export function prefillModalWithTaskData(task) {
   });
   updateSelectedModal();
 
-  /* -------- Subtasks -------- */
   subtasksModal = [...(task.subtasks || [])];
   renderSubtasksModal();
 }
 
-/* global verfügbar machen, damit board.js sie findet */
 window.prefillModalWithTaskData = prefillModalWithTaskData;
 
 window.initTaskFloat = initTaskFloat;
 
-/* -----------------------------------------------------------
-   EXPOSE FUNCTIONS + STATE SO THAT board.js CAN USE THEM
-   ----------------------------------------------------------- */
 window.selectPriorityModal  = selectPriorityModal;
 window.updateSelectedModal  = updateSelectedModal;
 window.renderSubtasksModal  = renderSubtasksModal;
-window.editingTaskId = null;   // ID des Tasks, falls wir editieren
-window.isEditMode    = false;  // true, wenn das Modal als „Edit“ geöffnet wurde
-/* Zugriff auf die aktuelle Subtask-Liste ermöglichen            */
+window.editingTaskId = null;
+window.isEditMode    = false;
+
 window.setSubtaskState = (arr) => { subtasksModal = [...arr]; };
 window.getSubtaskState = ()   => subtasksModal;

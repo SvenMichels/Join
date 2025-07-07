@@ -1,4 +1,3 @@
-// board.js
 import { requestData } from "../scripts/firebase.js";
 import { updateEmptyLists } from "../scripts/utils/emptylisthelper.js";
 
@@ -8,8 +7,8 @@ const statusMap = {
   await: "awaitList",
   done: "doneList",
 };
-window.editingTaskId = null;   // statt „let editingTaskId“
-window.isEditMode    = false;  // statt „let isEditMode“
+window.editingTaskId = null;
+window.isEditMode    = false;
 window.prefillModalWithTaskData = prefillModalWithTaskData;
 let loadedTasks = {};
 
@@ -46,7 +45,7 @@ async function fetchTasks() {
 function renderTasks(tasks) {
   if (!Array.isArray(tasks)) return;
 
-  clearTaskLists();                                   // alte DOM-Nodes raus
+  clearTaskLists();
 
   tasks.forEach((task) => {
     const element = createTaskElement(task);
@@ -86,9 +85,9 @@ function setupEditAndDelete(task) {
 
   if (deleteBtn) {
     deleteBtn.addEventListener("click", async () => {
-      await deleteTask(task.id);   // Firebase-DELETE
-      closeDetailModal();          // Overlay schließen
-      fetchTasks();                // Board frisch laden
+      await deleteTask(task.id);
+      closeDetailModal();
+      fetchTasks();
     });
   }
 }
@@ -135,15 +134,12 @@ function clearTaskLists() {
 async function openTaskDetails(task) {
   const overlay = document.getElementById("modal-overlay");
 
-  // --> richtiger Dateipfad
   const res = await fetch("../edittask/taskdetail.html");
   overlay.innerHTML = await res.text();
   overlay.classList.remove("d_none");
 
-  /* IDs an dein HTML anpassen */
-  renderTaskDetailData(task);          // bleibt gleich
+  renderTaskDetailData(task);
 
-  // Close-Icon
   overlay.querySelector(".taskDetailCloseButton")?.addEventListener("click", () => {
     overlay.classList.add("d_none");
     overlay.innerHTML = "";
@@ -289,19 +285,16 @@ function openTaskModal(isEdit = false, task = null) {
       overlay.innerHTML = html;
       overlay.classList.remove("d_none");
 
-      /* Modal initialisieren … danach ggf. Daten einspielen */
       setTimeout(() => {
         window.initTaskFloat?.();
         if (isEdit && task) {
           window.prefillModalWithTaskData?.(task);
 
-          /* Button-Text + Icon ändern */
           const okBtn = overlay.querySelector(".create-button");
           if (okBtn) okBtn.innerHTML = 'OK <img src="../assets/icons/check.svg">';
         }
       }, 0);
 
-      /* Schließen-Button */
       overlay
         .querySelector(".taskFloatButtonClose")
         ?.addEventListener("click", closeDetailModal);
