@@ -11,6 +11,15 @@ window.editingTaskId = null;
 window.isEditMode = false;
 let loadedTasks = {};
 
+const categoryIcons = {
+  User_Story: "propertyuserstory.svg",
+  Technical_Task: "propertytechnicaltask.svg",
+};
+
+function getCategoryIcon(category) {
+  return `../assets/icons/${categoryIcons[category] || "defaulticon.svg"}`;
+}
+
 async function deleteTask(id) {
   await requestData("DELETE", `/tasks/${id}`);
 }
@@ -57,7 +66,13 @@ function renderTasks(tasks) {
 }
 
 function renderTaskDetailData(task) {
-  const $ = (s) => document.querySelector(s);
+  const $ = (sel) => document.querySelector(sel);
+
+  const iconEl = $("#detail-icon");
+  if (iconEl) {
+    iconEl.src = getCategoryIcon(task.category);
+    iconEl.alt = task.category || "Task Icon";
+  }
 
   $("#task-detail-title").textContent = task.title;
   $("#detail-description").textContent = task.description;
@@ -66,14 +81,14 @@ function renderTaskDetailData(task) {
   $("#task-detail-assigned").innerHTML = generateAssignedChips(task.assigned);
   $("#task-detail-subtasks").innerHTML = (task.subtasks || [])
     .map(
-      (txt, i) => `
-    <li>
-      <input type="checkbox" class="modalCheckBox" id="sub-${i}">
-      <label for="sub-${i}">${txt}</label>
-    </li>
-  `
+      (
+        txt,
+        i
+      ) => `<li><input type="checkbox" id="sub-${i}" class="modalCheckBox">
+                     <label for="sub-${i}">${txt}</label></li>`
     )
     .join("");
+
   setupEditAndDelete(task);
 }
 
@@ -109,7 +124,9 @@ function createTaskElement(task) {
   const assignedHTML = generateAssignedChips(task.assigned);
 
   element.innerHTML = `
+  <div class="task-icon">
     <img src="../assets/icons/${iconFile}" alt="${task.category}">
+    </div>
     <h3>${task.title}</h3>
     <p>${task.description}</p>
     <div class="meta">
@@ -293,14 +310,13 @@ function openTaskModal(isEdit = false, task = null) {
         const p = window.initTaskFloat?.();
         if (p instanceof Promise) await p;
 
-        window.isEditMode    = isEdit;
+        window.isEditMode = isEdit;
         window.editingTaskId = isEdit && task ? task.id : null;
 
         const form = overlay.querySelector("#taskForm-modal");
 
         if (isEdit && task && form) {
-
-          form.dataset.taskId     = task.id;
+          form.dataset.taskId = task.id;
           form.dataset.taskStatus = task.status;
 
           window.prefillModalWithTaskData(task);

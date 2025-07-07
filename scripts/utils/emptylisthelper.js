@@ -2,22 +2,22 @@ const listConfigs = [
   {
     listId: 'todoList',
     headerPlaceholder: '[data-status="todo"] .empty-placeholder',
-    msg: 'Kein „To Do“-Task vorhanden.'
+    msg: 'No tasks To do'
   },
   {
     listId: 'inProgressList',
     headerPlaceholder: '[data-status="in-progress"] .empty-placeholder',
-    msg: 'Kein „In Progress“-Task vorhanden.'
+    msg: 'No tasks in Progress'
   },
   {
     listId: 'awaitList',
     headerPlaceholder: '[data-status="await"] .empty-placeholder',
-    msg: 'Kein „Await Feedback“-Task vorhanden.'
+    msg: 'No tasks Awaiting'
   },
   {
     listId: 'doneList',
     headerPlaceholder: '[data-status="done"] .empty-placeholder',
-    msg: 'Kein „Done“-Task vorhanden.'
+    msg: 'No tasks Done'
   },
 ];
 

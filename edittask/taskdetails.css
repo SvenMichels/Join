@@ -14,6 +14,13 @@
     width: auto;
     height: 27px;
   }
+
+  button {
+    border: none;
+    background-color: transparent;
+    display: flex;
+    gap: 12px
+  }
 }
 
 #task-detail-title {
@@ -27,12 +34,15 @@
 }
 
 span {
-  font-family: Inter;
-  font-weight: 400;
-  font-style: Regular;
-  font-size: 20px;
-  line-height: 120%;
-  letter-spacing: 0%;
+    display: flex;
+    flex-direction: column;
+    font-family: Inter;
+    font-weight: 400;
+    font-style: Regular;
+    font-size: 20px;
+    line-height: 120%;
+    letter-spacing: 0%;
+    gap: 16px;
 }
 
 ul {
@@ -69,4 +79,20 @@ ul {
     background-color: #ffffff;
     border: none;
     cursor: pointer;
+}
+
+#task-detail-priority-box {
+  display: flex;
+  align-items: center;
+}
+
+#task-detail-assigned-box {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+#task-detail-due-date-box {
+  display: flex;
+  align-items: center
 }

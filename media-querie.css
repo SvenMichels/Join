@@ -180,6 +180,10 @@
     display: none;
   }
 
+    .empty-placeholder {
+  width: 100%;
+}
+
   .board-container {
     display: flex;
     flex-direction: column;
@@ -266,6 +270,10 @@
     box-sizing: border-box;
   }
 
+    .empty-placeholder {
+  width: 100%;
+}
+
   .subtask-display-text::before {
     content: "";
     left: 6px;
@@ -345,6 +353,10 @@
   .header-nav-logo {
     display: none;
   }
+
+    .empty-placeholder {
+  width: 100%;
+}
 
   .header-container {
     padding-left: 318px;
@@ -429,6 +441,10 @@
   .header-nav-logo {
     display: none;
   }
+
+    .empty-placeholder {
+  width: 100%;
+}
 
   .header-container {
     padding-left: 328px;
