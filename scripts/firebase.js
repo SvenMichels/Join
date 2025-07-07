@@ -6,7 +6,7 @@
 const BASE_URL =
   "https://join-da-project-default-rtdb.europe-west1.firebasedatabase.app/";
 
-export async function loadData(path = "") {
+export async function loadData( ) {
   const response = await fetch(BASE_URL + path + ".json");
   if (!response.ok) {
     throw new Error("Network response was not ok");
@@ -55,25 +55,21 @@ export async function putData(path = "", data = {}) {
   return response.json();
 }
 
-// Diese Funktion ist eine generische Funktion, die verschiedene HTTP-Methoden unterstützt,
-// einschließlich GET, POST, PUT und DELETE. Sie kann verwendet werden, um Daten von der Firebase-Datenbank
-// anzufordern oder zu senden, indem der entsprechende HTTP-Methodenname und der Pfad angegeben werden.
 export async function requestData(method = "GET", path = "", data = {}) {
-  const options = {
-    method,
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
+  const options = {method, headers: {"Content-Type": "application/json",}, };
   if (["POST", "PUT", "PATCH"].includes(method.toUpperCase())) {
     options.body = JSON.stringify(data);
   }
+ 
+  await responseRequestData(options, path = "");
+}
 
+async function responseRequestData(options, path = "") {
   const response = await fetch(BASE_URL + path + ".json", options);
   const result = await response.json();
-  if (!response.ok) {
-    throw new Error(`Request failed: ${response.status}`);
-  }
 
-  return { status: response.status, data: result };
-}
+   if (!response.ok) {
+    throw new Error(`Request failed: ${response.status}`);
+  } 
+ return { status: response.status, data: result };
+} 
