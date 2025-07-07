@@ -2,11 +2,14 @@ import { requestData } from "../scripts/firebase.js";
 
 export function initTaskFloat() {
   cacheDom();
-  if (!$.modal) return;
-  initFormModal();
+  if (!$.modal) return Promise.resolve();
+
   loadUserInitialsModal();
   eventHandleSearchModal();
+
+  return initFormModal();
 }
+window.initTaskFloat = initTaskFloat;
 
 const $ = {};
 document.addEventListener("DOMContentLoaded", initTaskFloat);
@@ -88,24 +91,19 @@ function selectPriorityModal(prio) {
 
 export async function initFormModal() {
   await loadAndRenderUsersModal();
-
   selectPriorityModal("medium");
 
-  const cat    = document.getElementById("category-modal");
+  const cat = document.getElementById("category-modal");
   const submit = $.form?.querySelector(".create-button");
-  const toggleSubmit = () => {
-    submit.disabled = cat.value.trim() === "";
-  };
-
-  toggleSubmit();
-  cat.addEventListener("change", toggleSubmit);
+  const toggle = () => (submit.disabled = cat.value.trim() === "");
+  toggle();
+  cat.addEventListener("change", toggle);
 
   ["urgent", "medium", "low"].forEach((p) =>
     document
       .getElementById(`${p}-task-modal`)
       ?.addEventListener("click", () => selectPriorityModal(p))
   );
-
 }
 
 async function handleSubmitModal(e) {
@@ -339,7 +337,7 @@ export function prefillModalWithTaskData(task) {
 
   document.getElementById("task-date-modal").value = task.dueDate;
   document.getElementById("category-modal").value = task.category;
-  selectPriorityModal(task.prio.toLowerCase());
+  selectPriorityModal((task.prio || "medium").toLowerCase());
 
   document
     .querySelectorAll(".user-checkbox-modal")

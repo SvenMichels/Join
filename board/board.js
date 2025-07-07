@@ -283,15 +283,15 @@ function closeDetailModal() {
 function openTaskModal(isEdit = false, task = null) {
   const overlay = document.getElementById("modal-overlay");
 
-  fetch("../taskfloatdata/taskfloat.html")
+  fetch("../taskFloatData/taskfloat.html")
     .then((r) => r.text())
     .then((html) => {
       overlay.innerHTML = html;
       overlay.classList.remove("d_none");
 
-      setTimeout(async () => {
-        const maybePromise = window.initTaskFloat?.();
-        if (maybePromise instanceof Promise) await maybePromise;
+      (async () => {
+        const p = window.initTaskFloat?.();
+        if (p instanceof Promise) await p;
 
         window.isEditMode    = isEdit;
         window.editingTaskId = isEdit && task ? task.id : null;
@@ -303,7 +303,7 @@ function openTaskModal(isEdit = false, task = null) {
           form.dataset.taskId     = task.id;
           form.dataset.taskStatus = task.status;
 
-          window.prefillModalWithTaskData?.(task);
+          window.prefillModalWithTaskData(task);
 
           const okBtn = form.querySelector(".create-button");
           if (okBtn) {
@@ -318,6 +318,6 @@ function openTaskModal(isEdit = false, task = null) {
             overlay.classList.add("d_none");
             overlay.innerHTML = "";
           });
-      }, 0);
+      })();
     });
 }
