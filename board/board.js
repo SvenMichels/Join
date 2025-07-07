@@ -8,11 +8,18 @@ const statusMap = {
   await: "awaitList",
   done: "doneList",
 };
-
+window.editingTaskId = null;   // statt „let editingTaskId“
+window.isEditMode    = false;  // statt „let isEditMode“
+window.prefillModalWithTaskData = prefillModalWithTaskData;
 let loadedTasks = {};
+
+async function deleteTask(id) {
+  await requestData("DELETE", `/tasks/${id}`);
+}
 
 window.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("taskCreated", fetchTasks);
+  window.addEventListener("taskUpdated", fetchTasks);
   document.getElementById("openMenu").addEventListener("click", closeOpenMenu);
   fetchTasks();
   setupDragAndDrop();
@@ -38,13 +45,52 @@ async function fetchTasks() {
 
 function renderTasks(tasks) {
   if (!Array.isArray(tasks)) return;
+
+  clearTaskLists();                                   // alte DOM-Nodes raus
+
   tasks.forEach((task) => {
     const element = createTaskElement(task);
-    const listId = statusMap[task.status];
-    const list = document.getElementById(listId);
+    const listId  = statusMap[task.status];
+    const list    = document.getElementById(listId);
     if (list) list.appendChild(element);
   });
+
   updateEmptyLists();
+}
+
+function renderTaskDetailData(task) {
+  const $ = (s) => document.querySelector(s);
+
+  $("#task-detail-title").textContent = task.title;
+  $("#detail-description").textContent = task.description;
+  $("#task-detail-due-date").textContent = task.dueDate;
+  $("#task-detail-priority").innerHTML = getPriorityIcon(task.prio);
+  $("#task-detail-assigned").innerHTML = generateAssignedChips(task.assigned);
+$("#task-detail-subtasks").innerHTML = (task.subtasks || [])
+  .map((txt, i) => `
+    <li>
+      <input type="checkbox" class="modalCheckBox" id="sub-${i}">
+      <label for="sub-${i}">${txt}</label>
+    </li>
+  `).join("");
+  setupEditAndDelete(task);
+}
+
+function setupEditAndDelete(task) {
+  const editBtn   = document.querySelector(".edit-btn");
+  const deleteBtn = document.querySelector(".delete-btn");
+
+  if (editBtn) {
+    editBtn.addEventListener("click", () => openTaskModal(true, task));
+  }
+
+  if (deleteBtn) {
+    deleteBtn.addEventListener("click", async () => {
+      await deleteTask(task.id);   // Firebase-DELETE
+      closeDetailModal();          // Overlay schließen
+      fetchTasks();                // Board frisch laden
+    });
+  }
 }
 
 function createTaskElement(task) {
@@ -74,8 +120,34 @@ function createTaskElement(task) {
 
   element.draggable = true;
   element.addEventListener("dragstart", handleDragStart);
+  element.addEventListener("click", () => openTaskDetails(task));
 
   return element;
+}
+
+function clearTaskLists() {
+  Object.values(statusMap).forEach((listId) => {
+    const list = document.getElementById(listId);
+    if (list) list.innerHTML = "";
+  });
+}
+
+async function openTaskDetails(task) {
+  const overlay = document.getElementById("modal-overlay");
+
+  // --> richtiger Dateipfad
+  const res = await fetch("../edittask/taskdetail.html");
+  overlay.innerHTML = await res.text();
+  overlay.classList.remove("d_none");
+
+  /* IDs an dein HTML anpassen */
+  renderTaskDetailData(task);          // bleibt gleich
+
+  // Close-Icon
+  overlay.querySelector(".taskDetailCloseButton")?.addEventListener("click", () => {
+    overlay.classList.add("d_none");
+    overlay.innerHTML = "";
+  });
 }
 
 function generateAssignedChips(assigned) {
@@ -113,6 +185,16 @@ function getRandomColor() {
 
 function handleDragStart(event) {
   event.dataTransfer.setData("text/plain", event.target.id);
+}
+
+function getPriorityIcon(prio) {
+  const prioMap = {
+    low: "prio_overlay_low.svg",
+    medium: "prio_overlay_medium.svg",
+    urgent: "prio_overlay_urgent.svg",
+  };
+  const icon = prioMap[prio?.toLowerCase()] || prioMap.low;
+  return `<img src="../assets/icons/${icon}" alt="${prio}">`;
 }
 
 function setupDragAndDrop() {
@@ -192,23 +274,36 @@ document.querySelectorAll(".board-icon").forEach((icon) => {
   });
 });
 
-async function openTaskModal() {
+function closeDetailModal() {
+  const overlay = document.getElementById("modal-overlay");
+  overlay.classList.add("d_none");
+  overlay.innerHTML = "";
+}
+
+function openTaskModal(isEdit = false, task = null) {
   const overlay = document.getElementById("modal-overlay");
 
-  /* ---------- Modal-HTML laden ---------- */
-  const response = await fetch("../taskFloatData/taskfloat.html");   // korrekter Pfad
-  overlay.innerHTML = await response.text();
-  overlay.classList.remove("d_none");
+  fetch("../taskFloatData/taskfloat.html")
+    .then((r) => r.text())
+    .then((html) => {
+      overlay.innerHTML = html;
+      overlay.classList.remove("d_none");
 
-  /* ---------- Modal initialisieren (nach dem Render-Tick) ---------- */
-  setTimeout(() => {
-    window.initTaskFloat?.();        // Funktion kommt aus taskfloat.js
-  }, 0);
+      /* Modal initialisieren … danach ggf. Daten einspielen */
+      setTimeout(() => {
+        window.initTaskFloat?.();
+        if (isEdit && task) {
+          window.prefillModalWithTaskData?.(task);
 
-  /* ---------- Close-Button ---------- */
-  const closeBtn = overlay.querySelector(".taskFloatButtonClose");
-  closeBtn?.addEventListener("click", () => {
-    overlay.classList.add("d_none");
-    overlay.innerHTML = "";          // Modal säubern
-  });
+          /* Button-Text + Icon ändern */
+          const okBtn = overlay.querySelector(".create-button");
+          if (okBtn) okBtn.innerHTML = 'OK <img src="../assets/icons/check.svg">';
+        }
+      }, 0);
+
+      /* Schließen-Button */
+      overlay
+        .querySelector(".taskFloatButtonClose")
+        ?.addEventListener("click", closeDetailModal);
+    });
 }

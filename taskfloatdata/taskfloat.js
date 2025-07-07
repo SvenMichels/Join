@@ -45,6 +45,13 @@ let allUsersModal = [];
 let subtasksModal = [];
 
 /* ========= Priority handling ========= */
+
+/*  alles sichtbar machen, was board.js aufrufen muss  */
+window.selectPriorityModal = selectPriorityModal;
+window.updateSelectedModal = updateSelectedModal;
+window.renderSubtasksModal = renderSubtasksModal;
+
+
 const priorityIconsModal = {
   urgent: [
     "../assets/icons/urgent_red.svg",
@@ -121,41 +128,46 @@ async function initFormModal() {
  */
 async function handleSubmitModal(e) {
   e.preventDefault();
-  const t = collectTaskDataModal(e.target);
-  if (!validateTaskModal(t)) return;
+  const task = collectTaskDataModal(e.target);
+  if (!validateTaskModal(task)) return;
 
   try {
-    // Task in Firebase speichern
-    await saveTaskModal(t);
+    await saveTaskModal(task);                       // <-- KEIN „t“, sondern task
 
-    // Formular & State aufräumen
-    subtasksModal = [];
-    renderSubtasksModal();
+    /* Board informieren (erst nach erfolgreichem Speichern) */
+    window.dispatchEvent(
+      new CustomEvent(window.isEditMode ? "taskUpdated" : "taskCreated",
+                      { detail: task })
+    );
+
+    /* Aufräumen */
+    window.editingTaskId = null;
+    window.isEditMode    = false;
+    subtasksModal        = [];
     $.form.reset();
     selectPriorityModal("medium");
-
-    // Modal zu – aber OHNE Seiten-Reload
     closeModal();
-
-    // Board benachrichtigen → fetchTasks() läuft automatisch
-    window.dispatchEvent(new CustomEvent("taskCreated", { detail: t }));
-  } catch (error) {
-    console.error(error);
+  } catch (err) {
+    console.error("Fehler beim Speichern:", err);
   }
-} 
+}
 
 /* ========= Collect & Validate ========= */
 function collectTaskDataModal(form) {
+  const id = window.isEditMode && window.editingTaskId
+           ? window.editingTaskId          // wir sind im Edit-Modus
+           : Date.now();                   // Neuer Task
+
   return {
-    id: Date.now(),
-    title: form.taskTitle.value.trim(),
+    id,
+    title:       form.taskTitle.value.trim(),
     description: form.taskDescription.value.trim(),
-    dueDate: form.taskDate.value,
-    category: form.category.value,
-    prio: currentPrioModal,
-    assigned: getChecked(".user-checkbox-modal"),
-    subtasks: [...subtasksModal],
-    status: "todo",
+    dueDate:     form.taskDate.value,
+    category:    form.category.value,
+    prio:        currentPrioModal,
+    assigned:    getChecked(".user-checkbox-modal"),
+    subtasks:    [...subtasksModal],
+    status:      "todo",
   };
 }
 
@@ -352,4 +364,52 @@ function eventHandleSearchModal() {
   });
 }
 
+export function prefillModalWithTaskData(task) {
+  // Titel + Beschreibung
+  document.getElementById("task-title-modal").value        = task.title;
+  document.getElementById("task-description-modal").value  = task.description;
+
+  // Datum, Kategorie, Prio
+  document.getElementById("task-date-modal").value         = task.dueDate;
+  document.getElementById("category-modal").value          = task.category;
+  selectPriorityModal(task.prio.toLowerCase());
+
+  /* -------- Assigned -------- */
+  // erst alle abhaken zurücksetzen
+  document
+    .querySelectorAll(".user-checkbox-modal")
+    .forEach((cb) => (cb.checked = false));
+
+  // dann die passenden anhaken
+  (task.assigned || []).forEach((name) => {
+    const cb = [...document.querySelectorAll(".user-checkbox-modal")]
+                .find((c) => c.value === name);
+    if (cb) {
+      cb.checked = true;
+      cb.closest(".user-checkbox-wrapper-modal")
+        ?.classList.add("active");
+    }
+  });
+  updateSelectedModal();
+
+  /* -------- Subtasks -------- */
+  subtasksModal = [...(task.subtasks || [])];
+  renderSubtasksModal();
+}
+
+/* global verfügbar machen, damit board.js sie findet */
+window.prefillModalWithTaskData = prefillModalWithTaskData;
+
 window.initTaskFloat = initTaskFloat;
+
+/* -----------------------------------------------------------
+   EXPOSE FUNCTIONS + STATE SO THAT board.js CAN USE THEM
+   ----------------------------------------------------------- */
+window.selectPriorityModal  = selectPriorityModal;
+window.updateSelectedModal  = updateSelectedModal;
+window.renderSubtasksModal  = renderSubtasksModal;
+window.editingTaskId = null;   // ID des Tasks, falls wir editieren
+window.isEditMode    = false;  // true, wenn das Modal als „Edit“ geöffnet wurde
+/* Zugriff auf die aktuelle Subtask-Liste ermöglichen            */
+window.setSubtaskState = (arr) => { subtasksModal = [...arr]; };
+window.getSubtaskState = ()   => subtasksModal;
