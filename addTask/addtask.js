@@ -108,6 +108,7 @@ function initForm() {
 
 function handleFormSubmit(event) {
   event.preventDefault();
+
   const task = collectTaskData(event.target);
   if (!isTaskValid(task)) return;
 
@@ -118,13 +119,15 @@ function handleFormSubmit(event) {
       selectPriority("medium");
       subtasks = [];
       renderSubtasks();
+      event.target.removeAttribute("data-task-id");
     })
     .catch((err) => console.error(err));
 }
 
 function collectTaskData(form) {
+  const existingId = form.getAttribute("data-task-id");
   return {
-    id: Date.now(),
+    id: existingId || Date.now(),
     title: form.taskTitle.value.trim(),
     description: form.taskDescription.value.trim(),
     dueDate: form.taskDate.value,

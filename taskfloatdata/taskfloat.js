@@ -23,9 +23,7 @@ function cacheDom() {
   $.assignBtn = $.modal?.querySelector(".assigned-userlist-button-modal");
   $.assignImg = document.getElementById("assignedBtnImg-modal");
 
-
   if ($.date) {
-
     $.date.min = new Date().toISOString().split("T")[0];
   }
 
@@ -43,7 +41,6 @@ let subtasksModal = [];
 window.selectPriorityModal = selectPriorityModal;
 window.updateSelectedModal = updateSelectedModal;
 window.renderSubtasksModal = renderSubtasksModal;
-
 
 const priorityIconsModal = {
   urgent: [
@@ -89,23 +86,26 @@ function selectPriorityModal(prio) {
   if (activeImg) activeImg.src = priorityIconsModal[prio][1];
 }
 
-async function initFormModal() {
+export async function initFormModal() {
   await loadAndRenderUsersModal();
+
   selectPriorityModal("medium");
 
-  const cat = document.getElementById("category-modal");
+  const cat    = document.getElementById("category-modal");
   const submit = $.form?.querySelector(".create-button");
-  submit.disabled = true;
-  cat.addEventListener(
-    "change",
-    () => (submit.disabled = cat.value.trim() === "")
-  );
+  const toggleSubmit = () => {
+    submit.disabled = cat.value.trim() === "";
+  };
+
+  toggleSubmit();
+  cat.addEventListener("change", toggleSubmit);
 
   ["urgent", "medium", "low"].forEach((p) =>
     document
       .getElementById(`${p}-task-modal`)
       ?.addEventListener("click", () => selectPriorityModal(p))
   );
+
 }
 
 async function handleSubmitModal(e) {
@@ -116,14 +116,18 @@ async function handleSubmitModal(e) {
   try {
     await saveTaskModal(task);
 
+    $.form.removeAttribute("data-task-id");
+    $.form.removeAttribute("data-task-status");
+
     window.dispatchEvent(
-      new CustomEvent(window.isEditMode ? "taskUpdated" : "taskCreated",
-                      { detail: task })
+      new CustomEvent(window.isEditMode ? "taskUpdated" : "taskCreated", {
+        detail: task,
+      })
     );
 
     window.editingTaskId = null;
-    window.isEditMode    = false;
-    subtasksModal        = [];
+    window.isEditMode = false;
+    subtasksModal = [];
     $.form.reset();
     selectPriorityModal("medium");
     closeModal();
@@ -133,20 +137,19 @@ async function handleSubmitModal(e) {
 }
 
 function collectTaskDataModal(form) {
-  const id = window.isEditMode && window.editingTaskId
-           ? window.editingTaskId
-           : Date.now();
+  const id = form.dataset.taskId || Date.now();
+  const status = form.dataset.taskStatus || "todo";
 
   return {
     id,
-    title:       form.taskTitle.value.trim(),
+    title: form.taskTitle.value.trim(),
     description: form.taskDescription.value.trim(),
-    dueDate:     form.taskDate.value,
-    category:    form.category.value,
-    prio:        currentPrioModal,
-    assigned:    getChecked(".user-checkbox-modal"),
-    subtasks:    [...subtasksModal],
-    status:      "todo",
+    dueDate: form.taskDate.value,
+    category: form.category.value,
+    prio: currentPrioModal,
+    assigned: getChecked(".user-checkbox-modal"),
+    subtasks: [...subtasksModal],
+    status,
   };
 }
 
@@ -159,9 +162,9 @@ function validateTaskModal(task) {
     if (condition) valid = false;
   };
 
-show("titleAlert-modal",    !task.title);
-show("dateAlert-modal",     !task.dueDate);
-show("categoryAlert-modal", !task.category);
+  show("titleAlert-modal", !task.title);
+  show("dateAlert-modal", !task.dueDate);
+  show("categoryAlert-modal", !task.category);
 
   return valid;
 }
@@ -331,11 +334,11 @@ function eventHandleSearchModal() {
 }
 
 export function prefillModalWithTaskData(task) {
-  document.getElementById("task-title-modal").value        = task.title;
-  document.getElementById("task-description-modal").value  = task.description;
+  document.getElementById("task-title-modal").value = task.title;
+  document.getElementById("task-description-modal").value = task.description;
 
-  document.getElementById("task-date-modal").value         = task.dueDate;
-  document.getElementById("category-modal").value          = task.category;
+  document.getElementById("task-date-modal").value = task.dueDate;
+  document.getElementById("category-modal").value = task.category;
   selectPriorityModal(task.prio.toLowerCase());
 
   document
@@ -343,12 +346,12 @@ export function prefillModalWithTaskData(task) {
     .forEach((cb) => (cb.checked = false));
 
   (task.assigned || []).forEach((name) => {
-    const cb = [...document.querySelectorAll(".user-checkbox-modal")]
-                .find((c) => c.value === name);
+    const cb = [...document.querySelectorAll(".user-checkbox-modal")].find(
+      (c) => c.value === name
+    );
     if (cb) {
       cb.checked = true;
-      cb.closest(".user-checkbox-wrapper-modal")
-        ?.classList.add("active");
+      cb.closest(".user-checkbox-wrapper-modal")?.classList.add("active");
     }
   });
   updateSelectedModal();
@@ -361,11 +364,13 @@ window.prefillModalWithTaskData = prefillModalWithTaskData;
 
 window.initTaskFloat = initTaskFloat;
 
-window.selectPriorityModal  = selectPriorityModal;
-window.updateSelectedModal  = updateSelectedModal;
-window.renderSubtasksModal  = renderSubtasksModal;
+window.selectPriorityModal = selectPriorityModal;
+window.updateSelectedModal = updateSelectedModal;
+window.renderSubtasksModal = renderSubtasksModal;
 window.editingTaskId = null;
-window.isEditMode    = false;
+window.isEditMode = false;
 
-window.setSubtaskState = (arr) => { subtasksModal = [...arr]; };
-window.getSubtaskState = ()   => subtasksModal;
+window.setSubtaskState = (arr) => {
+  subtasksModal = [...arr];
+};
+window.getSubtaskState = () => subtasksModal;

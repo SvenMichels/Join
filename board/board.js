@@ -8,8 +8,7 @@ const statusMap = {
   done: "doneList",
 };
 window.editingTaskId = null;
-window.isEditMode    = false;
-window.prefillModalWithTaskData = prefillModalWithTaskData;
+window.isEditMode = false;
 let loadedTasks = {};
 
 async function deleteTask(id) {
@@ -49,8 +48,8 @@ function renderTasks(tasks) {
 
   tasks.forEach((task) => {
     const element = createTaskElement(task);
-    const listId  = statusMap[task.status];
-    const list    = document.getElementById(listId);
+    const listId = statusMap[task.status];
+    const list = document.getElementById(listId);
     if (list) list.appendChild(element);
   });
 
@@ -65,18 +64,21 @@ function renderTaskDetailData(task) {
   $("#task-detail-due-date").textContent = task.dueDate;
   $("#task-detail-priority").innerHTML = getPriorityIcon(task.prio);
   $("#task-detail-assigned").innerHTML = generateAssignedChips(task.assigned);
-$("#task-detail-subtasks").innerHTML = (task.subtasks || [])
-  .map((txt, i) => `
+  $("#task-detail-subtasks").innerHTML = (task.subtasks || [])
+    .map(
+      (txt, i) => `
     <li>
       <input type="checkbox" class="modalCheckBox" id="sub-${i}">
       <label for="sub-${i}">${txt}</label>
     </li>
-  `).join("");
+  `
+    )
+    .join("");
   setupEditAndDelete(task);
 }
 
 function setupEditAndDelete(task) {
-  const editBtn   = document.querySelector(".edit-btn");
+  const editBtn = document.querySelector(".edit-btn");
   const deleteBtn = document.querySelector(".delete-btn");
 
   if (editBtn) {
@@ -140,10 +142,12 @@ async function openTaskDetails(task) {
 
   renderTaskDetailData(task);
 
-  overlay.querySelector(".taskDetailCloseButton")?.addEventListener("click", () => {
-    overlay.classList.add("d_none");
-    overlay.innerHTML = "";
-  });
+  overlay
+    .querySelector(".taskDetailCloseButton")
+    ?.addEventListener("click", () => {
+      overlay.classList.add("d_none");
+      overlay.innerHTML = "";
+    });
 }
 
 function generateAssignedChips(assigned) {
@@ -279,24 +283,41 @@ function closeDetailModal() {
 function openTaskModal(isEdit = false, task = null) {
   const overlay = document.getElementById("modal-overlay");
 
-  fetch("../taskFloatData/taskfloat.html")
+  fetch("../taskfloatdata/taskfloat.html")
     .then((r) => r.text())
     .then((html) => {
       overlay.innerHTML = html;
       overlay.classList.remove("d_none");
 
-      setTimeout(() => {
-        window.initTaskFloat?.();
-        if (isEdit && task) {
+      setTimeout(async () => {
+        const maybePromise = window.initTaskFloat?.();
+        if (maybePromise instanceof Promise) await maybePromise;
+
+        window.isEditMode    = isEdit;
+        window.editingTaskId = isEdit && task ? task.id : null;
+
+        const form = overlay.querySelector("#taskForm-modal");
+
+        if (isEdit && task && form) {
+
+          form.dataset.taskId     = task.id;
+          form.dataset.taskStatus = task.status;
+
           window.prefillModalWithTaskData?.(task);
 
-          const okBtn = overlay.querySelector(".create-button");
-          if (okBtn) okBtn.innerHTML = 'OK <img src="../assets/icons/check.svg">';
+          const okBtn = form.querySelector(".create-button");
+          if (okBtn) {
+            okBtn.innerHTML = 'OK <img src="../assets/icons/check.svg">';
+            okBtn.disabled = false;
+          }
         }
-      }, 0);
 
-      overlay
-        .querySelector(".taskFloatButtonClose")
-        ?.addEventListener("click", closeDetailModal);
+        overlay
+          .querySelector(".taskFloatButtonClose")
+          ?.addEventListener("click", () => {
+            overlay.classList.add("d_none");
+            overlay.innerHTML = "";
+          });
+      }, 0);
     });
 }
