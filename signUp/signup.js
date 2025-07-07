@@ -69,17 +69,6 @@ export async function collectUserInput() {
   const userEmail = document.getElementById("inputEmail").value.trim();
   const password = passwordInput.value;
   const confirmPassword = confirmPasswordInput.value;
-  console.log("TEst");
-
-  if (!userName || !userEmail) {
-    alert("Name and email are required");
-    return null;
-  }
-
-  if (password !== confirmPassword) {
-    alert("Passwords do not match");
-    return null;
-  }
 
   return { userName, userEmail, password };
 }
@@ -89,8 +78,7 @@ async function submitUser(userData) {
     await createUser(userData);
     showUserFeedback()
   } catch (error) {
-    console.error("User creation failed", error);
-    alert("Registration failed. Please try again.");
+    console.warn("User creation failed", error);
   }
 }
 
@@ -101,6 +89,10 @@ function showUserFeedback() {
   feedback.classList.remove("dp-none");
   feedback.classList.add("centerFeedback");
 
+  feedbackAnimationEnd(feedback)
+}
+
+function feedbackAnimationEnd(feedback) {
   feedback.addEventListener("animationend", () => {
     setTimeout(() => {
       feedback.classList.add("dp-none");
