@@ -526,7 +526,8 @@ input:valid + .error-message {
 }
 
 .close-button-modal:hover .icon {
-  content: url("../assets/icons/close_white.svg")
+  cursor: pointer;
+  content: url("../assets/icons/close.svg")
 }
 
 /* ----------  Prio-Button Farben ---------- */
