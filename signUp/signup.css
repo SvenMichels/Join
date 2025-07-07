@@ -159,6 +159,7 @@ footer a {
   height: auto;
   top: 40px;
   left: 40px;
+  padding-top: 0 !important;
 }
 
 .visually-hidden {
@@ -201,5 +202,11 @@ footer a {
   to {
     bottom: 40%;
     opacity: 1;
+  }
+}
+
+@media (max-width: 410px){
+  .form-container{
+    padding: 48px;
   }
 }

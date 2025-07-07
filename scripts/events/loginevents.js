@@ -1,5 +1,5 @@
 import { loginAsGuest, loginUser } from "../auth/login.js";
-import { collectUserInput } from "../../signup/signup.js";
+import { collectUserInput } from "../../signUp/signup.js"
 import { requestData } from "../firebase.js";
 
 export async function loginListeners() {
@@ -20,12 +20,30 @@ try {
 
   document.querySelector(".guestLogIn").addEventListener("click", async () => {
     try {
-      const guest = await loginAsGuest();
+      await loginAsGuest();
       window.location.href = "../../startpage/startpage.html";
     } catch (err) {
       console.log(`Guest login failed: ${err.message}`);
     }
   });
+  bindPolicyLinks();
+}
+
+function bindPolicyLinks() {
+  const selectors = [
+    'a[href$="privatpolicy.html"]',
+    'a[href$="legalnotice.html"]'
+  ].join()
+  const links = document.querySelectorAll(selectors)
+  links.forEach(async link => {
+    link.addEventListener("click", async event => {
+      if (!localStorage.getItem("token")) {
+        event.preventDefault()
+        await loginAsGuest()
+        window.location.href = link.href
+      }
+    })
+  })
 }
 
 export async function signupListeners() {
@@ -46,4 +64,5 @@ export async function signupListeners() {
       signUpBtn.disabled = !checkBox.checked;
     });
   }
+  bindPolicyLinks();
 }

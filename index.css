@@ -15,7 +15,7 @@ body{
 }
 
 .logInHeader{
-    width: 1440px;
+    width: 90vw;
     display: flex;
     align-items: start;
     justify-content: flex-end;
@@ -26,14 +26,16 @@ body{
 .signUpContainer{
     display: flex;
     flex-direction: row;
+    align-items: center;
+    gap: 20px;
     width: 279px;
     height: 49px;
     left: 90%;
 }
 
 .signUpTxt{
-    width: 153px;
-    height: 24px;
+    /* width: 153px; */
+    /* height: 24px; */
     font-family: "Inter";
     font-weight: 400;
     font-size: 20px;
@@ -104,7 +106,8 @@ h1{
 }
 
 form{
-    width: 422px;
+    width: 100%;
+    max-width: 422px;
     height: 152px;
     gap: 20px;
     display: flex;
@@ -154,6 +157,8 @@ form{
     display: flex;
     flex-direction: row;
     gap: 35px;
+    max-width: 322px;
+    width: 100%;
 }
 
 .btn {
@@ -212,4 +217,33 @@ form{
     font-size: 16px;
     width: 105px;
     height: 19px;
+}
+
+@media (max-width: 767px) {
+    body{
+        justify-content: flex-end;
+        gap: 50px;
+    }
+    .bigLogo.shrinkToLogo{
+        top: 20px;
+        left: 20px;
+    }
+    .loginForm {
+        order: 1;
+    }
+    .buttonContainer {
+        order: 2;
+    }
+    .logInHeader {
+        order: 3;
+        position: static;
+        align-self: center;
+        margin: 20px 0;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+    .footer {
+        order: 4;
+    }
 }

@@ -1,4 +1,5 @@
 import { createUser } from "../scripts/users/users.js";
+import { signupListeners } from "../scripts/events/loginevents.js"
 
 const passwordInput = document.getElementById("inputPassword");
 const confirmPasswordInput = document.getElementById("inputConfirmPassword");
@@ -13,6 +14,7 @@ const toggleConfirmIcon = document.querySelector(
 
 if (window.location.pathname.endsWith("signup.html")) {
   initSignup();
+  signupListeners();
 }
 
 function initSignup() {
