@@ -247,12 +247,12 @@ function renderSubtasksModal() {
   list.innerHTML = subtasksModal
     .map(
       (t, i) => `
-      <div class="subtask-container">
-        <span class="subtask-display-text" data-idx="${i}">${t}</span>
-        <div class="subtask-controls">
-          <button data-edit="${i}"><img src="../assets/icons/edit.svg" /></button>
-          <div class="subtask-spacer-second"></div>
-          <button data-del="${i}"><img src="../assets/icons/delete.svg" /></button>
+      <div class="subtask-container-modal">
+        <span class="subtask-display-text-modal" data-idx="${i}">${t}</span>
+        <div class="subtask-controls-modal">
+          <button class="subtask-edit-button-modal" data-edit="${i}"><img class="subtask-edit-button-images-modal" src="../assets/icons/edit.svg" /></button>
+          <div class="subtask-spacer-second-modal"></div>
+          <button class="subtask-delete-button-second-modal" data-del="${i}"><img class="subtask-edit-button-images-modal" src="../assets/icons/delete.svg" /></button>
         </div>
       </div>
     `
@@ -279,11 +279,11 @@ function makeSubtaskEditableModal(idx) {
   const list = document.getElementById("subtaskList-modal");
   const item = list.children[idx];
   item.innerHTML = `
-    <input type="text" class="subtask-text-input" value="${subtasksModal[idx]}">
-    <div class="subtask-button-wrapper">
-      <button data-save><img src="../assets/icons/check.svg" /></button>
-      <div class="subtask-spacer"></div>
-      <button data-del><img src="../assets/icons/delete.svg" /></button>
+    <input type="text" class="subtask-text-input-modal" value="${subtasksModal[idx]}">
+    <div class="subtask-button-wrapper-modal">
+    <button class="subtask-delete-button-modal" data-del><img class="subtask-delete-button-images-modal" src="../assets/icons/delete.svg" /></button>
+    <div class="subtask-spacer-modal"></div>
+    <button class="subtask-save-button-modal" data-save><img class="subtask-delete-button-images-modal" src="../assets/icons/check.svg" /></button>
     </div>
   `;
   const inp = item.querySelector("input");

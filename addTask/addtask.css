@@ -182,7 +182,7 @@ input:valid + .error-message {
   border-radius: 50%;
 }
 
-prio-assign-input:hover {
+.prio-assign-input:hover {
   border: 1px solid #a8a8a8;
 }
 
@@ -509,6 +509,7 @@ textarea:focus::placeholder {
   padding-left: 20px;
   display: flex;
   align-items: center;
+  width: 100%;
   height: 32px;
   gap: 8px;
   cursor: pointer;
