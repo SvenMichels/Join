@@ -10,4 +10,5 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 });
  
-console.log("Big logo animation script loaded.");
+console.log("Big logo animation script loaded.");  
+
