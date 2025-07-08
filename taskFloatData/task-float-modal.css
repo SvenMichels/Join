@@ -184,6 +184,9 @@
 }
 
 .prioButtons {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
   width: 136px;
   height: 56px;
   border-style: none;
@@ -527,7 +530,12 @@ input:valid + .error-message {
 
 .close-button-modal:hover .icon {
   cursor: pointer;
-  content: url("../assets/icons/close.svg")
+  content: url("../assets/icons/close_white.svg")
+}
+
+.prio-buttons-images-modal {
+  width: 20px;
+  height: 14.51px;
 }
 
 /* ----------  Prio-Button Farben ---------- */

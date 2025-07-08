@@ -10,19 +10,37 @@
   gap: 24px;
   max-width: 525px;
   width: 100%;
-  img {
+  height: 80%;
+}
+
+  .taskDetailCloseButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 56px;
+    border: 0;
+  }
+
+  .taskDetailCloseButton:hover {
+    cursor: pointer;
+    background: #29abe2;
+  }
+
+  .taskDetailCloseButton:hover .icon {
     width: auto;
-    height: 27px;
-    
+    height: 16px;
+    cursor: pointer;
+    content: url("../assets/icons/close_white.svg");
   }
 
   button {
     border: none;
     background-color: transparent;
     display: flex;
-    gap: 12px
+    gap: 12px;
   }
-}
 
 #task-detail-title {
   font-family: Inter;
@@ -35,15 +53,15 @@
 }
 
 #task-detail-assigned {
-    display: flex;
-    flex-direction: column;
-    font-family: Inter;
-    font-weight: 400;
-    font-style: Regular;
-    font-size: 20px;
-    line-height: 120%;
-    letter-spacing: 0%;
-    gap: 16px;
+  display: flex;
+  flex-direction: column;
+  font-family: Inter;
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 20px;
+  line-height: 120%;
+  letter-spacing: 0%;
+  gap: 16px;
 }
 
 ul {
@@ -62,10 +80,10 @@ ul {
 }
 
 .detail-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 2px;
-    text-align: center;
+  display: flex;
+  justify-content: flex-end;
+  gap: 2px;
+  text-align: center;
   img {
     width: 16px;
     height: 16px;
@@ -73,12 +91,18 @@ ul {
   }
 }
 
+.delete-btn:hover,
+.edit-btn:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
 .modalCheckBox {
-    width: 20px;
-    height: 20px;
-    background-color: #ffffff;
-    border: none;
-    cursor: pointer;
+  width: 20px;
+  height: 20px;
+  background-color: #ffffff;
+  border: none;
+  cursor: pointer;
 }
 
 #task-detail-priority-box {
@@ -94,5 +118,5 @@ ul {
 
 #task-detail-due-date-box {
   display: flex;
-  align-items: center
+  align-items: center;
 }
