@@ -21,7 +21,7 @@ try {
   console.warn(`Login failed: ${err.message}`);
 
 }
-  });
+  };
 
   document.querySelector(".guestLogIn").addEventListener("click", async () => {
     try {
@@ -55,7 +55,7 @@ export async function signupListeners() {
   const form = document.getElementById("signUpForm");
   if (!form) return console.log("signUpForm not found");
 
- formEventListener();
+formEventListener(form);
 
   const checkBox = document.getElementById("checkBox");
   const signUpBtn = document.getElementById("signUpBtn");
@@ -67,7 +67,7 @@ export async function signupListeners() {
   bindPolicyLinks();
 }
 
-function formEventListener(){
+function formEventListener(form){
    form.addEventListener("submit", async (event) => {
     event.preventDefault();
     console.log("Submit triggered");

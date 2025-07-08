@@ -1,4 +1,4 @@
-import { loadData, postData, deleteData, requestData } from "./firebase.js";
+import { requestData } from "./firebase.js";
 import { formatFirebaseData, loadTasks } from "./utils/helpers.js";
 import { createUser } from "./users/users.js";
 import { loginListeners , signupListeners} from "./events/loginevents.js";

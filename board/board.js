@@ -16,6 +16,13 @@ const categoryIcons = {
   Technical_Task: "propertytechnicaltask.svg",
 };
 
+function toArray(val) {
+  if (Array.isArray(val)) return val;
+  if (val && typeof val === "object") return Object.values(val);
+  if (typeof val === "string") return val.split(",").map(s => s.trim());
+  return [];
+}
+
 function getCategoryIcon(category) {
   return `../assets/icons/${categoryIcons[category] || "defaulticon.svg"}`;
 }
@@ -78,7 +85,7 @@ function renderTaskDetailData(task) {
   $("#detail-description").textContent = task.description;
   $("#task-detail-due-date").textContent = task.dueDate;
   $("#task-detail-priority").innerHTML = getPriorityIcon(task.prio);
-  $("#task-detail-assigned").innerHTML = generateAssignedChips(task.assigned);
+  $("#task-detail-assigned").innerHTML = generateAssignedChips(toArray(task.assigned));
   $("#task-detail-subtasks").innerHTML = (task.subtasks || [])
     .map(
       (
@@ -168,23 +175,11 @@ async function openTaskDetails(task) {
 }
 
 function generateAssignedChips(assigned) {
-  if (!assigned || (Array.isArray(assigned) && assigned.length === 0))
-    return "";
-
-  const names = Array.isArray(assigned)
-    ? assigned.map((item) =>
-        typeof item === "string" ? item : item.name || item.fullName || ""
-      )
-    : String(assigned).split(",");
+  const names = toArray(assigned);
+  if (names.length === 0) return "";
 
   return names
-    .map((name) => name.trim())
-    .filter((name) => name.length > 0)
-    .map((name) => {
-      const initials = getInitials(name);
-      const color = getRandomColor();
-      return `<div class="selected-contact-chip" style="background-color:${color};">${initials}</div>`;
-    })
+    .map(name => `<div class="assigned-chip">${name}</div>`)
     .join("");
 }
 

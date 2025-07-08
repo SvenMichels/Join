@@ -1,5 +1,12 @@
 import { requestData } from "../scripts/firebase.js";
 
+function toArray(val) {
+  if (Array.isArray(val))             return val;
+  if (val && typeof val === "object") return Object.values(val);
+  if (typeof val === "string")        return val.split(",").map(s => s.trim());
+  return [];
+}
+
 export function initTaskFloat() {
   cacheDom();
   if (!$.modal) return Promise.resolve();
@@ -170,35 +177,53 @@ function validateTaskModal(task) {
 const saveTaskModal = (task) => requestData("PUT", `/tasks/${task.id}`, task);
 
 async function loadAndRenderUsersModal() {
-  const { data = {} } = await requestData("GET", "/users");
-  allUsersModal = Object.entries(data).map(([id, u]) => ({ id, ...u }));
-  renderUserCheckboxesModal(allUsersModal);
+  try {
+    const { data = {} } = await requestData("GET", "/users");
+    const listObj = data && typeof data === "object" ? data : {};
+
+    allUsersModal = Object.entries(listObj).map(([id, u]) => ({ id, ...u }));
+
+    if (allUsersModal.length === 0) {
+      const me = JSON.parse(localStorage.getItem("currentUser") || "{}");
+      if (me.userName) allUsersModal.push({ id: me.id || "me", userName: me.userName });
+    }
+
+    renderUserCheckboxesModal(allUsersModal);
+  } catch (err) {
+    console.error("Fehler beim Laden der Nutzer (Modal):", err);
+  }
 }
 
 function renderUserCheckboxesModal(arr) {
   const list = document.getElementById("assignedUserList-modal");
   if (!list) return;
+
   list.innerHTML = "";
-  arr.forEach((u) => {
+
+  const seen = new Set();
+
+  arr.forEach(({ userName }) => {
+    if (seen.has(userName)) return;
+    seen.add(userName);
+
     const wrap = document.createElement("div");
     wrap.className = "user-checkbox-wrapper-modal";
     wrap.innerHTML = `
       <div class="user-info-wrapper">
-        <div class="selected-contact-chip" style="background:${rndColor()}">${initials(
-      u.userName
-    )}</div>
-        <label>${u.userName}</label>
+        <div class="selected-contact-chip" style="background:${rndColor()}">${initials(userName)}</div>
+        <label>${userName}</label>
       </div>
-      <input type="checkbox" class="user-checkbox-modal" value="${u.userName}">
+      <input type="checkbox" class="user-checkbox-modal" value="${userName}">
     `;
+    const cb = wrap.querySelector("input");
     wrap.addEventListener("click", (ev) => {
-      const cb = wrap.querySelector("input");
       if (ev.target !== cb) cb.checked = !cb.checked;
       wrap.classList.toggle("active", cb.checked);
       updateSelectedModal();
     });
     list.appendChild(wrap);
   });
+
   updateSelectedModal();
 }
 
@@ -343,7 +368,7 @@ export function prefillModalWithTaskData(task) {
     .querySelectorAll(".user-checkbox-modal")
     .forEach((cb) => (cb.checked = false));
 
-  (task.assigned || []).forEach((name) => {
+  toArray(task.assigned).forEach((name) => {
     const cb = [...document.querySelectorAll(".user-checkbox-modal")].find(
       (c) => c.value === name
     );

@@ -1,9 +1,4 @@
-import { 
-    postData, 
-    loadData, 
-    deleteData, 
-    putData, 
-    requestData} from "../scripts/firebase.js";
+import { requestData} from "../scripts/firebase.js";
 
 export async function createContact(contact) {
   const user = JSON.parse(localStorage.getItem("currentUser"));
@@ -11,14 +6,15 @@ export async function createContact(contact) {
 
   const path = `contacts/${user.id}`;
   const result = await requestData("POST", path, contact);
-  return result; // enthÃ¤lt Firebase-generierte ID
+  return result;
 }
+  
 
 export async function loadContacts() {
   const user = JSON.parse(localStorage.getItem("currentUser"));
   if (!user?.id) return [];
 
-  const response = await requestData("GET", `contacts/${user.id}`); //returns {status, data}
+  const response = await requestData("GET", `contacts/${user.id}`);
   const data = response.data;
   return Object.entries(data || {}).map(([key, value]) => ({
     ...value,

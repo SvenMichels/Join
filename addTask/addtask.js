@@ -165,48 +165,44 @@ async function saveTask(task) {
 }
 
 async function loadAndRenderUsers() {
-  try {
-    const { data = {} } = await requestData("GET", "/users");
-    allUsers = Object.entries(data).map(([id, user]) => ({ id, ...user }));
-    renderUserCheckboxes(allUsers);
-  } catch (error) {
-    console.error("Fehler beim Laden der Nutzer:", error);
-  }
+  const { data = {} } = await requestData("GET", "/users");
+  allUsers = Object.entries(data).map(([id, u]) => ({ id, ...u }));
+
+  allUsers = allUsers.filter((user, index, self) =>
+    index === self.findIndex(u => u.userName === user.userName)
+  );
+
+  renderUserCheckboxes(allUsers);
 }
 
 function renderUserCheckboxes(users) {
   const container = document.getElementById("assignedUserList");
+  if (!container) return;
+
   container.innerHTML = "";
 
-  users.forEach((user) => {
-    const checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.value = user.userName;
-    checkbox.className = "user-checkbox";
+  const unique = new Set();
 
-    const initialsDiv = document.createElement("div");
-    initialsDiv.className = "selected-contact-chip";
-    initialsDiv.textContent = getInitials(user.userName);
-    initialsDiv.style.backgroundColor = getRandomColor();
+  users.forEach(({ userName }) => {
+    if (unique.has(userName)) return;
+    unique.add(userName);
 
-    const label = document.createElement("label");
-    label.textContent = user.userName;
-
-    const namesDiv = document.createElement("div");
-    namesDiv.className = "user-info-wrapper";
-    namesDiv.append(initialsDiv, label);
-
-    const wrapper = document.createElement("div");
-    wrapper.className = "user-checkbox-wrapper";
-    wrapper.append(namesDiv, checkbox);
-
-    container.appendChild(wrapper);
-
-    wrapper.addEventListener("click", (e) => {
-      if (e.target !== checkbox) checkbox.checked = !checkbox.checked;
-      wrapper.classList.toggle("active", checkbox.checked);
+    const wrap = document.createElement("div");
+    wrap.className = "user-checkbox-wrapper";
+    wrap.innerHTML = `
+      <div class="user-info-wrapper">
+        <div class="selected-contact-chip" style="background:${getRandomColor()}">${getInitials(userName)}</div>
+        <label>${userName}</label>
+      </div>
+      <input type="checkbox" class="user-checkbox" value="${userName}">
+    `;
+    const cb = wrap.querySelector("input");
+    wrap.addEventListener("click", (e) => {
+      if (e.target !== cb) cb.checked = !cb.checked;
+      wrap.classList.toggle("active", cb.checked);
       updateSelectedUserDisplay();
     });
+    container.appendChild(wrap);
   });
 
   updateSelectedUserDisplay();
