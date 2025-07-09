@@ -333,3 +333,26 @@ function openTaskModal(isEdit = false, task = null) {
       })();
     });
 }
+
+document.getElementById("inputIcon").addEventListener("click", searchTasks);
+
+function searchTasks() {
+  const searchInput = document.getElementById("searchFieldInput");
+  const searchTerm = searchInput.value.toLowerCase().trim();
+
+  Object.values(loadedTasks).forEach((task) => {
+    const taskElement = document.getElementById(`task-${task.id}`);
+    if (!taskElement) return;
+
+    const matchesTitle = task.title.toLowerCase().includes(searchTerm);
+    const matchesDescription = task.description
+      .toLowerCase()
+      .includes(searchTerm);
+
+    if (matchesTitle || matchesDescription) {
+      taskElement.style.display = "block";
+    } else {
+      taskElement.style.display = "none";
+    }
+  });
+}
