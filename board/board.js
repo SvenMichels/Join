@@ -137,11 +137,16 @@ function createTaskElement(task) {
     </div>
     <h3>${task.title}</h3>
     <p>${task.description}</p>
-    <div class="meta">
-      <span>Fällig: ${task.dueDate}</span>
-      <span>Prio: ${task.prio}</span>
+    <div class="progress-bar-wrapper">
+    <div class="progress-bar-container">
+      <div class="progress-bar-fill" style="width: 50%;"></div>
+      </div>
+      <span>1/2 Subtasks</span>
     </div>
     <div class="assigned-chips">${assignedHTML}</div>
+        <div class="meta">
+      <span>Prio: ${task.prio}</span>
+    </div>
   `;
 
   element.draggable = true;
