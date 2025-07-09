@@ -350,7 +350,7 @@ function searchTasks() {
       .includes(searchTerm);
 
     if (matchesTitle || matchesDescription) {
-      taskElement.style.display = "block";
+      taskElement.style.display = "flex";
     } else {
       taskElement.style.display = "none";
     }
