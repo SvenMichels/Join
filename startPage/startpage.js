@@ -1,10 +1,11 @@
 import { requestData } from "../scripts/firebase.js";
+import { setupDropdown } from "../scripts/ui/dropdown.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   updateUserGreeting();
   updateSummary();
   handleMobileGreetingFade();
-  document.getElementById("openMenu").addEventListener("click", closeOpenMenu);
+  setupDropdown('#openMenu', '#dropDownMenu');
 });
 
 function updateUserGreeting() {
@@ -101,14 +102,5 @@ function handleMobileGreetingFade() {
     if (el) {
       setTimeout(() => el.classList.add('hidden'), 500);
     }
-  }
-}
-
-function closeOpenMenu() {
-  const element = document.getElementById("dropDownMenu");
-  if (element.classList.contains("dp-none")) {
-    document.getElementById(`dropDownMenu`).classList.remove("dp-none");
-  } else {
-    document.getElementById(`dropDownMenu`).classList.add("dp-none");
   }
 }

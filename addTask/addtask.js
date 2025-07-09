@@ -1,4 +1,5 @@
 import { requestData } from "../scripts/firebase.js";
+import { setupDropdown } from "../scripts/ui/dropdown.js";
 
 let currentActivePriority = "medium";
 let allUsers = [];
@@ -21,6 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initForm();
   loadUserInitials();
   eventHandleSearch();
+  setupDropdown('#openMenu', '#dropDownMenu');
 });
 
 const $ = {};
@@ -37,16 +39,10 @@ function cacheDom() {
   document.getElementById("task-date").min = new Date()
     .toISOString()
     .split("T")[0];
-
-  $.openMenuBtn?.addEventListener("click", toggleMenu);
   $.form?.addEventListener("submit", handleFormSubmit);
   $.subtaskAddBtn?.addEventListener("click", addSubtask);
   $.subtaskInput?.addEventListener("keydown", addSubtaskOnEnter);
   $.assignUserListBtn?.addEventListener("click", toggleUserList);
-}
-
-function toggleMenu() {
-  document.getElementById("dropDownMenu").classList.toggle("dp-none");
 }
 
 function toggleUserList(e) {

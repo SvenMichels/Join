@@ -11,6 +11,8 @@ import {
   deleteContactFromFirebase,
 } from "../contactPage/contactService.js";
 
+import { setupDropdown } from "../scripts/ui/dropdown.js";
+
 let contactList = [];
 let currentlyEditingId = null;
 const usedLetters = new Set();
@@ -21,7 +23,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("addBtn").addEventListener("click", openAddWindow);
   document.querySelectorAll(".cancelBtn, .closeBtn").forEach((btn) => btn.addEventListener("click", handleClose));
   document.getElementById("addContactForm").addEventListener("submit", addContact);
-  document.getElementById("openMenu").addEventListener("click", toggleMenu);
+  setupDropdown('#openMenu', '#dropDownMenu');
   document.getElementById("editContactForm").addEventListener("submit", handleEditSubmit);
 
   loadShowContact();
@@ -64,10 +66,6 @@ export function openEditWindow() {
   });
 
   document.getElementById("editWindow").classList.remove("dp-none");
-}
-
-function toggleMenu() {
-  document.getElementById("dropDownMenu").classList.toggle("dp-none");
 }
 
 async function loadContactsFromFirebase() {

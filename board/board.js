@@ -1,5 +1,6 @@
 import { requestData } from "../scripts/firebase.js";
 import { updateEmptyLists } from "../scripts/utils/emptylisthelper.js";
+import { setupDropdown } from "../scripts/ui/dropdown.js";
 
 const statusMap = {
   todo: "todoList",
@@ -34,7 +35,7 @@ async function deleteTask(id) {
 window.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("taskCreated", fetchTasks);
   window.addEventListener("taskUpdated", fetchTasks);
-  document.getElementById("openMenu").addEventListener("click", closeOpenMenu);
+  setupDropdown('#openMenu', '#dropDownMenu');
   fetchTasks();
   setupDragAndDrop();
   loadUserInitials();
@@ -264,11 +265,6 @@ async function updateTask(task) {
   } catch (error) {
     console.error("Fehler beim Aktualisieren des Tasks:", error);
   }
-}
-
-function closeOpenMenu() {
-  const element = document.getElementById("dropDownMenu");
-  element.classList.toggle("dp-none");
 }
 
 function loadUserInitials() {
