@@ -136,16 +136,17 @@ function createTaskElement(task) {
     <img src="../assets/icons/${iconFile}" alt="${task.category}">
     </div>
     <h3>${task.title}</h3>
-    <p>${task.description}</p>
+    <p class="task-description-coloring">${task.description}</p>
     <div class="progress-bar-wrapper">
     <div class="progress-bar-container">
       <div class="progress-bar-fill" style="width: 50%;"></div>
       </div>
       <span>1/2 Subtasks</span>
     </div>
-    <div class="assigned-chips">${assignedHTML}</div>
-        <div class="meta">
-      <span>Prio: ${task.prio}</span>
+    <div class="assigned-chips">
+    <div>${assignedHTML}</div>
+      <span>${task.prio}</span>
+      </div>
     </div>
   `;
 
