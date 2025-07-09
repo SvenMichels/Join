@@ -136,7 +136,7 @@ function createTaskElement(task) {
     <img src="../assets/icons/${iconFile}" alt="${task.category}">
     </div>
     <h3>${task.title}</h3>
-    <p class="task-description-coloring">${task.description}</p>
+    <p class="task-description-style">${task.description}</p>
     <div class="progress-bar-wrapper">
     <div class="progress-bar-container">
       <div class="progress-bar-fill" style="width: 50%;"></div>
