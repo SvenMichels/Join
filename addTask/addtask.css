@@ -40,6 +40,7 @@
   height: 120px;
   border-radius: 10px;
   border: 1px solid #d1d1d1;
+  max-width: 440px;
 }
 
 .task-date {
@@ -600,6 +601,12 @@ textarea:focus::placeholder {
 .subtask-delete-buttonImg {
   width: 15.49px;
   height: 11.23;
+}
+
+.form-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .form-container {
