@@ -2,7 +2,6 @@ body {
   max-width: 1440px;
 }
 
-
 .search-add-container {
   display: flex;
   gap: 32px;
@@ -93,20 +92,32 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-width: 252px;
-  max-width: 263px;
+  word-wrap: break-word;
+  width: 220px;
+  height: 231px;
+  padding: 15px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
   border-radius: 24px;
   padding: 16px;
   margin: 15px 0 5px 0;
-  gap: 16px;
+  gap: 24px;
   background-color: rgba(255, 255, 255, 1);
   cursor: pointer;
-  width: 100%;
+  opacity: 1;
   img {
     height: 27px;
     align-content: flex-start;
   }
+}
+
+h3 {
+  margin: 0;
+}
+
+.task-description-style {
+  color: #a8a8a8;
+  font-weight: 400;
+  white-space: normal;
 }
 
 .add-task-board-button-second {
@@ -165,6 +176,8 @@ body {
 
 .assigned-chips {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .empty-placeholder {
@@ -232,7 +245,7 @@ body {
 
 .progress-bar-fill {
   height: 100%;
-  background-color: #4589FF;
+  background-color: #4589ff;
   width: 0;
   transition: width 0.3s ease;
 }
