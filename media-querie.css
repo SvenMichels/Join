@@ -198,7 +198,7 @@
   }
 }
 
-@media (min-width: 576px) and (max-width: 767px) {
+@media (min-width: 576px) and (max-width: 768px) {
   .header-nav-logo {
     width: 32px;
     height: 39px;

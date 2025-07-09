@@ -219,7 +219,7 @@ form{
     height: 19px;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 768px) {
     body{
         justify-content: flex-end;
         gap: 50px;

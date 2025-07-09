@@ -525,7 +525,7 @@ h2{
 }
 
 
-@media (max-width: 767px){
+@media (max-width: 768px){
     .profileName{
         font-size: 35px;
     }
