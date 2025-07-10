@@ -92,12 +92,13 @@ function renderTaskDetailData(task) {
       (
         txt,
         i
-      ) => `<li><input type="checkbox" id="sub-${i}" class="modalCheckBox">
+      ) => `<li><input type="checkbox" id="sub-${i}" class="subtask-checkbox">
                      <label for="sub-${i}">${txt}</label></li>`
     )
     .join("");
 
   setupEditAndDelete(task);
+  initSubtaskProgress(null, task);
 }
 
 function setupEditAndDelete(task) {
@@ -118,6 +119,7 @@ function setupEditAndDelete(task) {
 }
 
 function createTaskElement(task) {
+  setTimeout(() => updateSubtaskProgress(task.id), 0);
   const categoryIcons = {
     User_Story: "propertyuserstory.svg",
     Technical_Task: "propertytechnicaltask.svg",
@@ -141,9 +143,9 @@ function createTaskElement(task) {
     </div>
     <div class="progress-bar-wrapper">
     <div class="progress-bar-container">
-      <div class="progress-bar-fill" style="width: 50%;"></div>
+      <div id="subtask-progressbar-${task.id}" class="progress-bar-fill"></div>
       </div>
-      <span>1/2 Subtasks</span>
+      <span id="subtask-progress-text-${task.id}">0/0 Subtasks</span>
     </div>
     <div class="assigned-chips">
     <div>${assignedHTML}</div>
@@ -359,3 +361,41 @@ function searchTasks() {
     }
   });
 }
+
+function initSubtaskProgress(taskId = null, task = null) {
+  document.querySelectorAll('.subtask-checkbox')
+    .forEach(cb => 
+      cb.addEventListener('change', () => {
+        updateSubtaskProgress(taskId);
+        if (task) saveSubtaskState(task);
+}));
+  updateSubtaskProgress(taskId);
+}
+
+function updateSubtaskProgress(taskId = null) {
+  const boxes = [...document.querySelectorAll('.subtask-checkbox')];
+  const total = boxes.length;
+  const done = boxes.filter(b => b.checked).length;
+  setProgressText(done, total, taskId);
+  setProgressBar(done, total, taskId);
+}
+
+function setProgressText(done, total, taskId) {
+  const id = taskId ? `subtask-progress-text-${taskId}` : 'subtask-progress-text';
+  const text = document.getElementById(id);
+  if (text) text.textContent = `${done}/${total} Subtasks`;
+}
+
+function setProgressBar(done, total, taskId) {
+  const id = taskId ? `subtask-progressbar-${taskId}` : 'subtask-progressbar';
+  const bar = document.getElementById(id);
+  if (bar) bar.style.width = total ? `${(done / total) * 100}%` : '0%';
+}
+
+function saveSubtaskState(task) {
+  const boxes = [...document.querySelectorAll('.subtask-checkbox')];
+  const states = boxes.map(cb => cb.checked);
+  task.subtaskDone = states;
+  updateTask(task);
+}
+
