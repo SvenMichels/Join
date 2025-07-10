@@ -425,7 +425,7 @@
   }
 }
 
-@media (min-width: 992px) and (max-width: 1199px) {
+@media (min-width: 991px) and (max-width: 1200px) {
   .nav-bar {
     height: 100vh;
     display: flex;
