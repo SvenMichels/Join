@@ -231,8 +231,8 @@ h3 {
 
 .progress-bar-container {
   display: flex;
-  justify-content: c;
   width: 128px;
+  justify-content: flex-start;
   max-width: 400px;
   height: 8px;
   background-color: #e0e0e0;
@@ -243,7 +243,8 @@ h3 {
 
 .progress-bar-fill {
   height: 100%;
-  background-color: #4589ff;
-  width: 0;
-  transition: width 0.3s ease;
+  width: 0%; /* Fallback, wird dynamisch durch style überschrieben */
+  background-color: #005eff;
+  transition: width 0.3s ease-in-out;
+  transform-origin: left;
 }
