@@ -145,7 +145,7 @@ function collectTaskDataModal(form) {
   const id = form.dataset.taskId || Date.now();
   const status = form.dataset.taskStatus || "todo";
 
-  return {
+  const task = {
     id,
     title: form.taskTitle.value.trim(),
     description: form.taskDescription.value.trim(),
@@ -154,8 +154,11 @@ function collectTaskDataModal(form) {
     prio: currentPrioModal,
     assigned: getChecked(".user-checkbox-modal"),
     subtasks: [...subtasksModal],
+    subtaskDone: [...subtaskDoneModal], // 🟢 HIER wird der Status der Checkboxen übernommen
     status,
   };
+
+  return task;
 }
 
 function validateTaskModal(task) {
@@ -269,35 +272,44 @@ function addSubtaskOnEnterModal(ev) {
 
 function renderSubtasksModal() {
   const list = document.getElementById("subtaskList-modal");
-  list.innerHTML = subtasksModal
-    .map(
-      (t, i) => `
+  list.innerHTML = "";
+
+  subtasksModal.forEach((t, i) => {
+    const isChecked = subtaskDoneModal[i] ? "checked" : "";
+
+    list.insertAdjacentHTML("beforeend", `
       <div class="subtask-container-modal">
-        <span class="subtask-display-text-modal" data-idx="${i}">${t}</span>
+        <input type="checkbox" class="subtask-checkbox-modal" data-index="${i}" ${isChecked}>
+        <span class="subtask-display-text-modal">${t}</span>
         <div class="subtask-controls-modal">
           <button class="subtask-edit-button-modal" data-edit="${i}"><img class="subtask-edit-button-images-modal" src="../assets/icons/edit.svg" /></button>
           <div class="subtask-spacer-second-modal"></div>
           <button class="subtask-delete-button-second-modal" data-del="${i}"><img class="subtask-edit-button-images-modal" src="../assets/icons/delete.svg" /></button>
         </div>
       </div>
-    `
-    )
-    .join("");
+    `);
+  });
 
   list.querySelectorAll("[data-del]").forEach((b) =>
     b.addEventListener("click", () => {
       subtasksModal.splice(+b.dataset.del, 1);
+      subtaskDoneModal.splice(+b.dataset.del, 1); // 🟢 auch das löschen!
       renderSubtasksModal();
     })
   );
 
-  list
-    .querySelectorAll("[data-edit]")
-    .forEach((b) =>
-      b.addEventListener("click", () =>
-        makeSubtaskEditableModal(+b.dataset.edit)
-      )
-    );
+  list.querySelectorAll("[data-edit]").forEach((b) =>
+    b.addEventListener("click", () =>
+      makeSubtaskEditableModal(+b.dataset.edit)
+    )
+  );
+
+  list.querySelectorAll(".subtask-checkbox-modal").forEach((cb) =>
+    cb.addEventListener("change", (e) => {
+      const idx = +e.target.dataset.index;
+      subtaskDoneModal[idx] = e.target.checked;
+    })
+  );
 }
 
 function makeSubtaskEditableModal(idx) {
@@ -331,7 +343,9 @@ const initials = (n) =>
 const rndColor = () => `hsl(${Math.random() * 360},70%,80%)`;
 
 function closeModal() {
+  const modal = document.getElementById("taskDetailModal");
   const overlay = document.getElementById("modal-overlay");
+  if (modal?.close) modal.close();
   if (overlay) {
     overlay.classList.add("d_none");
     overlay.innerHTML = "";
@@ -356,22 +370,17 @@ function eventHandleSearchModal() {
   });
 }
 
-export function prefillModalWithTaskData(task) {
+function prefillModalWithTaskData(task) {
   document.getElementById("task-title-modal").value = task.title;
   document.getElementById("task-description-modal").value = task.description;
-
   document.getElementById("task-date-modal").value = task.dueDate;
   document.getElementById("category-modal").value = task.category;
   selectPriorityModal((task.prio || "medium").toLowerCase());
 
-  document
-    .querySelectorAll(".user-checkbox-modal")
-    .forEach((cb) => (cb.checked = false));
+  document.querySelectorAll(".user-checkbox-modal").forEach(cb => cb.checked = false);
 
-  toArray(task.assigned).forEach((name) => {
-    const cb = [...document.querySelectorAll(".user-checkbox-modal")].find(
-      (c) => c.value === name
-    );
+  toArray(task.assigned).forEach(name => {
+    const cb = [...document.querySelectorAll(".user-checkbox-modal")].find(c => c.value === name);
     if (cb) {
       cb.checked = true;
       cb.closest(".user-checkbox-wrapper-modal")?.classList.add("active");
@@ -379,8 +388,11 @@ export function prefillModalWithTaskData(task) {
   });
   updateSelectedModal();
 
-  subtasksModal = [...(task.subtasks || [])];
-  renderSubtasksModal();
+  // Subtasks & DONE-Zustände korrekt setzen
+  window.subtasksModal = [...(task.subtasks || [])];
+  window.subtaskDoneModal = [...(task.subtaskDone || new Array(window.subtasksModal.length).fill(false))];
+
+  renderSubtasksModal(); // 🟢 sorgt dafür, dass die Taskbar korrekt angezeigt wird
 }
 
 window.prefillModalWithTaskData = prefillModalWithTaskData;
@@ -397,3 +409,142 @@ window.setSubtaskState = (arr) => {
   subtasksModal = [...arr];
 };
 window.getSubtaskState = () => subtasksModal;
+
+
+let pendingTaskUpdates = {};
+
+// Subtasks im Modal korrekt rendern mit Checkboxen
+
+function renderSubtasksInModal(task) {
+  const container = document.getElementById("modal-subtask-list");
+  container.innerHTML = "";
+
+  task.subtasks.forEach((subtask, index) => {
+    const isChecked = task.subtaskDone?.[index] ? "checked" : "";
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.className = "modal-subtask-checkbox";
+    checkbox.dataset.index = index;
+    checkbox.dataset.taskId = task.id;
+    if (isChecked) checkbox.checked = true;
+
+    const label = document.createElement("label");
+    label.textContent = subtask;
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "modal-subtask-entry";
+    wrapper.appendChild(checkbox);
+    wrapper.appendChild(label);
+
+    container.appendChild(wrapper);
+  });
+}
+
+// Checkbox Änderungen zwischenspeichern
+
+document.addEventListener("change", async (e) => {
+  if (!e.target.classList.contains("modal-subtask-checkbox")) return;
+
+  const index = parseInt(e.target.dataset.index);
+  const taskId = e.target.dataset.taskId;
+  const checked = e.target.checked;
+
+  if (!taskId || isNaN(index)) return;
+
+  if (!pendingTaskUpdates[taskId]) {
+    try {
+      const { data: task } = await requestData("GET", `/tasks/${taskId}`);
+      task.subtaskDone = task.subtaskDone || new Array(task.subtasks.length).fill(false);
+      pendingTaskUpdates[taskId] = task;
+    } catch (err) {
+      console.error("Fehler beim Laden des Tasks:", err);
+      return;
+    }
+  }
+
+  pendingTaskUpdates[taskId].subtaskDone[index] = checked;
+});
+
+// Modal-Schließen und Änderungen speichern + Board wirklich aktualisieren
+
+const modal = document.getElementById("taskDetailModal");
+if (modal) {
+  modal.addEventListener("close", async () => {
+    for (const [taskId, updatedTask] of Object.entries(pendingTaskUpdates)) {
+      try {
+        await requestData("PATCH", `/tasks/${taskId}`, {
+          subtaskDone: updatedTask.subtaskDone,
+        });
+      } catch (err) {
+        console.error("Fehler beim Speichern des Tasks:", err);
+      }
+    }
+    pendingTaskUpdates = {};
+
+    // Board aktiv aktualisieren (fix):
+    if (typeof window.renderBoard === "function") {
+      window.renderBoard();
+    } else {
+      location.reload();
+    }
+  });
+}
+
+
+function prefillModalWithTaskData(task) {
+  const form = document.getElementById("taskForm-modal");
+  if (!form) return;
+
+  form.elements.title.value = task.title;
+  form.elements.description.value = task.description;
+  form.elements.dueDate.value = task.dueDate;
+  form.elements.category.value = task.category;
+  form.elements.prio.value = task.prio;
+
+  // Subtasks übernehmen
+  window.subtasksModal = [...(task.subtasks || [])];
+  window.subtaskDoneModal = [...(task.subtaskDone || new Array(window.subtasksModal.length).fill(false))];
+  if (typeof renderSubtasksInModal === "function") {
+    renderSubtasksInModal(task);
+  }
+}
+
+
+window.prefillModalWithTaskData = function (task) {
+  const form = document.getElementById("taskForm-modal");
+  if (!form) return;
+
+  form.taskTitle.value = task.title;
+  form.taskDescription.value = task.description;
+  form.taskDate.value = task.dueDate;
+  form.category.value = task.category;
+  selectPriority(task.prio);
+
+  subtasks = [...window.editSubtasks]; // globale Übergabe
+  subtaskDone = [...window.editSubtaskDone]; // globale Übergabe
+
+  renderSubtasks(); // Mit Checkboxen
+  restoreAssignedUsers(task.assigned);
+};
+
+function renderSubtasks() {
+  const list = document.getElementById("subtaskList");
+  if (!list) return;
+  list.innerHTML = "";
+
+  subtasks.forEach((text, i) => {
+    const container = document.createElement("div");
+    container.className = "subtask-container";
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = subtaskDone[i] || false;
+
+    const label = document.createElement("span");
+    label.textContent = text;
+    label.className = "subtask-display-text";
+
+    container.append(checkbox, label);
+    list.appendChild(container);
+  });
+}
