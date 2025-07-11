@@ -650,6 +650,7 @@ select {
   .required-container-modal {
     position: absolute;
     bottom: 0;
+    left: 35px;
     width: 90%;
   }
 }
