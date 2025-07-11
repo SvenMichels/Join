@@ -51,7 +51,6 @@ async function fetchTasks() {
 
     for (const [id, task] of Object.entries(tasksData || {})) {
       task.id = id;
-      // Ensure subtaskDone matches subtasks length
       if (!Array.isArray(task.subtaskDone) || task.subtaskDone.length !== (task.subtasks?.length || 0)) {
         task.subtaskDone = new Array(task.subtasks?.length || 0).fill(false);
       }
@@ -181,7 +180,6 @@ function renderTaskDetailData(task) {
             <label for="sub-${i}">${txt}</label></li>`;
   }).join("");
 
-  // 👉 Subtasks für Modal erzeugen (damit checkboxen funktionieren)
   if (typeof renderSubtasksInModal === "function") {
     renderSubtasksInModal(task);
   }
@@ -223,7 +221,7 @@ async function openTaskDetails(task) {
 
  overlay.querySelector(".taskDetailCloseButton")?.addEventListener("click", async () => {
   closeDetailModal();
-  await fetchTasks(); // Holt aktuelle Daten und rendert neu!
+  await fetchTasks();
 });
 }
 
