@@ -125,6 +125,11 @@ p {
   background-color: #091931;
 }
 
+.nav-buttons.active,
+.taskFrameLink.active{
+  background-color: #091931;
+}
+
 .nav-button-login {
   background-color: #2a3647;
   color: #cdcdcd;
@@ -169,10 +174,12 @@ p {
 .taskFrameLink {
   display: flex;
   align-items: center;
+  justify-content: center;
   color: #cdcdcd;
   text-decoration: none;
   height: 35px;
-  padding: 8px;
+  padding: 8px 0;
+  width: 100%;
 }
 
 .taskFrameLink:hover {

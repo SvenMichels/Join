@@ -12,6 +12,7 @@ import {
 } from "../contactPage/contactService.js";
 
 import { setupDropdown } from "../scripts/ui/dropdown.js";
+import { highlightActiveLinks } from "../scripts/utils/navUtils.js";
 
 let contactList = [];
 let currentlyEditingId = null;
@@ -30,6 +31,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   await loadContactsFromFirebase();
   await ensureColorClassForAllContacts();
   loadUserInitials();
+  highlightActiveLinks();
 });
 
 function handleClose() {

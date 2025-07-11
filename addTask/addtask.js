@@ -1,5 +1,6 @@
 import { requestData } from "../scripts/firebase.js";
 import { setupDropdown } from "../scripts/ui/dropdown.js";
+import { highlightActiveLinks } from "../scripts/utils/navUtils.js";
 
 let currentActivePriority = "medium";
 let allUsers = [];
@@ -23,6 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
   loadUserInitials();
   eventHandleSearch();
   setupDropdown('#openMenu', '#dropDownMenu');
+  highlightActiveLinks();
 });
 
 const $ = {};

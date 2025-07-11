@@ -1,6 +1,7 @@
 import { requestData } from "../scripts/firebase.js";
 import { updateEmptyLists } from "../scripts/utils/emptylisthelper.js";
 import { setupDropdown } from "../scripts/ui/dropdown.js";
+import { highlightActiveLinks } from "../scripts/utils/navUtils.js";
 
 const statusMap = {
   todo: "todoList",
@@ -39,6 +40,7 @@ window.addEventListener("DOMContentLoaded", () => {
   fetchTasks();
   setupDragAndDrop();
   loadUserInitials();
+  highlightActiveLinks();
 });
 
 async function fetchTasks() {

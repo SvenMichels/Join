@@ -1,11 +1,13 @@
 import { requestData } from "../scripts/firebase.js";
 import { setupDropdown } from "../scripts/ui/dropdown.js";
+import { highlightActiveLinks } from "../scripts/utils/navUtils.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   updateUserGreeting();
   updateSummary();
   handleMobileGreetingFade();
   setupDropdown('#openMenu', '#dropDownMenu');
+  highlightActiveLinks();
 });
 
 function updateUserGreeting() {
