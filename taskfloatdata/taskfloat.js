@@ -465,3 +465,51 @@ if (modal) {
     }
   });
 }
+
+document.addEventListener("click", (event) => {
+  const detailModal = document.getElementById("taskDetailModal");
+  const formModal = document.querySelector(".form-wrapper-modal");
+  const overlay = document.getElementById("modal-overlay");
+
+  const isSubtaskButtonClick =
+    event.target.closest(".subtask-edit-button-modal") ||
+    event.target.closest(".subtask-delete-button-second-modal") ||
+    event.target.closest(".subtask-save-button-modal") ||
+    event.target.closest(".subtask-delete-button-modal") ||
+    event.target.closest(".subtask-text-input-modal");
+
+  if (isSubtaskButtonClick) return;
+
+  const clickedOutsideDetail =
+    detailModal?.open && !detailModal.contains(event.target) &&
+    !event.composedPath().includes(detailModal);
+
+  const clickedOutsideForm =
+    formModal &&
+    getComputedStyle(formModal).display !== "none" &&
+    !formModal.contains(event.target);
+
+  if (clickedOutsideDetail || clickedOutsideForm) {
+    if (detailModal?.open && typeof detailModal.close === "function") {
+      detailModal.close();
+    }
+
+    if (formModal) formModal.style.display = "none";
+
+    if (overlay) {
+      overlay.classList.add("d_none");
+      overlay.innerHTML = "";
+    }
+
+    window.isEditMode = false;
+    window.editingTaskId = null;
+
+    const form = document.getElementById("taskForm");
+    form?.reset();
+    form?.removeAttribute("data-task-id");
+    form?.removeAttribute("data-task-status");
+
+    window.subtasksModal = [];
+    window.subtaskDoneModal = [];
+  }
+});

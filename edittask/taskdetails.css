@@ -8,10 +8,12 @@
   padding-left: 40px;
   padding-right: 40px;
   border-radius: 30px;
+  border: none;
   gap: 24px;
   max-width: 525px;
-  width: 100%;
+  width: 80%;
   height: 80%;
+  /* margin: auto; */
 }
 
   .taskDetailCloseButton {
