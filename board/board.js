@@ -10,7 +10,6 @@ const statusMap = {
   done: "doneList",
 };
 
-
 window.editingTaskId = null;
 window.isEditMode = false;
 let loadedTasks = {};
@@ -23,7 +22,7 @@ const categoryIcons = {
 function toArray(val) {
   if (Array.isArray(val)) return val;
   if (val && typeof val === "object") return Object.values(val);
-  if (typeof val === "string") return val.split(",").map(s => s.trim());
+  if (typeof val === "string") return val.split(",").map((s) => s.trim());
   return [];
 }
 
@@ -38,7 +37,7 @@ async function deleteTask(id) {
 window.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("taskCreated", fetchTasks);
   window.addEventListener("taskUpdated", fetchTasks);
-  setupDropdown('#openMenu', '#dropDownMenu');
+  setupDropdown("#openMenu", "#dropDownMenu");
   fetchTasks();
   setupDragAndDrop();
   loadUserInitials();
@@ -51,7 +50,10 @@ async function fetchTasks() {
 
     for (const [id, task] of Object.entries(tasksData || {})) {
       task.id = id;
-      if (!Array.isArray(task.subtaskDone) || task.subtaskDone.length !== (task.subtasks?.length || 0)) {
+      if (
+        !Array.isArray(task.subtaskDone) ||
+        task.subtaskDone.length !== (task.subtasks?.length || 0)
+      ) {
         task.subtaskDone = new Array(task.subtasks?.length || 0).fill(false);
       }
       loadedTasks[id] = task;
@@ -89,19 +91,22 @@ function createTaskElement(task) {
   const iconFile = categoryIcons[task.category] || "defaulticon.svg";
 
   const element = document.createElement("article");
-  element.className = `task prio-${(task.prio || "low").toLowerCase()}${hasSubtasksClass}`;
+  element.className = `task prio-${(
+    task.prio || "low"
+  ).toLowerCase()}${hasSubtasksClass}`;
   element.id = `task-${task.id}`;
 
   const assignedHTML = generateAssignedChips(task.assigned);
 
-  const progressBar = total > 0
-    ? `<div class="progress-bar-wrapper">
+  const progressBar =
+    total > 0
+      ? `<div class="progress-bar-wrapper">
         <div class="progress-bar-container">
           <div id="subtask-progressbar-${task.id}" class="progress-bar-fill" style="width: ${percent}%;"></div>
         </div>
         <span id="subtask-progress-text-${task.id}" class="subtask-counter">${done}/${total} Subtasks</span>
       </div>`
-    : "";
+      : "";
 
   element.innerHTML = `
     <div class="task-icon">
@@ -146,7 +151,9 @@ function getInitials(name) {
 function generateAssignedChips(assigned) {
   const names = toArray(assigned);
   if (names.length === 0) return "";
-  return names.map(name => `<div class="assigned-chip">${name}</div>`).join("");
+  return names
+    .map((name) => `<div class="assigned-chip">${name}</div>`)
+    .join("");
 }
 
 function loadUserInitials() {
@@ -173,12 +180,16 @@ function renderTaskDetailData(task) {
   $("#detail-description").textContent = task.description;
   $("#task-detail-due-date").textContent = task.dueDate;
   $("#task-detail-priority").innerHTML = getPriorityIcon(task.prio);
-  $("#task-detail-assigned").innerHTML = generateAssignedChips(toArray(task.assigned));
-  $("#task-detail-subtasks").innerHTML = (task.subtasks || []).map((txt, i) => {
-    const isChecked = task.subtaskDone?.[i] ? 'checked' : '';
-    return `<li><input type="checkbox" id="sub-${i}" class="subtask-checkbox" ${isChecked}>
+  $("#task-detail-assigned").innerHTML = generateAssignedChips(
+    toArray(task.assigned)
+  );
+  $("#task-detail-subtasks").innerHTML = (task.subtasks || [])
+    .map((txt, i) => {
+      const isChecked = task.subtaskDone?.[i] ? "checked" : "";
+      return `<li><input type="checkbox" id="sub-${i}" class="subtask-checkbox" ${isChecked}>
             <label for="sub-${i}">${txt}</label></li>`;
-  }).join("");
+    })
+    .join("");
 
   if (typeof renderSubtasksInModal === "function") {
     renderSubtasksInModal(task);
@@ -213,17 +224,43 @@ function closeDetailModal() {
 
 async function openTaskDetails(task) {
   const overlay = document.getElementById("modal-overlay");
-  const res = await fetch("../edittask/taskdetail.html");
-  overlay.innerHTML = await res.text();
+
+  overlay.innerHTML = "";
   overlay.classList.remove("d_none");
+
+  const res = await fetch("../edittask/taskdetail.html");
+  const modalHTML = await res.text();
+  overlay.innerHTML = modalHTML;
 
   renderTaskDetailData(task);
 
- overlay.querySelector(".taskDetailCloseButton")?.addEventListener("click", async () => {
-  closeDetailModal();
-  await fetchTasks();
-});
+  const modal = overlay.querySelector("#taskDetailModal");
+
+  // 🧲 X-Button zum Schließen
+  const closeBtn = modal.querySelector(".taskDetailCloseButton");
+  closeBtn?.addEventListener("click", async () => {
+    overlay.classList.add("d_none");
+    overlay.innerHTML = "";
+    await fetchTasks();
+  });
+
+  // ✨ NEUER Outside-Klick-Handler (Variante A)
+  const outsideClickHandler = (event) => {
+    if (!modal) return;
+
+    const clickedInside = event.composedPath().includes(modal);
+    const clickedOverlay = event.target === overlay;
+
+    if (clickedInside || !clickedOverlay) return;
+
+    overlay.classList.add("d_none");
+    overlay.innerHTML = "";
+    overlay.removeEventListener("click", outsideClickHandler);
+  };
+
+  overlay.addEventListener("click", outsideClickHandler);
 }
+
 
 document.querySelectorAll(".board-icon").forEach((icon) => {
   icon.addEventListener("click", async () => {
@@ -254,10 +291,12 @@ function openTaskModal(isEdit = false, task = null) {
             okBtn.disabled = false;
           }
         }
-        overlay.querySelector(".taskFloatButtonClose")?.addEventListener("click", () => {
-          overlay.classList.add("d_none");
-          overlay.innerHTML = "";
-        });
+        overlay
+          .querySelector(".taskFloatButtonClose")
+          ?.addEventListener("click", () => {
+            overlay.classList.add("d_none");
+            overlay.innerHTML = "";
+          });
       })();
     });
 }
@@ -332,44 +371,49 @@ function searchTasks() {
     const taskElement = document.getElementById(`task-${task.id}`);
     if (!taskElement) return;
     const matchesTitle = task.title.toLowerCase().includes(searchTerm);
-    const matchesDescription = task.description.toLowerCase().includes(searchTerm);
-    taskElement.style.display = (matchesTitle || matchesDescription) ? "flex" : "none";
+    const matchesDescription = task.description
+      .toLowerCase()
+      .includes(searchTerm);
+    taskElement.style.display =
+      matchesTitle || matchesDescription ? "flex" : "none";
   });
 }
 
 function initSubtaskProgress(taskId = null, task = null) {
-  document.querySelectorAll('.subtask-checkbox')
-    .forEach(cb => 
-      cb.addEventListener('change', () => {
-        updateSubtaskProgress(taskId);
-        if (task) saveSubtaskState(task);
-  }));
+  document.querySelectorAll(".subtask-checkbox").forEach((cb) =>
+    cb.addEventListener("change", () => {
+      updateSubtaskProgress(taskId);
+      if (task) saveSubtaskState(task);
+    })
+  );
   updateSubtaskProgress(taskId);
 }
 
 function updateSubtaskProgress(taskId = null) {
-  const boxes = [...document.querySelectorAll('.subtask-checkbox')];
+  const boxes = [...document.querySelectorAll(".subtask-checkbox")];
   const total = boxes.length;
-  const done = boxes.filter(b => b.checked).length;
+  const done = boxes.filter((b) => b.checked).length;
   setProgressText(done, total, taskId);
   setProgressBar(done, total, taskId);
 }
 
 function setProgressText(done, total, taskId) {
-  const id = taskId ? `subtask-progress-text-${taskId}` : 'subtask-progress-text';
+  const id = taskId
+    ? `subtask-progress-text-${taskId}`
+    : "subtask-progress-text";
   const text = document.getElementById(id);
   if (text) text.textContent = `${done}/${total} Subtasks`;
 }
 
 function setProgressBar(done, total, taskId) {
-  const id = taskId ? `subtask-progressbar-${taskId}` : 'subtask-progressbar';
+  const id = taskId ? `subtask-progressbar-${taskId}` : "subtask-progressbar";
   const bar = document.getElementById(id);
-  if (bar) bar.style.width = total ? `${(done / total) * 100}%` : '0%';
+  if (bar) bar.style.width = total ? `${(done / total) * 100}%` : "0%";
 }
 
 function saveSubtaskState(task) {
-  const boxes = [...document.querySelectorAll('.subtask-checkbox')];
-  const states = boxes.map(cb => cb.checked);
+  const boxes = [...document.querySelectorAll(".subtask-checkbox")];
+  const states = boxes.map((cb) => cb.checked);
   task.subtaskDone = states;
   updateTask(task);
 }

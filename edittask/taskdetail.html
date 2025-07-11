@@ -1,33 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <link rel="stylesheet" href="../edittask/taskdetails.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Task Detail</title>
+  <link rel="stylesheet" href="../edittask/taskdetails.css" />
 </head>
-
 <body>
-  <dialog id="taskDetailModal" class="task-detail-modal">
+
+  <!-- Modal-Fenster -->
+  <div id="taskDetailModal" class="task-detail-modal">
 
     <div class="detail-header">
-      <img id="detail-icon" src="../assets/icons/propertyuserstory.svg" alt="">
-      <button class="taskDetailCloseButton"><img class="icon" src="../assets/icons/close.svg"></button>
+      <img id="detail-icon" src="../assets/icons/propertyuserstory.svg" alt="" />
+      <button class="taskDetailCloseButton">
+        <img class="icon" src="../assets/icons/close.svg" />
+      </button>
     </div>
 
     <h2 id="task-detail-title"></h2>
     <p id="detail-description"></p>
 
-    <div class="detail-row" id="task-detail-due-date-box"><strong>Due Date:</strong>
+    <div class="detail-row" id="task-detail-due-date-box">
+      <strong>Due Date:</strong>
       <span id="task-detail-due-date"></span>
     </div>
 
-    <div class="detail-row" id="task-detail-priority-box"><strong>Priority:</strong>
+    <div class="detail-row" id="task-detail-priority-box">
+      <strong>Priority:</strong>
       <span id="task-detail-priority"></span>
     </div>
 
-    <div class="detail-row" id="task-detail-assigned-box"><strong>Assigned To:</strong>
+    <div class="detail-row" id="task-detail-assigned-box">
+      <strong>Assigned To:</strong>
       <span id="task-detail-assigned"></span>
     </div>
 
@@ -35,12 +40,16 @@
     <ul id="task-detail-subtasks"></ul>
 
     <div class="detail-actions">
-      <button class="delete-btn"><img src="../assets/icons/delete.svg"> Delete</button>
+      <button class="delete-btn">
+        <img src="../assets/icons/delete.svg" /> Delete
+      </button>
       <div class="space-div"></div>
-      <button class="edit-btn"><img src="../assets/icons/edit.svg"> Edit</button>
+      <button class="edit-btn">
+        <img src="../assets/icons/edit.svg" /> Edit
+      </button>
     </div>
 
-  </dialog>
-</body>
+  </div>
 
+</body>
 </html>

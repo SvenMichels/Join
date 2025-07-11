@@ -606,16 +606,16 @@ select {
 @media (max-width: 575px) {
 }
 
-@media (min-width: 576px) and (max-width: 767px) {
+@media (min-width: 575px) and (max-width: 768px) {
 }
-@media (min-width: 768px) and (max-width: 991px) {
+@media (min-width: 768px) and (max-width: 992px) {
   .form-wrapper-modal {
     max-width: 80%;
   }
 }
 @media (min-width: 992px) and (max-width: 1199px) {
   .form-wrapper-modal {
-    max-width: 90%;
+    max-width: 960px;
   }
 
   .form-container-modal {
@@ -655,7 +655,7 @@ select {
 }
 @media (min-width: 1200px) {
   .form-wrapper-modal {
-    max-width: 70%;
+    max-width: 960px;
   }
 
   .form-container-modal {
