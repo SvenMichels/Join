@@ -10,6 +10,7 @@ const statusMap = {
   done: "doneList",
 };
 
+
 window.editingTaskId = null;
 window.isEditMode = false;
 let loadedTasks = {};
@@ -187,24 +188,7 @@ function renderTaskDetailData(task) {
 
   setupEditAndDelete(task);
   initSubtaskProgress(null, task);
-
-  // 👉 Modal anzeigen, falls noch nicht enthalten
-  const modal = document.getElementById("taskDetailModal");
-  if (modal) modal.showModal();
 }
-
-// 👇 Modal-Schließ-Listener zum Neurendern des Boards
-const modal = document.getElementById("taskDetailModal");
-if (modal) {
-  modal.addEventListener("close", async () => {
-    if (typeof fetchTasks === "function") {
-      await fetchTasks(); // holt Daten neu und rendert Board automatisch
-    } else if (typeof renderBoard === "function") {
-      renderBoard();
-    }
-  });
-}
-
 
 function setupEditAndDelete(task) {
   const editBtn = document.querySelector(".edit-btn");
