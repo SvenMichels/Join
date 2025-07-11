@@ -1,0 +1,61 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edit Task</title>
+  <link rel="stylesheet" href="taskfloatdata/task-float-modal.css" />
+</head>
+<body>
+  <div id="taskEditModal" class="task-edit-modal">
+    <div class="edit-header">
+      <img src="../assets/icons/propertyuserstory.svg" alt="User Story Icon" />
+      <button class="taskDetailCloseButton" aria-label="Close">
+        <img class="icon" src="../assets/icons/close.svg" alt="Close icon" />
+      </button>
+    </div>
+
+    <form onsubmit="event.preventDefault();">
+      <label for="task-title-modal">Title <span style="color: #ff8190">*</span></label>
+      <input class="task-title-input" id="task-title-modal" name="taskTitle" placeholder="Enter a title" type="text" required />
+
+      <label for="task-description-modal">Description</label>
+      <textarea class="task-description-input" id="task-description-modal" name="taskDescription" placeholder="Enter a description"></textarea>
+
+      <label for="task-date-modal">Due date</label>
+      <input class="task-date-input" id="task-date-modal" name="dueDate" type="date" />
+
+      <label for="task-priority">Priority</label>
+      <div class="prio-btn-container" id="task-priority">
+        <button type="button" class="prio urgent" onclick="setPrio('urgent')">
+          <span>Urgent</span><img src="../assets/icons/PrioUrgent.svg" alt="Urgent Priority" />
+        </button>
+        <button type="button" class="prio medium" onclick="setPrio('medium')">
+          <span>Medium</span><img src="../assets/icons/PrioMedium.svg" alt="Medium Priority" />
+        </button>
+        <button type="button" class="prio low" onclick="setPrio('low')">
+          <span>Low</span><img src="../assets/icons/PrioLow.svg" alt="Low Priority" />
+        </button>
+      </div>
+
+      <label for="searchUser-modal">Assigned to</label>
+      <div class="dropdown">
+        <input type="text" id="searchUser-modal" name="assignedUsers" oninput="filterUsers()" placeholder="Select contacts to assign" />
+        <div class="dropdown-content" id="userDropdown"></div>
+      </div>
+
+      <label for="subtask-modal">Subtasks</label>
+      <div class="subtask-container">
+        <input class="subtask-input" id="subtask-modal" name="subtaskInput" placeholder="Add new subtask" type="text" />
+        <button class="subtask-add-btn" onclick="addSubtask()">+</button>
+      </div>
+      <ul class="subtask-list" id="subtask-list"></ul>
+
+      <div class="form-buttons">
+        <button type="button" onclick="updateTask()">Save changes <img src="../assets/icons/check-white.svg" alt="Check icon" /></button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

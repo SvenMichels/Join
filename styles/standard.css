@@ -21,6 +21,10 @@ p {
   display: none !important;
 }
 
+.board{
+  gap: 26px;
+}
+
 .txtDeco-none {
   text-decoration: none;
 }
