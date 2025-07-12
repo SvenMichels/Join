@@ -406,8 +406,9 @@ input:valid + .error-message {
   padding-left: 20px;
   display: flex;
   align-items: center;
+  font-size: 16px;
   width: 100%;
-  height: 32px;
+  height: fit-content;
   gap: 8px;
   cursor: pointer;
   transition: background-color 0.2s ease, box-shadow 0.2s ease;
