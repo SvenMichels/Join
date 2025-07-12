@@ -329,7 +329,7 @@ function sortContactsAlphabetically(arr) {
   );
 }
 
-function showUserFeedback() {
+export function showUserFeedback() {
   const el = $("userFeedback");
   if (!el) return;
   el.classList.remove("dp-none");
