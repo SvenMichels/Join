@@ -339,13 +339,16 @@ function showContact(id) {
 
 window.addEventListener('resize', () => {
   const single = document.querySelector('.singleContact');
-  const fab = document.getElementById('fabContainer');
+  const fab    = document.getElementById('fabContainer');
 
   if (isMobileView()) {
     if (single) single.style.display = 'none';
-    if (fab) fab.style.display    = ''; 
+    if (fab)    fab.style.display    = '';
   } else {
-    if (single) single.style.display = 'flex';
+    if (single) {
+      single.style.display = 'flex';
+      single.classList.remove('slide-in', 'slide-out');
+    }
     if (fab) fab.style.display = 'none';
   }
 });
