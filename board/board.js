@@ -35,6 +35,7 @@ async function deleteTask(id) {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("add-task-btn").addEventListener("click",)
   window.addEventListener("taskCreated", fetchTasks);
   window.addEventListener("taskUpdated", fetchTasks);
   setupDropdown("#openMenu", "#dropDownMenu");
