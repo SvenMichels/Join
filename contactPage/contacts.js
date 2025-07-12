@@ -200,9 +200,21 @@ async function deleteContact(id) {
   clearContactListUI();
   renderAllContacts(contactList);
   clearBigContactView();
+  handlePostDeleteView(contactList);
+}
 
+function handlePostDeleteView(list) {
+  if (!list.length) {
+    hideSingleContactView();
+    return;
+  }
+
+  const firstId = list[0].id;
   if (isMobileView()) {
     hideSingleContactView();
+  } else {
+    showContact(firstId);
+    document.querySelector(`.contact[data-id="${firstId}"]`)?.classList.add('active');
   }
 }
 
@@ -314,12 +326,29 @@ function showContact(id) {
   if (!c) return;
   renderSingleContact(c.name, c.email, c.phone, c.initials, c.id, c.colorClass || getRandomColorClass());
 
+  const single = document.querySelector('.singleContact');
   if (isMobileView()) {
-    document.querySelector('.singleContact').classList.add('slide-in')
+    single.classList.add('slide-in');
     initializeFabMenu(id);
     initializeBackButton();
+  } else {
+    single.style.display = 'flex';
+    single.classList.remove('slide-out'); 
   }
 }
+
+window.addEventListener('resize', () => {
+  const single = document.querySelector('.singleContact');
+  const fab = document.getElementById('fabContainer');
+
+  if (isMobileView()) {
+    if (single) single.style.display = 'none';
+    if (fab) fab.style.display    = ''; 
+  } else {
+    if (single) single.style.display = 'flex';
+    if (fab) fab.style.display = 'none';
+  }
+});
 
 
 function clearContactListUI() {
