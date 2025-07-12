@@ -49,6 +49,12 @@ body {
   border: 0px;
 }
 
+.add-task-board-button:hover {
+  background: #007cee;
+  color: #ffffff;
+  cursor: pointer;
+}
+
 .add-task-board-button img {
   width: 20px;
   height: 20px;
