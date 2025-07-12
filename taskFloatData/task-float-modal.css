@@ -627,6 +627,7 @@ select {
 @media (min-width: 768px) and (max-width: 991px) {
   .form-wrapper-modal {
     max-width: 80%;
+    height: 70vh;
   }
 
   .task-container-modal {
@@ -640,6 +641,7 @@ select {
 @media (min-width: 992px) and (max-width: 1199px) {
   .form-wrapper-modal {
     max-width: 960px;
+    height: 70vh;
   }
 
   .form-container-modal {
@@ -682,6 +684,7 @@ select {
 @media (min-width: 1200px) {
   .form-wrapper-modal {
     max-width: 960px;
+    height: 70vh;
   }
 
   .form-container-modal {
