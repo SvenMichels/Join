@@ -254,6 +254,7 @@ input:valid + .error-message {
   justify-content: space-between;
   border-radius: 10px;
   border: 1px solid #d1d1d1;
+  box-sizing: border-box;
 }
 
 .prio-category-container {
@@ -282,6 +283,7 @@ input:valid + .error-message {
   justify-content: space-between;
   border-radius: 10px;
   border: 1px solid #d1d1d1;
+  box-sizing: border-box;
 }
 
 .create-container-modal {
