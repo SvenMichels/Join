@@ -35,7 +35,7 @@ async function deleteTask(id) {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("add-task-btn").addEventListener("click",)
+  //document.getElementById("add-task-btn").addEventListener("click", )
   window.addEventListener("taskCreated", fetchTasks);
   window.addEventListener("taskUpdated", fetchTasks);
   setupDropdown("#openMenu", "#dropDownMenu");
@@ -256,10 +256,12 @@ async function openTaskDetails(task) {
 
     overlay.classList.add("d_none");
     overlay.innerHTML = "";
-    overlay.removeEventListener("click", outsideClickHandler);
+    overlay.removeEventListener("click", outsideClickHandler)
+    fetchTasks();
   };
 
   overlay.addEventListener("click", outsideClickHandler);
+  
 }
 
 
