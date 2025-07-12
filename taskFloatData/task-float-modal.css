@@ -113,9 +113,11 @@
 }
 
 .required-container-modal {
+  margin-top: 140px;
   display: flex;
   flex-direction: column;
   margin-bottom: 16px;
+  z-index: 1;
 }
 
 .task-title {
