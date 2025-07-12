@@ -5,6 +5,10 @@
   gap: 1px;
 }
 
+h1 {
+padding-left: 15px;
+}
+
 .redSpan {
   font-family: Inter;
   font-weight: 400;
