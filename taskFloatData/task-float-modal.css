@@ -1,15 +1,16 @@
 .form-wrapper-modal {
   position: absolute;
-  top: 100px;
-  bottom: 80px;
   left: 50%;
-  transform: translateX(-50%);
+  top: 50%;
+  height: 90vh;
+  transform: translate(-50%, -50%);
   width: 100%;
   overflow-y: auto;
   padding: 0 16px;
   box-sizing: border-box;
   background-color: white;
   border-radius: 32px;
+  scrollbar-width: none;
 }
 
 .task-h1-container-modal {
@@ -66,7 +67,6 @@
 .subtask-wrapper-modal {
   position: relative;
   width: 100%;
-  max-width: 440px;
 }
 
 .subtask-add-button-modal {
@@ -114,9 +114,11 @@
 }
 
 .required-container-modal {
+  margin-top: 140px;
   display: flex;
   flex-direction: column;
   margin-bottom: 16px;
+  margin-top: 40px;
 }
 
 .task-title {
@@ -246,7 +248,7 @@ input:valid + .error-message {
 }
 
 .prio-assign-input {
-  width: 98%;
+  width: 100%;
   height: 48px;
   display: flex;
   justify-content: space-between;
@@ -265,11 +267,16 @@ input:valid + .error-message {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  height: 80px;
+}
+
+#subtaskList-modal {
+  height: 70px;
+  overflow: auto;
+  width: 100%;
 }
 
 .prio-subtask-input {
-  width: 98%;
+  width: 100%;
   height: 48px;
   display: flex;
   justify-content: space-between;
@@ -525,12 +532,12 @@ input:valid + .error-message {
 
 .close-button-modal:hover {
   cursor: pointer;
-  background: #29ABE2;
+  background: #29abe2;
 }
 
 .close-button-modal:hover .icon {
   cursor: pointer;
-  content: url("../assets/icons/close_white.svg")
+  content: url("../assets/icons/close_white.svg");
 }
 
 .prio-buttons-images-modal {
@@ -604,13 +611,30 @@ select {
 }
 
 @media (max-width: 575px) {
+  .form-container-modal {
+    display: flex;
+    width: 100%;
+    align-items: center;
+  }
+  .task-container-modal {
+    width: 100%;
+  }
 }
 
 @media (min-width: 575px) and (max-width: 768px) {
 }
-@media (min-width: 768px) and (max-width: 992px) {
+
+@media (min-width: 768px) and (max-width: 991px) {
   .form-wrapper-modal {
     max-width: 80%;
+  }
+
+  .task-container-modal {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+    margin: 0 auto;
   }
 }
 @media (min-width: 992px) and (max-width: 1199px) {
@@ -627,7 +651,8 @@ select {
   .task-container-modal {
     display: flex;
     gap: 16px;
-    width: 95%;
+    width: 100%;
+    margin: 0 auto;
   }
 
   .space-container {
@@ -650,7 +675,7 @@ select {
   .required-container-modal {
     position: absolute;
     bottom: 0;
-    left: 35px;
+    left: 50px;
     width: 90%;
   }
 }
@@ -668,7 +693,8 @@ select {
   .task-container-modal {
     display: flex;
     gap: 16px;
-    width: 95%;
+    width: 100%;
+    margin: 0 auto;
   }
 
   .space-container {
@@ -691,6 +717,7 @@ select {
   .required-container-modal {
     position: absolute;
     bottom: 0;
+    left: 50px;
     width: 90%;
   }
 }

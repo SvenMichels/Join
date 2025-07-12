@@ -141,8 +141,8 @@
 
         <div class="assigned-input-wrapper">
           <div class="assigned-container">
-            <input id="searchUser" placeholder="Select contact to assign" name="assignedUsers" class="prio-assign-input"
-              type="text" />
+            <input id="searchUser" placeholder="Select contact to assign"  name="assignedUsers" class="prio-assign-input" onkeydown="return false" onpaste="return false" type="text"
+               />
             <button class="assignUserListBtn" type="button">
               <img id="assignedBtnImg" class="assignedInputImg dropdown-arrow"
                 src="../assets/icons/arrow_drop_down.svg" />
@@ -188,11 +188,14 @@
         <button class="clear-button" id="clearBtn" type="reset">
           Clear <img alt="Bild" src="../assets/icons/iconoir_cancel.svg" />
         </button>
-        <button class="create-button" type="submit">
+        <button id="createBtn" class="create-button" type="submit">
           Create Task <img alt="Bild" src="../assets/icons/create_check.svg" />
         </button>
       </div>
     </div>
+     <Article id="userFeedback" class="userFeedback ">
+            <p>task Successfully created</p>
+        </Article>
 </div>
 
   <footer></footer>

@@ -49,6 +49,12 @@ body {
   border: 0px;
 }
 
+.add-task-board-button:hover {
+  background: #007cee;
+  color: #ffffff;
+  cursor: pointer;
+}
+
 .add-task-board-button img {
   width: 20px;
   height: 20px;
@@ -119,6 +125,7 @@ h3 {
 }
 
 .add-task-board-button-second {
+  font-size: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -135,6 +142,12 @@ h3 {
   padding-right: 16px;
   padding-bottom: 8px;
   padding-left: 16px;
+}
+
+.add-task-board-button-second:hover {
+  background: #007cee;
+  color: #ffffff;
+  cursor: pointer;
 }
 
 .add-tasboard-button-second img {

@@ -45,6 +45,7 @@ function cacheDom() {
   $.subtaskAddBtn?.addEventListener("click", addSubtask);
   $.subtaskInput?.addEventListener("keydown", addSubtaskOnEnter);
   $.assignUserListBtn?.addEventListener("click", toggleUserList);
+  document.getElementById("createBtn").addEventListener("click", showUserFeedback)
 }
 
 function toggleUserList(e) {

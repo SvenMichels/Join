@@ -12,6 +12,7 @@ body{
     align-items: center;
     max-width: 1440px;
     height: 100vh;
+    background-color: #fefafa;
 }
 
 .logInHeader{
@@ -159,6 +160,7 @@ form{
     gap: 35px;
     max-width: 322px;
     width: 100%;
+    padding-top: 52px;
 }
 
 .btn {
@@ -217,6 +219,28 @@ form{
     font-size: 16px;
     width: 105px;
     height: 19px;
+    
+}
+
+.loginContainer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 32px;
+    width: 652px;
+    height: 449px;
+    background-color: #FFFFFF;
+    box-shadow: 4px 4px 4px 4px rgba(0, 0, 0, 0.25);
+    padding: 48px 115px 48px 115px;
+    border: 1px solid transparent;
+    border-radius: 30px;
+}
+
+.bar{
+    width: 150px;
+    background-color: #29abe2;
+    border: 1px solid #29abe2;
 }
 
 @media (max-width: 768px) {
