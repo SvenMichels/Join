@@ -118,6 +118,7 @@
 }
 
 .required-container-modal {
+  margin-top: 140px;
   display: flex;
   flex-direction: column;
   margin-bottom: 16px;
