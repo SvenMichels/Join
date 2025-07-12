@@ -287,7 +287,7 @@ function renderSubtasksModal() {
     list.insertAdjacentHTML("beforeend", `
       <div class="subtask-container-modal">
         <input type="checkbox" class="subtask-checkbox-modal" data-index="${i}" ${isChecked}>
-        <span class="subtask-display-text-modal">${t}</span>
+        <p class="subtask-display-text-modal">${t}</p>
         <div class="subtask-controls-modal">
           <button class="subtask-edit-button-modal" data-edit="${i}"><img class="subtask-edit-button-images-modal" src="../assets/icons/edit.svg" /></button>
           <div class="subtask-spacer-second-modal"></div>
