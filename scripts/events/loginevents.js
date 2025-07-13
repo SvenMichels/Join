@@ -1,5 +1,5 @@
 import { loginAsGuest, loginUser } from "../auth/login.js";
-import { collectUserInput } from "../../signUp/signup.js"
+import { collectUserInput } from "../../signup/signup.js"
 import { requestData } from "../firebase.js";
 
 export async function loginListeners() {

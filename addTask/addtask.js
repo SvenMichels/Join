@@ -1,6 +1,7 @@
 import { requestData } from "../scripts/firebase.js";
 import { setupDropdown } from "../scripts/ui/dropdown.js";
 import { highlightActiveLinks } from "../scripts/utils/navUtils.js";
+import { ensureUserHasColor } from "../scripts/utils/colors.js";
 
 let currentActivePriority = "medium";
 let allUsers = [];
@@ -174,26 +175,26 @@ async function loadAndRenderUsers() {
   renderUserCheckboxes(allUsers);
 }
 
-function renderUserCheckboxes(users) {
+async function renderUserCheckboxes(users) {
   const container = document.getElementById("assignedUserList");
   if (!container) return;
 
   container.innerHTML = "";
-
   const unique = new Set();
 
-  users.forEach(({ userName }) => {
-    if (unique.has(userName)) return;
-    unique.add(userName);
+  for (let user of users) {
+    user = await ensureUserHasColor(user);
+    if (unique.has(user.userName)) continue;
+    unique.add(user.userName);
 
     const wrap = document.createElement("div");
     wrap.className = "user-checkbox-wrapper";
     wrap.innerHTML = `
       <div class="user-info-wrapper">
-        <div class="selected-contact-chip" style="background:${getRandomColor()}">${getInitials(userName)}</div>
-        <label>${userName}</label>
+        <div class="selected-contact-chip ${user.colorClass}">${getInitials(user.userName)}</div>
+        <label>${user.userName}</label>
       </div>
-      <input type="checkbox" class="user-checkbox" value="${userName}">
+      <input type="checkbox" class="user-checkbox" value="${user.userName}">
     `;
     const cb = wrap.querySelector("input");
     wrap.addEventListener("click", (e) => {
@@ -202,7 +203,7 @@ function renderUserCheckboxes(users) {
       updateSelectedUserDisplay();
     });
     container.appendChild(wrap);
-  });
+  }
 
   updateSelectedUserDisplay();
 }
@@ -217,10 +218,10 @@ function updateSelectedUserDisplay() {
   const selectedContainer = document.getElementById("selectedUser");
   selectedContainer.innerHTML = "";
   collectAssignedUsers().forEach((name) => {
+    const user = allUsers.find((u) => u.userName === name);
     const chip = document.createElement("div");
-    chip.className = "selected-contact-chip";
+    chip.className = `selected-contact-chip ${user?.colorClass || "color-1"}`;
     chip.textContent = getInitials(name);
-    chip.style.backgroundColor = getRandomColor();
     selectedContainer.appendChild(chip);
   });
 }

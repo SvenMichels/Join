@@ -10,6 +10,7 @@ import {
   updateContactInFirebase,
   deleteContactFromFirebase,
 } from "../contactPage/contactService.js";
+import { getRandomColorClass, ensureUserHasColor } from "../scripts/utils/colors.js";
 
 import { setupDropdown } from "../scripts/ui/dropdown.js";
 import { highlightActiveLinks } from "../scripts/utils/navUtils.js";
@@ -72,17 +73,21 @@ export function openEditWindow() {
 
 async function loadContactsFromFirebase() {
   const currentUser = JSON.parse(localStorage.getItem("currentUser")) || {};
-
   contactList = await loadContacts();
 
+  for (let contact of contactList) {
+    await ensureUserHasColor(contact);
+  }
+
   if (currentUser.id && !contactList.some((c) => c.id === currentUser.id)) {
+    const userWithColor = await ensureUserHasColor(currentUser);
     contactList.push({
-      id: currentUser.id,
-      name: currentUser.userName,
-      email: currentUser.userEmail,
-      phone: currentUser.phoneNumber || "–",
-      initials: getInitials(currentUser.userName),
-      colorClass: currentUser.colorClass || getRandomColorClass(),
+      id: userWithColor.id,
+      name: userWithColor.userName,
+      email: userWithColor.userEmail,
+      phone: userWithColor.phoneNumber || "–",
+      initials: getInitials(userWithColor.userName),
+      colorClass: userWithColor.colorClass,
     });
   }
 
@@ -320,7 +325,7 @@ function clearBigContactView() {
 
 function renderAllContacts(list) {
   sortContactsAlphabetically(list).forEach((c) =>
-    renderContact(c.name, c.email, c.phone, c.initials, getFirstLetter(c.name), c.id, c.colorClass || getRandomColorClass()));
+    renderContact(c.name, c.email, c.phone, c.initials, getFirstLetter(c.name), c.id, c.colorClass));
 }
 
 function sortContactsAlphabetically(arr) {
@@ -340,10 +345,6 @@ export function showUserFeedback() {
       el.classList.remove("centerFeedback");
     }, 1500)
   );
-}
-
-function getRandomColorClass() {
-  return `color-${Math.floor(Math.random() * 10) + 1}`;
 }
 
 async function ensureColorClassForAllContacts() {
