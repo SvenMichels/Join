@@ -189,7 +189,7 @@ h3 {
 
 .assigned-chips {
   display: flex;
-  align-items: center;
+  align-items: end;
   justify-content: space-between;
 }
 
@@ -262,4 +262,9 @@ h3 {
   background-color: #005eff;
   transition: width 0.3s ease-in-out;
   transform-origin: left;
+}
+
+.task-priority-img {
+  width: 20px;
+  height: 20px;
 }
