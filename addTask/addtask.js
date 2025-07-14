@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initForm();
   loadUserInitials();
   eventHandleSearch();
-  setupDropdown('#openMenu', '#dropDownMenu');
+  setupDropdown("#openMenu", "#dropDownMenu");
   highlightActiveLinks();
 });
 
@@ -46,7 +46,9 @@ function cacheDom() {
   $.subtaskAddBtn?.addEventListener("click", addSubtask);
   $.subtaskInput?.addEventListener("keydown", addSubtaskOnEnter);
   $.assignUserListBtn?.addEventListener("click", toggleUserList);
-  document.getElementById("createBtn").addEventListener("click", showUserFeedback)
+  document
+    .getElementById("createBtn")
+    .addEventListener("click", showUserFeedback);
 }
 
 function toggleUserList(e) {
@@ -168,8 +170,9 @@ async function loadAndRenderUsers() {
   const { data = {} } = await requestData("GET", "/users");
   allUsers = Object.entries(data).map(([id, u]) => ({ id, ...u }));
 
-  allUsers = allUsers.filter((user, index, self) =>
-    index === self.findIndex(u => u.userName === user.userName)
+  allUsers = allUsers.filter(
+    (user, index, self) =>
+      index === self.findIndex((u) => u.userName === user.userName)
   );
 
   renderUserCheckboxes(allUsers);
@@ -191,7 +194,9 @@ async function renderUserCheckboxes(users) {
     wrap.className = "user-checkbox-wrapper";
     wrap.innerHTML = `
       <div class="user-info-wrapper">
-        <div class="selected-contact-chip ${user.colorClass}">${getInitials(user.userName)}</div>
+        <div class="selected-contact-chip ${user.colorClass}">${getInitials(
+      user.userName
+    )}</div>
         <label>${user.userName}</label>
       </div>
       <input type="checkbox" class="user-checkbox" value="${user.userName}">
