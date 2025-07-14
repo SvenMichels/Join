@@ -1,4 +1,5 @@
 import { requestData } from "../scripts/firebase.js";
+import { ensureUserHasColor } from "../scripts/utils/colors.js";
 
 function toArray(val) {
   if (Array.isArray(val))             return val;
@@ -201,26 +202,26 @@ async function loadAndRenderUsersModal() {
   }
 }
 
-function renderUserCheckboxesModal(arr) {
+async function renderUserCheckboxesModal(arr) {
   const list = document.getElementById("assignedUserList-modal");
   if (!list) return;
 
   list.innerHTML = "";
-
   const seen = new Set();
 
-  arr.forEach(({ userName }) => {
-    if (seen.has(userName)) return;
-    seen.add(userName);
+  for (let user of arr) {
+    user = await ensureUserHasColor(user);
+    if (seen.has(user.userName)) continue;
+    seen.add(user.userName);
 
     const wrap = document.createElement("div");
     wrap.className = "user-checkbox-wrapper-modal";
     wrap.innerHTML = `
       <div class="user-info-wrapper">
-        <div class="selected-contact-chip" style="background:${rndColor()}">${initials(userName)}</div>
-        <label>${userName}</label>
+        <div class="selected-contact-chip ${user.colorClass}">${initials(user.userName)}</div>
+        <label>${user.userName}</label>
       </div>
-      <input type="checkbox" class="user-checkbox-modal" value="${userName}">
+      <input type="checkbox" class="user-checkbox-modal" value="${user.userName}">
     `;
     const cb = wrap.querySelector("input");
     wrap.addEventListener("click", (ev) => {
@@ -229,7 +230,7 @@ function renderUserCheckboxesModal(arr) {
       updateSelectedModal();
     });
     list.appendChild(wrap);
-  });
+  }
 
   updateSelectedModal();
 }
@@ -248,13 +249,11 @@ function getChecked(sel) {
 function updateSelectedModal() {
   const tgt = document.getElementById("selectedUser-modal");
   tgt.innerHTML = "";
-  getChecked(".user-checkbox-modal").forEach((n) => {
-    tgt.insertAdjacentHTML(
-      "beforeend",
-      `<div class="selected-contact-chip" style="background:${rndColor()}">${initials(
-        n
-      )}</div>`
-    );
+  getChecked(".user-checkbox-modal").forEach((name) => {
+    const user = allUsersModal.find((u) => u.userName === name);
+    tgt.insertAdjacentHTML("beforeend", `
+      <div class="selected-contact-chip ${user?.colorClass || "color-1"}">${initials(name)}</div>
+    `);
   });
 }
 

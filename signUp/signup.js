@@ -60,7 +60,7 @@ function setupSignupHandler() {
     const userData = collectUserInput();
     if (!userData) return;
 
-    await submitUser(userData);
+    await submitUser();
   });
 }
 
@@ -73,9 +73,8 @@ export async function collectUserInput() {
   return { userName, userEmail, password };
 }
 
-async function submitUser(userData) {
+async function submitUser() {
   try {
-    await createUser(userData);
     showUserFeedback()
   } catch (error) {
     console.warn("User creation failed", error);

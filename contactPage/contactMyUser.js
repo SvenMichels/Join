@@ -1,24 +1,25 @@
 import { renderContact, getInitials, openEditWindow } from "./contacts.js";
+import { ensureUserHasColor } from "../scripts/utils/colors.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   currentUserCard();
-  document.getElementById("edit").addEventListener("click", openEditWindow);
+  const editBtn = document.getElementById("edit");
+  if (editBtn) {
+    editBtn.addEventListener("click", openEditWindow);
+  }
 });
 
-function currentUserCard() {
+async function currentUserCard() {
   const user = JSON.parse(localStorage.getItem("currentUser"));
   if (!user) return;
 
-  const { userName: name, userEmail: email } = user;
-  const phone = user.phoneNumber || "–";
+  const updatedUser = await ensureUserHasColor(user);
+  const { userName: name, userEmail: email } = updatedUser;
+  const phone = updatedUser.phoneNumber || "–";
   const initials = getInitials(name);
   const firstLetter = name[0]?.toUpperCase() || "";
-  const id = user.id;
-  const colorClass = user.colorClass || getRandomColorClass();
+  const id = updatedUser.id;
+  const colorClass = updatedUser.colorClass;
 
   renderContact(name, email, phone, initials, firstLetter, id, colorClass);
-}
-
-function getRandomColorClass() {
-  return `color-${Math.floor(Math.random() * 20) + 1}`;
 }

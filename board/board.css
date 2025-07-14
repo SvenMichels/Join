@@ -31,6 +31,7 @@ body {
 .board-wrapper {
   position: relative;
   display: flex;
+  padding-left: 20px;
   align-items: center;
   justify-content: space-between;
   height: 32px;
@@ -186,10 +187,34 @@ h3 {
   border: 2px solid #ffffff;
 }
 
-.assigned-chips {
+.contact-chip {
   display: flex;
   align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  gap: 10px;
+  background-color: #007cee;
+  opacity: 1;
+  color: white;
+  border: 2px solid #FFFFFF;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+  margin-left: -8px;
+  z-index: 1;
+  position: relative;
+}
+
+.assigned-chips {
+  display: flex;
+  align-items: end;
   justify-content: space-between;
+}
+
+.assigned-chip-container {
+  display: flex;
+  align-items: center;
+  gap: 0;
 }
 
 .empty-placeholder {
@@ -261,4 +286,9 @@ h3 {
   background-color: #005eff;
   transition: width 0.3s ease-in-out;
   transform-origin: left;
+}
+
+.task-priority-img {
+  width: 20px;
+  height: 20px;
 }

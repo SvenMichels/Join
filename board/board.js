@@ -10,6 +10,12 @@ const statusMap = {
   done: "doneList",
 };
 
+const priorityIcons = {
+  urgent: "../assets/icons/urgent_red.svg",
+  medium:"../assets/icons/medium_yellow.svg",
+  low:"../assets/icons/low_green.svg",
+}
+
 window.editingTaskId = null;
 window.isEditMode = false;
 let loadedTasks = {};
@@ -82,6 +88,8 @@ function renderTasks(tasks) {
 }
 
 function createTaskElement(task) {
+  const prio = (task.prio || "medium").toLowerCase();
+  const prioIcon = priorityIcons[prio];
   const done = Array.isArray(task.subtaskDone)
     ? task.subtaskDone.filter(Boolean).length
     : 0;
@@ -119,8 +127,8 @@ function createTaskElement(task) {
     </div>
     ${progressBar}
     <div class="assigned-chips">
-      <div>${assignedHTML}</div>
-      <span>${task.prio}</span>
+      <div class="assigned-chip-container">${assignedHTML}</div>
+      <img class="task-priority-img" src="${prioIcon}" alt="${task.prio}"
     </div>
   `;
 
@@ -150,10 +158,15 @@ function getInitials(name) {
 }
 
 function generateAssignedChips(assigned) {
-  const names = toArray(assigned);
-  if (names.length === 0) return "";
-  return names
-    .map((name) => `<div class="assigned-chip">${name}</div>`)
+  const users = toArray(assigned);
+  if (users.length === 0) return "";
+  return users
+    .map((user) => {
+      const name = typeof user === "string" ? user : user.userName;
+      const initials = getInitials(name);
+      const colorClass = user.colorClass;
+      return `<div class="contact-chip" style="background-color: ${colorClass};">${initials}</div>`;
+    })
     .join("");
 }
 
