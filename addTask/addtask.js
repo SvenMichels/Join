@@ -31,6 +31,12 @@ document.addEventListener("DOMContentLoaded", () => {
 const $ = {};
 
 function cacheDom() {
+  assignDomElements();
+  setDateRestriction();
+  attachEventListeners();
+}
+
+function assignDomElements() {
   $.openMenuBtn = document.getElementById("openMenu");
   $.form = document.getElementById("taskForm");
   $.taskDate = document.getElementById("taskDate");
@@ -38,17 +44,22 @@ function cacheDom() {
   $.subtaskAddBtn = document.querySelector(".subtask-add-button");
   $.assignUserListBtn = document.querySelector(".assignUserListBtn");
   $.assignedBtnImg = document.getElementById("assignedBtnImg");
+}
 
-  document.getElementById("task-date").min = new Date()
-    .toISOString()
-    .split("T")[0];
+function setDateRestriction() {
+  const today = new Date().toISOString().split("T")[0];
+  const dateInput = document.getElementById("task-date");
+  if (dateInput) dateInput.min = today;
+}
+
+function attachEventListeners() {
   $.form?.addEventListener("submit", handleFormSubmit);
   $.subtaskAddBtn?.addEventListener("click", addSubtask);
   $.subtaskInput?.addEventListener("keydown", addSubtaskOnEnter);
   $.assignUserListBtn?.addEventListener("click", toggleUserList);
-  document
-    .getElementById("createBtn")
-    .addEventListener("click", showUserFeedback);
+
+  const createBtn = document.getElementById("createBtn");
+  createBtn?.addEventListener("click", showUserFeedback);
 }
 
 function toggleUserList(e) {
@@ -178,39 +189,55 @@ async function loadAndRenderUsers() {
   renderUserCheckboxes(allUsers);
 }
 
-async function renderUserCheckboxes(users) {
+async function renderUserCheckboxes(users, preselected = []) {
   const container = document.getElementById("assignedUserList");
   if (!container) return;
 
   container.innerHTML = "";
-  const unique = new Set();
+  const uniqueNames = new Set();
 
   for (let user of users) {
     user = await ensureUserHasColor(user);
-    if (unique.has(user.userName)) continue;
-    unique.add(user.userName);
+    if (uniqueNames.has(user.userName)) continue;
+    uniqueNames.add(user.userName);
 
-    const wrap = document.createElement("div");
-    wrap.className = "user-checkbox-wrapper";
-    wrap.innerHTML = `
-      <div class="user-info-wrapper">
-        <div class="selected-contact-chip ${user.colorClass}">${getInitials(
-      user.userName
-    )}</div>
-        <label>${user.userName}</label>
-      </div>
-      <input type="checkbox" class="user-checkbox" value="${user.userName}">
-    `;
-    const cb = wrap.querySelector("input");
-    wrap.addEventListener("click", (e) => {
-      if (e.target !== cb) cb.checked = !cb.checked;
-      wrap.classList.toggle("active", cb.checked);
-      updateSelectedUserDisplay();
-    });
-    container.appendChild(wrap);
+    const isChecked = preselected.includes(user.userName);
+    const checkboxElement = createUserCheckboxElement(user, isChecked);
+    container.appendChild(checkboxElement);
   }
 
   updateSelectedUserDisplay();
+}
+
+function createUserCheckboxElement(user, isChecked) {
+  const wrapper = document.createElement("div");
+  wrapper.className = "user-checkbox-wrapper";
+  if (isChecked) wrapper.classList.add("active");
+
+  wrapper.innerHTML = `
+    <div class="user-info-wrapper">
+      <div class="selected-contact-chip ${user.colorClass}">
+        ${getInitials(user.userName)}
+      </div>
+      <label>${user.userName}</label>
+    </div>
+    <input type="checkbox" class="user-checkbox" value="${user.userName}" ${
+    isChecked ? "checked" : ""
+  }>
+  `;
+
+  attachCheckboxListener(wrapper);
+  return wrapper;
+}
+
+function attachCheckboxListener(wrapper) {
+  const checkbox = wrapper.querySelector("input");
+
+  wrapper.addEventListener("click", (e) => {
+    if (e.target !== checkbox) checkbox.checked = !checkbox.checked;
+    wrapper.classList.toggle("active", checkbox.checked);
+    updateSelectedUserDisplay();
+  });
 }
 
 function collectAssignedUsers() {
@@ -252,34 +279,58 @@ function renderSubtasks() {
   list.innerHTML = "";
 
   subtasks.forEach((text, index) => {
-    const container = document.createElement("div");
-    container.className = "subtask-container";
-
-    const textElement = document.createElement("span");
-    textElement.className = "subtask-display-text";
-    textElement.textContent = text;
-    textElement.addEventListener("click", () => makeSubtaskEditable(index));
-
-    const controls = document.createElement("div");
-    controls.className = "subtask-controls";
-    controls.innerHTML = `
-      <button class="subtask-edit-button"><img class="subtask-edit-buttonImg" src="../assets/icons/edit.svg" alt="edit"></button>
-      <div class="subtask-spacer-second"></div>
-      <button class="subtask-delete-buttonSecond"><img class="subtask-delete-buttonImgSecond" src="../assets/icons/delete.svg" alt="delete"></button>`;
-
-    const [editBtn, , deleteBtn] = controls.children;
-    editBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      makeSubtaskEditable(index);
-    });
-    deleteBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      subtasks.splice(index, 1);
-      renderSubtasks();
-    });
-
-    container.append(textElement, controls);
+    const container = createSubtaskContainer(text, index);
     list.appendChild(container);
+  });
+}
+
+function createSubtaskContainer(text, index) {
+  const container = document.createElement("div");
+  container.className = "subtask-container";
+
+  const textElement = createTextElement(text, index);
+  const controlGroup = createControlGroup(index);
+
+  container.append(textElement, controlGroup);
+  return container;
+}
+
+function createTextElement(text, index) {
+  const span = document.createElement("span");
+  span.className = "subtask-display-text";
+  span.textContent = text;
+  span.addEventListener("click", () => makeSubtaskEditable(index));
+  return span;
+}
+
+function createControlGroup(index) {
+  const wrapper = document.createElement("div");
+  wrapper.className = "subtask-controls";
+
+  wrapper.innerHTML = `
+    <button class="subtask-edit-button">
+      <img class="subtask-edit-buttonImg" src="../assets/icons/edit.svg" alt="edit">
+    </button>
+    <div class="subtask-spacer-second"></div>
+    <button class="subtask-delete-buttonSecond">
+      <img class="subtask-delete-buttonImgSecond" src="../assets/icons/delete.svg" alt="delete">
+    </button>`;
+
+  const [editBtn, , deleteBtn] = wrapper.children;
+  addControlListeners(editBtn, deleteBtn, index);
+
+  return wrapper;
+}
+
+function addControlListeners(editBtn, deleteBtn, index) {
+  editBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    makeSubtaskEditable(index);
+  });
+  deleteBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    subtasks.splice(index, 1);
+    renderSubtasks();
   });
 }
 
@@ -288,37 +339,51 @@ function makeSubtaskEditable(index) {
   const container = list.children[index];
   container.innerHTML = "";
 
+  const input = createSubtaskInput(subtasks[index]);
+  const buttonGroup = createSubtaskButtons(index, input);
+
+  container.append(input, buttonGroup);
+}
+
+function createSubtaskInput(value) {
   const input = document.createElement("input");
   input.type = "text";
-  input.value = subtasks[index];
+  input.value = value;
   input.className = "subtask-text-input";
+  return input;
+}
 
-  const buttonWrapper = document.createElement("div");
-  buttonWrapper.className = "subtask-button-wrapper";
+function createSubtaskButtons(index, input) {
+  const wrapper = document.createElement("div");
+  wrapper.className = "subtask-button-wrapper";
 
-  const saveBtn = document.createElement("button");
-  saveBtn.innerHTML = `<img class="subtask-save-buttonImg" src="../assets/icons/check.svg" alt="save">`;
-  saveBtn.className = "subtask-save-button";
+  const saveBtn = createIconButton("check.svg", "subtask-save-button", () => {
+    subtasks[index] = input.value.trim();
+    renderSubtasks();
+  });
 
-  const deleteBtn = document.createElement("button");
-  deleteBtn.innerHTML = `<img class="subtask-delete-buttonImg" src="../assets/icons/delete.svg" alt="delete">`;
-  deleteBtn.className = "subtask-delete-button";
+  const deleteBtn = createIconButton(
+    "delete.svg",
+    "subtask-delete-button",
+    () => {
+      subtasks.splice(index, 1);
+      renderSubtasks();
+    }
+  );
 
   const spacer = document.createElement("div");
   spacer.className = "subtask-spacer";
 
-  saveBtn.addEventListener("click", () => {
-    subtasks[index] = input.value.trim();
-    renderSubtasks();
-  });
-  deleteBtn.addEventListener("click", () => {
-    subtasks.splice(index, 1);
-    renderSubtasks();
-  });
+  wrapper.append(deleteBtn, spacer, saveBtn);
+  return wrapper;
+}
 
-  buttonWrapper.append(deleteBtn, spacer, saveBtn);
-  container.appendChild(input);
-  container.appendChild(buttonWrapper);
+function createIconButton(icon, className, onClick) {
+  const btn = document.createElement("button");
+  btn.className = className;
+  btn.innerHTML = `<img src="../assets/icons/${icon}" alt="${className}">`;
+  btn.addEventListener("click", onClick);
+  return btn;
 }
 
 function getInitials(name) {
@@ -326,10 +391,6 @@ function getInitials(name) {
 
   const parts = name.trim().split(" ");
   return ((parts[0]?.[0] || "") + (parts.at(-1)?.[0] || "")).toUpperCase();
-}
-
-function getRandomColor() {
-  return `hsl(${Math.floor(Math.random() * 360)}, 70%, 80%)`;
 }
 
 function loadUserInitials() {

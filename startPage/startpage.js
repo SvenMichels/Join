@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   updateUserGreeting();
   updateSummary();
   handleMobileGreetingFade();
-  setupDropdown('#openMenu', '#dropDownMenu');
+  setupDropdown("#openMenu", "#dropDownMenu");
   highlightActiveLinks();
 });
 
@@ -15,32 +15,48 @@ function updateUserGreeting() {
   if (!userString) return;
 
   try {
-    tryUpdateUserGreeting(userString)
+    tryUpdateUserGreeting(userString);
   } catch (err) {
     console.warn("Fehler beim Parsen des Benutzers:", err);
   }
 }
 
 function tryUpdateUserGreeting(userString) {
-    const user = JSON.parse(userString);
-    const name = user.userName || "Guest";
-    const greetingEl = document.querySelector(".greetings > p:first-child");
-    const nameEl = document.querySelector(".greetings .username");
-    const profileButton = document.getElementById("openMenu");
-    const hour = new Date().getHours();
-    let greeting = "Hello";
-    
-    tryIfUpdateUserGreeting(greetingEl, nameEl, profileButton, name, greeting, hour, user);
+  const user = JSON.parse(userString);
+  const name = user.userName || "Guest";
+  const greetingEl = document.querySelector(".greetings > p:first-child");
+  const nameEl = document.querySelector(".greetings .username");
+  const profileButton = document.getElementById("openMenu");
+  const hour = new Date().getHours();
+  let greeting = "Hello";
+
+  tryIfUpdateUserGreeting(
+    greetingEl,
+    nameEl,
+    profileButton,
+    name,
+    greeting,
+    hour,
+    user
+  );
 }
 
-function tryIfUpdateUserGreeting(greetingEl, nameEl, profileButton, name, greeting, hour, user) {
+function tryIfUpdateUserGreeting(
+  greetingEl,
+  nameEl,
+  profileButton,
+  name,
+  greeting,
+  hour,
+  user
+) {
   if (hour < 12) greeting = "Good Morning";
-    else if (hour < 18) greeting = "Good Afternoon";
-    else greeting = "Good Evening";
-    if (greetingEl) greetingEl.textContent = `${greeting},`;
-    if (nameEl) nameEl.textContent = name;
-    if (profileButton) profileButton.textContent = getInitials(name);
-    }
+  else if (hour < 18) greeting = "Good Afternoon";
+  else greeting = "Good Evening";
+  if (greetingEl) greetingEl.textContent = `${greeting},`;
+  if (nameEl) nameEl.textContent = name;
+  if (profileButton) profileButton.textContent = getInitials(name);
+}
 
 async function updateSummary() {
   try {
@@ -54,14 +70,14 @@ async function updateSummary() {
 }
 
 async function setTextUpdateSummary(allTasks) {
-    setText(".todoTaskAmount", countByStatus(allTasks, "todo"));
-    setText(".doneTaskAmount", countByStatus(allTasks, "done"));
-    setText(".taskInProgress", countByStatus(allTasks, "in-progress"));
-    setText(".awaitingFeedback", countByStatus(allTasks, "await"));
-    setText(".taskInBoard", allTasks.length);
-    setText(".urgentTaskAmount", countByPriority(allTasks, "High"));
-    const earliestUrgentDate = getEarliestUrgentDueDate(allTasks);
-    setText(".urgentTaskDate", earliestUrgentDate || "No deadline");
+  setText(".todoTaskAmount", countByStatus(allTasks, "todo"));
+  setText(".doneTaskAmount", countByStatus(allTasks, "done"));
+  setText(".taskInProgress", countByStatus(allTasks, "in-progress"));
+  setText(".awaitingFeedback", countByStatus(allTasks, "await"));
+  setText(".taskInBoard", allTasks.length);
+  setText(".urgentTaskAmount", countByPriority(allTasks, "High"));
+  const earliestUrgentDate = getEarliestUrgentDueDate(allTasks);
+  setText(".urgentTaskDate", earliestUrgentDate || "No deadline");
 }
 
 function countByStatus(tasks, status) {
@@ -100,9 +116,9 @@ function getInitials(name) {
 
 function handleMobileGreetingFade() {
   if (window.innerWidth < 767) {
-    const el = document.querySelector('.greetings');
+    const el = document.querySelector(".greetings");
     if (el) {
-      setTimeout(() => el.classList.add('hidden'), 500);
+      setTimeout(() => el.classList.add("hidden"), 500);
     }
   }
 }
