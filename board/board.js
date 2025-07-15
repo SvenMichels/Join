@@ -12,9 +12,9 @@ const statusMap = {
 
 const priorityIcons = {
   urgent: "../assets/icons/urgent_red.svg",
-  medium:"../assets/icons/medium_yellow.svg",
-  low:"../assets/icons/low_green.svg",
-}
+  medium: "../assets/icons/medium_yellow.svg",
+  low: "../assets/icons/low_green.svg",
+};
 
 window.editingTaskId = null;
 window.isEditMode = false;
@@ -41,7 +41,9 @@ async function deleteTask(id) {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("add-task-btn", "add-task-board-button").addEventListener("click", openTaskModal);
+  document
+    .getElementById("add-task-btn", "add-task-board-button")
+    .addEventListener("click", openTaskModal);
   window.addEventListener("taskCreated", fetchTasks);
   window.addEventListener("taskUpdated", fetchTasks);
   setupDropdown("#openMenu", "#dropDownMenu");
@@ -179,8 +181,6 @@ function loadUserInitials() {
   if (profileButton) profileButton.textContent = getInitials(name);
 }
 
-// Restliche Funktionen
-
 function renderTaskDetailData(task) {
   const $ = (sel) => document.querySelector(sel);
 
@@ -238,45 +238,54 @@ function closeDetailModal() {
 
 async function openTaskDetails(task) {
   const overlay = document.getElementById("modal-overlay");
+  resetOverlay(overlay);
 
-  overlay.innerHTML = "";
-  overlay.classList.remove("d_none");
-
-  const res = await fetch("../edittask/taskdetail.html");
-  const modalHTML = await res.text();
+  const modalHTML = await fetchModalHTML("../edittask/taskdetail.html");
   overlay.innerHTML = modalHTML;
 
   renderTaskDetailData(task);
-
   const modal = overlay.querySelector("#taskDetailModal");
 
-  // 🧲 X-Button zum Schließen
+  setupCloseButton(modal, overlay);
+  setupOutsideClickHandler(modal, overlay);
+}
+
+function resetOverlay(overlay) {
+  overlay.innerHTML = "";
+  overlay.classList.remove("d_none");
+}
+
+async function fetchModalHTML(path) {
+  const res = await fetch(path);
+  return await res.text();
+}
+
+function setupCloseButton(modal, overlay) {
   const closeBtn = modal.querySelector(".taskDetailCloseButton");
   closeBtn?.addEventListener("click", async () => {
-    overlay.classList.add("d_none");
-    overlay.innerHTML = "";
+    closeOverlay(overlay);
     await fetchTasks();
   });
+}
 
-  // ✨ NEUER Outside-Klick-Handler (Variante A)
-  const outsideClickHandler = (event) => {
-    if (!modal) return;
-
+function setupOutsideClickHandler(modal, overlay) {
+  const handler = (event) => {
     const clickedInside = event.composedPath().includes(modal);
     const clickedOverlay = event.target === overlay;
 
     if (clickedInside || !clickedOverlay) return;
 
-    overlay.classList.add("d_none");
-    overlay.innerHTML = "";
-    overlay.removeEventListener("click", outsideClickHandler)
+    closeOverlay(overlay);
+    overlay.removeEventListener("click", handler);
     fetchTasks();
   };
-
-  overlay.addEventListener("click", outsideClickHandler);
-  
+  overlay.addEventListener("click", handler);
 }
 
+function closeOverlay(overlay) {
+  overlay.classList.add("d_none");
+  overlay.innerHTML = "";
+}
 
 document.querySelectorAll(".board-icon").forEach((icon) => {
   icon.addEventListener("click", async () => {
@@ -287,36 +296,50 @@ document.querySelectorAll(".board-icon").forEach((icon) => {
 function openTaskModal(isEdit = false, task = null) {
   const overlay = document.getElementById("modal-overlay");
   fetch("../taskFloatData/taskfloat.html")
-    .then((r) => r.text())
+    .then((res) => res.text())
     .then((html) => {
       overlay.innerHTML = html;
       overlay.classList.remove("d_none");
-      (async () => {
-        const p = window.initTaskFloat?.();
-        if (p instanceof Promise) await p;
-        window.isEditMode = isEdit;
-        window.editingTaskId = isEdit && task ? task.id : null;
-        const form = overlay.querySelector("#taskForm-modal");
-        if (isEdit && task && form) {
-          form.dataset.taskId = task.id;
-          form.dataset.taskStatus = task.status;
-          window.prefillModalWithTaskData(task);
-          const okBtn = form.querySelector(".create-button");
-          if (okBtn) {
-            okBtn.innerHTML = 'OK <img src="../assets/icons/check.svg">';
-            okBtn.disabled = false;
-          }
-        }
-        overlay
-          .querySelector(".taskFloatButtonClose")
-          ?.addEventListener("click", () => {
-            overlay.classList.add("d_none");
-            overlay.innerHTML = "";
-          });
-      })();
+      initModalContents(overlay, isEdit, task);
     });
 }
 
+async function initModalContents(overlay, isEdit, task) {
+  const init = window.initTaskFloat?.();
+  if (init instanceof Promise) await init;
+
+  setModalMode(isEdit, task);
+  const form = overlay.querySelector("#taskForm-modal");
+
+  if (isEdit && task && form) {
+    prepareModalFormForEdit(form, task);
+  }
+
+  overlay
+    .querySelector(".taskFloatButtonClose")
+    ?.addEventListener("click", () => {
+      overlay.classList.add("d_none");
+      overlay.innerHTML = "";
+    });
+}
+
+function setModalMode(isEdit, task) {
+  window.isEditMode = isEdit;
+  window.editingTaskId = isEdit && task ? task.id : null;
+}
+
+function prepareModalFormForEdit(form, task) {
+  form.dataset.taskId = task.id;
+  form.dataset.taskStatus = task.status;
+
+  window.prefillModalWithTaskData(task);
+
+  const okBtn = form.querySelector(".create-button");
+  if (okBtn) {
+    okBtn.innerHTML = 'OK <img src="../assets/icons/check.svg">';
+    okBtn.disabled = false;
+  }
+}
 function getPriorityIcon(prio) {
   const prioMap = {
     low: "prio_overlay_low.svg",

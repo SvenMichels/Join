@@ -2,9 +2,9 @@ import { requestData } from "../scripts/firebase.js";
 import { ensureUserHasColor } from "../scripts/utils/colors.js";
 
 function toArray(val) {
-  if (Array.isArray(val))             return val;
+  if (Array.isArray(val)) return val;
   if (val && typeof val === "object") return Object.values(val);
-  if (typeof val === "string")        return val.split(",").map(s => s.trim());
+  if (typeof val === "string") return val.split(",").map((s) => s.trim());
   return [];
 }
 
@@ -193,7 +193,8 @@ async function loadAndRenderUsersModal() {
 
     if (allUsersModal.length === 0) {
       const me = JSON.parse(localStorage.getItem("currentUser") || "{}");
-      if (me.userName) allUsersModal.push({ id: me.id || "me", userName: me.userName });
+      if (me.userName)
+        allUsersModal.push({ id: me.id || "me", userName: me.userName });
     }
 
     renderUserCheckboxesModal(allUsersModal);
@@ -218,10 +219,14 @@ async function renderUserCheckboxesModal(arr) {
     wrap.className = "user-checkbox-wrapper-modal";
     wrap.innerHTML = `
       <div class="user-info-wrapper">
-        <div class="selected-contact-chip ${user.colorClass}">${initials(user.userName)}</div>
+        <div class="selected-contact-chip ${user.colorClass}">${initials(
+      user.userName
+    )}</div>
         <label>${user.userName}</label>
       </div>
-      <input type="checkbox" class="user-checkbox-modal" value="${user.userName}">
+      <input type="checkbox" class="user-checkbox-modal" value="${
+        user.userName
+      }">
     `;
     const cb = wrap.querySelector("input");
     wrap.addEventListener("click", (ev) => {
@@ -251,9 +256,14 @@ function updateSelectedModal() {
   tgt.innerHTML = "";
   getChecked(".user-checkbox-modal").forEach((name) => {
     const user = allUsersModal.find((u) => u.userName === name);
-    tgt.insertAdjacentHTML("beforeend", `
-      <div class="selected-contact-chip ${user?.colorClass || "color-1"}">${initials(name)}</div>
-    `);
+    tgt.insertAdjacentHTML(
+      "beforeend",
+      `
+      <div class="selected-contact-chip ${
+        user?.colorClass || "color-1"
+      }">${initials(name)}</div>
+    `
+    );
   });
 }
 
@@ -283,7 +293,9 @@ function renderSubtasksModal() {
   subtasksModal.forEach((t, i) => {
     const isChecked = subtaskDoneModal[i] ? "checked" : "";
 
-    list.insertAdjacentHTML("beforeend", `
+    list.insertAdjacentHTML(
+      "beforeend",
+      `
       <div class="subtask-container-modal">
         <input type="checkbox" class="subtask-checkbox-modal" data-index="${i}" ${isChecked}>
         <p class="subtask-display-text-modal">${t}</p>
@@ -293,7 +305,8 @@ function renderSubtasksModal() {
           <button class="subtask-delete-button-second-modal" data-del="${i}"><img class="subtask-edit-button-images-modal" src="../assets/icons/delete.svg" /></button>
         </div>
       </div>
-    `);
+    `
+    );
   });
 
   list.querySelectorAll("[data-del]").forEach((b) =>
@@ -304,11 +317,13 @@ function renderSubtasksModal() {
     })
   );
 
-  list.querySelectorAll("[data-edit]").forEach((b) =>
-    b.addEventListener("click", () =>
-      makeSubtaskEditableModal(+b.dataset.edit)
-    )
-  );
+  list
+    .querySelectorAll("[data-edit]")
+    .forEach((b) =>
+      b.addEventListener("click", () =>
+        makeSubtaskEditableModal(+b.dataset.edit)
+      )
+    );
 
   list.querySelectorAll(".subtask-checkbox-modal").forEach((cb) =>
     cb.addEventListener("change", (e) => {
@@ -383,9 +398,13 @@ function prefillModalWithTaskData(task) {
   document.getElementById("category-modal").value = task.category;
   selectPriorityModal((task.prio || "medium").toLowerCase());
 
-  document.querySelectorAll(".user-checkbox-modal").forEach(cb => cb.checked = false);
-  toArray(task.assigned).forEach(name => {
-    const cb = [...document.querySelectorAll(".user-checkbox-modal")].find(c => c.value === name);
+  document
+    .querySelectorAll(".user-checkbox-modal")
+    .forEach((cb) => (cb.checked = false));
+  toArray(task.assigned).forEach((name) => {
+    const cb = [...document.querySelectorAll(".user-checkbox-modal")].find(
+      (c) => c.value === name
+    );
     if (cb) {
       cb.checked = true;
       cb.closest(".user-checkbox-wrapper-modal")?.classList.add("active");
@@ -394,7 +413,9 @@ function prefillModalWithTaskData(task) {
   updateSelectedModal();
 
   window.subtasksModal = [...(task.subtasks || [])];
-  window.subtaskDoneModal = [...(task.subtaskDone || new Array(window.subtasksModal.length).fill(false))];
+  window.subtaskDoneModal = [
+    ...(task.subtaskDone || new Array(window.subtasksModal.length).fill(false)),
+  ];
 
   subtasksModal = window.subtasksModal;
   subtaskDoneModal = window.subtaskDoneModal;
@@ -417,7 +438,6 @@ window.setSubtaskState = (arr) => {
 };
 window.getSubtaskState = () => subtasksModal;
 
-
 let pendingTaskUpdates = {};
 
 document.addEventListener("change", async (e) => {
@@ -432,7 +452,8 @@ document.addEventListener("change", async (e) => {
   if (!pendingTaskUpdates[taskId]) {
     try {
       const { data: task } = await requestData("GET", `/tasks/${taskId}`);
-      task.subtaskDone = task.subtaskDone || new Array(task.subtasks.length).fill(false);
+      task.subtaskDone =
+        task.subtaskDone || new Array(task.subtasks.length).fill(false);
       pendingTaskUpdates[taskId] = task;
     } catch (err) {
       console.error("Fehler beim Laden des Tasks:", err);
@@ -480,7 +501,8 @@ document.addEventListener("click", (event) => {
   if (isSubtaskButtonClick) return;
 
   const clickedOutsideDetail =
-    detailModal?.open && !detailModal.contains(event.target) &&
+    detailModal?.open &&
+    !detailModal.contains(event.target) &&
     !event.composedPath().includes(detailModal);
 
   const clickedOutsideForm =
