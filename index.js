@@ -12,7 +12,6 @@ window.addEventListener("DOMContentLoaded", () => {
  
 console.log("Big logo animation script loaded.");
 
-
   function isMobileDevice() {
     return window.innerWidth <= 820;
   }
