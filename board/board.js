@@ -19,6 +19,7 @@ const priorityIcons = {
 window.editingTaskId = null;
 window.isEditMode = false;
 let loadedTasks = {};
+let allUsers = [];
 
 const categoryIcons = {
   User_Story: "propertyuserstory.svg",
@@ -54,8 +55,13 @@ window.addEventListener("DOMContentLoaded", () => {
 
 async function fetchTasks() {
   try {
-    const { data: tasksData } = await requestData("GET", "/tasks/");
+    const [{ data: tasksData }, { data: usersData }] = await Promise.all([
+      requestData("GET", "/tasks/"),
+      requestData("GET", "/users"),
+    ]);
+
     loadedTasks = {};
+    allUsers = Object.values(usersData || {});
 
     for (const [id, task] of Object.entries(tasksData || {})) {
       task.id = id;
@@ -68,28 +74,28 @@ async function fetchTasks() {
       loadedTasks[id] = task;
     }
 
-    renderTasks(Object.values(loadedTasks));
+    await renderTasks(Object.values(loadedTasks)); // ⏱️ wichtig!
     updateEmptyLists();
   } catch (error) {
     console.error("Fehler beim Laden der Tasks:", error);
   }
 }
 
-function renderTasks(tasks) {
+async function renderTasks(tasks) {
   if (!Array.isArray(tasks)) return;
   clearTaskLists();
 
-  tasks.forEach((task) => {
-    const element = createTaskElement(task);
+  for (const task of tasks) {
+    const element = await createTaskElement(task, allUsers); // 👈
     const listId = statusMap[task.status];
     const list = document.getElementById(listId);
     if (list) list.appendChild(element);
-  });
+  }
 
   updateEmptyLists();
 }
 
-function createTaskElement(task) {
+async function createTaskElement(task, allUsers) {
   const prio = (task.prio || "medium").toLowerCase();
   const prioIcon = priorityIcons[prio];
   const done = Array.isArray(task.subtaskDone)
@@ -102,21 +108,19 @@ function createTaskElement(task) {
   const iconFile = categoryIcons[task.category] || "defaulticon.svg";
 
   const element = document.createElement("article");
-  element.className = `task prio-${(
-    task.prio || "low"
-  ).toLowerCase()}${hasSubtasksClass}`;
+  element.className = `task prio-${prio}${hasSubtasksClass}`;
   element.id = `task-${task.id}`;
 
-  const assignedHTML = generateAssignedChips(task.assigned);
+  const assignedHTML = generateAssignedChips(task.assigned, allUsers);
 
   const progressBar =
     total > 0
       ? `<div class="progress-bar-wrapper">
-        <div class="progress-bar-container">
-          <div id="subtask-progressbar-${task.id}" class="progress-bar-fill" style="width: ${percent}%;"></div>
-        </div>
-        <span id="subtask-progress-text-${task.id}" class="subtask-counter">${done}/${total} Subtasks</span>
-      </div>`
+          <div class="progress-bar-container">
+            <div id="subtask-progressbar-${task.id}" class="progress-bar-fill" style="width: ${percent}%;"></div>
+          </div>
+          <span id="subtask-progress-text-${task.id}" class="subtask-counter">${done}/${total} Subtasks</span>
+        </div>`
       : "";
 
   element.innerHTML = `
@@ -130,7 +134,7 @@ function createTaskElement(task) {
     ${progressBar}
     <div class="assigned-chips">
       <div class="assigned-chip-container">${assignedHTML}</div>
-      <img class="task-priority-img" src="${prioIcon}" alt="${task.prio}"
+      <img class="task-priority-img" src="${prioIcon}" alt="${task.prio}">
     </div>
   `;
 
@@ -159,15 +163,19 @@ function getInitials(name) {
   return (first + last).toUpperCase();
 }
 
-function generateAssignedChips(assigned) {
-  const users = toArray(assigned);
-  if (users.length === 0) return "";
-  return users
-    .map((user) => {
-      const name = typeof user === "string" ? user : user.userName;
+function generateAssignedChips(assigned, users = []) {
+  const assignedUsers = toArray(assigned);
+  if (assignedUsers.length === 0) return "";
+
+  return assignedUsers
+    .map((u) => {
+      const name = typeof u === "string" ? u : u.userName;
+      const user = users.find(
+        (usr) => usr.userName?.toLowerCase() === name?.toLowerCase()
+      );
       const initials = getInitials(name);
-      const colorClass = user.colorClass;
-      return `<div class="contact-chip" style="background-color: ${colorClass};">${initials}</div>`;
+      const colorClass = user?.colorClass || "color-1"; // Fallback auf color-1 (z. B. blau)
+      return `<div class="contact-chip ${colorClass}">${initials}</div>`;
     })
     .join("");
 }
@@ -181,7 +189,7 @@ function loadUserInitials() {
   if (profileButton) profileButton.textContent = getInitials(name);
 }
 
-function renderTaskDetailData(task) {
+async function renderTaskDetailData(task) {
   const $ = (sel) => document.querySelector(sel);
 
   const iconEl = $("#detail-icon");
@@ -195,13 +203,15 @@ function renderTaskDetailData(task) {
   $("#task-detail-due-date").textContent = task.dueDate;
   $("#task-detail-priority").innerHTML = getPriorityIcon(task.prio);
   $("#task-detail-assigned").innerHTML = generateAssignedChips(
-    toArray(task.assigned)
+    toArray(task.assigned),
+    allUsers
   );
+
   $("#task-detail-subtasks").innerHTML = (task.subtasks || [])
     .map((txt, i) => {
       const isChecked = task.subtaskDone?.[i] ? "checked" : "";
       return `<li><input type="checkbox" id="sub-${i}" class="subtask-checkbox" ${isChecked}>
-            <label for="sub-${i}">${txt}</label></li>`;
+              <label for="sub-${i}">${txt}</label></li>`;
     })
     .join("");
 
@@ -457,22 +467,20 @@ function saveSubtaskState(task) {
   updateTask(task);
 }
 
- function isMobileDevice() {
-    return window.innerWidth <= 820;
-  }
+function isMobileDevice() {
+  return window.innerWidth <= 820;
+}
 
-  function isLandscapeMode() {
-    return window.matchMedia("(orientation: landscape)").matches;
-  }
+function isLandscapeMode() {
+  return window.matchMedia("(orientation: landscape)").matches;
+}
 
-  function toggleRotateWarning() {
-    const warning = document.getElementById("rotateWarning");
-    const shouldShow = isMobileDevice() && isLandscapeMode();
-    warning.style.display = shouldShow ? "flex" : "none";
-  }
+function toggleRotateWarning() {
+  const warning = document.getElementById("rotateWarning");
+  const shouldShow = isMobileDevice() && isLandscapeMode();
+  warning.style.display = shouldShow ? "flex" : "none";
+}
 
-  window.addEventListener("orientationchange", toggleRotateWarning);
-  window.addEventListener("resize", toggleRotateWarning);
-  document.addEventListener("DOMContentLoaded", toggleRotateWarning);
-
-
+window.addEventListener("orientationchange", toggleRotateWarning);
+window.addEventListener("resize", toggleRotateWarning);
+document.addEventListener("DOMContentLoaded", toggleRotateWarning);
