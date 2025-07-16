@@ -190,30 +190,11 @@ function loadUserInitials() {
 }
 
 async function renderTaskDetailData(task) {
-  const $ = (sel) => document.querySelector(sel);
-
-  const iconEl = $("#detail-icon");
-  if (iconEl) {
-    iconEl.src = getCategoryIcon(task.category);
-    iconEl.alt = task.category || "Task Icon";
-  }
-
-  $("#task-detail-title").textContent = task.title;
-  $("#detail-description").textContent = task.description;
-  $("#task-detail-due-date").textContent = task.dueDate;
-  $("#task-detail-priority").innerHTML = getPriorityIcon(task.prio);
-  $("#task-detail-assigned").innerHTML = generateAssignedChips(
-    toArray(task.assigned),
-    allUsers
-  );
-
-  $("#task-detail-subtasks").innerHTML = (task.subtasks || [])
-    .map((txt, i) => {
-      const isChecked = task.subtaskDone?.[i] ? "checked" : "";
-      return `<li><input type="checkbox" id="sub-${i}" class="subtask-checkbox" ${isChecked}>
-              <label for="sub-${i}">${txt}</label></li>`;
-    })
-    .join("");
+  renderTaskIcon(task);
+  renderTaskTextContent(task);
+  renderTaskPriority(task);
+  renderTaskAssigned(task);
+  renderTaskSubtasks(task);
 
   if (typeof renderSubtasksInModal === "function") {
     renderSubtasksInModal(task);
@@ -222,6 +203,45 @@ async function renderTaskDetailData(task) {
   setupEditAndDelete(task);
   initSubtaskProgress(null, task);
 }
+
+function renderTaskIcon(task) {
+  const iconEl = document.querySelector("#detail-icon");
+  if (!iconEl) return;
+
+  iconEl.src = getCategoryIcon(task.category);
+  iconEl.alt = task.category || "Task Icon";
+}
+
+function renderTaskTextContent(task) {
+  document.querySelector("#task-detail-title").textContent = task.title;
+  document.querySelector("#detail-description").textContent = task.description;
+  document.querySelector("#task-detail-due-date").textContent = task.dueDate;
+}
+
+function renderTaskPriority(task) {
+  document.querySelector("#task-detail-priority").innerHTML = getPriorityIcon(task.prio);
+}
+
+function renderTaskAssigned(task) {
+  document.querySelector("#task-detail-assigned").innerHTML = generateAssignedChips(
+    toArray(task.assigned),
+    allUsers
+  );
+}
+
+function renderTaskSubtasks(task) {
+  const subtasksHTML = (task.subtasks || []).map((txt, i) => {
+    const isChecked = task.subtaskDone?.[i] ? "checked" : "";
+    return `
+      <li>
+        <input type="checkbox" id="sub-${i}" class="subtask-checkbox" ${isChecked}>
+        <label for="sub-${i}">${txt}</label>
+      </li>`;
+  }).join("");
+
+  document.querySelector("#task-detail-subtasks").innerHTML = subtasksHTML;
+}
+
 
 function setupEditAndDelete(task) {
   const editBtn = document.querySelector(".edit-btn");
