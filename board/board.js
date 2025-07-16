@@ -189,63 +189,31 @@ function renderProgressBar(task) {
     </div>`;
 }
 
-function renderAssignment(task, allUsers) {
-  const chips = generateAssignedChips(task.assigned, allUsers);
-  const prio = (task.prio || "medium").toLowerCase();
-  const icon = priorityIcons[prio];
+async function renderTaskDetailData(task) {
+  const $ = (sel) => document.querySelector(sel);
 
-  return `
-    <div class="assigned-chips">
-      <div class="assigned-chip-container">${chips}</div>
-      <img class="task-priority-img" src="${icon}" alt="${task.prio}">
-    </div>
-  `;
-}
+  const iconEl = $("#detail-icon");
+  if (iconEl) {
+    iconEl.src = getCategoryIcon(task.category);
+    iconEl.alt = task.category || "Task Icon";
+  }
 
+  $("#task-detail-title").textContent = task.title;
+  $("#detail-description").textContent = task.description;
+  $("#task-detail-due-date").textContent = task.dueDate;
+  $("#task-detail-priority").innerHTML = getPriorityIcon(task.prio);
+  $("#task-detail-assigned").innerHTML = generateAssignedChips(
+    toArray(task.assigned),
+    allUsers
+  );
 
-function handleDragStart(event) {
-  event.dataTransfer.setData("text/plain", event.target.id);
-}
-
-function getInitials(name) {
-  const parts = name.trim().split(" ");
-  const first = parts[0]?.[0] || "";
-  const last = parts.length > 1 ? parts[parts.length - 1][0] : "";
-  return (first + last).toUpperCase();
-}
-
-function generateAssignedChips(assigned, users = []) {
-  const assignedUsers = toArray(assigned);
-  if (assignedUsers.length === 0) return "";
-
-  return assignedUsers
-    .map((u) => {
-      const name = typeof u === "string" ? u : u.userName;
-      const user = users.find(
-        (usr) => usr.userName?.toLowerCase() === name?.toLowerCase()
-      );
-      const initials = getInitials(name);
-      const colorClass = user?.colorClass || "color-1";
-      return `<div class="contact-chip ${colorClass}">${initials}</div>`;
+  $("#task-detail-subtasks").innerHTML = (task.subtasks || [])
+    .map((txt, i) => {
+      const isChecked = task.subtaskDone?.[i] ? "checked" : "";
+      return `<li><input type="checkbox" id="sub-${i}" class="subtask-checkbox" ${isChecked}>
+              <label for="sub-${i}">${txt}</label></li>`;
     })
     .join("");
-}
-
-function loadUserInitials() {
-  const userString = localStorage.getItem("currentUser");
-  if (!userString) return;
-  const user = JSON.parse(userString);
-  const name = user.userName || "Guest";
-  const profileButton = document.getElementById("openMenu");
-  if (profileButton) profileButton.textContent = getInitials(name);
-}
-
-async function renderTaskDetailData(task) {
-  renderTaskIcon(task);
-  renderTaskTextContent(task);
-  renderTaskPriority(task);
-  renderTaskAssigned(task);
-  renderTaskSubtasks(task);
 
   if (typeof renderSubtasksInModal === "function") {
     renderSubtasksInModal(task);
