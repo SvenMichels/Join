@@ -11,7 +11,8 @@ import {
   deleteContactFromFirebase,
 } from "../contactPage/contactService.js";
 import { getRandomColorClass, ensureUserHasColor } from "../scripts/utils/colors.js";
-
+import { initializeBackButton, initializeFabMenu } from "../scripts/ui/fabContact.js";
+import { isMobileView } from "../scripts/utils/mobileView.js";
 import { setupDropdown } from "../scripts/ui/dropdown.js";
 import { highlightActiveLinks } from "../scripts/utils/navUtils.js";
 
@@ -199,7 +200,7 @@ function loadShowContact() {
   });
 }
 
-async function deleteContact(id) {
+export async function deleteContact(id) {
   await deleteContactFromFirebase(id);
   contactList = contactList.filter((c) => c.id !== id);
 
@@ -224,7 +225,7 @@ function handlePostDeleteView(list) {
   }
 }
 
-function editContact(id) {
+export function editContact(id) {
   const contact = findContactById(id);
 
   if (!contact) {
@@ -408,63 +409,6 @@ function loadUserInitials() {
   if (btn) btn.textContent = getInitials(user.userName || "U");
 }
 
-function isMobileView() {
-  return window.matchMedia('(max-width: 768px)').matches
-}
-
-function initializeFabMenu(id) {
-  const elements = getFabElements();
-  if (!elements) return;
-  setupFabToggle(elements);
-  setupFabActions(elements, id);
-}
-
-function getFabElements() {
-  const container = document.getElementById('fabContainer');
-  if (!container || !isMobileView()) return null;
-  return {
-    container,
-    toggle:  document.getElementById('fabToggle'),
-    editBtn:  document.getElementById('fabEdit'),
-    delBtn:   document.getElementById('fabDelete'),
-  };
-}
-
-function setupFabToggle({ container, toggle }) {
-  container.classList.remove('open');
-  toggle.addEventListener('click', () =>
-    container.classList.toggle('open')
-  );
-}
-
-function setupFabActions({ container, editBtn, delBtn }, id) {
-  editBtn.addEventListener('click', () => {
-    editContact(id);
-    container.classList.remove('open');
-  });
-  delBtn.addEventListener('click', async () => {
-    await deleteContact(id);
-    container.classList.remove('open');
-  });
-}
-
-function initializeBackButton() {
-  const singleContactEl = document.querySelector('.singleContact');
-  const backBtn = document.getElementById('closeSingleMobile');
-  const fabContainer = document.getElementById('fabContainer');
-  if (!backBtn) return;
-
-  backBtn.addEventListener('click', () => {
-    singleContactEl.classList.remove('slide-in');
-    singleContactEl.classList.add('slide-out');
-
-    setTimeout(() => {
-      singleContactEl.style.display = 'none';
-      if (fabContainer) fabContainer.style.display = 'none';
-    }, 300);
-  });
-}
-
 function hideSingleContactView() {
   const single = document.querySelector('.singleContact');
   const fab    = document.getElementById('fabContainer');
@@ -476,7 +420,7 @@ function hideSingleContactView() {
     if (fab) fab.style.display    = 'none';
   }, 300);
 }
- function isMobileDevice() {
+  function isMobileDevice() {
     return window.innerWidth <= 820;
   }
 
