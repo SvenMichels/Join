@@ -97,7 +97,7 @@ async function loadContactsFromFirebase() {
 
   if (contactList.length) {
     const firstId = contactList[0].id;
-    if (!isMobileView) {
+    if (!isMobileView()) {
       showContact(firstId);
       document
         .querySelector(`.contact[data-id="${firstId}"]`)
