@@ -55,63 +55,38 @@ window.addEventListener("DOMContentLoaded", () => {
 
 async function fetchTasks() {
   try {
-    const [tasks, users] = await fetchTasksAndUsers();
-    allUsers = extractUsers(users);
-    loadedTasks = normalizeTasks(tasks);
-    await renderTasks(Object.values(loadedTasks));
+    const [{ data: tasksData }, { data: usersData }] = await Promise.all([
+      requestData("GET", "/tasks/"),
+      requestData("GET", "/users"),
+    ]);
+
+    loadedTasks = {};
+    allUsers = Object.values(usersData || {});
+
+    for (const [id, task] of Object.entries(tasksData || {})) {
+      task.id = id;
+      if (
+        !Array.isArray(task.subtaskDone) ||
+        task.subtaskDone.length !== (task.subtasks?.length || 0)
+      ) {
+        task.subtaskDone = new Array(task.subtasks?.length || 0).fill(false);
+      }
+      loadedTasks[id] = task;
+    }
+
+    await renderTasks(Object.values(loadedTasks)); // ⏱️ wichtig!
     updateEmptyLists();
   } catch (error) {
-    handleTaskFetchError(error);
+    console.error("Fehler beim Laden der Tasks:", error);
   }
 }
-
-async function fetchTasksAndUsers() {
-  return Promise.all([
-    requestData("GET", "/tasks/"),
-    requestData("GET", "/users"),
-  ]);
-}
-
-function extractUsers(userResponse) {
-  return Object.values(userResponse?.data || {});
-}
-
-function normalizeTasks(taskResponse) {
-  const tasks = {};
-  const taskData = taskResponse?.data || {};
-
-  for (const [id, task] of Object.entries(taskData)) {
-    tasks[id] = prepareTask(id, task);
-  }
-
-  return tasks;
-}
-
-function prepareTask(id, task) {
-  const subtaskCount = task.subtasks?.length || 0;
-  const isValidArray = Array.isArray(task.subtaskDone);
-  const lengthMatches = task.subtaskDone?.length === subtaskCount;
-
-  return {
-    ...task,
-    id,
-    subtaskDone: isValidArray && lengthMatches
-      ? task.subtaskDone
-      : new Array(subtaskCount).fill(false),
-  };
-}
-
-function handleTaskFetchError(error) {
-  console.error("Fehler beim Laden der Tasks:", error);
-}
-
 
 async function renderTasks(tasks) {
   if (!Array.isArray(tasks)) return;
   clearTaskLists();
 
   for (const task of tasks) {
-    const element = await createTaskElement(task, allUsers);
+    const element = await createTaskElement(task, allUsers); // 👈
     const listId = statusMap[task.status];
     const list = document.getElementById(listId);
     if (list) list.appendChild(element);
@@ -121,13 +96,49 @@ async function renderTasks(tasks) {
 }
 
 async function createTaskElement(task, allUsers) {
+  const prio = (task.prio || "medium").toLowerCase();
+  const prioIcon = priorityIcons[prio];
+  const done = Array.isArray(task.subtaskDone)
+    ? task.subtaskDone.filter(Boolean).length
+    : 0;
+  const total = Array.isArray(task.subtasks) ? task.subtasks.length : 0;
+  const percent = total > 0 ? (done / total) * 100 : 0;
+  const hasSubtasksClass = total > 0 ? " has-subtasks" : "";
+
+  const iconFile = categoryIcons[task.category] || "defaulticon.svg";
+
   const element = document.createElement("article");
-  element.className = getTaskClass(task);
+  element.className = `task prio-${prio}${hasSubtasksClass}`;
   element.id = `task-${task.id}`;
+
+  const assignedHTML = generateAssignedChips(task.assigned, allUsers);
+
+  const progressBar =
+    total > 0
+      ? `<div class="progress-bar-wrapper">
+          <div class="progress-bar-container">
+            <div id="subtask-progressbar-${task.id}" class="progress-bar-fill" style="width: ${percent}%;"></div>
+          </div>
+          <span id="subtask-progress-text-${task.id}" class="subtask-counter">${done}/${total} Subtasks</span>
+        </div>`
+      : "";
+
+  element.innerHTML = `
+    <div class="task-icon">
+      <img src="../assets/icons/${iconFile}" alt="${task.category}">
+    </div>
+    <div>
+      <h3>${task.title}</h3>
+      <p class="task-description-style">${task.description}</p>
+    </div>
+    ${progressBar}
+    <div class="assigned-chips">
+      <div class="assigned-chip-container">${assignedHTML}</div>
+      <img class="task-priority-img" src="${prioIcon}" alt="${task.prio}">
+    </div>
+  `;
+
   element.draggable = true;
-
-  element.innerHTML = renderTaskHTML(task, allUsers);
-
   element.addEventListener("dragstart", handleDragStart);
   element.addEventListener("click", () => openTaskDetails(task));
 
@@ -141,79 +152,49 @@ function clearTaskLists() {
   });
 }
 
-function getTaskClass(task) {
-  const prio = (task.prio || "low").toLowerCase();
-  const hasSubtasks = Array.isArray(task.subtasks) && task.subtasks.length > 0;
-  return `task prio-${prio}${hasSubtasks ? " has-subtasks" : ""}`;
+function handleDragStart(event) {
+  event.dataTransfer.setData("text/plain", event.target.id);
 }
 
-function renderTaskHTML(task, allUsers) {
-  return `
-    ${renderTaskIcon(task)}
-    ${renderTaskContent(task)}
-    ${renderProgressBar(task)}
-    ${renderAssignment(task, allUsers)}
-  `;
+function getInitials(name) {
+  const parts = name.trim().split(" ");
+  const first = parts[0]?.[0] || "";
+  const last = parts.length > 1 ? parts[parts.length - 1][0] : "";
+  return (first + last).toUpperCase();
 }
 
-function renderTaskIcon(task) {
-  const iconFile = categoryIcons[task.category] || "defaulticon.svg";
-  return `
-    <div class="task-icon">
-      <img src="../assets/icons/${iconFile}" alt="${task.category}">
-    </div>
-  `;
+function generateAssignedChips(assigned, users = []) {
+  const assignedUsers = toArray(assigned);
+  if (assignedUsers.length === 0) return "";
+
+  return assignedUsers
+    .map((u) => {
+      const name = typeof u === "string" ? u : u.userName;
+      const user = users.find(
+        (usr) => usr.userName?.toLowerCase() === name?.toLowerCase()
+      );
+      const initials = getInitials(name);
+      const colorClass = user?.colorClass || "color-1"; // Fallback auf color-1 (z. B. blau)
+      return `<div class="contact-chip ${colorClass}">${initials}</div>`;
+    })
+    .join("");
 }
 
-function renderTaskContent(task) {
-  return `
-    <div>
-      <h3>${task.title}</h3>
-      <p class="task-description-style">${task.description}</p>
-    </div>
-  `;
-}
-
-function renderProgressBar(task) {
-  const done = (task.subtaskDone || []).filter(Boolean).length;
-  const total = (task.subtasks || []).length;
-  if (total === 0) return "";
-
-  const percent = (done / total) * 100;
-  return `
-    <div class="progress-bar-wrapper">
-      <div class="progress-bar-container">
-        <div id="subtask-progressbar-${task.id}" class="progress-bar-fill" style="width: ${percent}%;"></div>
-      </div>
-      <span id="subtask-progress-text-${task.id}" class="subtask-counter">${done}/${total} Subtasks</span>
-    </div>`;
+function loadUserInitials() {
+  const userString = localStorage.getItem("currentUser");
+  if (!userString) return;
+  const user = JSON.parse(userString);
+  const name = user.userName || "Guest";
+  const profileButton = document.getElementById("openMenu");
+  if (profileButton) profileButton.textContent = getInitials(name);
 }
 
 async function renderTaskDetailData(task) {
-  const $ = (sel) => document.querySelector(sel);
-
-  const iconEl = $("#detail-icon");
-  if (iconEl) {
-    iconEl.src = getCategoryIcon(task.category);
-    iconEl.alt = task.category || "Task Icon";
-  }
-
-  $("#task-detail-title").textContent = task.title;
-  $("#detail-description").textContent = task.description;
-  $("#task-detail-due-date").textContent = task.dueDate;
-  $("#task-detail-priority").innerHTML = getPriorityIcon(task.prio);
-  $("#task-detail-assigned").innerHTML = generateAssignedChips(
-    toArray(task.assigned),
-    allUsers
-  );
-
-  $("#task-detail-subtasks").innerHTML = (task.subtasks || [])
-    .map((txt, i) => {
-      const isChecked = task.subtaskDone?.[i] ? "checked" : "";
-      return `<li><input type="checkbox" id="sub-${i}" class="subtask-checkbox" ${isChecked}>
-              <label for="sub-${i}">${txt}</label></li>`;
-    })
-    .join("");
+  renderTaskDetailIcon(task.category);
+  renderTaskDetailText(task);
+  renderTaskDetailPriority(task.prio);
+  renderTaskDetailAssignees(task.assigned);
+  renderTaskDetailSubtasks(task.subtasks, task.subtaskDone);
 
   if (typeof renderSubtasksInModal === "function") {
     renderSubtasksInModal(task);
@@ -223,34 +204,34 @@ async function renderTaskDetailData(task) {
   initSubtaskProgress(null, task);
 }
 
-function renderTaskIcon(task) {
+function renderTaskDetailIcon(category) {
   const iconEl = document.querySelector("#detail-icon");
   if (!iconEl) return;
 
-  iconEl.src = getCategoryIcon(task.category);
-  iconEl.alt = task.category || "Task Icon";
+  iconEl.src = getCategoryIcon(category);
+  iconEl.alt = category || "Task Icon";
 }
 
-function renderTaskTextContent(task) {
+function renderTaskDetailText(task) {
   document.querySelector("#task-detail-title").textContent = task.title;
   document.querySelector("#detail-description").textContent = task.description;
   document.querySelector("#task-detail-due-date").textContent = task.dueDate;
 }
 
-function renderTaskPriority(task) {
-  document.querySelector("#task-detail-priority").innerHTML = getPriorityIcon(task.prio);
+function renderTaskDetailPriority(prio) {
+  document.querySelector("#task-detail-priority").innerHTML = getPriorityIcon(prio);
 }
 
-function renderTaskAssigned(task) {
+function renderTaskDetailAssignees(assigned) {
   document.querySelector("#task-detail-assigned").innerHTML = generateAssignedChips(
-    toArray(task.assigned),
+    toArray(assigned),
     allUsers
   );
 }
 
-function renderTaskSubtasks(task) {
-  const subtasksHTML = (task.subtasks || []).map((txt, i) => {
-    const isChecked = task.subtaskDone?.[i] ? "checked" : "";
+function renderTaskDetailSubtasks(subtasks = [], subtaskDone = []) {
+  const subtasksHtml = subtasks.map((txt, i) => {
+    const isChecked = subtaskDone?.[i] ? "checked" : "";
     return `
       <li>
         <input type="checkbox" id="sub-${i}" class="subtask-checkbox" ${isChecked}>
@@ -258,7 +239,7 @@ function renderTaskSubtasks(task) {
       </li>`;
   }).join("");
 
-  document.querySelector("#task-detail-subtasks").innerHTML = subtasksHTML;
+  document.querySelector("#task-detail-subtasks").innerHTML = subtasksHtml;
 }
 
 
@@ -338,7 +319,7 @@ function closeOverlay(overlay) {
 
 document.querySelectorAll(".board-icon").forEach((icon) => {
   icon.addEventListener("click", async () => {
-    openTaskModal();
+    await openTaskModal();
   });
 });
 
@@ -354,7 +335,9 @@ function openTaskModal(isEdit = false, task = null) {
 }
 
 async function initModalContents(overlay, isEdit, task) {
-  await waitForTaskFloatInit();
+  const init = window.initTaskFloat?.();
+  if (init instanceof Promise) await init;
+
   setModalMode(isEdit, task);
   const form = overlay.querySelector("#taskForm-modal");
 
@@ -362,19 +345,12 @@ async function initModalContents(overlay, isEdit, task) {
     prepareModalFormForEdit(form, task);
   }
 
-  setupModalCloseButton(overlay);
-}
-
-async function waitForTaskFloatInit() {
-  const init = window.initTaskFloat?.();
-  if (init instanceof Promise) await init;
-}
-
-function setupModalCloseButton(overlay) {
-  overlay.querySelector(".taskFloatButtonClose")?.addEventListener("click", () => {
-    overlay.classList.add("d_none");
-    overlay.innerHTML = "";
-  });
+  overlay
+    .querySelector(".taskFloatButtonClose")
+    ?.addEventListener("click", () => {
+      overlay.classList.add("d_none");
+      overlay.innerHTML = "";
+    });
 }
 
 function setModalMode(isEdit, task) {
@@ -394,7 +370,6 @@ function prepareModalFormForEdit(form, task) {
     okBtn.disabled = false;
   }
 }
-
 function getPriorityIcon(prio) {
   const prioMap = {
     low: "prio_overlay_low.svg",
@@ -406,65 +381,40 @@ function getPriorityIcon(prio) {
 }
 
 function setupDragAndDrop() {
-  Object.values(statusMap).forEach((columnId) => {
-    const column = document.getElementById(columnId);
-    if (column) attachDragEvents(column);
+  Object.values(statusMap).forEach((id) => {
+    const column = document.getElementById(id);
+    if (column) {
+      column.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        column.classList.add("drag-over");
+      });
+      column.addEventListener("dragleave", () => {
+        column.classList.remove("drag-over");
+      });
+      column.addEventListener("drop", (e) => {
+        e.preventDefault();
+        column.classList.remove("drag-over");
+        handleDrop(e);
+      });
+    }
   });
 }
 
-function attachDragEvents(column) {
-  column.addEventListener("dragover", handleDragOver);
-  column.addEventListener("dragleave", handleDragLeave);
-  column.addEventListener("drop", handleDropOnColumn);
-}
-
-function handleDragOver(e) {
-  e.preventDefault();
-  e.currentTarget.classList.add("drag-over");
-}
-
-function handleDragLeave(e) {
-  e.currentTarget.classList.remove("drag-over");
-}
-
-function handleDropOnColumn(e) {
-  e.preventDefault();
-  e.currentTarget.classList.remove("drag-over");
-  handleDrop(e);
-}
-
 function handleDrop(event) {
-  const taskId = getDraggedTaskId(event);
-  const task = getLoadedTaskById(taskId);
-  const newStatus = getDropTargetStatus(event);
-
-  if (!task || !newStatus) return;
-
-  task.status = newStatus;
-  moveTaskToNewList(taskId, event.currentTarget);
-  updateTask(task);
-  updateEmptyLists();
-}
-
-function getDraggedTaskId(event) {
-  return event.dataTransfer.getData("text/plain");
-}
-
-function getLoadedTaskById(taskId) {
-  const id = taskId.replace("task-", "");
-  return loadedTasks[id];
-}
-
-function getDropTargetStatus(event) {
-  const targetListId = event.currentTarget?.id;
-  return getStatusFromElementId(targetListId);
-}
-
-function moveTaskToNewList(taskId, targetElement) {
+  const taskId = event.dataTransfer.getData("text/plain");
   const taskElement = document.getElementById(taskId);
-  if (taskElement && targetElement) {
-    targetElement.appendChild(taskElement);
-  }
+  const targetListId = event.currentTarget.id;
+  const newStatus = getStatusFromElementId(targetListId);
+
+  if (!taskElement || !newStatus) return;
+
+  const id = taskId.replace("task-", "");
+  const task = loadedTasks[id];
+  if (!task) return;
+  task.status = newStatus;
+  event.currentTarget.appendChild(taskElement);
+  updateEmptyLists();
+  updateTask(task);
 }
 
 function getStatusFromElementId(id) {
@@ -476,33 +426,26 @@ function getStatusFromElementId(id) {
 async function updateTask(task) {
   try {
     await requestData("PUT", `/tasks/${task.id}`, task);
-  } catch (warn) {
-    console.warn("Fehler beim Aktualisieren des Tasks:", warn);
+  } catch (error) {
+    console.error("Fehler beim Aktualisieren des Tasks:", error);
   }
 }
 
 document.getElementById("inputIcon").addEventListener("click", searchTasks);
 
 function searchTasks() {
-  const term = getSearchTerm();
+  const searchInput = document.getElementById("searchFieldInput");
+  const searchTerm = searchInput.value.toLowerCase().trim();
   Object.values(loadedTasks).forEach((task) => {
     const taskElement = document.getElementById(`task-${task.id}`);
     if (!taskElement) return;
-
-    const isMatch = taskMatchesSearch(task, term);
-    taskElement.style.display = isMatch ? "flex" : "none";
+    const matchesTitle = task.title.toLowerCase().includes(searchTerm);
+    const matchesDescription = task.description
+      .toLowerCase()
+      .includes(searchTerm);
+    taskElement.style.display =
+      matchesTitle || matchesDescription ? "flex" : "none";
   });
-}
-
-function getSearchTerm() {
-  const input = document.getElementById("searchFieldInput");
-  return input?.value?.toLowerCase().trim() || "";
-}
-
-function taskMatchesSearch(task, term) {
-  const titleMatch = task.title.toLowerCase().includes(term);
-  const descriptionMatch = task.description.toLowerCase().includes(term);
-  return titleMatch || descriptionMatch;
 }
 
 function initSubtaskProgress(taskId = null, task = null) {
