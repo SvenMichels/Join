@@ -16,8 +16,8 @@ function updateUserGreeting() {
 
   try {
     tryUpdateUserGreeting(userString);
-  } catch (err) {
-    console.warn("Fehler beim Parsen des Benutzers:", err);
+  } catch (warning) {
+    console.warn("Fehler beim Parsen des Benutzers:", warning);
   }
 }
 
@@ -64,8 +64,8 @@ async function updateSummary() {
     if (!tasks) return;
     const allTasks = Object.values(tasks);
     setTextUpdateSummary(allTasks);
-  } catch (err) {
-    console.error("Fehler beim Laden der Summary:", err);
+  } catch (warning) {
+    console.warn("Fehler beim Laden der Summary:", warning);
   }
 }
 

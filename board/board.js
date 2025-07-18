@@ -60,8 +60,8 @@ async function fetchTasks() {
     loadedTasks = normalizeTasks(tasks);
     await renderTasks(Object.values(loadedTasks));
     updateEmptyLists();
-  } catch (error) {
-    handleTaskFetchError(error);
+  } catch (warning) {
+    handleTaskFetchError(warning);
   }
 }
 
@@ -101,8 +101,8 @@ function prepareTask(id, task) {
   };
 }
 
-function handleTaskFetchError(error) {
-  console.error("Fehler beim Laden der Tasks:", error);
+function handleTaskFetchError(warning) {
+  console.warn("Fehler:", warning);
 }
 
 

@@ -70,7 +70,7 @@ main {
 }
 
 .headline h1 {
-  font-family: Inter;
+  font-family: "Inter";
   font-weight: 700;
   /* font-size: 61px; */
   font-size: clamp(2.5rem, 5vw, 3.8rem);

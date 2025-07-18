@@ -9,7 +9,6 @@ export async function createContact(contact) {
   return result;
 }
   
-
 export async function loadContacts() {
   const user = JSON.parse(localStorage.getItem("currentUser"));
   if (!user?.id) return [];
@@ -24,14 +23,12 @@ export async function loadContacts() {
 
 export async function updateContactInFirebase(contact) {
   const user = JSON.parse(localStorage.getItem("currentUser"));
-  if (!user?.id) throw new Error("Kein eingeloggter Benutzer");
-
+  if (!user?.id)
   await requestData("PUT", `contacts/${user.id}/${contact.id}`, contact)
 }
 
 export async function deleteContactFromFirebase(contactId) {
   const user = JSON.parse(localStorage.getItem("currentUser"));
-  if (!user?.id) throw new Error("Kein eingeloggter Benutzer");
-
+  if (!user?.id)
   await requestData("DELETE", `contacts/${user.id}/${contactId}`)
 }

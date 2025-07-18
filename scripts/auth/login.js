@@ -1,6 +1,5 @@
 import { requestData } from "../firebase.js";
 
-// === LOGIN FORM HANDLING ===
 const loginForm = document.getElementById("loginForm");
 
 loginForm?.addEventListener("submit", async (event) => {
@@ -11,12 +10,11 @@ loginForm?.addEventListener("submit", async (event) => {
   try {
     await loginUser(email, password);
     window.location.href = "startpage.html";
-  } catch (err) {
-    console.warn("Login fehlgeschlagen:", err.message);
+  } catch (warning) {
+    console.warn("Login fehlgeschlagen:", warning);
   }
 });
 
-// === LOGIN-FUNKTION ===
 export async function loginUser(email, password) {
   try {
     const { data: users } = await requestData("GET", "/users/");
@@ -32,13 +30,11 @@ export async function loginUser(email, password) {
 
     localStorage.setItem("currentUser", JSON.stringify(user));
     return user;
-  } catch (err) {
-    console.warn("Fehler beim Login:", err);
-    throw err;
+  } catch (warning) {
+    console.warn("Fehler beim Login:", warning);
   }
 }
 
-// === GAST-LOGIN ===
 export async function loginAsGuest() {
   try {
     const { data: users } = await requestData("GET", "/users/");
@@ -50,18 +46,16 @@ export async function loginAsGuest() {
 
     localStorage.setItem("currentUser", JSON.stringify(guest));
     window.location.href = "startpage.html";
-  } catch (err) {
-    console.warn("Fehler beim Gast-Login:", err);
+  } catch (warning) {
+    console.warn("Fehler beim Gast-Login:", warning);
   }
 }
 
-// === INIT ON LOAD ===
 document.addEventListener("DOMContentLoaded", () => {
   updateUserGreeting();
   updateSummary();
 });
 
-// === BEGRÜSSUNG ===
 function updateUserGreeting() {
   try {
     const user = JSON.parse(localStorage.getItem("currentUser"));
@@ -79,8 +73,8 @@ function updateUserGreeting() {
 
     if (greetingElement) greetingElement.textContent = `${greeting},`;
     if (nameElement) nameElement.textContent = name;
-  } catch (err) {
-    console.warn("Fehler beim Parsen des Benutzers:", err);
+  } catch (warning) {
+    console.warn("Fehler beim Parsen des Benutzers:", warning);
   }
 }
 
@@ -100,12 +94,11 @@ async function updateSummary() {
 
     const earliestUrgentDate = getEarliestUrgentDueDate(allTasks);
     setText(".urgentTaskDate", earliestUrgentDate || "No deadline");
-  } catch (err) {
-    console.warn("Fehler beim Laden der Summary:", err);
+  } catch (warning) {
+    console.warn("Fehler beim Laden der Summary:", warning);
   }
 }
 
-// === HELPER ===
 function countByStatus(tasks, status) {
   return tasks.filter((t) => t.status === status).length;
 }

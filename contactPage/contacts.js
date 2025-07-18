@@ -10,7 +10,10 @@ import {
   updateContactInFirebase,
   deleteContactFromFirebase,
 } from "../contactPage/contactService.js";
-import { getRandomColorClass, ensureUserHasColor } from "../scripts/utils/colors.js";
+import {
+  getRandomColorClass,
+  ensureUserHasColor,
+} from "../scripts/utils/colors.js";
 
 import { setupDropdown } from "../scripts/ui/dropdown.js";
 import { highlightActiveLinks } from "../scripts/utils/navUtils.js";
@@ -23,10 +26,16 @@ window.contactList = contactList;
 
 document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("addBtn").addEventListener("click", openAddWindow);
-  document.querySelectorAll(".cancelBtn, .closeBtn").forEach((btn) => btn.addEventListener("click", handleClose));
-  document.getElementById("addContactForm").addEventListener("submit", addContact);
-  setupDropdown('#openMenu', '#dropDownMenu');
-  document.getElementById("editContactForm").addEventListener("submit", handleEditSubmit);
+  document
+    .querySelectorAll(".cancelBtn, .closeBtn")
+    .forEach((btn) => btn.addEventListener("click", handleClose));
+  document
+    .getElementById("addContactForm")
+    .addEventListener("submit", addContact);
+  setupDropdown("#openMenu", "#dropDownMenu");
+  document
+    .getElementById("editContactForm")
+    .addEventListener("submit", handleEditSubmit);
 
   loadShowContact();
   await loadContactsFromFirebase();
@@ -106,7 +115,13 @@ async function loadContactsFromFirebase() {
 async function addContact(e) {
   e.preventDefault();
   const name = getName();
-  const contact = {name, email: getEmail(), phone: getPhone(), initials: getInitials(name), colorClass: getRandomColorClass(),};
+  const contact = {
+    name,
+    email: getEmail(),
+    phone: getPhone(),
+    initials: getInitials(name),
+    colorClass: getRandomColorClass(),
+  };
 
   try {
     await addContactTry(contact);
@@ -116,15 +131,15 @@ async function addContact(e) {
 }
 
 async function addContactTry(contact) {
-    const result = await createContact(contact);
-    contact.id = result.data.name;
-    contactList.push(contact);
+  const result = await createContact(contact);
+  contact.id = result.data.name;
+  contactList.push(contact);
 
-    clearContactListUI();
-    renderAllContacts(contactList);
-    emptyInput();
-    showUserFeedback();
-    setTimeout(closeAddWindow, 800);
+  clearContactListUI();
+  renderAllContacts(contactList);
+  emptyInput();
+  showUserFeedback();
+  setTimeout(closeAddWindow, 800);
 }
 
 const $ = (id) => document.getElementById(id);
@@ -158,7 +173,15 @@ function getFirstLetter(name) {
   return name[0]?.toUpperCase() || "";
 }
 
-export function renderContact(name, email, phone, initials, firstLetter, id, colorClass) {
+export function renderContact(
+  name,
+  email,
+  phone,
+  initials,
+  firstLetter,
+  id,
+  colorClass
+) {
   renderAlphabetFilter(firstLetter);
   renderContactCard(name, email, initials, id, colorClass);
   renderSingleContact(name, email, phone, initials, id, colorClass);
@@ -171,10 +194,24 @@ function renderAlphabetFilter(letter) {
 }
 
 function renderContactCard(name, email, initials, id, colorClass) {
-  $("allContacts").innerHTML += contactCard( name, email, initials, id, colorClass);
+  $("allContacts").innerHTML += contactCard(
+    name,
+    email,
+    initials,
+    id,
+    colorClass
+  );
 }
+
 function renderSingleContact(name, email, phone, initials, id, colorClass) {
-  $("bigContact").innerHTML = singleContact(name, email, phone || "–", initials, id, colorClass);
+  $("bigContact").innerHTML = singleContact(
+    name,
+    email,
+    phone || "–",
+    initials,
+    id,
+    colorClass
+  );
   bindDeleteButton($("bigContact"));
   bindEditButton($("bigContact"));
 }
@@ -191,7 +228,9 @@ function loadShowContact() {
   $("allContacts").addEventListener("click", (e) => {
     const card = e.target.closest(".contact");
     if (!card) return;
-    document.querySelectorAll("#allContacts .contact.active").forEach((c) => c.classList.remove("active"));
+    document
+      .querySelectorAll("#allContacts .contact.active")
+      .forEach((c) => c.classList.remove("active"));
     card.classList.add("active");
     showContact(card.dataset.id);
   });
@@ -210,7 +249,7 @@ function editContact(id) {
   const contact = findContactById(id);
 
   if (!contact) {
-    editContactIf(contact)
+    editContactIf(contact);
     return;
   }
   currentlyEditingId = id;
@@ -218,13 +257,17 @@ function editContact(id) {
   openEditWindow();
 }
 
-function editContactIf(contact){
-    currentlyEditingId = null;
-    openEditWindow();
+function editContactIf(contact) {
+  currentlyEditingId = null;
+  openEditWindow();
 }
 
 function fillEditForm(c) {
-  const map = {contactName: c.name, contactEmail: c.email, contactPhone: c.phone,};
+  const map = {
+    contactName: c.name,
+    contactEmail: c.email,
+    contactPhone: c.phone,
+  };
   Object.entries(map).forEach(([id, val]) => {
     const el = document.querySelector(`#editWindow #${id}`);
     if (el) el.value = val;
@@ -250,7 +293,7 @@ function handleEditSubmit(e) {
   const contact = findContactById(currentlyEditingId);
 
   if (contact) {
-   handleIfEditSubmit(contact, updated);
+    handleIfEditSubmit(contact, updated);
   } else {
     handleElseEditSubmit(updated);
   }
@@ -258,17 +301,17 @@ function handleEditSubmit(e) {
 
 function handleIfEditSubmit(contact, updated) {
   updateContact(contact, updated).then(() => {
-      rerenderAfterEdit(contact.id);
-      showContact(contact.id);
-      closeEditWindow();
-    });
+    rerenderAfterEdit(contact.id);
+    showContact(contact.id);
+    closeEditWindow();
+  });
 }
 
 function handleElseEditSubmit(updated) {
-   updateCurrentUser(updated).then(() => {
-      loadUserInitials();
-      closeEditWindow();
-    });
+  updateCurrentUser(updated).then(() => {
+    loadUserInitials();
+    closeEditWindow();
+  });
 }
 
 async function updateContact(contact, updated) {
@@ -278,14 +321,19 @@ async function updateContact(contact, updated) {
 
 async function updateCurrentUser(updated) {
   const user = JSON.parse(localStorage.getItem("currentUser")) || {};
-  const patched = {...user, userName: updated.name, userEmail: updated.email, phoneNumber: updated.phone,};
+  const patched = {
+    ...user,
+    userName: updated.name,
+    userEmail: updated.email,
+    phoneNumber: updated.phone,
+  };
   localStorage.setItem("currentUser", JSON.stringify(patched));
 
- tryIfIfBlock()
+  tryIfIfBlock();
 }
 
 async function tryIfIfBlock() {
-   try {
+  try {
     const { updateUser } = await import("../scripts/users/users.js");
     await updateUser(patched.id, patched);
   } catch (_) {}
@@ -296,7 +344,14 @@ async function tryIfIfBlock() {
     card.querySelector(".email").textContent = patched.userEmail;
   }
   if (document.querySelector("#profileName")?.textContent === user.userName) {
-    renderSingleContact(patched.userName, patched.userEmail, patched.phoneNumber, getInitials(patched.userName), patched.id, patched.colorClass || getRandomColorClass());
+    renderSingleContact(
+      patched.userName,
+      patched.userEmail,
+      patched.phoneNumber,
+      getInitials(patched.userName),
+      patched.id,
+      patched.colorClass || getRandomColorClass()
+    );
   }
 }
 
@@ -312,7 +367,14 @@ function findContactById(id) {
 function showContact(id) {
   const c = findContactById(id);
   if (!c) return;
-  renderSingleContact(c.name, c.email, c.phone, c.initials, c.id, c.colorClass || getRandomColorClass());
+  renderSingleContact(
+    c.name,
+    c.email,
+    c.phone,
+    c.initials,
+    c.id,
+    c.colorClass || getRandomColorClass()
+  );
 }
 
 function clearContactListUI() {
@@ -325,7 +387,16 @@ function clearBigContactView() {
 
 function renderAllContacts(list) {
   sortContactsAlphabetically(list).forEach((c) =>
-    renderContact(c.name, c.email, c.phone, c.initials, getFirstLetter(c.name), c.id, c.colorClass));
+    renderContact(
+      c.name,
+      c.email,
+      c.phone,
+      c.initials,
+      getFirstLetter(c.name),
+      c.id,
+      c.colorClass
+    )
+  );
 }
 
 function sortContactsAlphabetically(arr) {
@@ -363,21 +434,20 @@ function loadUserInitials() {
   if (btn) btn.textContent = getInitials(user.userName || "U");
 }
 
- function isMobileDevice() {
-    return window.innerWidth <= 820;
-  }
+function isMobileDevice() {
+  return window.innerWidth <= 820;
+}
 
-  function isLandscapeMode() {
-    return window.matchMedia("(orientation: landscape)").matches;
-  }
+function isLandscapeMode() {
+  return window.matchMedia("(orientation: landscape)").matches;
+}
 
-  function toggleRotateWarning() {
-    const warning = document.getElementById("rotateWarning");
-    const shouldShow = isMobileDevice() && isLandscapeMode();
-    warning.style.display = shouldShow ? "flex" : "none";
-  }
+function toggleRotateWarning() {
+  const warning = document.getElementById("rotateWarning");
+  const shouldShow = isMobileDevice() && isLandscapeMode();
+  warning.style.display = shouldShow ? "flex" : "none";
+}
 
-  window.addEventListener("orientationchange", toggleRotateWarning);
-  window.addEventListener("resize", toggleRotateWarning);
-  document.addEventListener("DOMContentLoaded", toggleRotateWarning);
-
+window.addEventListener("orientationchange", toggleRotateWarning);
+window.addEventListener("resize", toggleRotateWarning);
+document.addEventListener("DOMContentLoaded", toggleRotateWarning);

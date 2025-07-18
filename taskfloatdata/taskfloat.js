@@ -141,8 +141,8 @@ async function handleSubmitModal(e) {
     $.form.reset();
     selectPriorityModal("medium");
     closeModal();
-  } catch (err) {
-    console.error("Fehler beim Speichern:", err);
+  } catch (warning) {
+    console.warning("Fehler beim Speichern:", warning);
   }
 }
 
@@ -361,7 +361,6 @@ const initials = (n) =>
     .map((p) => p[0])
     .join("")
     .toUpperCase();
-const rndColor = () => `hsl(${Math.random() * 360},70%,80%)`;
 
 function closeModal() {
   const modal = document.getElementById("taskDetailModal");
@@ -455,8 +454,8 @@ document.addEventListener("change", async (e) => {
       task.subtaskDone =
         task.subtaskDone || new Array(task.subtasks.length).fill(false);
       pendingTaskUpdates[taskId] = task;
-    } catch (err) {
-      console.error("Fehler beim Laden des Tasks:", err);
+    } catch (warning) {
+      console.warn("Fehler beim Laden des Tasks:", warning);
       return;
     }
   }
@@ -472,8 +471,8 @@ if (modal) {
         await requestData("PATCH", `/tasks/${taskId}`, {
           subtaskDone: updatedTask.subtaskDone,
         });
-      } catch (err) {
-        console.error("Fehler beim Speichern des Tasks:", err);
+      } catch (warning) {
+        console.warn("Fehler beim Speichern des Tasks:", warning);
       }
     }
     pendingTaskUpdates = {};
