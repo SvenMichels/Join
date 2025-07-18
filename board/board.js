@@ -76,10 +76,51 @@ async function fetchTasks() {
 
     await renderTasks(Object.values(loadedTasks)); // ⏱️ wichtig!
     updateEmptyLists();
-  } catch (error) {
-    console.error("Fehler beim Laden der Tasks:", error);
+  } catch (warning) {
+    handleTaskFetchError(warning);
   }
 }
+
+async function fetchTasksAndUsers() {
+  return Promise.all([
+    requestData("GET", "/tasks/"),
+    requestData("GET", "/users"),
+  ]);
+}
+
+function extractUsers(userResponse) {
+  return Object.values(userResponse?.data || {});
+}
+
+function normalizeTasks(taskResponse) {
+  const tasks = {};
+  const taskData = taskResponse?.data || {};
+
+  for (const [id, task] of Object.entries(taskData)) {
+    tasks[id] = prepareTask(id, task);
+  }
+
+  return tasks;
+}
+
+function prepareTask(id, task) {
+  const subtaskCount = task.subtasks?.length || 0;
+  const isValidArray = Array.isArray(task.subtaskDone);
+  const lengthMatches = task.subtaskDone?.length === subtaskCount;
+
+  return {
+    ...task,
+    id,
+    subtaskDone: isValidArray && lengthMatches
+      ? task.subtaskDone
+      : new Array(subtaskCount).fill(false),
+  };
+}
+
+function handleTaskFetchError(warning) {
+  console.warn("Fehler:", warning);
+}
+
 
 async function renderTasks(tasks) {
   if (!Array.isArray(tasks)) return;

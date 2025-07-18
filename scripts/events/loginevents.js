@@ -17,8 +17,8 @@ export async function loginListeners() {
 try {
   await loginUser(email, password);
   window.location.href = "../../startpage/startpage.html";
-} catch (err) {
-  console.warn(`Login failed: ${err.message}`);
+} catch (warning) {
+  console.warn(`Login failed: ${warning}`);
 
 }
   };
@@ -27,8 +27,8 @@ try {
     try {
       await loginAsGuest();
       window.location.href = "../../startpage/startpage.html";
-    } catch (err) {
-      console.log(`Guest login failed: ${err.message}`);
+    } catch (warning) {
+      console.log(`Guest login failed: ${warning}`);
     }
   });
   bindPolicyLinks();

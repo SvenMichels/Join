@@ -1,4 +1,3 @@
-import { createUser } from "../scripts/users/users.js";
 import { signupListeners } from "../scripts/events/loginevents.js"
 
 const passwordInput = document.getElementById("inputPassword");
@@ -76,8 +75,8 @@ export async function collectUserInput() {
 async function submitUser() {
   try {
     showUserFeedback()
-  } catch (error) {
-    console.warn("User creation failed", error);
+  } catch (warning) {
+    console.warn("User creation failed", warning);
   }
 }
 

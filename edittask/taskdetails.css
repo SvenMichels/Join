@@ -13,37 +13,36 @@
   max-width: 525px;
   width: 74%;
   height: 80%;
-  /* margin: auto; */
 }
 
-  .taskDetailCloseButton {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    border-radius: 56px;
-    border: 0;
-  }
+.taskDetailCloseButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 56px;
+  border: 0;
+}
 
-  .taskDetailCloseButton:hover {
-    cursor: pointer;
-    background: #29abe2;
-  }
+.taskDetailCloseButton:hover {
+  cursor: pointer;
+  background: #29abe2;
+}
 
-  .taskDetailCloseButton:hover .icon {
-    width: auto;
-    height: 16px;
-    cursor: pointer;
-    content: url("../assets/icons/close_white.svg");
-  }
+.taskDetailCloseButton:hover .icon {
+  width: auto;
+  height: 16px;
+  cursor: pointer;
+  content: url("../assets/icons/close_white.svg");
+}
 
-  button {
-    border: none;
-    background-color: transparent;
-    display: flex;
-    gap: 12px;
-  }
+button {
+  border: none;
+  background-color: transparent;
+  display: flex;
+  gap: 12px;
+}
 
 #task-detail-title {
   font-family: Inter;

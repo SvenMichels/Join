@@ -134,7 +134,7 @@ function handleFormSubmit(event) {
       renderSubtasks();
       event.target.removeAttribute("data-task-id");
     })
-    .catch((err) => console.error(err));
+    .catch((warning) => console.warn(warning));
 }
 
 function collectTaskData(form) {
@@ -171,9 +171,8 @@ function isTaskValid(task) {
 async function saveTask(task) {
   try {
     await requestData("PUT", `/tasks/${task.id}`, task);
-  } catch (error) {
-    alert("Fehler beim Speichern des Tasks.");
-    throw error;
+  } catch (warning) {
+    console.warn("Fehler beim Speichern des Tasks.", warning);
   }
 }
 
@@ -447,4 +446,3 @@ function showUserFeedback() {
   window.addEventListener("orientationchange", toggleRotateWarning);
   window.addEventListener("resize", toggleRotateWarning);
   document.addEventListener("DOMContentLoaded", toggleRotateWarning);
-
