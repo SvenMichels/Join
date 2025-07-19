@@ -1,37 +1,49 @@
 import { requestData } from "../firebase.js";
 
-const loginForm = document.getElementById("loginForm");
+const loginFormElement = document.getElementById("loginForm");
 
-loginForm?.addEventListener("submit", async (event) => {
-  event.preventDefault();
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value.trim();
+loginFormElement?.addEventListener("submit", async (submitEvent) => {
+  submitEvent.preventDefault();
+  const emailInputValue = document.getElementById("email").value.trim();
+  const passwordInputValue = document.getElementById("password").value.trim();
 
   try {
-    await loginUser(email, password);
+    await loginUser(emailInputValue, passwordInputValue);
     window.location.href = "startpage.html";
-  } catch (warning) {
-    console.warn("Login fehlgeschlagen:", warning);
+  } catch (loginError) {
+    console.warn("Login fehlgeschlagen:", loginError);
   }
 });
 
-export async function loginUser(email, password) {
+export async function loginUser(emailAddress, userPassword) {
   try {
-    const { data: users } = await requestData("GET", "/users/");
-    const userList = Object.entries(users || {}).map(([id, data]) => ({ id, ...data }));
+    const { data: allUsersData } = await requestData("GET", "/users/");
+    const userEntriesArray = Object.entries(allUsersData || {});
+    const completeUsersList = [];
+    
+    for (let entryIndex = 0; entryIndex < userEntriesArray.length; entryIndex++) {
+      const [userId, userData] = userEntriesArray[entryIndex];
+      completeUsersList.push({ id: userId, ...userData });
+    }
 
-    const user = userList.find(
-      (user) =>
-        user.userEmail?.toLowerCase() === email.toLowerCase() &&
-        user.password === password
-    );
+    let authenticatedUser = null;
+    for (let userIndex = 0; userIndex < completeUsersList.length; userIndex++) {
+      const currentUser = completeUsersList[userIndex];
+      const emailMatches = currentUser.userEmail?.toLowerCase() === emailAddress.toLowerCase();
+      const passwordMatches = currentUser.password === userPassword;
+      
+      if (emailMatches && passwordMatches) {
+        authenticatedUser = currentUser;
+        break;
+      }
+    }
 
-    if (!user) throw new Error("Invalid credentials");
+    if (!authenticatedUser) throw new Error("Invalid credentials");
 
-    localStorage.setItem("currentUser", JSON.stringify(user));
-    return user;
-  } catch (warning) {
-    console.warn("Fehler beim Login:", warning);
+    localStorage.setItem("currentUser", JSON.stringify(authenticatedUser));
+    return authenticatedUser;
+  } catch (loginError) {
+    console.warn("Fehler beim Login:", loginError);
   }
 }
 

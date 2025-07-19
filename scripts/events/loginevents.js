@@ -1,77 +1,79 @@
 import { loginAsGuest, loginUser } from "../auth/login.js";
-import { collectUserInput } from "../../signup/signup.js"
+import { collectUserInput } from "../../signup/signup.js";
 import { requestData } from "../firebase.js";
 
 export async function loginListeners() {
-  const loginForm = document.getElementById("loginForm");
-  if (!loginForm) return console.log("loginForm not found");
+  const loginFormElement = document.getElementById("loginForm");
+  if (!loginFormElement) return;
+
   document.querySelector(".logIn").addEventListener("click", async () => {
-    
-   loginListenersTry();
+    loginListenersTry();
   });
 
-  async function loginListenersTry(){
-     const email = document.querySelector("#loginEmail").value.trim();
-    const password = document.querySelector("#loginPassword").value.trim();
+  async function loginListenersTry() {
+    const emailAddress = document.querySelector("#loginEmail").value.trim();
+    const userPassword = document.querySelector("#loginPassword").value.trim();
 
-try {
-  await loginUser(email, password);
-  window.location.href = "../../startpage/startpage.html";
-} catch (warning) {
-  console.warn(`Login failed: ${warning}`);
-
-}
-  };
+    try {
+      await loginUser(emailAddress, userPassword);
+      window.location.href = "../../startpage/startpage.html";
+    } catch (errorMessage) {
+      // Handle login error silently
+    }
+  }
 
   document.querySelector(".guestLogIn").addEventListener("click", async () => {
     try {
       await loginAsGuest();
       window.location.href = "../../startpage/startpage.html";
-    } catch (warning) {
-      console.log(`Guest login failed: ${warning}`);
+    } catch (errorMessage) {
+      // Handle guest login error silently
     }
   });
   bindPolicyLinks();
 }
 
 function bindPolicyLinks() {
-  const selectors = [
+  const linkSelectorsList = [
     'a[href$="privatpolicy.html"]',
-    'a[href$="legalnotice.html"]'
-  ].join()
-  const links = document.querySelectorAll(selectors)
-  links.forEach(async link => {
-    link.addEventListener("click", async event => {
+    'a[href$="legalnotice.html"]',
+  ];
+
+  const combinedSelectors = linkSelectorsList.join(",");
+  const allPolicyLinks = document.querySelectorAll(combinedSelectors);
+
+  for (let linkIndex = 0; linkIndex < allPolicyLinks.length; linkIndex++) {
+    const currentPolicyLink = allPolicyLinks[linkIndex];
+    currentPolicyLink.addEventListener("click", async (event) => {
       if (!localStorage.getItem("token")) {
-        event.preventDefault()
-        await loginAsGuest()
-        window.location.href = link.href
+        event.preventDefault();
+        await loginAsGuest();
+        window.location.href = currentPolicyLink.href;
       }
-    })
-  })
+    });
+  }
 }
 
 export async function signupListeners() {
-  const form = document.getElementById("signUpForm");
-  if (!form) return console.log("signUpForm not found");
+  const signupFormElement = document.getElementById("signUpForm");
+  if (!signupFormElement) return
 
-formEventListener(form);
+  formEventListener(signupFormElement);
 
-  const checkBox = document.getElementById("checkBox");
-  const signUpBtn = document.getElementById("signUpBtn");
-  if (checkBox && signUpBtn) {
-    checkBox.addEventListener("change", () => {
-      signUpBtn.disabled = !checkBox.checked;
+  const privacyPolicyCheckbox = document.getElementById("checkBox");
+  const signUpSubmitButton = document.getElementById("signUpBtn");
+  if (privacyPolicyCheckbox && signUpSubmitButton) {
+    privacyPolicyCheckbox.addEventListener("change", () => {
+      signUpSubmitButton.disabled = !privacyPolicyCheckbox.checked;
     });
   }
   bindPolicyLinks();
 }
 
-function formEventListener(form){
-   form.addEventListener("submit", async (event) => {
+function formEventListener(signupFormElement) {
+  signupFormElement.addEventListener("submit", async (event) => {
     event.preventDefault();
-    console.log("Submit triggered");
-    const userdata = await collectUserInput();
-  requestData("POST","/users/", userdata);
+    const userRegistrationData = await collectUserInput();
+    requestData("POST", "/users/", userRegistrationData);
   });
 }

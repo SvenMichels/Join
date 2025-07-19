@@ -1,107 +1,122 @@
 import { requestData } from "../scripts/firebase.js";
 import { setupDropdown } from "../scripts/ui/dropdown.js";
-import { highlightActiveLinks } from "../scripts/utils/navUtils.js";
-import { ensureUserHasColor } from "../scripts/utils/colors.js";
+import { highlightActiveNavigationLinks } from "../scripts/utils/navUtils.js";
+import { ensureUserHasAssignedColor } from "../scripts/utils/colors.js";
+import { getUserCheckboxTemplate } from "./addtasktemplates.js";
+import { getInitials } from "../scripts/utils/helpers.js";
+import { PRIORITY_ICONS } from "../taskFloatData/taskfloat.js";
+import { setupMobileDeviceListeners } from "../scripts/utils/mobileUtils.js";
 
-let currentActivePriority = "medium";
-let allUsers = [];
-let subtasks = [];
+let currentlySelectedPriority = "medium";
+let allSystemUsers = [];
+let subtaskItemsList = [];
 
-const priorityIcons = {
-  urgent: [
-    "../assets/icons/urgent_red.svg",
-    "../assets/icons/urgent_white.svg",
-  ],
-  medium: [
-    "../assets/icons/medium_yellow.svg",
-    "../assets/icons/medium_white.svg",
-  ],
-  low: ["../assets/icons/low_green.svg", "../assets/icons/low_white.svg"],
-};
-
+// Initialize add task page
 document.addEventListener("DOMContentLoaded", () => {
-  cacheDom();
-  initForm();
-  loadUserInitials();
-  eventHandleSearch();
+  initializeDomElements();
+  initializeFormConfiguration();
+  loadUserInitialsDisplay();
+  setupSearchEventHandlers();
   setupDropdown("#openMenu", "#dropDownMenu");
-  highlightActiveLinks();
+  highlightActiveNavigationLinks();
+  setupMobileDeviceListeners();
 });
 
-const $ = {};
+const domElementCache = {};
 
-function cacheDom() {
-  assignDomElements();
-  setDateRestriction();
-  attachEventListeners();
+// Caches DOM elements and sets up initial configuration
+function initializeDomElements() {
+  assignDomElementsToCache();
+  configureDateRestrictions();
+  attachAllEventListeners();
 }
 
-function assignDomElements() {
-  $.openMenuBtn = document.getElementById("openMenu");
-  $.form = document.getElementById("taskForm");
-  $.taskDate = document.getElementById("taskDate");
-  $.subtaskInput = document.getElementById("subtask");
-  $.subtaskAddBtn = document.querySelector(".subtask-add-button");
-  $.assignUserListBtn = document.querySelector(".assignUserListBtn");
-  $.assignedBtnImg = document.getElementById("assignedBtnImg");
+// Assigns frequently used DOM elements to cache for easier access
+function assignDomElementsToCache() {
+  domElementCache.openMenuBtn = document.getElementById("openMenu");
+  domElementCache.taskForm = document.getElementById("taskForm");
+  domElementCache.taskDateInput = document.getElementById("taskDate");
+  domElementCache.subtaskInputField = document.getElementById("subtask");
+  domElementCache.subtaskAddButton = document.querySelector(".subtask-add-button");
+  domElementCache.assignUserListButton = document.querySelector(".assignUserListBtn");
+  domElementCache.assignedButtonImage = document.getElementById("assignedBtnImg");
 }
 
-function setDateRestriction() {
-  const today = new Date().toISOString().split("T")[0];
-  const dateInput = document.getElementById("task-date");
-  if (dateInput) dateInput.min = today;
+// Sets minimum date restriction for task date input to today
+function configureDateRestrictions() {
+  const currentDate = new Date().toISOString().split("T")[0];
+  const taskDateInput = document.getElementById("task-date");
+  if (taskDateInput) taskDateInput.min = currentDate;
 }
 
-function attachEventListeners() {
-  $.form?.addEventListener("submit", handleFormSubmit);
-  $.subtaskAddBtn?.addEventListener("click", addSubtask);
-  $.subtaskInput?.addEventListener("keydown", addSubtaskOnEnter);
-  $.assignUserListBtn?.addEventListener("click", toggleUserList);
+// Attaches event listeners to form elements
+function attachAllEventListeners() {
+  domElementCache.taskForm?.addEventListener("submit", handleFormSubmission);
+  domElementCache.subtaskAddButton?.addEventListener("click", addNewSubtask);
+  domElementCache.subtaskInputField?.addEventListener("keydown", addSubtaskOnEnterKey);
+  domElementCache.assignUserListButton?.addEventListener("click", toggleUserAssignmentList);
 
-  const createBtn = document.getElementById("createBtn");
-  createBtn?.addEventListener("click", showUserFeedback);
+  const clearFormButton = document.getElementById("clearBtn");
+  clearFormButton?.addEventListener("click", clearAllFormData);
 }
 
-function toggleUserList(e) {
-  e.preventDefault();
-  const list = document.getElementById("assignedUserList");
-  const arrow = $.assignedBtnImg;
-  const visible = list.classList.toggle("visible");
-  arrow?.classList.toggle("rotated", visible);
+// Toggles the visibility of the user assignment list
+function toggleUserAssignmentList(clickEvent) {
+  clickEvent.preventDefault();
+  const userAssignmentList = document.getElementById("assignedUserList");
+  const arrowIndicator = domElementCache.assignedButtonImage;
+  const isListVisible = userAssignmentList.classList.toggle("visible");
+  arrowIndicator?.classList.toggle("rotated", isListVisible);
+}
+
+function resetAllPriorityStyles(prioritySelectionObject) {
+  const priorityEntries = Object.entries(prioritySelectionObject);
+  
+  for (let priorityIndex = 0; priorityIndex < priorityEntries.length; priorityIndex++) {
+    const [priorityKey, priorityElementId] = priorityEntries[priorityIndex];
+    const priorityElement = document.getElementById(priorityElementId);
+    
+    priorityElement?.classList.remove(
+      "prioUrgentBtnActive",
+      "prioMediumBtnActive", 
+      "prioLowBtnActive"
+    );
+    
+    const priorityImageElement = document.getElementById(`${priorityKey}-task-img`);
+    if (priorityImageElement) priorityImageElement.src = PRIORITY_ICONS[priorityKey][0];
+  }
+}
+
+function applySelectedPriorityStyle(selectedPriority, prioritySelectionObject) {
+  const activePriorityButton = document.getElementById(prioritySelectionObject[selectedPriority]);
+  const activePriorityImage = document.getElementById(`${selectedPriority}-task-img`);
+
+  if (selectedPriority === "urgent") {
+    activePriorityButton?.classList.add("prioUrgentBtnActive");
+  } else if (selectedPriority === "medium") {
+    activePriorityButton?.classList.add("prioMediumBtnActive");
+  } else if (selectedPriority === "low") {
+    activePriorityButton?.classList.add("prioLowBtnActive");
+  }
+
+  if (activePriorityImage) {
+    activePriorityImage.src = PRIORITY_ICONS[selectedPriority][1];
+  }
 }
 
 function selectPriority(priority) {
-  currentActivePriority = priority;
-  const map = {
+  currentlySelectedPriority = priority;
+  const selectPrio = {
     urgent: "urgent-task",
     medium: "medium-task",
     low: "low-task",
   };
 
-  Object.entries(map).forEach(([key, id]) => {
-    const btn = document.getElementById(id);
-    const img = document.getElementById(`${key}-task-img`);
-    btn?.classList.remove(
-      "prioUrgentBtnActive",
-      "prioMediumBtnActive",
-      "prioLowBtnActive"
-    );
-    if (img) img.src = priorityIcons[key][0];
-  });
-
-  const activeBtn = document.getElementById(map[priority]);
-  const activeImg = document.getElementById(`${priority}-task-img`);
-  activeBtn?.classList.add(
-    {
-      urgent: "prioUrgentBtnActive",
-      medium: "prioMediumBtnActive",
-      low: "prioLowBtnActive",
-    }[priority]
-  );
-  if (activeImg) activeImg.src = priorityIcons[priority][1];
+  resetAllPriorityStyles(selectPrio);
+  applySelectedPriorityStyle(priority, selectPrio);
 }
 
-function initForm() {
+function initializeFormConfiguration() {
   loadAndRenderUsers();
   selectPriority("medium");
 
@@ -119,92 +134,128 @@ function initForm() {
   });
 }
 
-function handleFormSubmit(event) {
+async function handleFormSubmission(event) {
   event.preventDefault();
 
-  const task = collectTaskData(event.target);
-  if (!isTaskValid(task)) return;
+  const taskData = collectTaskData(event.target);
+  if (!isTaskValid(taskData)) return;
 
-  saveTask(task)
-    .then(() => {
+  try {
+    const result = await saveTask(taskData);
+    
+    setTimeout(() => {
       showUserFeedback();
-      event.target.reset();
-      selectPriority("medium");
-      subtasks = [];
-      renderSubtasks();
-      event.target.removeAttribute("data-task-id");
-    })
-    .catch((warning) => console.warn(warning));
+      clearAllFormData();
+    }, 100);
+    
+  } catch (saveError) {
+    alert("Fehler beim Speichern des Tasks. Bitte versuchen Sie es erneut.");
+  }
 }
 
 function collectTaskData(form) {
-  const existingId = form.getAttribute("data-task-id");
-  return {
-    id: existingId || Date.now(),
+  const existingTaskId = form.getAttribute("data-task-id");
+  const taskData = {
     title: form.taskTitle.value.trim(),
     description: form.taskDescription.value.trim(),
     dueDate: form.taskDate.value,
     category: form.category.value,
-    prio: currentActivePriority,
+    prio: currentlySelectedPriority,
     assigned: collectAssignedUsers(),
-    subtasks: [...subtasks],
+    subtasks: [...subtaskItemsList],
+    subtaskDone: new Array(subtaskItemsList.length).fill(false),
     status: "todo",
   };
+  
+  // Nur bei bestehenden Tasks die ID setzen
+  if (existingTaskId) {
+    taskData.id = existingTaskId;
+  }
+  
+  return taskData;
 }
 
 function isTaskValid(task) {
-  let valid = true;
+  let validTask = true;
   const show = (id, condition) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.style.display = condition ? "inline" : "none";
-    if (condition) valid = false;
+    const element = document.getElementById(id);
+    if (!element) return;
+    element.style.display = condition ? "inline" : "none";
+    if (condition) validTask = false;
   };
 
   show("titleAlert", !task.title);
   show("dateAlert", !task.dueDate);
   show("categoryAlert", !task.category);
 
-  return valid;
+  return validTask;
 }
 
-async function saveTask(task) {
+async function saveTask(taskData) {
   try {
-    await requestData("PUT", `/tasks/${task.id}`, task);
-  } catch (warning) {
-    console.warn("Fehler beim Speichern des Tasks.", warning);
+    const isNewTask = !taskData.id;
+    const httpMethod = isNewTask ? "POST" : "PUT";
+    const apiEndpoint = isNewTask ? "/tasks" : `/tasks/${taskData.id}`;
+    
+    const response = await requestData(httpMethod, apiEndpoint, taskData);
+    return response;
+  } catch (saveError) {
+    throw saveError;
   }
 }
 
 async function loadAndRenderUsers() {
   const { data = {} } = await requestData("GET", "/users");
-  allUsers = Object.entries(data).map(([id, u]) => ({ id, ...u }));
+  const userEntries = Object.entries(data);
+  
+  allSystemUsers = [];
+  for (let entryIndex = 0; entryIndex < userEntries.length; entryIndex++) {
+    const [userId, userInformation] = userEntries[entryIndex];
+    allSystemUsers.push({ id: userId, ...userInformation });
+  }
 
-  allUsers = allUsers.filter(
-    (user, index, self) =>
-      index === self.findIndex((u) => u.userName === user.userName)
-  );
+  // Remove duplicate users by username
+  const uniqueSystemUsers = [];
+  for (let userIndex = 0; userIndex < allSystemUsers.length; userIndex++) {
+    const currentUser = allSystemUsers[userIndex];
+    const isDuplicate = uniqueSystemUsers.some(existingUser => 
+      existingUser.userName === currentUser.userName
+    );
+    if (!isDuplicate) {
+      uniqueSystemUsers.push(currentUser);
+    }
+  }
+  
+  allSystemUsers = uniqueSystemUsers;
+  renderUserCheckboxes(allSystemUsers);
+}
 
-  renderUserCheckboxes(allUsers);
+function clearAndPrepareContainer(id) {
+  const container = document.getElementById(id);
+  if (!container) return null;
+  container.innerHTML = "";
+  return container;
+}
+
+function addUniqueCheckboxes(users, preSelected, container) {
+  const uniqueNames = new Set();
+
+  users.forEach(async (user) => {
+    user = await ensureUserHasAssignedColor(user);
+    if (uniqueNames.has(user.userName)) return;
+    uniqueNames.add(user.userName);
+
+    const isChecked = preSelected.includes(user.userName);
+    const checkboxElement = createUserCheckboxElement(user, isChecked);
+    container.appendChild(checkboxElement);
+  });
 }
 
 async function renderUserCheckboxes(users, preselected = []) {
-  const container = document.getElementById("assignedUserList");
+  const container = clearAndPrepareContainer("assignedUserList");
   if (!container) return;
 
-  container.innerHTML = "";
-  const uniqueNames = new Set();
-
-  for (let user of users) {
-    user = await ensureUserHasColor(user);
-    if (uniqueNames.has(user.userName)) continue;
-    uniqueNames.add(user.userName);
-
-    const isChecked = preselected.includes(user.userName);
-    const checkboxElement = createUserCheckboxElement(user, isChecked);
-    container.appendChild(checkboxElement);
-  }
-
+  addUniqueCheckboxes(users, preselected, container);
   updateSelectedUserDisplay();
 }
 
@@ -213,18 +264,7 @@ function createUserCheckboxElement(user, isChecked) {
   wrapper.className = "user-checkbox-wrapper";
   if (isChecked) wrapper.classList.add("active");
 
-  wrapper.innerHTML = `
-    <div class="user-info-wrapper">
-      <div class="selected-contact-chip ${user.colorClass}">
-        ${getInitials(user.userName)}
-      </div>
-      <label>${user.userName}</label>
-    </div>
-    <input type="checkbox" class="user-checkbox" value="${user.userName}" ${
-    isChecked ? "checked" : ""
-  }>
-  `;
-
+  wrapper.innerHTML = getUserCheckboxTemplate(user, isChecked);
   attachCheckboxListener(wrapper);
   return wrapper;
 }
@@ -249,7 +289,7 @@ function updateSelectedUserDisplay() {
   const selectedContainer = document.getElementById("selectedUser");
   selectedContainer.innerHTML = "";
   collectAssignedUsers().forEach((name) => {
-    const user = allUsers.find((u) => u.userName === name);
+    const user = allSystemUsers.find((u) => u.userName === name);
     const chip = document.createElement("div");
     chip.className = `selected-contact-chip ${user?.colorClass || "color-1"}`;
     chip.textContent = getInitials(name);
@@ -257,16 +297,16 @@ function updateSelectedUserDisplay() {
   });
 }
 
-function addSubtask(element) {
+function addNewSubtask(element) {
   element.preventDefault();
-  const value = $.subtaskInput.value.trim();
-  if (!value) return;
-  subtasks.push(value);
-  $.subtaskInput.value = "";
+  const subtaskInputValue = domElementCache.subtaskInputField.value.trim();
+  if (!subtaskInputValue) return;
+  subtaskItemsList.push(subtaskInputValue);
+  domElementCache.subtaskInputField.value = "";
   renderSubtasks();
 }
 
-function addSubtaskOnEnter(element) {
+function addSubtaskOnEnterKey(element) {
   if (element.key === "Enter") {
     element.preventDefault();
     addSubtask(element);
@@ -277,10 +317,11 @@ function renderSubtasks() {
   const list = document.getElementById("subtaskList");
   list.innerHTML = "";
 
-  subtasks.forEach((text, index) => {
+  for (let index = 0; index < subtaskItemsList.length; index++) {
+    const text = subtaskItemsList[index];
     const container = createSubtaskContainer(text, index);
     list.appendChild(container);
-  });
+  }
 }
 
 function createSubtaskContainer(text, index) {
@@ -328,7 +369,7 @@ function addControlListeners(editBtn, deleteBtn, index) {
   });
   deleteBtn.addEventListener("click", (e) => {
     e.preventDefault();
-    subtasks.splice(index, 1);
+    subtaskItemsList.splice(index, 1);
     renderSubtasks();
   });
 }
@@ -338,7 +379,7 @@ function makeSubtaskEditable(index) {
   const container = list.children[index];
   container.innerHTML = "";
 
-  const input = createSubtaskInput(subtasks[index]);
+  const input = createSubtaskInput(subtaskItemsList[index]);
   const buttonGroup = createSubtaskButtons(index, input);
 
   container.append(input, buttonGroup);
@@ -353,11 +394,11 @@ function createSubtaskInput(value) {
 }
 
 function createSubtaskButtons(index, input) {
-  const wrapper = document.createElement("div");
-  wrapper.className = "subtask-button-wrapper";
+  const wrapper = createElement("div", "subtask-button-wrapper");
+  const spacer = createElement("div", "subtask-spacer");
 
   const saveBtn = createIconButton("check.svg", "subtask-save-button", () => {
-    subtasks[index] = input.value.trim();
+    subtaskItemsList[index] = input.value.trim();
     renderSubtasks();
   });
 
@@ -365,16 +406,19 @@ function createSubtaskButtons(index, input) {
     "delete.svg",
     "subtask-delete-button",
     () => {
-      subtasks.splice(index, 1);
+      subtaskItemsList.splice(index, 1);
       renderSubtasks();
     }
   );
 
-  const spacer = document.createElement("div");
-  spacer.className = "subtask-spacer";
-
   wrapper.append(deleteBtn, spacer, saveBtn);
   return wrapper;
+}
+
+function createElement(tag, className) {
+  const element = document.createElement(tag);
+  element.className = className;
+  return element;
 }
 
 function createIconButton(icon, className, onClick) {
@@ -385,31 +429,24 @@ function createIconButton(icon, className, onClick) {
   return btn;
 }
 
-function getInitials(name) {
-  if (typeof name !== "string") return "";
-
-  const parts = name.trim().split(" ");
-  return ((parts[0]?.[0] || "") + (parts.at(-1)?.[0] || "")).toUpperCase();
-}
-
-function loadUserInitials() {
+function loadUserInitialsDisplay() {
   const userString = localStorage.getItem("currentUser");
   if (!userString) return;
   const { userName = "Guest" } = JSON.parse(userString);
   document.getElementById("openMenu").textContent = getInitials(userName);
 }
 
-function eventHandleSearch() {
+function setupSearchEventHandlers() {
   const searchBar = document.getElementById("searchUser");
   searchBar.addEventListener("input", () => {
     const term = searchBar.value.toLowerCase();
     if (term.length < 3) {
-      if (!term.length) renderUserCheckboxes(allUsers);
+      if (!term.length) renderUserCheckboxes(allSystemUsers);
       return;
     }
     document.getElementById("assignedUserList").classList.add("visible");
     renderUserCheckboxes(
-      allUsers.filter((u) => u.userName.toLowerCase().includes(term))
+      allSystemUsers.filter((u) => u.userName.toLowerCase().includes(term))
     );
   });
 }
@@ -429,20 +466,31 @@ function showUserFeedback() {
   });
 }
 
- function isMobileDevice() {
-    return window.innerWidth <= 820;
+function clearAllFormData() {
+  // Reset form and clear all states
+  domElementCache.taskForm?.reset();
+  currentlySelectedPriority = "medium";
+  subtaskItemsList = [];
+  selectPriority("medium");
+  renderSubtasks();
+  
+  // Clear validation alerts
+  const alertElementIds = ["titleAlert", "dateAlert", "categoryAlert"];
+  for (let alertIndex = 0; alertIndex < alertElementIds.length; alertIndex++) {
+    const alertElementId = alertElementIds[alertIndex];
+    const alertElement = document.getElementById(alertElementId);
+    if (alertElement) alertElement.style.display = "none";
   }
 
-  function isLandscapeMode() {
-    return window.matchMedia("(orientation: landscape)").matches;
+  // Clear selected users
+  const selectedUserContainer = document.getElementById("selectedUser");
+  if (selectedUserContainer) {
+    selectedUserContainer.innerHTML = "";
   }
-
-  function toggleRotateWarning() {
-    const warning = document.getElementById("rotateWarning");
-    const shouldShow = isMobileDevice() && isLandscapeMode();
-    warning.style.display = shouldShow ? "flex" : "none";
-  }
-
-  window.addEventListener("orientationchange", toggleRotateWarning);
-  window.addEventListener("resize", toggleRotateWarning);
-  document.addEventListener("DOMContentLoaded", toggleRotateWarning);
+  const checkboxes = document.querySelectorAll('.user-checkbox');
+  checkboxes.forEach(cb => {
+    cb.checked = false;
+    cb.closest('.user-checkbox-wrapper')?.classList.remove('active');
+  });
+  setupMobileDeviceListeners();
+}

@@ -16,30 +16,13 @@
     href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&amp;display=swap"
     rel="stylesheet" />
     <script type="module">
-      import { highlightActiveLinks } from '../scripts/utils/navUtils.js'
+      import { highlightActiveLinks } from '../scripts/utils/navUtils.js';
+      import { setupMobileDeviceListeners } from '../scripts/utils/mobileUtils.js';
+      
       document.addEventListener('DOMContentLoaded', () => {
-        highlightActiveLinks()
-      })
-
-       function isMobileDevice() {
-    return window.innerWidth <= 820;
-  }
-
-  function isLandscapeMode() {
-    return window.matchMedia("(orientation: landscape)").matches;
-  }
-
-  function toggleRotateWarning() {
-    const warning = document.getElementById("rotateWarning");
-    const shouldShow = isMobileDevice() && isLandscapeMode();
-    warning.style.display = shouldShow ? "flex" : "none";
-  }
-
-  window.addEventListener("orientationchange", toggleRotateWarning);
-  window.addEventListener("resize", toggleRotateWarning);
-  document.addEventListener("DOMContentLoaded", toggleRotateWarning);
-
-
+        highlightActiveLinks();
+        setupMobileDeviceListeners();
+      });
     </script>
   </head>
   <body>'
@@ -51,7 +34,6 @@
   color: #fff;
   z-index: 9999;
   font-size: 1.5rem;
-  display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;

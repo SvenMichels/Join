@@ -1,22 +1,42 @@
-/**
- * Wandelt das von Firebase zurückgegebene Objekt in ein Array mit IDs um.
- * @param {Object} data - Das Firebase-Objekt, z. B. { "-id123": {...}, "-id456": {...} }
- * @returns {Array} - Ein Array von Objekten mit der ID als eigenes Feld
- */
 import { requestData } from "../firebase.js";
 
-export function formatFirebaseData(data) {
-  if (!data || typeof data !== "object") return [];
+// Firebase returns objects, but we need arrays for processing
+export function formatFirebaseDataToArray(firebaseDataObject) {
+  if (!firebaseDataObject) return [];
   
-  return Object.entries(data).map(([id, value]) => ({
-    id,
-    ...value,
-  }));
+  const formattedResultArray = [];
+  const dataEntries = Object.entries(firebaseDataObject);
+  
+  for (let entryIndex = 0; entryIndex < dataEntries.length; entryIndex++) {
+    const [dataKey, dataValue] = dataEntries[entryIndex];
+    formattedResultArray.push({ id: dataKey, ...dataValue });
+  }
+  
+  return formattedResultArray;
 }
 
-export async function loadTasks() {
-  const { data } = await requestData("GET", "tasks");
-  const tasksArray = formatFirebaseData(data);
+export async function loadAllTasksFromDatabase() {
+  try {
+    const databaseResponse = await requestData("GET", "tasks");
+    const formattedTasksArray = formatFirebaseDataToArray(databaseResponse.data);
+    return formattedTasksArray;
+  } catch (loadingError) {
+    return [];
+  }
+}
 
-  console.table(tasksArray);
+// Extract initials from full name (e.g. "Max Mustermann" -> "MM")
+export function getInitials(fullNameString) {
+  if (!fullNameString || typeof fullNameString !== "string") {
+    return "??";
+  }
+
+  const nameWordsArray = fullNameString.trim().split(/\s+/);
+  if (nameWordsArray.length === 1) {
+    return nameWordsArray[0].substring(0, 2).toUpperCase();
+  }
+  
+  const firstNameInitial = nameWordsArray[0][0] || "";
+  const lastNameInitial = nameWordsArray[nameWordsArray.length - 1][0] || "";
+  return (firstNameInitial + lastNameInitial).toUpperCase();
 }

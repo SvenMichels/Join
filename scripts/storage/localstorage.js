@@ -1,8 +1,8 @@
-export const saveToStorage = (key, data) => {
-  localStorage.setItem(key, JSON.stringify(data));
-};
+export function saveToStorage(storageKey, dataToStore) {
+  localStorage.setItem(storageKey, JSON.stringify(dataToStore));
+}
 
-export const loadFromStorage = (key) => {
-  const data = localStorage.getItem(key);
-  return data ? JSON.parse(data) : null;
-};
+export function loadFromStorage(storageKey) {
+  const retrievedData = localStorage.getItem(storageKey);
+  return retrievedData ? JSON.parse(retrievedData) : null;
+}

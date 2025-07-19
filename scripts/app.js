@@ -1,13 +1,12 @@
 import { requestData } from "./firebase.js";
-import { formatFirebaseData, loadTasks } from "./utils/helpers.js";
-import { createUser } from "./users/users.js";
+import { formatFirebaseDataToArray, loadAllTasksFromDatabase } from "./utils/helpers.js";
+import { createNewUserAccount } from "./users/users.js";
 import { loginListeners , signupListeners} from "./events/loginevents.js";
 
+// Initialize the app
 export async function init() {
-  console.log("App initialized");
   loginListeners();
   signupListeners();
-  //  requestData("DELETE","", {});
 }
 
 init();
