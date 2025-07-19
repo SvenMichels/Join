@@ -1,4 +1,4 @@
-const listConfigs = [
+const taskStatusConfigurationsList = [
   {
     listId: 'todoList',
     headerPlaceholder: '[data-status="todo"] .empty-placeholder',
@@ -22,35 +22,50 @@ const listConfigs = [
 ];
 
 export function updateEmptyLists() {
-  listConfigs.forEach(({ listId, headerPlaceholder, msg }) => {
-    const listEl    = document.getElementById(listId);
-    if (!listEl) return;
+  for (let configIndex = 0; configIndex < taskStatusConfigurationsList.length; configIndex++) {
+    const currentConfiguration = taskStatusConfigurationsList[configIndex];
+    const { listId, headerPlaceholder, msg } = currentConfiguration;
+    
+    const targetListElement = document.getElementById(listId);
+    if (!targetListElement) continue;
 
-    const headerPH  = document.querySelector(headerPlaceholder);
-    const dynamicPH = listEl.querySelector(".empty-placeholder");
-    const hasRealTasks = [...listEl.children]
-      .some(el => !el.classList.contains("empty-placeholder"));
+    const headerPlaceholderElement = document.querySelector(headerPlaceholder);
+    const dynamicPlaceholderElement = targetListElement.querySelector(".empty-placeholder");
 
-    if (hasRealTasks) {
-      updateEmptyListsTrue(headerPH, dynamicPH);
-    } else {
-      updateEmptyListsFalse(headerPH, dynamicPH, listEl, msg);
+    const allChildElementsInList = [];
+    for (let childIndex = 0; childIndex < targetListElement.children.length; childIndex++) {
+      allChildElementsInList.push(targetListElement.children[childIndex]);
     }
-  });
+    
+    let hasActualTaskElements = false;
+    for (let elementIndex = 0; elementIndex < allChildElementsInList.length; elementIndex++) {
+      const currentChildElement = allChildElementsInList[elementIndex];
+      if (!currentChildElement.classList.contains("empty-placeholder")) {
+        hasActualTaskElements = true;
+        break;
+      }
+    }
+
+    if (hasActualTaskElements) {
+      updateEmptyListsTrue(headerPlaceholderElement, dynamicPlaceholderElement);
+    } else {
+      updateEmptyListsFalse(headerPlaceholderElement, dynamicPlaceholderElement, targetListElement, msg);
+    }
+  }
 }
 
-function updateEmptyListsTrue(headerPH, dynamicPH) {
-  if (headerPH)  headerPH.style.display = "none";
-  if (dynamicPH) dynamicPH.remove();
+function updateEmptyListsTrue(headerPlaceholderElement, dynamicPlaceholderElement) {
+  if (headerPlaceholderElement) headerPlaceholderElement.style.display = "none";
+  if (dynamicPlaceholderElement) dynamicPlaceholderElement.remove();
 }
 
-function updateEmptyListsFalse(headerPH, dynamicPH, listEl, msg) {
-  if (headerPH)  headerPH.style.display = "";
+function updateEmptyListsFalse(headerPlaceholderElement, dynamicPlaceholderElement, targetListElement, emptyMessage) {
+  if (headerPlaceholderElement) headerPlaceholderElement.style.display = "";
 
-  if (!dynamicPH) {
-    const ph = document.createElement("div");
-    ph.className  = "empty-placeholder";
-    ph.textContent = msg;
-    listEl.appendChild(ph);
+  if (!dynamicPlaceholderElement) {
+    const newPlaceholderElement = document.createElement("div");
+    newPlaceholderElement.className = "empty-placeholder";
+    newPlaceholderElement.textContent = emptyMessage;
+    targetListElement.appendChild(newPlaceholderElement);
   }
 }

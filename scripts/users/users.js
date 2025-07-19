@@ -1,18 +1,19 @@
 import { requestData } from "../firebase.js";
 
-export async function createUser(userData) {
-    const response = await requestData("POST", "users", userData);
-  }
-
-export async function getUser(userId) {
-  const response = await requestData("GET", `/users/${userId}`);
-  return response.data;
+export async function createNewUserAccount(newUserData) {
+    const databaseResponse = await requestData("POST", "users", newUserData);
+    return databaseResponse;
 }
 
-export async function updateUser(userId, updatedData) {
-  return await requestData("PATCH", `users/${userId}`, updatedData);
+export async function getUserDataById(userIdentifier) {
+  const userDataResponse = await requestData("GET", `/users/${userIdentifier}`);
+  return userDataResponse.data;
 }
 
-export async function deleteUser(userId) {
-  return await requestData("DELETE", `/users/${userId}`);
+export async function updateUserInformation(userIdentifier, updatedUserData) {
+  return await requestData("PATCH", `users/${userIdentifier}`, updatedUserData);
+}
+
+export async function deleteUserAccount(userIdentifier) {
+  return await requestData("DELETE", `/users/${userIdentifier}`);
 }

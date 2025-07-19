@@ -1,100 +1,100 @@
 import { signupListeners } from "../scripts/events/loginevents.js"
 
-const passwordInput = document.getElementById("inputPassword");
-const confirmPasswordInput = document.getElementById("inputConfirmPassword");
-const checkbox = document.getElementById("checkBox");
-const signUpBtn = document.getElementById("signUpBtn");
-const togglePasswordIcon = document.querySelector(
+const userPasswordInputField = document.getElementById("inputPassword");
+const confirmPasswordInputField = document.getElementById("inputConfirmPassword");
+const privacyPolicyCheckbox = document.getElementById("checkBox");
+const signUpSubmitButton = document.getElementById("signUpBtn");
+const passwordVisibilityToggleIcon = document.querySelector(
   "#inputPassword + .toggle-password"
 );
-const toggleConfirmIcon = document.querySelector(
+const confirmPasswordVisibilityToggleIcon = document.querySelector(
   "#inputConfirmPassword + .toggle-password"
 );
 
 if (window.location.pathname.endsWith("signup.html")) {
-  initSignup();
+  initializeSignupPageFunctionality();
   signupListeners();
 }
 
-function initSignup() {
-  setupPasswordValidation();
-  setupPasswordToggle();
-  setupSignupHandler();
+function initializeSignupPageFunctionality() {
+  setupPasswordMatchValidation();
+  setupPasswordVisibilityToggle();
+  setupSignupFormHandler();
 }
 
-function setupPasswordValidation() {
-  passwordInput.addEventListener("input", validatePasswordsMatch);
-  confirmPasswordInput.addEventListener("input", validatePasswordsMatch);
+function setupPasswordMatchValidation() {
+  userPasswordInputField.addEventListener("input", validatePasswordsMatchCorrectly);
+  confirmPasswordInputField.addEventListener("input", validatePasswordsMatchCorrectly);
 }
 
-function validatePasswordsMatch() {
-  const mismatch = passwordInput.value !== confirmPasswordInput.value;
-  confirmPasswordInput.setCustomValidity(
-    mismatch ? "Passwords do not match" : ""
+function validatePasswordsMatchCorrectly() {
+  const passwordsDoNotMatch = userPasswordInputField.value !== confirmPasswordInputField.value;
+  confirmPasswordInputField.setCustomValidity(
+    passwordsDoNotMatch ? "Passwords do not match" : ""
   );
 }
 
-function setupPasswordToggle() {
-  togglePasswordIcon.addEventListener("click", () => {
-    toggleInputVisibility(passwordInput, togglePasswordIcon);
+function setupPasswordVisibilityToggle() {
+  passwordVisibilityToggleIcon.addEventListener("click", () => {
+    togglePasswordInputVisibility(userPasswordInputField, passwordVisibilityToggleIcon);
   });
 
-  toggleConfirmIcon.addEventListener("click", () => {
-    toggleInputVisibility(confirmPasswordInput, toggleConfirmIcon);
+  confirmPasswordVisibilityToggleIcon.addEventListener("click", () => {
+    togglePasswordInputVisibility(confirmPasswordInputField, confirmPasswordVisibilityToggleIcon);
   });
 }
 
-function toggleInputVisibility(input, icon) {
-  const isHidden = input.type === "password";
-  input.type = isHidden ? "text" : "password";
-  icon.src = isHidden
+function togglePasswordInputVisibility(passwordInputElement, visibilityToggleIcon) {
+  const isCurrentlyHidden = passwordInputElement.type === "password";
+  passwordInputElement.type = isCurrentlyHidden ? "text" : "password";
+  visibilityToggleIcon.src = isCurrentlyHidden
     ? "../assets/icons/visibility_off.svg"
     : "../assets/icons/visibility.svg";
 }
 
-function setupSignupHandler() {
-  signUpBtn.addEventListener("click", async () => {
-    if (!checkbox.checked) return;
+function setupSignupFormHandler() {
+  signUpSubmitButton.addEventListener("click", async () => {
+    if (!privacyPolicyCheckbox.checked) return;
 
-    const userData = collectUserInput();
-    if (!userData) return;
+    const userInputData = collectUserInput();
+    if (!userInputData) return;
 
     await submitUser();
   });
 }
 
 export async function collectUserInput() {
-  const userName = document.getElementById("inputName").value.trim();
-  const userEmail = document.getElementById("inputEmail").value.trim();
-  const password = passwordInput.value;
-  const confirmPassword = confirmPasswordInput.value;
+  const userFullName = document.getElementById("inputName").value.trim();
+  const emailAddress = document.getElementById("inputEmail").value.trim();
+  const userPassword = userPasswordInputField.value;
+  const confirmPassword = confirmPasswordInputField.value;
 
-  return { userName, userEmail, password };
+  return { userFullName, emailAddress, userPassword };
 }
 
 async function submitUser() {
   try {
     showUserFeedback()
-  } catch (warning) {
-    console.warn("User creation failed", warning);
+  } catch (errorMessage) {
+    console.warn("User creation failed", errorMessage);
   }
 }
 
 function showUserFeedback() {
-  const feedback = document.getElementById("userFeedback");
-  if (!feedback) return;
+  const feedbackDisplayElement = document.getElementById("userFeedback");
+  if (!feedbackDisplayElement) return;
 
-  feedback.classList.remove("dp-none");
-  feedback.classList.add("centerFeedback");
+  feedbackDisplayElement.classList.remove("dp-none");
+  feedbackDisplayElement.classList.add("centerFeedback");
 
-  feedbackAnimationEnd(feedback)
+  feedbackAnimationEnd(feedbackDisplayElement)
 }
 
-function feedbackAnimationEnd(feedback) {
-  feedback.addEventListener("animationend", () => {
+function feedbackAnimationEnd(feedbackDisplayElement) {
+  feedbackDisplayElement.addEventListener("animationend", () => {
     setTimeout(() => {
-      feedback.classList.add("dp-none");
-      feedback.classList.remove("centerFeedback");
+      feedbackDisplayElement.classList.add("dp-none");
+      feedbackDisplayElement.classList.remove("centerFeedback");
       window.location.href = "../index.html"
     }, 1500);
   });

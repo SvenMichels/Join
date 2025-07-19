@@ -1,21 +1,30 @@
-export function highlightActiveLinks(
-  selectors = [".nav-buttons", ".taskFrameLink"]
+export function highlightActiveNavigationLinks(
+  navigationSelectors = [".nav-buttons", ".taskFrameLink"]
 ) {
-  const currentPage = window.location.pathname
+  const currentPagePath = window.location.pathname
     .split("/")
     .pop()
     .replace(/[#?].*$/, "");
-  const sel = selectors.join(",");
-  document.querySelectorAll(sel).forEach((el) => {
-    const href =
-      el.tagName === "A"
-        ? el.getAttribute("href")
-        : el.closest("a")?.getAttribute("href");
-    if (!href) return;
-    const targetPage = href
+    
+  const combinedSelectors = navigationSelectors.join(",");
+  const navigationElements = document.querySelectorAll(combinedSelectors);
+  
+  for (let elementIndex = 0; elementIndex < navigationElements.length; elementIndex++) {
+    const navigationElement = navigationElements[elementIndex];
+    
+    const linkHref = navigationElement.tagName === "A"
+      ? navigationElement.getAttribute("href")
+      : navigationElement.closest("a")?.getAttribute("href");
+      
+    if (!linkHref) continue;
+    
+    const targetPagePath = linkHref
       .split("/")
       .pop()
       .replace(/[#?].*$/, "");
-    if (targetPage === currentPage) el.classList.add("active");
-  });
+      
+    if (targetPagePath === currentPagePath) {
+      navigationElement.classList.add("active");
+    }
+  }
 }

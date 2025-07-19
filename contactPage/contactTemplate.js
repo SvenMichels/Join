@@ -1,18 +1,18 @@
-export function singleContact(name, email, phone, initials, id, colorClass) {
+export function singleContact(fullContactName, emailAddress, phoneNumber, contactInitials, contactId, contactColorClass) {
   return `
 <div id = "bigContactCard">
             <div class="closeSingleMobile" id="closeSingleMobile">
               <img src="../assets/icons/arrow-left-line.svg" alt="">
             </div>
             <div class="profileHeader">
-              <div class="profilePic ${colorClass}">${initials}</div>
+              <div class="profilePic ${contactColorClass}">${contactInitials}</div>
               <div class="nameBtns">
-                <p id="profileName" class="profileName">${name}</p>
+                <p id="profileName" class="profileName">${fullContactName}</p>
                 <div class="btns">
-                  <p id="edit" class="editBtn" data-id="${id}">
+                  <p id="edit" class="editBtn" data-id="${contactId}">
                     <img src="../assets/icons/edit.svg" alt="" />Edit
                   </p>
-                  <p id="delete" class="deleteBtn" data-id="${id}">
+                  <p id="delete" class="deleteBtn" data-id="${contactId}">
                     <img src="../assets/icons/delete.svg" alt="" />Delete
                   </p>
                 </div>
@@ -23,11 +23,11 @@ export function singleContact(name, email, phone, initials, id, colorClass) {
               <div class="mailPhone">
                 <div class="emailContainer">
                   <p class="email">Email</p>
-                  <p id="eMail" class="emailAdress">${email}</p>
+                  <p id="eMail" class="emailAdress">${emailAddress}</p>
                 </div>
                 <div class="numberContainer">
                   <p class="phone">Phone</p>
-                  <p class="phoneNumber">${phone}</p>
+                  <p class="phoneNumber">${phoneNumber}</p>
                 </div>
               </div>
             </div>
@@ -35,10 +35,10 @@ export function singleContact(name, email, phone, initials, id, colorClass) {
     <div class="fab-container" id="fabContainer">
       <button class="fab-btn"   id="fabToggle">⋮</button>
       <div   class="fab-menu"   id="fabMenu">
-        <p class="fab-menu-item" id="fabEdit"   data-id="${id}">
+        <p class="fab-menu-item" id="fabEdit"   data-id="${contactId}">
           <img src="../assets/icons/edit.svg" alt="" /> Edit
         </p>
-        <p class="fab-menu-item" id="fabDelete" data-id="${id}">
+        <p class="fab-menu-item" id="fabDelete" data-id="${contactId}">
           <img src="../assets/icons/delete.svg" alt="" /> Delete
         </p>
       </div>
@@ -46,18 +46,18 @@ export function singleContact(name, email, phone, initials, id, colorClass) {
 `;
 }
 
-export function alphabetfilter(letter){
+export function alphabetfilter(alphabetLetter){
     return`
-      <div class="startLetter">${letter}</div>
+      <div class="startLetter">${alphabetLetter}</div>
           <div class="stripe"></div>`
 }
 
-export function contactCard(name, email, initials, id, colorClass){
-    return` <div class="contact" data-id="${id}">
-              <div class="pic ${colorClass}">${initials}</div>
+export function contactCard(fullContactName, emailAddress, contactInitials, contactId, contactColorClass){
+    return` <div class="contact" data-id="${contactId}">
+              <div class="pic ${contactColorClass}">${contactInitials}</div>
               <div class="nameAdressContainer">
-                <div id="profileName" class="contactName">${name}</div>
-                <div class="email">${email}</div>
+                <div id="profileName" class="contactName">${fullContactName}</div>
+                <div class="email">${emailAddress}</div>
               </div>
             </div>`
 }

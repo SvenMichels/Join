@@ -11,44 +11,51 @@ import {
   deleteContactFromFirebase,
 } from "../contactPage/contactService.js";
 import {
-  getRandomColorClass,
-  ensureUserHasColor,
+  generateRandomColorClass,
+  ensureUserHasAssignedColor,
 } from "../scripts/utils/colors.js";
 
 import { setupDropdown } from "../scripts/ui/dropdown.js";
-import { highlightActiveLinks } from "../scripts/utils/navUtils.js";
+import { highlightActiveNavigationLinks } from "../scripts/utils/navUtils.js";
+import { getInitials } from "../scripts/utils/helpers.js";
+import { setupMobileDeviceListeners } from "../scripts/utils/mobileUtils.js";
 
-let contactList = [];
-let currentlyEditingId = null;
-const usedLetters = new Set();
+let allContactsCollection = [];
+let currentlyBeingEditedContactId = null;
+const alphabetLettersUsedSet = new Set();
 
-window.contactList = contactList;
+window.contactList = allContactsCollection;
 
+// Initialize contacts page
 document.addEventListener("DOMContentLoaded", async () => {
-  document.getElementById("addBtn").addEventListener("click", openAddWindow);
-  document
-    .querySelectorAll(".cancelBtn, .closeBtn")
-    .forEach((btn) => btn.addEventListener("click", handleClose));
+  document.getElementById("addBtn").addEventListener("click", openContactAdditionWindow);
+  
+  const closeButtons = document.querySelectorAll(".cancelBtn, .closeBtn");
+  for (let buttonIndex = 0; buttonIndex < closeButtons.length; buttonIndex++) {
+    closeButtons[buttonIndex].addEventListener("click", handleWindowClosing);
+  }
+  
   document
     .getElementById("addContactForm")
-    .addEventListener("submit", addContact);
+    .addEventListener("submit", addNewContactToDatabase);
   setupDropdown("#openMenu", "#dropDownMenu");
   document
     .getElementById("editContactForm")
-    .addEventListener("submit", handleEditSubmit);
+    .addEventListener("submit", handleContactEditSubmission);
 
-  loadShowContact();
-  await loadContactsFromFirebase();
-  await ensureColorClassForAllContacts();
-  loadUserInitials();
-  highlightActiveLinks();
+  loadAndShowContactDetails();
+  await loadAllContactsFromFirebaseDatabase();
+  await ensureColorClassAssignmentForAllContacts();
+  loadUserInitialsDisplay();
+  highlightActiveNavigationLinks();
+  setupMobileDeviceListeners();
 });
 
-function handleClose() {
+function handleWindowClosing() {
   closeAddWindow();
   closeEditWindow();
 }
-function openAddWindow() {
+function openContactAdditionWindow() {
   document.getElementById("addWindow").classList.remove("dp-none");
 }
 function closeAddWindow() {
@@ -59,7 +66,7 @@ function closeEditWindow() {
 }
 
 export function openEditWindow() {
-  let contact = currentlyEditingId ? findContactById(currentlyEditingId) : null;
+  let contact = currentlyBeingEditedContactId ? findContactById(currentlyBeingEditedContactId) : null;
 
   if (!contact) {
     const u = JSON.parse(localStorage.getItem("currentUser")) || {};
@@ -70,7 +77,7 @@ export function openEditWindow() {
       phone: u.phoneNumber || "",
     };
   }
-  currentlyEditingId = contact.id;
+  currentlyBeingEditedContactId = contact.id;
 
   ["Name", "Email", "Phone"].forEach((f) => {
     const inp = document.querySelector(`#editWindow #contact${f}`);
@@ -80,16 +87,16 @@ export function openEditWindow() {
   document.getElementById("editWindow").classList.remove("dp-none");
 }
 
-async function loadContactsFromFirebase() {
+async function loadAllContactsFromFirebaseDatabase() {
   const currentUser = JSON.parse(localStorage.getItem("currentUser")) || {};
   contactList = await loadContacts();
 
   for (let contact of contactList) {
-    await ensureUserHasColor(contact);
+    await ensureUserHasAssignedColor(contact);
   }
 
   if (currentUser.id && !contactList.some((c) => c.id === currentUser.id)) {
-    const userWithColor = await ensureUserHasColor(currentUser);
+    const userWithColor = await ensureUserHasAssignedColor(currentUser);
     contactList.push({
       id: userWithColor.id,
       name: userWithColor.userName,
@@ -112,7 +119,7 @@ async function loadContactsFromFirebase() {
   }
 }
 
-async function addContact(e) {
+async function addNewContactToDatabase(e) {
   e.preventDefault();
   const name = getName();
   const contact = {
@@ -120,13 +127,13 @@ async function addContact(e) {
     email: getEmail(),
     phone: getPhone(),
     initials: getInitials(name),
-    colorClass: getRandomColorClass(),
+    colorClass: generateRandomColorClass(),
   };
 
   try {
     await addContactTry(contact);
   } catch (error) {
-    console.warn("Fehler beim Erstellen des Kontakts:", error);
+    // Silently handle contact creation errors
   }
 }
 
@@ -164,11 +171,6 @@ function emptyInput() {
   });
 }
 
-export function getInitials(name) {
-  const [a = "", b = ""] = name.split(" ").filter(Boolean);
-  return (a[0] || "").toUpperCase() + (b[0] || "").toUpperCase();
-}
-
 function getFirstLetter(name) {
   return name[0]?.toUpperCase() || "";
 }
@@ -188,8 +190,8 @@ export function renderContact(
 }
 
 function renderAlphabetFilter(letter) {
-  if (usedLetters.has(letter)) return;
-  usedLetters.add(letter);
+  if (alphabetLettersUsedSet.has(letter)) return;
+  alphabetLettersUsedSet.add(letter);
   $("allContacts").innerHTML += alphabetfilter(letter);
 }
 
@@ -224,7 +226,7 @@ function bindButton(container, selector, cb) {
 const bindDeleteButton = (c) => bindButton(c, ".deleteBtn", deleteContact);
 const bindEditButton = (c) => bindButton(c, ".editBtn", editContact);
 
-function loadShowContact() {
+function loadAndShowContactDetails() {
   $("allContacts").addEventListener("click", (e) => {
     const card = e.target.closest(".contact");
     if (!card) return;
@@ -252,13 +254,13 @@ function editContact(id) {
     editContactIf(contact);
     return;
   }
-  currentlyEditingId = id;
+  currentlyBeingEditedContactId = id;
   fillEditForm(contact);
   openEditWindow();
 }
 
 function editContactIf(contact) {
-  currentlyEditingId = null;
+  currentlyBeingEditedContactId = null;
   openEditWindow();
 }
 
@@ -286,11 +288,11 @@ function trimValEdit(id) {
   return document.querySelector(`#editWindow #${id}`).value.trim();
 }
 
-function handleEditSubmit(e) {
+function handleContactEditSubmission(e) {
   e.preventDefault();
 
   const updated = getEditContactInput();
-  const contact = findContactById(currentlyEditingId);
+  const contact = findContactById(currentlyBeingEditedContactId);
 
   if (contact) {
     handleIfEditSubmit(contact, updated);
@@ -309,7 +311,7 @@ function handleIfEditSubmit(contact, updated) {
 
 function handleElseEditSubmit(updated) {
   updateCurrentUser(updated).then(() => {
-    loadUserInitials();
+    loadUserInitialsDisplay();
     closeEditWindow();
   });
 }
@@ -334,8 +336,8 @@ async function updateCurrentUser(updated) {
 
 async function tryIfIfBlock() {
   try {
-    const { updateUser } = await import("../scripts/users/users.js");
-    await updateUser(patched.id, patched);
+    const { updateUserInformation } = await import("../scripts/users/users.js");
+    await updateUserInformation(patched.id, patched);
   } catch (_) {}
 
   const card = document.querySelector(`.contact[data-id='${patched.id}']`);
@@ -350,7 +352,7 @@ async function tryIfIfBlock() {
       patched.phoneNumber,
       getInitials(patched.userName),
       patched.id,
-      patched.colorClass || getRandomColorClass()
+      patched.colorClass || generateRandomColorClass()
     );
   }
 }
@@ -373,13 +375,13 @@ function showContact(id) {
     c.phone,
     c.initials,
     c.id,
-    c.colorClass || getRandomColorClass()
+    c.colorClass || generateRandomColorClass()
   );
 }
 
 function clearContactListUI() {
   $("allContacts").innerHTML = "";
-  usedLetters.clear();
+  alphabetLettersUsedSet.clear();
 }
 function clearBigContactView() {
   $("bigContact").innerHTML = "";
@@ -418,36 +420,20 @@ export function showUserFeedback() {
   );
 }
 
-async function ensureColorClassForAllContacts() {
+async function ensureColorClassAssignmentForAllContacts() {
   for (const c of contactList) {
     if (!c.colorClass) {
-      c.colorClass = getRandomColorClass();
+      c.colorClass = generateRandomColorClass();
       await updateContactInFirebase(c);
     }
   }
 }
 
-function loadUserInitials() {
+function loadUserInitialsDisplay() {
   const user = JSON.parse(localStorage.getItem("currentUser"));
   if (!user) return;
   const btn = $("openMenu");
   if (btn) btn.textContent = getInitials(user.userName || "U");
 }
 
-function isMobileDevice() {
-  return window.innerWidth <= 820;
-}
 
-function isLandscapeMode() {
-  return window.matchMedia("(orientation: landscape)").matches;
-}
-
-function toggleRotateWarning() {
-  const warning = document.getElementById("rotateWarning");
-  const shouldShow = isMobileDevice() && isLandscapeMode();
-  warning.style.display = shouldShow ? "flex" : "none";
-}
-
-window.addEventListener("orientationchange", toggleRotateWarning);
-window.addEventListener("resize", toggleRotateWarning);
-document.addEventListener("DOMContentLoaded", toggleRotateWarning);

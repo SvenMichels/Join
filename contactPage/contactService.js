@@ -1,24 +1,34 @@
 import { requestData} from "../scripts/firebase.js";
 
-export async function createContact(contact) {
-  const user = JSON.parse(localStorage.getItem("currentUser"));
-  if (!user?.id) throw new Error("Kein eingeloggter Benutzer");
+export async function createContact(contactData) {
+  const currentUserString = localStorage.getItem("currentUser");
+  const currentUserData = JSON.parse(currentUserString);
+  if (!currentUserData?.id) throw new Error("Kein eingeloggter Benutzer");
 
-  const path = `contacts/${user.id}`;
-  const result = await requestData("POST", path, contact);
-  return result;
+  const apiPath = `contacts/${currentUserData.id}`;
+  const creationResult = await requestData("POST", apiPath, contactData);
+  return creationResult;
 }
   
 export async function loadContacts() {
-  const user = JSON.parse(localStorage.getItem("currentUser"));
-  if (!user?.id) return [];
+  const currentUserString = localStorage.getItem("currentUser");
+  const currentUserData = JSON.parse(currentUserString);
+  if (!currentUserData?.id) return [];
 
-  const response = await requestData("GET", `contacts/${user.id}`);
-  const data = response.data;
-  return Object.entries(data || {}).map(([key, value]) => ({
-    ...value,
-    id: key,
-  }));
+  const contactsResponse = await requestData("GET", `contacts/${currentUserData.id}`);
+  const contactsRawData = contactsResponse.data;
+  const contactEntriesArray = Object.entries(contactsRawData || {});
+  const processedContactsList = [];
+  
+  for (let entryIndex = 0; entryIndex < contactEntriesArray.length; entryIndex++) {
+    const [contactKey, contactValue] = contactEntriesArray[entryIndex];
+    processedContactsList.push({
+      ...contactValue,
+      id: contactKey,
+    });
+  }
+  
+  return processedContactsList;
 }
 
 export async function updateContactInFirebase(contact) {
