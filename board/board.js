@@ -470,24 +470,52 @@ async function updateTask(task) {
   } catch (error) {
     console.error("Fehler beim Aktualisieren des Tasks:", error);
   }
+} 
+
+const searchField = document.getElementById("searchFieldInput");
+const searchButton = document.getElementById("inputIcon");
+
+searchButton.addEventListener("click", handleSearch);
+searchField.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") handleSearch();
+});
+
+function handleSearch() {
+  const term = getSearchTerm();
+  const hasMatches = filterTasksBySearchTerm(term);
+  toggleNoResultsMessage(!hasMatches);
 }
 
-document.getElementById("inputIcon").addEventListener("click", searchTasks);
+function getSearchTerm() {
+  const input = document.getElementById("searchFieldInput");
+  return input?.value?.toLowerCase().trim() || "";
+}
 
-function searchTasks() {
-  const searchInput = document.getElementById("searchFieldInput");
-  const searchTerm = searchInput.value.toLowerCase().trim();
+function filterTasksBySearchTerm(term) {
+  let hasVisibleTask = false;
+
   Object.values(loadedTasks).forEach((task) => {
     const taskElement = document.getElementById(`task-${task.id}`);
     if (!taskElement) return;
-    const matchesTitle = task.title.toLowerCase().includes(searchTerm);
-    const matchesDescription = task.description
-      .toLowerCase()
-      .includes(searchTerm);
-    taskElement.style.display =
-      matchesTitle || matchesDescription ? "flex" : "none";
+
+    const matchesTitle = task.title.toLowerCase().includes(term);
+    const matchesDescription = task.description.toLowerCase().includes(term);
+    const isVisible = matchesTitle || matchesDescription;
+
+    taskElement.style.display = isVisible ? "flex" : "none";
+
+    if (isVisible) hasVisibleTask = true;
   });
+
+  return hasVisibleTask;
 }
+
+function toggleNoResultsMessage(show) {
+  const notice = document.getElementById("noTasksFoundNotice");
+  if (!notice) return;
+  notice.style.display = show ? "block" : "none";
+}
+
 
 function initSubtaskProgress(taskId = null, task = null) {
   document.querySelectorAll(".subtask-checkbox").forEach((cb) =>
