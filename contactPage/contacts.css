@@ -482,7 +482,17 @@ h2{
 }
 
 .singleContact.slide-out {
+  .singleContact.slide-out {
+  display: block !important;
+  position: fixed;
+  top: 96px;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 96px);
+  background-color: white;
+  z-index: 10;
   animation: slideOut 0.3s ease-in forwards;
+}
 }
 
 @media (max-width: 1100px){

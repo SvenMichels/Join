@@ -14,11 +14,14 @@ import {
   generateRandomColorClass,
   ensureUserHasAssignedColor,
 } from "../scripts/utils/colors.js";
-
+import { initializeBackButton, initializeFabMenu } from "../scripts/ui/fabContact.js";
 import { setupDropdown } from "../scripts/ui/dropdown.js";
 import { highlightActiveNavigationLinks } from "../scripts/utils/navUtils.js";
 import { getInitials } from "../scripts/utils/helpers.js";
-import { setupMobileDeviceListeners } from "../scripts/utils/mobileUtils.js";
+import { 
+  setupMobileDeviceListeners,
+  isMobileView 
+} from "../scripts/utils/mobileUtils.js";
 
 let allContactsCollection = [];
 let currentlyBeingEditedContactId = null;
@@ -150,10 +153,12 @@ async function loadAllContactsFromFirebaseDatabase() {
     }
   } else if (contactList.length) {
     const firstId = contactList[0].id;
-    showContact(firstId);
-    document
-      .querySelector(`.contact[data-id="${firstId}"]`)
-      ?.classList.add("active");
+    if (!isMobileView()) {
+      showContact(firstId);
+      document
+        .querySelector(`.contact[data-id="${firstId}"]`)
+        ?.classList.add("active");
+    }
   }
 }
 
@@ -283,7 +288,7 @@ function loadAndShowContactDetails() {
   });
 }
 
-async function deleteContact(id) {
+export async function deleteContact(id) {
   try {
     // First delete from Firebase
     await deleteContactFromFirebase(id);
@@ -303,9 +308,25 @@ async function deleteContact(id) {
     // Handle deletion error - could show user feedback here
     alert("Failed to delete contact. Please try again.");
   }
+  handlePostDeleteView(contactList);
 }
 
-function editContact(id) {
+function handlePostDeleteView(list) {
+  if (!list.length) {
+    hideSingleContactView();
+    return;
+  }
+
+  const firstId = list[0].id;
+  if (isMobileView()) {
+    hideSingleContactView();
+  } else {
+    showContact(firstId);
+    document.querySelector(`.contact[data-id="${firstId}"]`)?.classList.add('active');
+  }
+}
+
+export function editContact(id) {
   const contact = findContactById(id);
 
   if (!contact) {
@@ -477,7 +498,34 @@ function showContact(id) {
     c.id,
     c.colorClass || generateRandomColorClass()
   );
+
+  const single = document.querySelector('.singleContact');
+  if (isMobileView()) {
+    single.classList.add('slide-in');
+    initializeFabMenu(id);
+    initializeBackButton();
+  } else {
+    single.style.display = 'flex';
+    single.classList.remove('slide-out'); 
+  }
 }
+
+window.addEventListener('resize', () => {
+  const single = document.querySelector('.singleContact');
+  const fab    = document.getElementById('fabContainer');
+
+  if (isMobileView()) {
+    if (single) single.style.display = 'none';
+    if (fab)    fab.style.display    = '';
+  } else {
+    if (single) {
+      single.style.display = 'flex';
+      single.classList.remove('slide-in', 'slide-out');
+    }
+    if (fab) fab.style.display = 'none';
+  }
+});
+
 
 function clearContactListUI() {
   $("allContacts").innerHTML = "";
@@ -535,3 +583,33 @@ function loadUserInitialsDisplay() {
   const btn = $("openMenu");
   if (btn) btn.textContent = getInitials(user.userName || "U");
 }
+
+function hideSingleContactView() {
+  const single = document.querySelector('.singleContact');
+  const fab    = document.getElementById('fabContainer');
+  if (!single) return;
+  single.classList.remove('slide-in');
+  single.classList.add('slide-out');
+  setTimeout(() => {
+    single.style.display = 'none';
+    if (fab) fab.style.display    = 'none';
+  }, 300);
+}
+  function isMobileDevice() {
+    return window.innerWidth <= 820;
+  }
+
+  function isLandscapeMode() {
+    return window.matchMedia("(orientation: landscape)").matches;
+  }
+
+  function toggleRotateWarning() {
+    const warning = document.getElementById("rotateWarning");
+    const shouldShow = isMobileDevice() && isLandscapeMode();
+    warning.style.display = shouldShow ? "flex" : "none";
+  }
+
+  window.addEventListener("orientationchange", toggleRotateWarning);
+  window.addEventListener("resize", toggleRotateWarning);
+  document.addEventListener("DOMContentLoaded", toggleRotateWarning);
+
