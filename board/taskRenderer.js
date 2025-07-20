@@ -18,7 +18,7 @@ export async function createTaskElement(taskData, allSystemUsers) {
   const taskElement = createBaseTaskElement(taskData);
   const subtaskProgressInfo = getSubtaskProgressData(taskData);
   
-  taskElement.innerHTML = generateTaskHTML(taskData, allSystemUsers, subtaskProgressInfo);
+  taskElement.innerHTML = await generateTaskHTML(taskData, allSystemUsers, subtaskProgressInfo);
   setupTaskElementEvents(taskElement, taskData);
   
   return taskElement;
@@ -61,11 +61,11 @@ function getSubtaskProgressData(taskData) {
 }
 
 // Build complete HTML structure for task
-function generateTaskHTML(taskData, allSystemUsers, subtaskProgressInfo) {
+async function generateTaskHTML(taskData, allSystemUsers, subtaskProgressInfo) {
   const categoryIconPath = getCategoryIcon(taskData.category);
   const iconFileName = categoryIconPath.split('/').pop();
   const priorityIconPath = getPriorityIconPath(taskData.prio);
-  const assignedUsersHTML = generateAssignedChips(taskData.assigned, allSystemUsers);
+  const assignedUsersHTML = await generateAssignedChips(taskData.assigned, allSystemUsers);
   const progressBarHTML = generateSubtaskProgressBar(taskData.id, subtaskProgressInfo);
 
   const taskHtmlTemplate = `

@@ -1,6 +1,13 @@
-/* Modal management for tasks */
+/**
+ * @fileoverview Modal management for task creation and editing
+ */
 
-// Initialize modal for task creation/editing
+/**
+ * Initializes modal contents and sets up appropriate mode
+ * @param {HTMLElement} overlay - Modal overlay container element
+ * @param {boolean} isEdit - Whether modal is in edit mode or create mode
+ * @param {Object|null} task - Task data object for editing (null for new tasks)
+ */
 export async function initModalContents(overlay, isEdit, task) {
   const init = window.initTaskFloat?.();
   if (init instanceof Promise) await init;
@@ -9,23 +16,30 @@ export async function initModalContents(overlay, isEdit, task) {
   const form = overlay.querySelector("#taskForm-modal");
 
   if (isEdit && task && form) {
-    prepareModalFormForEdit(form, task);
+    prepareEditMode(form, task);
+  } else {
+    prepareCreateMode(form);
   }
 
-  setupModalCloseButton(overlay);
+  setupCloseButton(overlay);
 }
 
+/**
+ * Sets global modal state variables
+ * @param {boolean} isEdit - Whether in edit mode
+ * @param {Object|null} task - Task object containing id property
+ */
 function setModalMode(isEdit, task) {
   window.isEditMode = isEdit;
   window.editingTaskId = isEdit && task ? task.id : null;
 }
 
 /**
- * Prepares modal form for editing existing task
- * @param {HTMLElement} form - Form element
- * @param {Object} task - Task data
+ * Configures modal form for editing existing task
+ * @param {HTMLElement} form - Form element to configure
+ * @param {Object} task - Task object with id, status, and other properties
  */
-function prepareModalFormForEdit(form, task) {
+function prepareEditMode(form, task) {
   form.dataset.taskId = task.id;
   form.dataset.taskStatus = task.status;
 
@@ -33,18 +47,48 @@ function prepareModalFormForEdit(form, task) {
     window.prefillModalWithTaskData(task);
   }
 
-  const okBtn = form.querySelector(".create-button");
-  if (okBtn) {
-    okBtn.innerHTML = 'OK <img src="../assets/icons/check.svg">';
-    okBtn.disabled = false;
+  const btn = form.querySelector(".create-button");
+  if (btn) {
+    btn.innerHTML = 'OK <img src="../assets/icons/check.svg">';
+    btn.disabled = false;
   }
 }
 
 /**
- * Sets up modal close button functionality
- * @param {HTMLElement} overlay - Modal overlay element
+ * Configures modal form for creating new task
+ * @param {HTMLElement|null} form - Form element to reset and configure
  */
-function setupModalCloseButton(overlay) {
+function prepareCreateMode(form) {
+  if (!form) return;
+  
+  if (window.resetModalFormState) {
+    window.resetModalFormState();
+  }
+  
+  resetSubtasks();
+  
+  if (window.renderSubtasksModal) {
+    window.renderSubtasksModal();
+  }
+}
+
+/**
+ * Clears subtask arrays for new task creation
+ */
+function resetSubtasks() {
+  if (window.subtaskItemsListModal) {
+    window.subtaskItemsListModal.length = 0;
+  }
+  if (window.completedSubtasksModal) {
+    window.completedSubtasksModal.length = 0;
+  }
+}
+
+/**
+ * Attaches close button event listener to modal
+ * @param {HTMLElement} overlay - Modal overlay containing close button
+ */
+function setupCloseButton(overlay) {
   const closeBtn = overlay.querySelector(".taskFloatButtonClose");
   closeBtn?.addEventListener("click", () => {
     overlay.classList.add("d_none");
@@ -53,9 +97,9 @@ function setupModalCloseButton(overlay) {
 }
 
 /**
- * Opens task modal for creation or editing
- * @param {boolean} isEdit - Whether in edit mode
- * @param {Object|null} task - Task data for editing
+ * Opens task modal by fetching HTML and initializing contents
+ * @param {boolean} [isEdit=false] - Whether to open in edit mode
+ * @param {Object|null} [task=null] - Task data for editing
  */
 export function openTaskModal(isEdit = false, task = null) {
   const overlay = document.getElementById("modal-overlay");

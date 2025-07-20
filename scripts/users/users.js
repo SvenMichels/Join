@@ -1,8 +1,8 @@
 import { requestData } from "../firebase.js";
 
 export async function createNewUserAccount(newUserData) {
-    const databaseResponse = await requestData("POST", "users", newUserData);
-    return databaseResponse;
+  const databaseResponse = await requestData("POST", "users", newUserData);
+  return databaseResponse;
 }
 
 export async function getUserDataById(userIdentifier) {

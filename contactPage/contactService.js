@@ -39,6 +39,10 @@ export async function updateContactInFirebase(contact) {
 
 export async function deleteContactFromFirebase(contactId) {
   const user = JSON.parse(localStorage.getItem("currentUser"));
-  if (!user?.id)
-  await requestData("DELETE", `contacts/${user.id}/${contactId}`)
+  if (!user?.id) {
+    throw new Error("No current user found");
+  }
+  
+  const deleteResult = await requestData("DELETE", `contacts/${user.id}/${contactId}`);
+  return deleteResult;
 }

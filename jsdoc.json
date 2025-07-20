@@ -1,0 +1,36 @@
+{
+  "source": {
+    "include": [
+      "./",
+      "./scripts/",
+      "./board/",
+      "./addtask/",
+      "./contactpage/",
+      "./taskFloatData/",
+      "./startpage/",
+      "./signup/"
+    ],
+    "includePattern": "\\.(js)$",
+    "exclude": [
+      "node_modules/",
+      "doc/"
+    ],
+    "excludePattern": "(node_modules/|docs/)"
+  },
+  "opts": {
+    "destination": "./docs/",
+    "recurse": true,
+    "readme": "./README.md"
+  },
+  "plugins": [
+    "plugins/markdown"
+  ],
+  "templates": {
+    "cleverLinks": false,
+    "monospaceLinks": false
+  },
+  "tags": {
+    "allowUnknownTags": true,
+    "dictionaries": ["jsdoc", "closure"]
+  }
+}

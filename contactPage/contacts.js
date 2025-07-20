@@ -65,24 +65,41 @@ function closeEditWindow() {
   document.getElementById("editWindow").classList.add("dp-none");
 }
 
-export function openEditWindow() {
+export async function openEditWindow() {
   let contact = currentlyBeingEditedContactId ? findContactById(currentlyBeingEditedContactId) : null;
 
   if (!contact) {
-    const u = JSON.parse(localStorage.getItem("currentUser")) || {};
+    const currentUserData = JSON.parse(localStorage.getItem("currentUser")) || {};
+    
+    // Try to get the most complete user data including phone number
+    let phoneNumber = currentUserData.phoneNumber;
+    if (!phoneNumber && currentUserData.id) {
+      try {
+        const { getUserDataById } = await import("../scripts/users/users.js");
+        const firebaseUserData = await getUserDataById(currentUserData.id);
+        phoneNumber = firebaseUserData?.phoneNumber || "";
+      } catch (error) {
+        phoneNumber = "";
+      }
+    }
+    
     contact = {
-      id: u.id || null,
-      name: u.userName || "",
-      email: u.userEmail || "",
-      phone: u.phoneNumber || "",
+      id: currentUserData.id || null,
+      name: currentUserData.userName || "",
+      email: currentUserData.userEmail || "",
+      phone: phoneNumber || "",
     };
   }
   currentlyBeingEditedContactId = contact.id;
 
-  ["Name", "Email", "Phone"].forEach((f) => {
-    const inp = document.querySelector(`#editWindow #contact${f}`);
-    if (inp) inp.value = contact[f.toLowerCase()];
-  });
+  // Fill form fields with proper mapping
+  const nameInput = document.querySelector(`#editWindow #contactName`);
+  const emailInput = document.querySelector(`#editWindow #contactEmail`);
+  const phoneInput = document.querySelector(`#editWindow #contactPhone`);
+  
+  if (nameInput) nameInput.value = contact.name || "";
+  if (emailInput) emailInput.value = contact.email || "";
+  if (phoneInput) phoneInput.value = contact.phone || "";
 
   document.getElementById("editWindow").classList.remove("dp-none");
 }
@@ -97,11 +114,24 @@ async function loadAllContactsFromFirebaseDatabase() {
 
   if (currentUser.id && !contactList.some((c) => c.id === currentUser.id)) {
     const userWithColor = await ensureUserHasAssignedColor(currentUser);
+    
+    // Try to get phone number from Firebase if not in localStorage
+    let phoneNumber = userWithColor.phoneNumber;
+    if (!phoneNumber) {
+      try {
+        const { getUserDataById } = await import("../scripts/users/users.js");
+        const firebaseUserData = await getUserDataById(currentUser.id);
+        phoneNumber = firebaseUserData?.phoneNumber || "";
+      } catch (error) {
+        phoneNumber = "";
+      }
+    }
+    
     contactList.push({
       id: userWithColor.id,
       name: userWithColor.userName,
       email: userWithColor.userEmail,
-      phone: userWithColor.phoneNumber || "–",
+      phone: phoneNumber,
       initials: getInitials(userWithColor.userName),
       colorClass: userWithColor.colorClass,
     });
@@ -110,7 +140,15 @@ async function loadAllContactsFromFirebaseDatabase() {
   clearContactListUI();
   renderAllContacts(contactList);
 
-  if (contactList.length) {
+  // Show current user's contact by default, not just the first one
+  if (contactList.length && currentUser.id) {
+    const userContactId = currentUser.id;
+    showContact(userContactId);
+    const userContactElement = document.querySelector(`.contact[data-id="${userContactId}"]`);
+    if (userContactElement) {
+      userContactElement.classList.add("active");
+    }
+  } else if (contactList.length) {
     const firstId = contactList[0].id;
     showContact(firstId);
     document
@@ -206,10 +244,11 @@ function renderContactCard(name, email, initials, id, colorClass) {
 }
 
 function renderSingleContact(name, email, phone, initials, id, colorClass) {
+  const displayPhone = phone && phone.trim() !== "" ? phone : "–";
   $("bigContact").innerHTML = singleContact(
     name,
     email,
-    phone || "–",
+    displayPhone,
     initials,
     id,
     colorClass
@@ -223,8 +262,14 @@ function bindButton(container, selector, cb) {
   if (btn) btn.addEventListener("click", () => cb(btn.dataset.id));
 }
 
-const bindDeleteButton = (c) => bindButton(c, ".deleteBtn", deleteContact);
-const bindEditButton = (c) => bindButton(c, ".editBtn", editContact);
+const bindDeleteButton = (containerElement) => {
+  bindButton(containerElement, ".deleteBtn", deleteContact);
+  bindButton(containerElement, "#fabDelete", deleteContact);
+};
+const bindEditButton = (containerElement) => {
+  bindButton(containerElement, ".editBtn", editContact);
+  bindButton(containerElement, "#fabEdit", editContact);
+};
 
 function loadAndShowContactDetails() {
   $("allContacts").addEventListener("click", (e) => {
@@ -239,12 +284,25 @@ function loadAndShowContactDetails() {
 }
 
 async function deleteContact(id) {
-  await deleteContactFromFirebase(id);
-  contactList = contactList.filter((c) => c.id !== id);
+  try {
+    // First delete from Firebase
+    await deleteContactFromFirebase(id);
+    
+    // Then remove from local contactList
+    contactList = contactList.filter((contactItem) => contactItem.id !== id);
 
-  clearContactListUI();
-  renderAllContacts(contactList);
-  clearBigContactView();
+    // Update UI
+    clearContactListUI();
+    renderAllContacts(contactList);
+    clearBigContactView();
+    
+    // Show success feedback
+    showUserFeedback();
+    
+  } catch (deleteError) {
+    // Handle deletion error - could show user feedback here
+    alert("Failed to delete contact. Please try again.");
+  }
 }
 
 function editContact(id) {
@@ -312,6 +370,20 @@ function handleIfEditSubmit(contact, updated) {
 function handleElseEditSubmit(updated) {
   updateCurrentUser(updated).then(() => {
     loadUserInitialsDisplay();
+    
+    // Re-render the contact list and show updated contact
+    clearContactListUI();
+    renderAllContacts(contactList);
+    
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    if (currentUser?.id) {
+      showContact(currentUser.id);
+      const userContactElement = document.querySelector(`.contact[data-id="${currentUser.id}"]`);
+      if (userContactElement) {
+        userContactElement.classList.add("active");
+      }
+    }
+    
     closeEditWindow();
   });
 }
@@ -322,34 +394,62 @@ async function updateContact(contact, updated) {
 }
 
 async function updateCurrentUser(updated) {
-  const user = JSON.parse(localStorage.getItem("currentUser")) || {};
-  const patched = {
+  const user = getCurrentUser();
+  const patchedUser = createPatchedUser(user, updated);
+  
+  saveUserToLocalStorage(patchedUser);
+  updateContactInList(user.id, updated);
+  await tryUpdateUserInDatabase(patchedUser, user);
+}
+
+function getCurrentUser() {
+  return JSON.parse(localStorage.getItem("currentUser")) || {};
+}
+
+function createPatchedUser(user, updated) {
+  return {
     ...user,
     userName: updated.name,
     userEmail: updated.email,
     phoneNumber: updated.phone,
   };
-  localStorage.setItem("currentUser", JSON.stringify(patched));
-
-  tryIfIfBlock();
 }
 
-async function tryIfIfBlock() {
-  try {
+function saveUserToLocalStorage(patchedUser) {
+  localStorage.setItem("currentUser", JSON.stringify(patchedUser));
+}
+
+function updateContactInList(userId, updated) {
+  const userContactIndex = contactList.findIndex(contact => contact.id === userId);
+  
+  if (userContactIndex !== -1) {
+    contactList[userContactIndex] = {
+      ...contactList[userContactIndex],
+      name: updated.name,
+      email: updated.email,
+      phone: updated.phone,
+      initials: getInitials(updated.name)
+    };
+  }
+}
+
+async function tryUpdateUserInDatabase(patched, originalUser) {
     const { updateUserInformation } = await import("../scripts/users/users.js");
     await updateUserInformation(patched.id, patched);
-  } catch (_) {}
+
 
   const card = document.querySelector(`.contact[data-id='${patched.id}']`);
   if (card) {
     card.querySelector(".contactName").textContent = patched.userName;
     card.querySelector(".email").textContent = patched.userEmail;
   }
-  if (document.querySelector("#profileName")?.textContent === user.userName) {
+  
+  if (document.querySelector("#profileName")?.textContent === originalUser.userName) {
+    const displayPhone = patched.phoneNumber && patched.phoneNumber.trim() !== "" ? patched.phoneNumber : "–";
     renderSingleContact(
       patched.userName,
       patched.userEmail,
-      patched.phoneNumber,
+      displayPhone,
       getInitials(patched.userName),
       patched.id,
       patched.colorClass || generateRandomColorClass()
@@ -435,5 +535,3 @@ function loadUserInitialsDisplay() {
   const btn = $("openMenu");
   if (btn) btn.textContent = getInitials(user.userName || "U");
 }
-
-

@@ -1,9 +1,9 @@
 import { updateTask } from "./taskManager.js";
 
 /**
- * Initializes subtask progress functionality
- * @param {string|null} taskId - Task ID for specific task or null for modal
- * @param {Object|null} task - Task object for saving state
+ * Initializes subtask progress functionality for task cards or modals
+ * @param {string|null} taskId - Task ID for specific task or null for modal context
+ * @param {Object|null} task - Task object containing subtask data for state persistence
  */
 export function initSubtaskProgress(taskId = null, task = null) {
   document.querySelectorAll(".subtask-checkbox").forEach((cb) =>
@@ -16,8 +16,8 @@ export function initSubtaskProgress(taskId = null, task = null) {
 }
 
 /**
- * Updates subtask progress display
- * @param {string|null} taskId - Task ID for specific task
+ * Updates the visual progress display for subtasks
+ * @param {string|null} taskId - Task ID for specific task identification
  */
 export function updateSubtaskProgress(taskId = null) {
   const boxes = [...document.querySelectorAll(".subtask-checkbox")];
@@ -29,10 +29,10 @@ export function updateSubtaskProgress(taskId = null) {
 }
 
 /**
- * Sets progress text element
+ * Updates the progress text display element
  * @param {number} done - Number of completed subtasks
  * @param {number} total - Total number of subtasks
- * @param {string|null} taskId - Task ID for specific task
+ * @param {string|null} taskId - Task ID for element identification
  */
 export function setProgressText(done, total, taskId) {
   const id = taskId
@@ -44,10 +44,10 @@ export function setProgressText(done, total, taskId) {
 }
 
 /**
- * Sets progress bar width
+ * Updates the progress bar visual indicator
  * @param {number} done - Number of completed subtasks
  * @param {number} total - Total number of subtasks
- * @param {string|null} taskId - Task ID for specific task
+ * @param {string|null} taskId - Task ID for element identification
  */
 export function setProgressBar(done, total, taskId) {
   const id = taskId ? `subtask-progressbar-${taskId}` : "subtask-progressbar";
@@ -59,8 +59,8 @@ export function setProgressBar(done, total, taskId) {
 }
 
 /**
- * Saves subtask completion state to database
- * @param {Object} task - Task object to update
+ * Persists subtask completion state to database
+ * @param {Object} task - Task object to update with new subtask states
  */
 export function saveSubtaskState(task) {
   const boxes = [...document.querySelectorAll(".subtask-checkbox")];

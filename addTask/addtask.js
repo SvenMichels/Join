@@ -1,8 +1,12 @@
+/**
+ * @fileoverview Add Task page functionality for creating and managing tasks
+ */
+
 import { requestData } from "../scripts/firebase.js";
 import { setupDropdown } from "../scripts/ui/dropdown.js";
 import { highlightActiveNavigationLinks } from "../scripts/utils/navUtils.js";
 import { ensureUserHasAssignedColor } from "../scripts/utils/colors.js";
-import { getUserCheckboxTemplate } from "./addtasktemplates.js";
+import { getUserCheckboxTemplate, getSubtaskControlGroupTemplate } from "./addtasktemplates.js";
 import { getInitials } from "../scripts/utils/helpers.js";
 import { PRIORITY_ICONS } from "../taskFloatData/taskfloat.js";
 import { setupMobileDeviceListeners } from "../scripts/utils/mobileUtils.js";
@@ -11,7 +15,9 @@ let currentlySelectedPriority = "medium";
 let allSystemUsers = [];
 let subtaskItemsList = [];
 
-// Initialize add task page
+/**
+ * Initializes add task page when DOM content is loaded
+ */
 document.addEventListener("DOMContentLoaded", () => {
   initializeDomElements();
   initializeFormConfiguration();
@@ -24,7 +30,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 const domElementCache = {};
 
-// Caches DOM elements and sets up initial configuration
+/**
+ * Caches DOM elements and sets up initial page configuration
+ */
 function initializeDomElements() {
   assignDomElementsToCache();
   configureDateRestrictions();
@@ -346,15 +354,7 @@ function createTextElement(text, index) {
 function createControlGroup(index) {
   const wrapper = document.createElement("div");
   wrapper.className = "subtask-controls";
-
-  wrapper.innerHTML = `
-    <button class="subtask-edit-button">
-      <img class="subtask-edit-buttonImg" src="../assets/icons/edit.svg" alt="edit">
-    </button>
-    <div class="subtask-spacer-second"></div>
-    <button class="subtask-delete-buttonSecond">
-      <img class="subtask-delete-buttonImgSecond" src="../assets/icons/delete.svg" alt="delete">
-    </button>`;
+  wrapper.innerHTML = getSubtaskControlGroupTemplate();
 
   const [editBtn, , deleteBtn] = wrapper.children;
   addControlListeners(editBtn, deleteBtn, index);
@@ -467,22 +467,30 @@ function showUserFeedback() {
 }
 
 function clearAllFormData() {
-  // Reset form and clear all states
+  resetFormAndStates();
+  clearValidationAlerts();
+  clearSelectedUsers();
+  setupMobileDeviceListeners();
+}
+
+function resetFormAndStates() {
   domElementCache.taskForm?.reset();
   currentlySelectedPriority = "medium";
   subtaskItemsList = [];
   selectPriority("medium");
   renderSubtasks();
-  
-  // Clear validation alerts
+}
+
+function clearValidationAlerts() {
   const alertElementIds = ["titleAlert", "dateAlert", "categoryAlert"];
   for (let alertIndex = 0; alertIndex < alertElementIds.length; alertIndex++) {
     const alertElementId = alertElementIds[alertIndex];
     const alertElement = document.getElementById(alertElementId);
     if (alertElement) alertElement.style.display = "none";
   }
+}
 
-  // Clear selected users
+function clearSelectedUsers() {
   const selectedUserContainer = document.getElementById("selectedUser");
   if (selectedUserContainer) {
     selectedUserContainer.innerHTML = "";
@@ -492,5 +500,4 @@ function clearAllFormData() {
     cb.checked = false;
     cb.closest('.user-checkbox-wrapper')?.classList.remove('active');
   });
-  setupMobileDeviceListeners();
 }

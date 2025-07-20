@@ -11,7 +11,7 @@ export async function renderTaskDetailData(task, allUsers) {
   renderTaskDetailIcon(task.category);
   renderTaskDetailText(task);
   renderTaskDetailPriority(task.prio);
-  renderTaskDetailAssignees(task.assigned, allUsers);
+  await renderTaskDetailAssignees(task.assigned, allUsers);
   renderTaskDetailSubtasks(task.subtasks, task.subtaskDone);
 
   if (typeof renderSubtasksInModal === "function") {
@@ -64,10 +64,10 @@ function renderTaskDetailPriority(prio) {
  * @param {Array} assigned - Assigned users
  * @param {Array} allUsers - All users array
  */
-function renderTaskDetailAssignees(assigned, allUsers) {
+async function renderTaskDetailAssignees(assigned, allUsers) {
   const assignedEl = document.querySelector("#task-detail-assigned");
   if (assignedEl) {
-    assignedEl.innerHTML = generateAssignedChips(
+    assignedEl.innerHTML = await generateAssignedChips(
       toArray(assigned),
       allUsers
     );

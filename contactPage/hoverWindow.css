@@ -1,7 +1,3 @@
-.dp-none{
-    display: none !important;
-}
-
 .hoverPosition {
     position: fixed;
     top: 0; left: 0;

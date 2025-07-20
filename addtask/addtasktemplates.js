@@ -13,3 +13,14 @@ export function getUserCheckboxTemplate(user, isChecked) {
   }>
   `;
 }
+
+export function getSubtaskControlGroupTemplate() {
+  return `
+    <button class="subtask-edit-button">
+      <img class="subtask-edit-buttonImg" src="../assets/icons/edit.svg" alt="edit">
+    </button>
+    <div class="subtask-spacer-second"></div>
+    <button class="subtask-delete-buttonSecond">
+      <img class="subtask-delete-buttonImgSecond" src="../assets/icons/delete.svg" alt="delete">
+    </button>`;
+}

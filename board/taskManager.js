@@ -1,6 +1,13 @@
+/**
+ * @fileoverview Task management utilities for Firebase data operations
+ */
+
 import { requestData } from "../scripts/firebase.js";
 
-// Load tasks and users data simultaneously from Firebase
+/**
+ * Fetches tasks and users data simultaneously from Firebase
+ * @returns {Promise<Array>} Array containing tasks response and users response
+ */
 export async function fetchTasksAndUsers() {
   const tasksRequest = requestData("GET", "/tasks/");
   const usersRequest = requestData("GET", "/users");
@@ -8,13 +15,21 @@ export async function fetchTasksAndUsers() {
   return Promise.all([tasksRequest, usersRequest]);
 }
 
-// Convert users response to array format
+/**
+ * Converts Firebase users response to array format
+ * @param {Object} firebaseUserResponse - Firebase response containing user data
+ * @returns {Array} Array of user objects
+ */
 export function extractUsers(firebaseUserResponse) {
   const userDataObject = firebaseUserResponse?.data || {};
   return Object.values(userDataObject);
 }
 
-// Convert Firebase task structure to normalized format
+/**
+ * Converts Firebase task structure to normalized format with proper IDs
+ * @param {Object} firebaseTaskResponse - Firebase response containing task data
+ * @returns {Object} Normalized tasks collection with task IDs as keys
+ */
 export function normalizeTasks(firebaseTaskResponse) {
   const normalizedTasksCollection = {};
   const rawTaskData = firebaseTaskResponse?.data || {};
@@ -26,7 +41,12 @@ export function normalizeTasks(firebaseTaskResponse) {
   return normalizedTasksCollection;
 }
 
-// Prepare individual task with proper structure
+/**
+ * Prepares individual task with proper structure and validated subtask data
+ * @param {string} taskIdentifier - Unique task identifier
+ * @param {Object} rawTaskInformation - Raw task data from Firebase
+ * @returns {Object} Prepared task object with validated subtask completion array
+ */
 function prepareTaskData(taskIdentifier, rawTaskInformation) {
   const subtaskCount = rawTaskInformation.subtasks?.length || 0;
   const isValidArray = Array.isArray(rawTaskInformation.subtaskDone);
@@ -41,22 +61,20 @@ function prepareTaskData(taskIdentifier, rawTaskInformation) {
   };
 }
 
+/**
+ * Updates existing task in Firebase database
+ * @param {Object} taskDataToUpdate - Task object containing updated data
+ */
 export async function updateTask(taskDataToUpdate) {
-  try {
     await requestData("PUT", `/tasks/${taskDataToUpdate.id}`, taskDataToUpdate);
-  } catch (updateError) {
-    // Handle task update error silently
-  }
 }
 
-// Deletes a task from Firebase
+/**
+ * Deletes a task from Firebase database
+ * @param {string} taskIdentifierToDelete - ID of task to delete
+ */
 export async function deleteTask(taskIdentifierToDelete) {
   await requestData("DELETE", `/tasks/${taskIdentifierToDelete}`);
-}
-
-// Handles task fetch errors
-export function handleTaskFetchError(errorFromFetch) {
-  // Handle task fetch error silently
 }
 
 // Gets status from board element ID

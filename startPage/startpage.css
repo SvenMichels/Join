@@ -17,12 +17,10 @@
 }
 
 .counter.loading {
-  color: #29ABE2;
   font-weight: bold;
 }
 
 .urgentTaskDate.loading {
-  color: #29ABE2;
   font-style: italic;
 }
 
