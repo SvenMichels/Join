@@ -1,4 +1,6 @@
 import { toArray } from "../scripts/utils/taskUtils.js";
+import { getInitials } from "../scripts/utils/helpers.js";
+import { ensureUserHasAssignedColor } from "../scripts/utils/colors.js";
 
 // Available category icons for tasks
 const AVAILABLE_CATEGORY_ICONS = {
@@ -25,16 +27,8 @@ export function getPriorityIconPath(priorityLevel) {
   return PRIORITY_LEVEL_ICONS[normalizedPriority] || fallbackIcon;
 }
 
-// Get user initials from full name
-export function getInitials(fullName) {
-  const nameParts = fullName.trim().split(" ");
-  const firstNameInitial = nameParts[0]?.[0] || "";
-  const lastNameInitial = nameParts.length > 1 ? nameParts[nameParts.length - 1][0] : "";
-  return (firstNameInitial + lastNameInitial).toUpperCase();
-}
-
 // Create HTML chips for assigned users
-export function generateAssignedChips(assignedUsersList, allSystemUsers = []) {
+export async function generateAssignedChips(assignedUsersList, allSystemUsers = []) {
   const assignedUsersArray = toArray(assignedUsersList);
   if (assignedUsersArray.length === 0) {
     return "";
@@ -42,15 +36,21 @@ export function generateAssignedChips(assignedUsersList, allSystemUsers = []) {
 
   const chipElements = [];
   for (const userEntry of assignedUsersArray) {
-    const userName = typeof userEntry === "string" ? userEntry : userEntry.userName;
-    const userRecord = findUserByName(allSystemUsers, userName);
+    const userName =
+      typeof userEntry === "string" ? userEntry : userEntry.userName;
+    let userRecord = findUserByName(allSystemUsers, userName);
+    
+    if (userRecord) {
+      userRecord = await ensureUserHasAssignedColor(userRecord);
+    }
+    
     const userInitials = getInitials(userName);
     const userColorClass = userRecord?.colorClass || "color-1";
-    
+
     const chipHtml = `<div class="contact-chip ${userColorClass}">${userInitials}</div>`;
     chipElements.push(chipHtml);
   }
-  
+
   return chipElements.join("");
 }
 
@@ -59,7 +59,7 @@ function findUserByName(usersList, searchName) {
   if (!Array.isArray(usersList)) {
     return undefined;
   }
-  
+
   for (const userRecord of usersList) {
     const userNameLower = userRecord.userName?.toLowerCase();
     const searchNameLower = searchName?.toLowerCase();
@@ -67,7 +67,7 @@ function findUserByName(usersList, searchName) {
       return userRecord;
     }
   }
-  
+
   return undefined;
 }
 
@@ -78,10 +78,11 @@ export function getPriorityIcon(priorityLevel) {
     medium: "prio_overlay_medium.svg",
     urgent: "prio_overlay_urgent.svg",
   };
-  
+
   const normalizedPriority = priorityLevel?.toLowerCase();
-  const iconFileName = priorityIconMapping[normalizedPriority] || priorityIconMapping.low;
-  
+  const iconFileName =
+    priorityIconMapping[normalizedPriority] || priorityIconMapping.low;
+
   return `<img src="../assets/icons/${iconFileName}" alt="${priorityLevel}">`;
 }
 
@@ -95,12 +96,12 @@ export function calculateSubtaskProgress(completedSubtasks, allSubtasks) {
       }
     }
   }
-  
+
   const totalSubtasks = Array.isArray(allSubtasks) ? allSubtasks.length : 0;
-  
+
   if (totalSubtasks === 0) {
     return 0;
   }
-  
+
   return (completedCount / totalSubtasks) * 100;
 }

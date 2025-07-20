@@ -16,11 +16,6 @@ p {
   line-height: 120%;
 }
 
-.d_none,
-.dp-none {
-  display: none !important;
-}
-
 .board{
   gap: 26px;
 }
@@ -272,26 +267,6 @@ p {
   color: #ffffff;
   cursor: pointer;
 }
-
-.color-1  { background-color: hsl(0, 70%, 80%); }
-.color-2  { background-color: hsl(20, 70%, 80%); }
-.color-3  { background-color: hsl(40, 70%, 80%); }
-.color-4  { background-color: hsl(60, 70%, 80%); }
-.color-5  { background-color: hsl(80, 70%, 80%); }
-.color-6  { background-color: hsl(100, 70%, 80%); }
-.color-7  { background-color: hsl(120, 70%, 80%); }
-.color-8  { background-color: hsl(140, 70%, 80%); }
-.color-9  { background-color: hsl(160, 70%, 80%); }
-.color-10 { background-color: hsl(180, 70%, 80%); }
-.color-11 { background-color: hsl(200, 70%, 80%); }
-.color-12 { background-color: hsl(220, 70%, 80%); }
-.color-13 { background-color: hsl(240, 70%, 80%); }
-.color-14 { background-color: hsl(260, 70%, 80%); }
-.color-15 { background-color: hsl(280, 70%, 80%); }
-.color-16 { background-color: hsl(300, 70%, 80%); }
-.color-17 { background-color: hsl(320, 70%, 80%); }
-.color-18 { background-color: hsl(340, 70%, 80%); }
-.color-19 { background-color: hsl(360, 70%, 80%); }
 
 /* @media screen and (orientation: landscape) and (max-width: 1390px) and (max-height: 950px) {
   body {

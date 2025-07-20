@@ -6,74 +6,117 @@ export async function loginListeners() {
   const loginFormElement = document.getElementById("loginForm");
   if (!loginFormElement) return;
 
-  document.querySelector(".logIn").addEventListener("click", async () => {
-    loginListenersTry();
-  });
-
-  async function loginListenersTry() {
-    const emailAddress = document.querySelector("#loginEmail").value.trim();
-    const userPassword = document.querySelector("#loginPassword").value.trim();
-
-    try {
-      await loginUser(emailAddress, userPassword);
-      window.location.href = "../../startpage/startpage.html";
-    } catch (errorMessage) {
-      // Handle login error silently
-    }
-  }
-
-  document.querySelector(".guestLogIn").addEventListener("click", async () => {
-    try {
-      await loginAsGuest();
-      window.location.href = "../../startpage/startpage.html";
-    } catch (errorMessage) {
-      // Handle guest login error silently
-    }
-  });
+  bindUserLoginButton();
+  bindGuestLoginButton();
   bindPolicyLinks();
 }
 
+function bindUserLoginButton() {
+  const loginButton = document.querySelector(".logIn");
+  loginButton.addEventListener("click", handleUserLogin);
+}
+
+function bindGuestLoginButton() {
+  const guestButton = document.querySelector(".guestLogIn");
+  guestButton.addEventListener("click", handleGuestLogin);
+}
+
+async function handleUserLogin() {
+  const credentials = collectLoginCredentials();
+  await attemptUserLogin(credentials);
+}
+
+async function handleGuestLogin() {
+  await loginAsGuest();
+  redirectToStartpage();
+}
+
+function collectLoginCredentials() {
+  return {
+    email: document.querySelector("#loginEmail").value.trim(),
+    password: document.querySelector("#loginPassword").value.trim(),
+  };
+}
+
+async function attemptUserLogin(credentials) {
+  await loginUser(credentials.email, credentials.password);
+  redirectToStartpage();
+}
+
+function redirectToStartpage() {
+  window.location.href = "../../startpage/startpage.html";
+}
+
 function bindPolicyLinks() {
-  const linkSelectorsList = [
+  const policyLinks = getAllPolicyLinks();
+  attachPolicyListeners(policyLinks);
+}
+
+function getAllPolicyLinks() {
+  const linkSelectors = [
     'a[href$="privatpolicy.html"]',
     'a[href$="legalnotice.html"]',
   ];
 
-  const combinedSelectors = linkSelectorsList.join(",");
-  const allPolicyLinks = document.querySelectorAll(combinedSelectors);
+  const combinedSelectors = linkSelectors.join(",");
+  return document.querySelectorAll(combinedSelectors);
+}
 
-  for (let linkIndex = 0; linkIndex < allPolicyLinks.length; linkIndex++) {
-    const currentPolicyLink = allPolicyLinks[linkIndex];
-    currentPolicyLink.addEventListener("click", async (event) => {
-      if (!localStorage.getItem("token")) {
-        event.preventDefault();
-        await loginAsGuest();
-        window.location.href = currentPolicyLink.href;
-      }
-    });
+function attachPolicyListeners(policyLinks) {
+  for (let linkIndex = 0; linkIndex < policyLinks.length; linkIndex++) {
+    const currentLink = policyLinks[linkIndex];
+    currentLink.addEventListener("click", (event) =>
+      handlePolicyClick(event, currentLink)
+    );
   }
+}
+
+async function handlePolicyClick(event, linkElement) {
+  if (userNeedsAuthentication()) {
+    event.preventDefault();
+    await authenticateAndRedirect(linkElement.href);
+  }
+}
+
+function userNeedsAuthentication() {
+  return !localStorage.getItem("token");
+}
+
+async function authenticateAndRedirect(targetUrl) {
+  await loginAsGuest();
+  window.location.href = targetUrl;
 }
 
 export async function signupListeners() {
   const signupFormElement = document.getElementById("signUpForm");
-  if (!signupFormElement) return
+  if (!signupFormElement) return;
 
-  formEventListener(signupFormElement);
-
-  const privacyPolicyCheckbox = document.getElementById("checkBox");
-  const signUpSubmitButton = document.getElementById("signUpBtn");
-  if (privacyPolicyCheckbox && signUpSubmitButton) {
-    privacyPolicyCheckbox.addEventListener("change", () => {
-      signUpSubmitButton.disabled = !privacyPolicyCheckbox.checked;
-    });
-  }
+  bindSignupForm(signupFormElement);
+  bindPrivacyCheckbox();
   bindPolicyLinks();
 }
 
-function formEventListener(signupFormElement) {
-  signupFormElement.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    const userRegistrationData = await collectUserInput();
-    requestData("POST", "/users/", userRegistrationData);
-  });
+function bindSignupForm(formElement) {
+  formElement.addEventListener("submit", handleSignupSubmission);
+}
+
+function bindPrivacyCheckbox() {
+  const checkbox = document.getElementById("checkBox");
+  const submitButton = document.getElementById("signUpBtn");
+
+  if (checkbox && submitButton) {
+    checkbox.addEventListener("change", () =>
+      toggleSubmitButton(checkbox, submitButton)
+    );
+  }
+}
+
+function toggleSubmitButton(checkbox, submitButton) {
+  submitButton.disabled = !checkbox.checked;
+}
+
+async function handleSignupSubmission(event) {
+  event.preventDefault();
+  const userRegistrationData = await collectUserInput();
+  requestData("POST", "/users/", userRegistrationData);
 }

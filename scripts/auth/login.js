@@ -2,113 +2,183 @@ import { requestData } from "../firebase.js";
 
 const loginFormElement = document.getElementById("loginForm");
 
-loginFormElement?.addEventListener("submit", async (submitEvent) => {
-  submitEvent.preventDefault();
-  const emailInputValue = document.getElementById("email").value.trim();
-  const passwordInputValue = document.getElementById("password").value.trim();
+loginFormElement?.addEventListener("submit", handleFormSubmission);
 
+async function handleFormSubmission(submitEvent) {
+  submitEvent.preventDefault();
+  const credentials = collectFormCredentials();
+  await processLoginAttempt(credentials);
+}
+
+function collectFormCredentials() {
+  return {
+    email: document.getElementById("email").value.trim(),
+    password: document.getElementById("password").value.trim(),
+  };
+}
+
+async function processLoginAttempt(credentials) {
   try {
-    await loginUser(emailInputValue, passwordInputValue);
-    window.location.href = "startpage.html";
+    await loginUser(credentials.email, credentials.password);
+    redirectToStartpage();
   } catch (loginError) {
     console.warn("Login fehlgeschlagen:", loginError);
   }
-});
+}
+
+function redirectToStartpage() {
+  window.location.href = "startpage.html";
+}
 
 export async function loginUser(emailAddress, userPassword) {
   try {
-    const { data: allUsersData } = await requestData("GET", "/users/");
-    const userEntriesArray = Object.entries(allUsersData || {});
-    const completeUsersList = [];
-    
-    for (let entryIndex = 0; entryIndex < userEntriesArray.length; entryIndex++) {
-      const [userId, userData] = userEntriesArray[entryIndex];
-      completeUsersList.push({ id: userId, ...userData });
+    const allUsers = await fetchAllUsers();
+    const authenticatedUser = findMatchingUser(
+      allUsers,
+      emailAddress,
+      userPassword
+    );
+
+    if (!authenticatedUser) {
+      throw new Error("Invalid credentials");
     }
 
-    let authenticatedUser = null;
-    for (let userIndex = 0; userIndex < completeUsersList.length; userIndex++) {
-      const currentUser = completeUsersList[userIndex];
-      const emailMatches = currentUser.userEmail?.toLowerCase() === emailAddress.toLowerCase();
-      const passwordMatches = currentUser.password === userPassword;
-      
-      if (emailMatches && passwordMatches) {
-        authenticatedUser = currentUser;
-        break;
-      }
-    }
-
-    if (!authenticatedUser) throw new Error("Invalid credentials");
-
-    localStorage.setItem("currentUser", JSON.stringify(authenticatedUser));
+    storeCurrentUser(authenticatedUser);
     return authenticatedUser;
   } catch (loginError) {
     console.warn("Fehler beim Login:", loginError);
+    throw loginError;
   }
+}
+
+async function fetchAllUsers() {
+  const { data: allUsersData } = await requestData("GET", "/users/");
+  const userEntriesArray = Object.entries(allUsersData || {});
+  return convertToUsersList(userEntriesArray);
+}
+
+function convertToUsersList(userEntries) {
+  const completeUsersList = [];
+
+  for (let entryIndex = 0; entryIndex < userEntries.length; entryIndex++) {
+    const [userId, userData] = userEntries[entryIndex];
+    completeUsersList.push({ id: userId, ...userData });
+  }
+
+  return completeUsersList;
+}
+
+function findMatchingUser(usersList, emailAddress, userPassword) {
+  for (let userIndex = 0; userIndex < usersList.length; userIndex++) {
+    const currentUser = usersList[userIndex];
+
+    if (credentialsMatch(currentUser, emailAddress, userPassword)) {
+      return currentUser;
+    }
+  }
+
+  return null;
+}
+
+function credentialsMatch(user, emailAddress, userPassword) {
+  const emailMatches =
+    user.userEmail?.toLowerCase() === emailAddress.toLowerCase();
+  const passwordMatches = user.password === userPassword;
+  return emailMatches && passwordMatches;
+}
+
+function storeCurrentUser(user) {
+  localStorage.setItem("currentUser", JSON.stringify(user));
 }
 
 export async function loginAsGuest() {
   try {
-    const { data: users } = await requestData("GET", "/users/");
-    const guest = Object.values(users || {}).find(
-      (user) => user.userName?.toLowerCase() === "guest"
-    );
+    const guestUser = await findGuestUser();
 
-    if (!guest) return warn("Gast-Zugang nicht gefunden.");
+    if (!guestUser) {
+      console.warn("Gast-Zugang nicht gefunden.");
+      return;
+    }
 
-    localStorage.setItem("currentUser", JSON.stringify(guest));
-    window.location.href = "startpage.html";
+    storeCurrentUser(guestUser);
+    redirectToStartpage();
   } catch (warning) {
     console.warn("Fehler beim Gast-Login:", warning);
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+async function findGuestUser() {
+  const { data: users } = await requestData("GET", "/users/");
+
+  return Object.values(users || {}).find(
+    (user) => user.userName?.toLowerCase() === "guest"
+  );
+}
+
+document.addEventListener("DOMContentLoaded", initializeStartpage);
+
+function initializeStartpage() {
   updateUserGreeting();
   updateSummary();
-});
+}
 
 function updateUserGreeting() {
   try {
-    const user = JSON.parse(localStorage.getItem("currentUser"));
-    if (!user) return;
+    const currentUser = getCurrentUser();
+    if (!currentUser) return;
 
-    const name = user.userName || "Guest";
-    const greetingElement = document.querySelector(".greetings > p:first-child");
-    const nameElement = document.querySelector(".greetings .username");
-
-    const hour = new Date().getHours();
-    const greeting =
-      hour < 12 ? "Good Morning" :
-      hour < 18 ? "Good Afternoon" :
-      "Good Evening";
-
-    if (greetingElement) greetingElement.textContent = `${greeting},`;
-    if (nameElement) nameElement.textContent = name;
+    const timeBasedGreeting = generateTimeBasedGreeting();
+    displayUserGreeting(timeBasedGreeting, currentUser.userName);
   } catch (warning) {
     console.warn("Fehler beim Parsen des Benutzers:", warning);
   }
 }
 
+function getCurrentUser() {
+  return JSON.parse(localStorage.getItem("currentUser"));
+}
+
+function generateTimeBasedGreeting() {
+  const currentHour = new Date().getHours();
+
+  if (currentHour < 12) return "Good Morning";
+  if (currentHour < 18) return "Good Afternoon";
+  return "Good Evening";
+}
+
+function displayUserGreeting(greeting, userName) {
+  const greetingElement = document.querySelector(".greetings > p:first-child");
+  const nameElement = document.querySelector(".greetings .username");
+
+  if (greetingElement) greetingElement.textContent = `${greeting},`;
+  if (nameElement) nameElement.textContent = userName || "Guest";
+}
+
 async function updateSummary() {
-  try {
-    const { data: tasks } = await requestData("GET", "/tasks/");
-    if (!tasks) return;
+  const allTasks = await fetchAllTasks();
+  if (!allTasks) return;
 
-    const allTasks = Object.values(tasks);
+  displayTaskCounts(allTasks);
+  displayUrgentTaskInfo(allTasks);
+}
 
-    setText(".todoTaskAmount", countByStatus(allTasks, "todo"));
-    setText(".doneTaskAmount", countByStatus(allTasks, "done"));
-    setText(".taskInProgress", countByStatus(allTasks, "in-progress"));
-    setText(".awaitingFeedback", countByStatus(allTasks, "await"));
-    setText(".taskInBoard", allTasks.length);
-    setText(".urgentTaskAmount", countByPriority(allTasks, "High"));
+async function fetchAllTasks() {
+  const { data: tasks } = await requestData("GET", "/tasks/");
+  return Object.values(tasks || {});
+}
 
-    const earliestUrgentDate = getEarliestUrgentDueDate(allTasks);
-    setText(".urgentTaskDate", earliestUrgentDate || "No deadline");
-  } catch (warning) {
-    console.warn("Fehler beim Laden der Summary:", warning);
-  }
+function displayTaskCounts(allTasks) {
+  setText(".todoTaskAmount", countByStatus(allTasks, "todo"));
+  setText(".doneTaskAmount", countByStatus(allTasks, "done"));
+  setText(".taskInProgress", countByStatus(allTasks, "in-progress"));
+  setText(".awaitingFeedback", countByStatus(allTasks, "await"));
+  setText(".taskInBoard", allTasks.length);
+  setText(".urgentTaskAmount", countByPriority(allTasks, "High"));
+}
+
+function displayUrgentTaskInfo(allTasks) {
+  const earliestUrgentDate = getEarliestUrgentDueDate(allTasks);
+  setText(".urgentTaskDate", earliestUrgentDate || "No deadline");
 }
 
 function countByStatus(tasks, status) {
@@ -116,7 +186,9 @@ function countByStatus(tasks, status) {
 }
 
 function countByPriority(tasks, priority) {
-  return tasks.filter((t) => (t.prio || "").toLowerCase() === priority.toLowerCase()).length;
+  return tasks.filter(
+    (t) => (t.prio || "").toLowerCase() === priority.toLowerCase()
+  ).length;
 }
 
 function getEarliestUrgentDueDate(tasks) {
@@ -130,7 +202,7 @@ function getEarliestUrgentDueDate(tasks) {
   return urgentDates[0].toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
-    day: "numeric"
+    day: "numeric",
   });
 }
 

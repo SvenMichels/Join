@@ -138,6 +138,10 @@ function attachEventListeners() {
 }
 
 export async function initFormModal() {
+  subtaskItemsListModal = [];
+  completedSubtasksModal = [];
+  renderSubtasksModal();
+
   await loadAndRenderUsersModal();
   selectPriorityModal("medium");
 
@@ -158,7 +162,11 @@ function selectPriorityModal(priorityLevel) {
   currentlySelectedPriorityModal = priorityLevel;
 
   const priorityConfigEntries = Object.values(PRIORITY_CONFIG);
-  for (let configIndex = 0; configIndex < priorityConfigEntries.length; configIndex++) {
+  for (
+    let configIndex = 0;
+    configIndex < priorityConfigEntries.length;
+    configIndex++
+  ) {
     const { id, icon, className } = priorityConfigEntries[configIndex];
     const priorityElement = document.getElementById(id);
     if (priorityElement) {
@@ -238,6 +246,7 @@ function resetFormState(task) {
   window.isEditMode = false;
   subtaskItemsListModal = [];
   completedSubtasksModal = [];
+  window.pendingAssignedUsers = null;
   $.form.reset();
   selectPriorityModal("medium");
   closeModal();
@@ -245,9 +254,10 @@ function resetFormState(task) {
 
 function prefillModalWithTaskData(task) {
   fillBasicFields(task);
-  updateUserCheckboxes(task.assigned);
   updateSubtasks(task.subtasks, task.subtaskDone);
   renderSubtasksModal();
+
+  window.pendingAssignedUsers = task.assigned;
 }
 
 function fillBasicFields(task) {
@@ -271,7 +281,10 @@ async function loadAndRenderUsersModal() {
   const { data = {} } = await requestData("GET", "/users");
   const listObj = data && typeof data === "object" ? data : {};
 
-  allSystemUsersModal = Object.entries(listObj).map(([id, u]) => ({ id, ...u }));
+  allSystemUsersModal = Object.entries(listObj).map(([id, u]) => ({
+    id,
+    ...u,
+  }));
 
   if (allSystemUsersModal.length === 0) {
     const me = JSON.parse(localStorage.getItem("currentUser") || "{}");
@@ -298,7 +311,12 @@ async function renderUserCheckboxesModal(users) {
     container.appendChild(checkboxEl);
   }
 
-  updateSelectedModal();
+  if (window.pendingAssignedUsers) {
+    updateUserCheckboxes(window.pendingAssignedUsers);
+    window.pendingAssignedUsers = null;
+  } else {
+    updateSelectedModal();
+  }
 }
 
 function buildUserCheckboxElement(user) {
@@ -458,11 +476,18 @@ function attachSubtaskEditListeners(container, index) {
   const saveBtn = container.querySelector("[data-save]");
   const deleteBtn = container.querySelector("[data-del]");
 
+  saveBtnInit(index, input, saveBtn);
+  deleteBtnInit(index, input, deleteBtn);
+}
+
+function saveBtnInit(index, input, saveBtn) {
   saveBtn?.addEventListener("click", () => {
     subtaskItemsListModal[index] = input.value.trim();
     renderSubtasksModal();
   });
+}
 
+function deleteBtnInit(index, input, deleteBtn) {
   deleteBtn?.addEventListener("click", () => {
     subtaskItemsListModal.splice(index, 1);
     completedSubtasksModal.splice(index, 1);
@@ -506,6 +531,8 @@ function resetModalFormState() {
 
   subtaskItemsListModal = [];
   completedSubtasksModal = [];
+
+  window.pendingAssignedUsers = null;
 }
 
 function handleGlobalClick(event) {
@@ -544,22 +571,22 @@ async function handleSubtaskCheckboxChange(e) {
 
   if (!taskId || isNaN(index)) return;
 
-  if (!pendingTaskUpdates[taskId]) {
+  if (!pendingTaskUpdateQueue[taskId]) {
     const { data: task } = await requestData("GET", `/tasks/${taskId}`);
     task.subtaskDone =
       task.subtaskDone || new Array(task.subtasks.length).fill(false);
-    pendingTaskUpdates[taskId] = task;
+    pendingTaskUpdateQueue[taskId] = task;
   }
-  pendingTaskUpdates[taskId].subtaskDone[index] = checked;
+  pendingTaskUpdateQueue[taskId].subtaskDone[index] = checked;
 }
 
 async function handleModalClose() {
-  for (const [taskId, updatedTask] of Object.entries(pendingTaskUpdates)) {
+  for (const [taskId, updatedTask] of Object.entries(pendingTaskUpdateQueue)) {
     await requestData("PATCH", `/tasks/${taskId}`, {
       subtaskDone: updatedTask.subtaskDone,
     });
   }
-  pendingTaskUpdates = {};
+  pendingTaskUpdateQueue = {};
 
   if (typeof window.renderBoard === "function") {
     window.renderBoard();
@@ -580,13 +607,14 @@ if (modal) {
 }
 
 // ==================== WINDOW EXPORTS ====================
-// Diese Exports müssen sofort verfügbar sein, nicht erst bei DOMContentLoaded
+// Diese Exports müssen sofort verfügbar sein, nicht erst bei DOMContentLoaded!!!
 
 window.initTaskFloat = initTaskFloat;
 window.selectPriorityModal = selectPriorityModal;
 window.updateSelectedModal = updateSelectedModal;
 window.renderSubtasksModal = renderSubtasksModal;
 window.prefillModalWithTaskData = prefillModalWithTaskData;
+window.resetModalFormState = resetModalFormState;
 window.editingTaskId = null;
 window.isEditMode = false;
 
@@ -594,7 +622,7 @@ window.setSubtaskState = (arr) => {
   subtaskItemsListModal = [...arr];
 };
 
-window.getSubtaskState = () => subtasksModal;
+window.getSubtaskState = () => subtaskItemsListModal;
 
 // Make global state accessible for debugging
 window.subtaskItemsListModal = subtaskItemsListModal;

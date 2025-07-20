@@ -21,7 +21,6 @@
 }
 
 .loading {
-  color: #a8a8a8;
   font-style: italic;
 }
 
@@ -118,7 +117,6 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background-color: #007cee;
   color: white;
   font-weight: 500;
   font-size: 14px;
@@ -250,3 +248,25 @@
     display: none !important;
   }
 }
+
+/* Color classes for user chips */
+.color-1 { background-color: #FF7A00; }
+.color-2 { background-color: #FF5EB3; }
+.color-3 { background-color: #6E52FF; }
+.color-4 { background-color: #9327FF; }
+.color-5 { background-color: #00BEE8; }
+.color-6 { background-color: #1FD7C1; }
+.color-7 { background-color: #FF745E; }
+.color-8 { background-color: #FFA35E; }
+.color-9 { background-color: #FC71FF; }
+.color-10 { background-color: #FFC701; }
+.color-11 { background-color: #0038FF; }
+.color-12 { background-color: #C3FF2B; }
+.color-13 { background-color: #FFE62B; }
+.color-14 { background-color: #FF4646; }
+.color-15 { background-color: #FFBB2B; }
+.color-16 { background-color: #1ABC9C; }
+.color-17 { background-color: #2ECC71; }
+.color-18 { background-color: #3498DB; }
+.color-19 { background-color: #9B59B6; }
+.color-20 { background-color: #E67E22; }
