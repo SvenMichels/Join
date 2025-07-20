@@ -15,11 +15,13 @@ import {
   ensureUserHasAssignedColor,
 } from "../scripts/utils/colors.js";
 import { initializeBackButton, initializeFabMenu } from "../scripts/ui/fabContact.js";
-import { isMobileView } from "../scripts/utils/mobileView.js";
 import { setupDropdown } from "../scripts/ui/dropdown.js";
 import { highlightActiveNavigationLinks } from "../scripts/utils/navUtils.js";
 import { getInitials } from "../scripts/utils/helpers.js";
-import { setupMobileDeviceListeners } from "../scripts/utils/mobileUtils.js";
+import { 
+  setupMobileDeviceListeners,
+  isMobileView 
+} from "../scripts/utils/mobileUtils.js";
 
 let allContactsCollection = [];
 let currentlyBeingEditedContactId = null;

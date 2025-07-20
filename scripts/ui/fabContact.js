@@ -1,4 +1,4 @@
-import { isMobileView } from "../utils/mobileView.js";
+import { isMobileView } from "../utils/mobileUtils.js";
 import { editContact, deleteContact } from "../../contactPage/contacts.js";
 
 export function initializeBackButton() {
@@ -18,7 +18,6 @@ export function initializeBackButton() {
   });
 
 }
-
 
 export function initializeFabMenu(id) {
   const elements = getFabElements();

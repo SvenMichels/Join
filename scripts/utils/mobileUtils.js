@@ -31,3 +31,7 @@ export function setupMobileDeviceListeners() {
   window.addEventListener("resize", toggleRotateWarning);
   document.addEventListener("DOMContentLoaded", toggleRotateWarning);
 }
+
+export function isMobileView() {
+  return window.matchMedia('(max-width: 768px)').matches
+}
