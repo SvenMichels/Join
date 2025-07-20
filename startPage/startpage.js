@@ -12,7 +12,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   highlightActiveNavigationLinks();
 });
 
-
 function displayDataLoadingState() {
   displayTaskCountersLoadingState();
   displayUrgentDateLoadingState();
@@ -20,49 +19,47 @@ function displayDataLoadingState() {
 
 function displayTaskCountersLoadingState() {
   const taskCounterSelectors = [
-    ".todoTaskAmount", 
-    ".doneTaskAmount", 
-    ".taskInProgress", 
-    ".awaitingFeedback", 
-    ".taskInBoard", 
-    ".urgentTaskAmount"
+    ".todoTaskAmount", ".doneTaskAmount", ".taskInProgress", 
+    ".awaitingFeedback", ".taskInBoard", ".urgentTaskAmount"
   ];
-  
-  for (let selectorIndex = 0; selectorIndex < taskCounterSelectors.length; selectorIndex++) {
-    setElementToLoadingState(taskCounterSelectors[selectorIndex], "...", "loading loading-dots");
-  }
-  const name = user.userName || 'Guest'
-  renderGreeting(name)
+
+  taskCounterSelectors.forEach(selector => {
+    setElementToLoadingState(selector, "...", "loading loading-dots");
+  });
 }
 
 function displayUrgentDateLoadingState() {
   setElementToLoadingState(".urgentTaskDate", "Loading...", "loading");
 }
 
-function setElementToLoadingState(elementSelector, loadingText, loadingClasses) {
+function setElementToLoadingState(
+  elementSelector,
+  loadingText,
+  loadingClasses
+) {
   const targetElement = document.querySelector(elementSelector);
   if (targetElement) {
     targetElement.textContent = loadingText;
-    targetElement.className = targetElement.className.replace(" loading", "") + " " + loadingClasses;
+    targetElement.className =
+      targetElement.className.replace(" loading", "") + " " + loadingClasses;
   }
 }
 
-async function updateTaskSummaryWithRetryLogic(maximumRetries = 3, retryDelayMs = 1000) {
+async function updateTaskSummaryWithRetryLogic(maximumRetries = 3, retryDelayMs = 800) {
+  displayDataLoadingState();
+
   for (let attemptNumber = 1; attemptNumber <= maximumRetries; attemptNumber++) {
     const shouldContinueRetrying = await attemptSummaryUpdate(attemptNumber, maximumRetries, retryDelayMs);
-    if (!shouldContinueRetrying) {
-      return;
-    }
+    if (!shouldContinueRetrying) return;
   }
+  
+  displayErrorState();
 }
 
 async function attemptSummaryUpdate(attemptNumber, maximumRetries, retryDelayMs) {
   try {
     const isUpdateSuccessful = await updateSummary();
-    
-    if (isUpdateSuccessful) {
-      return false;
-    }
+    if (isUpdateSuccessful) return false;
     
     return await handleRetryLogic(attemptNumber, maximumRetries, retryDelayMs);
   } catch (summaryError) {
@@ -72,7 +69,7 @@ async function attemptSummaryUpdate(attemptNumber, maximumRetries, retryDelayMs)
 
 async function handleRetryLogic(attemptNumber, maximumRetries, retryDelayMs) {
   if (attemptNumber < maximumRetries) {
-    await new Promise(resolve => setTimeout(resolve, retryDelayMs));
+    await new Promise((resolve) => setTimeout(resolve, retryDelayMs));
     return true;
   }
   return false;
@@ -80,12 +77,11 @@ async function handleRetryLogic(attemptNumber, maximumRetries, retryDelayMs) {
 
 async function handleSummaryError(summaryError, attemptNumber, maximumRetries, retryDelayMs) {
   if (attemptNumber === maximumRetries) {
-    displayErrorState();
     return false;
-  } else {
-    await new Promise(resolve => setTimeout(resolve, retryDelayMs));
-    return true;
   }
+  
+  await new Promise((resolve) => setTimeout(resolve, retryDelayMs));
+  return true;
 }
 
 function displayErrorState() {
@@ -95,18 +91,11 @@ function displayErrorState() {
 
 function displayErrorCounters() {
   const errorSelectors = [
-    ".todoTaskAmount", 
-    ".doneTaskAmount", 
-    ".taskInProgress", 
-    ".awaitingFeedback", 
-    ".taskInBoard", 
-    ".urgentTaskAmount"
+    ".todoTaskAmount", ".doneTaskAmount", ".taskInProgress",
+    ".awaitingFeedback", ".taskInBoard", ".urgentTaskAmount"
   ];
-  
-  for (let selectorIndex = 0; selectorIndex < errorSelectors.length; selectorIndex++) {
-    const currentSelector = errorSelectors[selectorIndex];
-    setText(currentSelector, "0");
-  }
+
+  errorSelectors.forEach(selector => setText(selector, "0"));
 }
 
 window.addEventListener("focus", async () => {
@@ -128,12 +117,7 @@ document.addEventListener("visibilitychange", async () => {
 function updateUserGreetingDisplay() {
   const currentUserString = localStorage.getItem("currentUser");
   if (!currentUserString) return;
-
-  try {
-    processUserGreetingUpdate(currentUserString);
-  } catch (greetingError) {
-    // Silently handle parsing errors
-  }
+  processUserGreetingUpdate(currentUserString);
 }
 
 function processUserGreetingUpdate(userDataString) {
@@ -149,13 +133,13 @@ function getGreetingDisplayElements() {
   return {
     greetingElement: document.querySelector(".greetings > p:first-child"),
     nameElement: document.querySelector(".greetings .username"),
-    profileButton: document.getElementById("openMenu")
+    profileButton: document.getElementById("openMenu"),
   };
 }
 
 function generateTimeBasedGreeting() {
   const currentHour = new Date().getHours();
-  
+
   if (currentHour < 12) return "Good Morning";
   if (currentHour < 18) return "Good Afternoon";
   return "Good Evening";
@@ -173,128 +157,104 @@ function updateAllGreetingElements(displayElements, userName, greetingText) {
   }
 }
 
-/**
- * Fetches tasks and renders the summary, catching any errors.
- * @async
- */
 async function updateSummary() {
   try {
-    const { data: tasksFromDatabase } = await requestData("GET", "/tasks/");
-    
-    if (!tasksFromDatabase) {
-      setTextUpdateSummary([]);
-      return false;
-    }
-    
-    const allTasksArray = Object.values(tasksFromDatabase);
-    
-    return processTasksDataForSummary(allTasksArray);
+    const response = await requestData("GET", "/tasks/");
+    if (!response || typeof response !== "object") return false;
+
+    const { data: tasksFromDatabase } = response;
+    return handleTasksResponse(tasksFromDatabase, response);
   } catch (error) {
-    setTextUpdateSummary([]);
     return false;
   }
 }
 
-function processTasksDataForSummary(allTasksArray) {
-  if (!validateTaskData(allTasksArray)) {
-    setTextUpdateSummary([]);
+function handleTasksResponse(tasksFromDatabase, response) {
+  if (!tasksFromDatabase) {
+    if (response.hasOwnProperty("data")) {
+      setTextUpdateSummary([]);
+      return true;
+    }
     return false;
   }
-  
+
+  const allTasksArray = Object.values(tasksFromDatabase);
+  return processTasksDataForSummary(allTasksArray);
+}
+
+function processTasksDataForSummary(allTasksArray) {
+  if (!validateTaskData(allTasksArray)) {
+    // Don't update display if validation fails, keep loading state
+    return false;
+  }
+
   setTextUpdateSummary(allTasksArray);
   return true;
 }
 
 function validateTaskData(allTasksDataArray) {
-  if (!Array.isArray(allTasksDataArray)) {
-    return false;
+  if (!Array.isArray(allTasksDataArray) || allTasksDataArray.length === 0) {
+    return Array.isArray(allTasksDataArray);
   }
 
-  if (allTasksDataArray.length === 0) {
-    return true;
-  }
-  
   const firstTaskSample = allTasksDataArray[0];
-  const mandatoryFieldsList = ['title', 'status'];
-  
-  for (let fieldIndex = 0; fieldIndex < mandatoryFieldsList.length; fieldIndex++) {
-    const requiredFieldName = mandatoryFieldsList[fieldIndex];
-    if (!firstTaskSample.hasOwnProperty(requiredFieldName)) {
-      return false;
-    }
-  }
-  return true;
+  const mandatoryFieldsList = ["title", "status"];
+
+  return mandatoryFieldsList.every(fieldName => 
+    firstTaskSample.hasOwnProperty(fieldName)
+  );
 }
 
 async function setTextUpdateSummary(allTasksDataArray) {
   const urgentPriorityTasksCount = countTasksByPriority(allTasksDataArray, "urgent");
   const earliestUrgentTaskDueDate = getEarliestUrgentDueDate(allTasksDataArray);
-    
+
+  updateTaskCounters(allTasksDataArray);
+  updateUrgentTaskDisplay(urgentPriorityTasksCount, earliestUrgentTaskDueDate);
+}
+
+function updateTaskCounters(allTasksDataArray) {
   setText(".todoTaskAmount", countTasksByStatus(allTasksDataArray, "todo"));
   setText(".doneTaskAmount", countTasksByStatus(allTasksDataArray, "done"));
   setText(".taskInProgress", countTasksByStatus(allTasksDataArray, "in-progress"));
   setText(".awaitingFeedback", countTasksByStatus(allTasksDataArray, "await"));
   setText(".taskInBoard", allTasksDataArray.length);
-  setText(".urgentTaskAmount", urgentPriorityTasksCount);
-  setText(".urgentTaskDate", earliestUrgentTaskDueDate || "No deadline");
+}
+
+function updateUrgentTaskDisplay(urgentCount, earliestDate) {
+  setText(".urgentTaskAmount", urgentCount);
+  const urgentDateText = earliestDate || (urgentCount > 0 ? "No date set" : "No urgent tasks");
+  setText(".urgentTaskDate", urgentDateText);
 }
 
 function countTasksByStatus(allTasksDataArray, targetStatusLevel) {
-  let matchingStatusTasksCount = 0;
-  
-  for (let taskIndex = 0; taskIndex < allTasksDataArray.length; taskIndex++) {
-    const currentTaskData = allTasksDataArray[taskIndex];
-    if (currentTaskData.status === targetStatusLevel) {
-      matchingStatusTasksCount++;
-    }
-  }
-  
-  return matchingStatusTasksCount;
+  return allTasksDataArray.filter(task => task.status === targetStatusLevel).length;
 }
 
 function countTasksByPriority(allTasksDataArray, targetPriorityLevel) {
-  let matchingPriorityTasksCount = 0;
+  const searchedPriorityLevel = targetPriorityLevel.toLowerCase();
   
-  for (let taskIndex = 0; taskIndex < allTasksDataArray.length; taskIndex++) {
-    const currentTaskData = allTasksDataArray[taskIndex];
-    const currentTaskPriority = (currentTaskData.prio || "").toLowerCase();
-    const searchedPriorityLevel = targetPriorityLevel.toLowerCase();
-    
-    if (currentTaskPriority === searchedPriorityLevel) {
-      matchingPriorityTasksCount++;
-    }
-  }
-  
-  return matchingPriorityTasksCount;
+  return allTasksDataArray.filter(task => {
+    const currentTaskPriority = (task.prio || "").toLowerCase();
+    return currentTaskPriority === searchedPriorityLevel;
+  }).length;
 }
 
 function getEarliestUrgentDueDate(allTasksDataArray) {
-  const urgentTasksWithDueDates = [];
-  
-  for (let taskIndex = 0; taskIndex < allTasksDataArray.length; taskIndex++) {
-    const currentTaskData = allTasksDataArray[taskIndex];
-    const taskHasUrgentPriority = (currentTaskData.prio || "").toLowerCase() === "urgent";
-    const taskHasDueDate = !!currentTaskData.dueDate;
-    
-    if (taskHasUrgentPriority && taskHasDueDate) {
-      urgentTasksWithDueDates.push(currentTaskData);
-    }
-  }
+  const urgentTasksWithDueDates = allTasksDataArray.filter(task => {
+    const taskHasUrgentPriority = (task.prio || "").toLowerCase() === "urgent";
+    const taskHasDueDate = !!task.dueDate;
+    return taskHasUrgentPriority && taskHasDueDate;
+  });
 
   if (urgentTasksWithDueDates.length === 0) return null;
-  
   return formatEarliestDueDate(urgentTasksWithDueDates);
 }
 
 function formatEarliestDueDate(urgentTasksList) {
-  const dueDateObjects = [];
-  for (let taskIndex = 0; taskIndex < urgentTasksList.length; taskIndex++) {
-    const taskData = urgentTasksList[taskIndex];
-    dueDateObjects.push(new Date(taskData.dueDate));
-  }
-  
+  const dueDateObjects = urgentTasksList.map(task => new Date(task.dueDate));
   dueDateObjects.sort((firstDate, secondDate) => firstDate - secondDate);
-  
+
   const dateFormattingOptions = { year: "numeric", month: "long", day: "numeric" };
   return dueDateObjects[0].toLocaleDateString("en-US", dateFormattingOptions);
 }
@@ -321,8 +281,3 @@ function handleMobileGreetingFadeEffect() {
     }
   }
 }
-
-window.fetchTasks      = fetchTasks
-window.updateSummary   = updateSummary
-initStartPage()
-
