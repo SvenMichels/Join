@@ -1,0 +1,26 @@
+{
+  "name": "join-kanban-board",
+  "version": "1.0.0",
+  "description": "Kanban board application for task management",
+  "main": "index.js",
+  "scripts": {
+    "docs": "jsdoc -c jsdoc.json",
+    "docs:watch": "jsdoc -c jsdoc.json --watch",
+    "serve": "live-server --port=3000",
+    "dev": "live-server --port=3000 --watch=."
+  },
+  "keywords": [
+    "kanban",
+    "task-management",
+    "firebase",
+    "javascript",
+    "html",
+    "css"
+  ],
+  "author": "Join Team",
+  "license": "MIT",
+  "devDependencies": {
+    "jsdoc": "^4.0.2",
+    "live-server": "^1.2.2"
+  }
+}

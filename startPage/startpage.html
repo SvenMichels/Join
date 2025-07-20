@@ -13,6 +13,7 @@
   <link href="startpage.css" rel="stylesheet" />
   <link rel="stylesheet" href="../styles/standard.css">
   <link href="../media-querie.css" rel="stylesheet" />
+  <link href="../styles/shared.css" rel="stylesheet" />
   <script type="module" src="../scripts/app.js">
   </script>
 </head>
@@ -30,17 +31,16 @@
         <button id="openMenu" class="profile-button"></button>
       </div>
       <div id="dropDownMenu" class="dropDownMenu dp-none">
-        <a class="txtDeco-none" href="../legalnotice.html">
+        <a class="txtDeco-none" href="../legalnotice/legalnotice.html">
           <p class="dropDownTxt">Legal Notice</p>
         </a>
-        <a class="txtDeco-none" href="../privatpolicy.html">
+        <a class="txtDeco-none" href="../privatePolicy/privatpolicy.html">
           <p class="dropDownTxt">Privacy Policy</p>
         </a>
         <a class="txtDeco-none" href="../index.html">
           <p class="dropDownTxt">Log out</p>
         </a>
       </div>
-    </div>
   </header>
 
   <nav class="nav-bar">
@@ -76,8 +76,8 @@
       </a>
     </div>
     <div class="legal-privat-container">
-      <a class="taskFrameLink" href="../privatpolicy.html">Privacy Policy</a>
-      <a class="taskFrameLink" href="../legalnotice.html">Legal notice</a>
+      <a class="taskFrameLink" href="../privatePolicy/privatpolicy.html">Privacy Policy</a>
+      <a class="taskFrameLink" href="../legalnotice/legalnotice.html">Legal notice</a>
     </div>
   </nav>
   <div class="frontPage">
@@ -98,7 +98,7 @@
             <img alt="Bild" class="icon defaultIcon" src="/assets/icons/edit_bg.svg" />
             <img alt="Bild" class="icon invertedIcon" id="" src="/assets/icons/edit_inverted.svg" />
             <div class="taskInfo">
-              <p class="counter todoTaskAmount"></p>
+              <p class="counter todoTaskAmount">0</p>
               <p class="taskText">
                 To-Do
               </p>
@@ -108,7 +108,7 @@
             <img alt="Bild" class="icon defaultIcon" src="/assets/icons/check_bg.svg" />
             <img alt="Bild" class="icon invertedIcon" src="/assets/icons/check_inverted.svg" />
             <div class="taskInfo">
-              <p class="counter doneTaskAmount"></p>
+              <p class="counter doneTaskAmount">0</p>
               <p class="taskText">
                 Done
               </p>
@@ -120,7 +120,7 @@
             <div class="urgentAmount">
               <img alt="Bild" class="icon" src="/assets/icons/prio_alta_big.svg" />
               <div class="taskInfo">
-                <p class="counter urgentTaskAmount"></p>
+                <p class="counter urgentTaskAmount">0</p>
                 <p class="taskText">
                   Urgent
                 </p>
@@ -173,7 +173,6 @@
       </section>
     </div>
   </div>
-  </main>
   <script type="module" src="startpage.js"></script>
 </body>
 

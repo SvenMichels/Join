@@ -3,6 +3,27 @@
   --sidebar-width: 326px;
 }
 
+/* Loading Animation */
+.loading-dots {
+  display: inline-block;
+  position: relative;
+  animation: loadingDots 1.5s infinite;
+}
+
+@keyframes loadingDots {
+  0%, 20% { opacity: 0.4; }
+  50% { opacity: 1; }
+  80%, 100% { opacity: 0.4; }
+}
+
+.counter.loading {
+  font-weight: bold;
+}
+
+.urgentTaskDate.loading {
+  font-style: italic;
+}
+
 *:not(.nav-bar):not(.nav-bar *):not(.header-style):not(.header-style *) {
   box-sizing: border-box;
 }
@@ -70,7 +91,7 @@ main {
 }
 
 .headline h1 {
-  font-family: Inter;
+  font-family: "Inter";
   font-weight: 700;
   /* font-size: 61px; */
   font-size: clamp(2.5rem, 5vw, 3.8rem);

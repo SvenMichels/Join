@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 
 <head>
   <meta charset="utf-8" />
@@ -8,15 +8,13 @@
   <link rel="icon" href="../assets/icons/join_logo_2.svg" type="image/x-icon" />
   <link href="./board.css" rel="stylesheet" />
   <link href="../styles/standard.css" rel="stylesheet">
+  <link href="../styles/shared.css" rel="stylesheet">
   <link href="../media-querie.css" rel="stylesheet" />
   <link href="../taskfloatdata/task-float-modal.css" rel="stylesheet"/>
   <link rel="stylesheet" href="../taskFloatData/task-float-modal.css" />
   <script type="module" src="../taskFloatData/taskfloat.js"></script>
   <script type="module" src="./board.js"></script>
   <link rel="stylesheet" href="../edittask/taskdetails.css">
-    <link
-    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&amp;display=swap"
-    rel="stylesheet" />
 </head>
 
 <body>
@@ -28,7 +26,6 @@
   color: #fff;
   z-index: 9999;
   font-size: 1.5rem;
-  display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
@@ -48,10 +45,10 @@
         <button id="openMenu" class="profile-button"></button>
       </div>
       <div id="dropDownMenu" class="dropDownMenu dp-none">
-        <a class="txtDeco-none" href="../legalnotice.html">
+        <a class="txtDeco-none" href="../legalnotice/legalnotice.html">
           <p class="dropDownTxt">Legal Notice</p>
         </a>
-        <a class="txtDeco-none" href="../privatpolicy.html">
+        <a class="txtDeco-none" href="../privatePolicy/privatpolicy.html">
           <p class="dropDownTxt">Privacy Policy</p>
         </a>
         <a class="txtDeco-none" href="../index.html">
@@ -91,15 +88,15 @@
       </a>
     </div>
     <div class="legal-privat-container">
-      <a class="taskFrameLink" href="../privatpolicy.html">Privacy Policy</a>
-      <a class="taskFrameLink" href="../legalnotice.html">Legal notice</a>
+      <a class="taskFrameLink" href="../privatePolicy/privatpolicy.html">Privacy Policy</a>
+      <a class="taskFrameLink" href="../legalnotice/legalnotice.html">Legal notice</a>
     </div>
   </nav>
 
   <div class="subMenuContainer d_none" id="subMenuContainer">
-    <a href="../privatpolicy.html">
+    <a href="../privatePolicy/privatpolicy.html">
       <button class="subMenuButtons">Privat Policy</button></a>
-    <a href="../legalnotice.html">
+    <a href="../legalnotice/legalnotice.html">
       <button class="subMenuButtons">Legal Notice</button></a>
     <button class="subMenuButtons">Log out</button>
   </div>
@@ -124,8 +121,13 @@
       <header class="board-wrapper">
         <h2>To Do</h2>
         <img alt="Bild" class="board-icon" id="add-task-btn" src="../assets/icons/add_task_btn.svg" />
-      </header>
-      <div class="task-list" id="todoList"></div>
+      </header> 
+      <p id="noTasksFoundNotice" style="display: none; color: #888; text-align: center; margin-top: 1rem;">
+          couldnt find any tasks matching your search criteria.
+      </p>
+      <div class="task-list" id="todoList">
+       
+      </div>
     </section>
 
     <section class="column" data-status="in-progress">

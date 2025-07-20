@@ -1,557 +1,163 @@
-import { requestData } from "../scripts/firebase.js";
+/**
+ * @fileoverview Main board application controller for Kanban task management
+ */
+
 import { updateEmptyLists } from "../scripts/utils/emptylisthelper.js";
 import { setupDropdown } from "../scripts/ui/dropdown.js";
-import { highlightActiveLinks } from "../scripts/utils/navUtils.js";
+import { setupMobileDeviceListeners } from "../scripts/utils/mobileUtils.js";
+import { getInitials } from "../scripts/utils/helpers.js";
+import { renderTasks } from "./taskRenderer.js";
+import { 
+  fetchTasksAndUsers,
+  extractUsers,
+  normalizeTasks,
+} from "./taskManager.js";
+import { openTaskModal } from "./modalManager.js";
+import { setupDragAndDrop } from "./dragDropManager.js";
+import { setupSearch } from "./searchManager.js";
+import "./taskDetails.js";
+import "./subtaskProgress.js";
 
-const statusMap = {
-  todo: "todoList",
-  "in-progress": "inProgressList",
-  await: "awaitList",
-  done: "doneList",
-};
-
-const priorityIcons = {
-  urgent: "../assets/icons/urgent_red.svg",
-  medium: "../assets/icons/medium_yellow.svg",
-  low: "../assets/icons/low_green.svg",
-};
-
+// Global variables for task management
 window.editingTaskId = null;
 window.isEditMode = false;
-let loadedTasks = {};
-let allUsers = [];
+let currentlyLoadedTasks = {};
+let allSystemUsers = [];
 
-const categoryIcons = {
-  User_Story: "propertyuserstory.svg",
-  Technical_Task: "propertytechnicaltask.svg",
-};
+/**
+ * Initializes board application when DOM is ready
+ */
+window.addEventListener("DOMContentLoaded", initializeBoardApplication);
 
-function toArray(val) {
-  if (Array.isArray(val)) return val;
-  if (val && typeof val === "object") return Object.values(val);
-  if (typeof val === "string") return val.split(",").map((s) => s.trim());
-  return [];
-}
-
-function getCategoryIcon(category) {
-  return `../assets/icons/${categoryIcons[category] || "defaulticon.svg"}`;
-}
-
-async function deleteTask(id) {
-  await requestData("DELETE", `/tasks/${id}`);
-}
-
-window.addEventListener("DOMContentLoaded", () => {
-  document
-    .getElementById("add-task-btn", "add-task-board-button")
-    .addEventListener("click", openTaskModal);
-  window.addEventListener("taskCreated", fetchTasks);
-  window.addEventListener("taskUpdated", fetchTasks);
+/**
+ * Sets up board application with all necessary components
+ */
+function initializeBoardApplication() {
+  setupAllEventListeners();
   setupDropdown("#openMenu", "#dropDownMenu");
-  fetchTasks();
-  setupDragAndDrop();
-  loadUserInitials();
-});
+  fetchAndLoadTasks();
+  loadUserInitialsDisplay();
+  setupMobileDeviceListeners();
+}
 
-async function fetchTasks() {
-  try {
-    const [tasks, users] = await fetchTasksAndUsers();
-    allUsers = extractUsers(users);
-    loadedTasks = normalizeTasks(tasks);
-    await renderTasks(Object.values(loadedTasks));
-    updateEmptyLists();
-  } catch (error) {
-    handleTaskFetchError(error);
+/**
+ * Attaches event listeners for board functionality
+ */
+function setupAllEventListeners() {
+  const addNewTaskButton = document.getElementById("add-task-btn");
+  if (addNewTaskButton) {
+    addNewTaskButton.addEventListener("click", () => openTaskModal());
   }
+  
+  window.addEventListener("taskCreated", fetchAndLoadTasks);
+  window.addEventListener("taskUpdated", fetchAndLoadTasks);
+  
+  setupBoardIconEventListeners();
+  setupSearchEventListeners();
 }
 
-async function fetchTasksAndUsers() {
-  return Promise.all([
-    requestData("GET", "/tasks/"),
-    requestData("GET", "/users"),
-  ]);
-}
+/**
+ * Sets up search functionality with input field and button
+ */
+function setupSearchEventListeners() {
+  const searchField = document.getElementById("searchFieldInput");
+  const searchButton = document.getElementById("inputIcon");
 
-function extractUsers(userResponse) {
-  return Object.values(userResponse?.data || {});
-}
-
-function normalizeTasks(taskResponse) {
-  const tasks = {};
-  const taskData = taskResponse?.data || {};
-
-  for (const [id, task] of Object.entries(taskData)) {
-    tasks[id] = prepareTask(id, task);
+  if (searchButton) {
+    searchButton.addEventListener("click", handleSearch);
   }
-
-  return tasks;
-}
-
-function prepareTask(id, task) {
-  const subtaskCount = task.subtasks?.length || 0;
-  const isValidArray = Array.isArray(task.subtaskDone);
-  const lengthMatches = task.subtaskDone?.length === subtaskCount;
-
-  return {
-    ...task,
-    id,
-    subtaskDone: isValidArray && lengthMatches
-      ? task.subtaskDone
-      : new Array(subtaskCount).fill(false),
-  };
-}
-
-function handleTaskFetchError(error) {
-  console.error("Fehler beim Laden der Tasks:", error);
-}
-
-
-async function renderTasks(tasks) {
-  if (!Array.isArray(tasks)) return;
-  clearTaskLists();
-
-  for (const task of tasks) {
-    const element = await createTaskElement(task, allUsers);
-    const listId = statusMap[task.status];
-    const list = document.getElementById(listId);
-    if (list) list.appendChild(element);
-  }
-
-  updateEmptyLists();
-}
-
-async function createTaskElement(task, allUsers) {
-  const element = document.createElement("article");
-  element.className = getTaskClass(task);
-  element.id = `task-${task.id}`;
-  element.draggable = true;
-
-  element.innerHTML = renderTaskHTML(task, allUsers);
-
-  element.addEventListener("dragstart", handleDragStart);
-  element.addEventListener("click", () => openTaskDetails(task));
-
-  return element;
-}
-
-function clearTaskLists() {
-  Object.values(statusMap).forEach((listId) => {
-    const list = document.getElementById(listId);
-    if (list) list.innerHTML = "";
-  });
-}
-
-function getTaskClass(task) {
-  const prio = (task.prio || "low").toLowerCase();
-  const hasSubtasks = Array.isArray(task.subtasks) && task.subtasks.length > 0;
-  return `task prio-${prio}${hasSubtasks ? " has-subtasks" : ""}`;
-}
-
-function renderTaskHTML(task, allUsers) {
-  return `
-    ${renderTaskIcon(task)}
-    ${renderTaskContent(task)}
-    ${renderProgressBar(task)}
-    ${renderAssignment(task, allUsers)}
-  `;
-}
-
-function renderTaskIcon(task) {
-  const iconFile = categoryIcons[task.category] || "defaulticon.svg";
-  return `
-    <div class="task-icon">
-      <img src="../assets/icons/${iconFile}" alt="${task.category}">
-    </div>
-  `;
-}
-
-function renderTaskContent(task) {
-  return `
-    <div>
-      <h3>${task.title}</h3>
-      <p class="task-description-style">${task.description}</p>
-    </div>
-  `;
-}
-
-function renderProgressBar(task) {
-  const done = (task.subtaskDone || []).filter(Boolean).length;
-  const total = (task.subtasks || []).length;
-  if (total === 0) return "";
-
-  const percent = (done / total) * 100;
-  return `
-    <div class="progress-bar-wrapper">
-      <div class="progress-bar-container">
-        <div id="subtask-progressbar-${task.id}" class="progress-bar-fill" style="width: ${percent}%;"></div>
-      </div>
-      <span id="subtask-progress-text-${task.id}" class="subtask-counter">${done}/${total} Subtasks</span>
-    </div>`;
-}
-
-async function renderTaskDetailData(task) {
-  const $ = (sel) => document.querySelector(sel);
-
-  const iconEl = $("#detail-icon");
-  if (iconEl) {
-    iconEl.src = getCategoryIcon(task.category);
-    iconEl.alt = task.category || "Task Icon";
-  }
-
-  $("#task-detail-title").textContent = task.title;
-  $("#detail-description").textContent = task.description;
-  $("#task-detail-due-date").textContent = task.dueDate;
-  $("#task-detail-priority").innerHTML = getPriorityIcon(task.prio);
-  $("#task-detail-assigned").innerHTML = generateAssignedChips(
-    toArray(task.assigned),
-    allUsers
-  );
-
-  $("#task-detail-subtasks").innerHTML = (task.subtasks || [])
-    .map((txt, i) => {
-      const isChecked = task.subtaskDone?.[i] ? "checked" : "";
-      return `<li><input type="checkbox" id="sub-${i}" class="subtask-checkbox" ${isChecked}>
-              <label for="sub-${i}">${txt}</label></li>`;
-    })
-    .join("");
-
-  if (typeof renderSubtasksInModal === "function") {
-    renderSubtasksInModal(task);
-  }
-
-  setupEditAndDelete(task);
-  initSubtaskProgress(null, task);
-}
-
-function renderTaskIcon(task) {
-  const iconEl = document.querySelector("#detail-icon");
-  if (!iconEl) return;
-
-  iconEl.src = getCategoryIcon(task.category);
-  iconEl.alt = task.category || "Task Icon";
-}
-
-function renderTaskTextContent(task) {
-  document.querySelector("#task-detail-title").textContent = task.title;
-  document.querySelector("#detail-description").textContent = task.description;
-  document.querySelector("#task-detail-due-date").textContent = task.dueDate;
-}
-
-function renderTaskPriority(task) {
-  document.querySelector("#task-detail-priority").innerHTML = getPriorityIcon(task.prio);
-}
-
-function renderTaskAssigned(task) {
-  document.querySelector("#task-detail-assigned").innerHTML = generateAssignedChips(
-    toArray(task.assigned),
-    allUsers
-  );
-}
-
-function renderTaskSubtasks(task) {
-  const subtasksHTML = (task.subtasks || []).map((txt, i) => {
-    const isChecked = task.subtaskDone?.[i] ? "checked" : "";
-    return `
-      <li>
-        <input type="checkbox" id="sub-${i}" class="subtask-checkbox" ${isChecked}>
-        <label for="sub-${i}">${txt}</label>
-      </li>`;
-  }).join("");
-
-  document.querySelector("#task-detail-subtasks").innerHTML = subtasksHTML;
-}
-
-
-function setupEditAndDelete(task) {
-  const editBtn = document.querySelector(".edit-btn");
-  const deleteBtn = document.querySelector(".delete-btn");
-
-  if (editBtn) {
-    editBtn.addEventListener("click", () => openTaskModal(true, task));
-  }
-
-  if (deleteBtn) {
-    deleteBtn.addEventListener("click", async () => {
-      await deleteTask(task.id);
-      closeDetailModal();
-      fetchTasks();
+  
+  if (searchField) {
+    searchField.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") handleSearch();
     });
   }
 }
 
-function closeDetailModal() {
-  const overlay = document.getElementById("modal-overlay");
-  overlay.classList.add("d_none");
-  overlay.innerHTML = "";
-}
-
-async function openTaskDetails(task) {
-  const overlay = document.getElementById("modal-overlay");
-  resetOverlay(overlay);
-
-  const modalHTML = await fetchModalHTML("../edittask/taskdetail.html");
-  overlay.innerHTML = modalHTML;
-
-  renderTaskDetailData(task);
-  const modal = overlay.querySelector("#taskDetailModal");
-
-  setupCloseButton(modal, overlay);
-  setupOutsideClickHandler(modal, overlay);
-}
-
-function resetOverlay(overlay) {
-  overlay.innerHTML = "";
-  overlay.classList.remove("d_none");
-}
-
-async function fetchModalHTML(path) {
-  const res = await fetch(path);
-  return await res.text();
-}
-
-function setupCloseButton(modal, overlay) {
-  const closeBtn = modal.querySelector(".taskDetailCloseButton");
-  closeBtn?.addEventListener("click", async () => {
-    closeOverlay(overlay);
-    await fetchTasks();
-  });
-}
-
-function setupOutsideClickHandler(modal, overlay) {
-  const handler = (event) => {
-    const clickedInside = event.composedPath().includes(modal);
-    const clickedOverlay = event.target === overlay;
-
-    if (clickedInside || !clickedOverlay) return;
-
-    closeOverlay(overlay);
-    overlay.removeEventListener("click", handler);
-    fetchTasks();
-  };
-  overlay.addEventListener("click", handler);
-}
-
-function closeOverlay(overlay) {
-  overlay.classList.add("d_none");
-  overlay.innerHTML = "";
-}
-
-document.querySelectorAll(".board-icon").forEach((icon) => {
-  icon.addEventListener("click", async () => {
-    openTaskModal();
-  });
-});
-
-function openTaskModal(isEdit = false, task = null) {
-  const overlay = document.getElementById("modal-overlay");
-  fetch("../taskFloatData/taskfloat.html")
-    .then((res) => res.text())
-    .then((html) => {
-      overlay.innerHTML = html;
-      overlay.classList.remove("d_none");
-      initModalContents(overlay, isEdit, task);
-    });
-}
-
-async function initModalContents(overlay, isEdit, task) {
-  await waitForTaskFloatInit();
-  setModalMode(isEdit, task);
-  const form = overlay.querySelector("#taskForm-modal");
-
-  if (isEdit && task && form) {
-    prepareModalFormForEdit(form, task);
-  }
-
-  setupModalCloseButton(overlay);
-}
-
-async function waitForTaskFloatInit() {
-  const init = window.initTaskFloat?.();
-  if (init instanceof Promise) await init;
-}
-
-function setupModalCloseButton(overlay) {
-  overlay.querySelector(".taskFloatButtonClose")?.addEventListener("click", () => {
-    overlay.classList.add("d_none");
-    overlay.innerHTML = "";
-  });
-}
-
-function setModalMode(isEdit, task) {
-  window.isEditMode = isEdit;
-  window.editingTaskId = isEdit && task ? task.id : null;
-}
-
-function prepareModalFormForEdit(form, task) {
-  form.dataset.taskId = task.id;
-  form.dataset.taskStatus = task.status;
-
-  window.prefillModalWithTaskData(task);
-
-  const okBtn = form.querySelector(".create-button");
-  if (okBtn) {
-    okBtn.innerHTML = 'OK <img src="../assets/icons/check.svg">';
-    okBtn.disabled = false;
+/**
+ * Attaches click event listeners to board icons for opening task modal
+ */
+function setupBoardIconEventListeners() {
+  const boardIconElements = document.querySelectorAll(".board-icon");
+  for (let iconIndex = 0; iconIndex < boardIconElements.length; iconIndex++) {
+    const currentIcon = boardIconElements[iconIndex];
+    currentIcon.addEventListener("click", () => openTaskModal());
   }
 }
 
-function getPriorityIcon(prio) {
-  const prioMap = {
-    low: "prio_overlay_low.svg",
-    medium: "prio_overlay_medium.svg",
-    urgent: "prio_overlay_urgent.svg",
-  };
-  const icon = prioMap[prio?.toLowerCase()] || prioMap.low;
-  return `<img src="../assets/icons/${icon}" alt="${prio}">`;
-}
-
-function setupDragAndDrop() {
-  Object.values(statusMap).forEach((columnId) => {
-    const column = document.getElementById(columnId);
-    if (column) attachDragEvents(column);
-  });
-}
-
-function attachDragEvents(column) {
-  column.addEventListener("dragover", handleDragOver);
-  column.addEventListener("dragleave", handleDragLeave);
-  column.addEventListener("drop", handleDropOnColumn);
-}
-
-function handleDragOver(e) {
-  e.preventDefault();
-  e.currentTarget.classList.add("drag-over");
-}
-
-function handleDragLeave(e) {
-  e.currentTarget.classList.remove("drag-over");
-}
-
-function handleDropOnColumn(e) {
-  e.preventDefault();
-  e.currentTarget.classList.remove("drag-over");
-  handleDrop(e);
-}
-
-function handleDrop(event) {
-  const taskId = getDraggedTaskId(event);
-  const task = getLoadedTaskById(taskId);
-  const newStatus = getDropTargetStatus(event);
-
-  if (!task || !newStatus) return;
-
-  task.status = newStatus;
-  moveTaskToNewList(taskId, event.currentTarget);
-  updateTask(task);
-  updateEmptyLists();
-}
-
-function getDraggedTaskId(event) {
-  return event.dataTransfer.getData("text/plain");
-}
-
-function getLoadedTaskById(taskId) {
-  const id = taskId.replace("task-", "");
-  return loadedTasks[id];
-}
-
-function getDropTargetStatus(event) {
-  const targetListId = event.currentTarget?.id;
-  return getStatusFromElementId(targetListId);
-}
-
-function moveTaskToNewList(taskId, targetElement) {
-  const taskElement = document.getElementById(taskId);
-  if (taskElement && targetElement) {
-    targetElement.appendChild(taskElement);
-  }
-}
-
-function getStatusFromElementId(id) {
-  return (
-    Object.entries(statusMap).find(([_, listId]) => listId === id)?.[0] || null
-  );
-}
-
-async function updateTask(task) {
-  try {
-    await requestData("PUT", `/tasks/${task.id}`, task);
-  } catch (warn) {
-    console.warn("Fehler beim Aktualisieren des Tasks:", warn);
-  }
-}
-
-document.getElementById("inputIcon").addEventListener("click", searchTasks);
-
-function searchTasks() {
+/**
+ * Handles search functionality by filtering tasks and showing results
+ */
+function handleSearch() {
   const term = getSearchTerm();
-  Object.values(loadedTasks).forEach((task) => {
-    const taskElement = document.getElementById(`task-${task.id}`);
-    if (!taskElement) return;
-
-    const isMatch = taskMatchesSearch(task, term);
-    taskElement.style.display = isMatch ? "flex" : "none";
-  });
+  const hasMatches = filterTasksBySearchTerm(term);
+  toggleNoResultsMessage(!hasMatches);
 }
 
+/**
+ * Gets search term from input field
+ * @returns {string} Trimmed lowercase search term
+ */
 function getSearchTerm() {
   const input = document.getElementById("searchFieldInput");
   return input?.value?.toLowerCase().trim() || "";
 }
 
-function taskMatchesSearch(task, term) {
-  const titleMatch = task.title.toLowerCase().includes(term);
-  const descriptionMatch = task.description.toLowerCase().includes(term);
-  return titleMatch || descriptionMatch;
+/**
+ * Filters task elements by search term in title and description
+ * @param {string} searchTerm - Term to search for in task content
+ * @returns {boolean} Whether any tasks match the search term
+ */
+function filterTasksBySearchTerm(searchTerm) {
+  let hasVisibleTask = false;
+
+  const loadedTaskEntries = Object.values(currentlyLoadedTasks);
+  for (let taskIndex = 0; taskIndex < loadedTaskEntries.length; taskIndex++) {
+    const currentTask = loadedTaskEntries[taskIndex];
+    const taskElement = document.getElementById(`task-${currentTask.id}`);
+    if (!taskElement) continue;
+
+    const titleMatches = currentTask.title.toLowerCase().includes(searchTerm);
+    const descriptionMatches = currentTask.description.toLowerCase().includes(searchTerm);
+    const isTaskVisible = titleMatches || descriptionMatches;
+
+    taskElement.style.display = isTaskVisible ? "flex" : "none";
+
+    if (isTaskVisible) hasVisibleTask = true;
+  }
+
+  return hasVisibleTask;
 }
 
-function initSubtaskProgress(taskId = null, task = null) {
-  document.querySelectorAll(".subtask-checkbox").forEach((cb) =>
-    cb.addEventListener("change", () => {
-      updateSubtaskProgress(taskId);
-      if (task) saveSubtaskState(task);
-    })
-  );
-  updateSubtaskProgress(taskId);
+/**
+ * Shows or hides no results message based on search results
+ * @param {boolean} show - Whether to show the no results message
+ */
+function toggleNoResultsMessage(show) {
+  const notice = document.getElementById("noTasksFoundNotice");
+  if (!notice) return;
+  notice.style.display = show ? "block" : "none";
 }
 
-function updateSubtaskProgress(taskId = null) {
-  const boxes = [...document.querySelectorAll(".subtask-checkbox")];
-  const total = boxes.length;
-  const done = boxes.filter((b) => b.checked).length;
-  setProgressText(done, total, taskId);
-  setProgressBar(done, total, taskId);
-}
-
-function setProgressText(done, total, taskId) {
-  const id = taskId
-    ? `subtask-progress-text-${taskId}`
-    : "subtask-progress-text";
-  const text = document.getElementById(id);
-  if (text) text.textContent = `${done}/${total} Subtasks`;
-}
-
-function setProgressBar(done, total, taskId) {
-  const id = taskId ? `subtask-progressbar-${taskId}` : "subtask-progressbar";
-  const bar = document.getElementById(id);
-  if (bar) bar.style.width = total ? `${(done / total) * 100}%` : "0%";
-}
-
-function saveSubtaskState(task) {
-  const boxes = [...document.querySelectorAll(".subtask-checkbox")];
-  const states = boxes.map((cb) => cb.checked);
-  task.subtaskDone = states;
-  updateTask(task);
-}
-
+/**
+ * Checks if current viewport is mobile size
+ * @returns {boolean} True if viewport width is 820px or less
+ */
 function isMobileDevice() {
   return window.innerWidth <= 820;
 }
 
+/**
+ * Checks if device is in landscape orientation
+ * @returns {boolean} True if device is in landscape mode
+ */
 function isLandscapeMode() {
   return window.matchMedia("(orientation: landscape)").matches;
 }
 
+/**
+ * Shows or hides rotation warning based on device orientation
+ */
 function toggleRotateWarning() {
   const warning = document.getElementById("rotateWarning");
   const shouldShow = isMobileDevice() && isLandscapeMode();
@@ -561,3 +167,44 @@ function toggleRotateWarning() {
 window.addEventListener("orientationchange", toggleRotateWarning);
 window.addEventListener("resize", toggleRotateWarning);
 document.addEventListener("DOMContentLoaded", toggleRotateWarning);
+
+/**
+ * Fetches tasks and users from database and renders them on board
+ */
+async function fetchAndLoadTasks() {
+  try {
+    const [tasksResponse, usersResponse] = await fetchTasksAndUsers();
+    
+    currentlyLoadedTasks = normalizeTasks(tasksResponse);
+    allSystemUsers = extractUsers(usersResponse);
+    
+    await renderTasks(Object.values(currentlyLoadedTasks), allSystemUsers);
+    setupDragAndDrop(currentlyLoadedTasks);
+    setupSearch(currentlyLoadedTasks);
+    updateEmptyLists();
+  } catch (taskFetchError) {
+    console.log("Error fetching tasks:", taskFetchError);
+  }
+}
+
+/**
+ * Loads and displays user initials in profile button from localStorage
+ */
+function loadUserInitialsDisplay() {
+  const storedUserString = localStorage.getItem("currentUser");
+  if (!storedUserString) return;
+  
+  const currentUserData = JSON.parse(storedUserString);
+  const userDisplayName = currentUserData.userName || "Guest";
+  const userProfileButton = document.getElementById("openMenu");
+  
+  if (userProfileButton) {
+    userProfileButton.textContent = getInitials(userDisplayName);
+  }
+}
+
+// Export globals for other modules
+window.openTaskModal = openTaskModal;
+window.loadedTasks = () => currentlyLoadedTasks;
+window.allUsers = () => allSystemUsers;
+window.fetchTasks = fetchAndLoadTasks;

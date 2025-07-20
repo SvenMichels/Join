@@ -13,37 +13,44 @@
   max-width: 525px;
   width: 74%;
   height: 80%;
-  /* margin: auto; */
+   overflow: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;    
 }
 
-  .taskDetailCloseButton {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    border-radius: 56px;
-    border: 0;
-  }
+.task-detail-modal::-webkit-scrollbar {
+  display: none;          
+}
 
-  .taskDetailCloseButton:hover {
-    cursor: pointer;
-    background: #29abe2;
-  }
 
-  .taskDetailCloseButton:hover .icon {
-    width: auto;
-    height: 16px;
-    cursor: pointer;
-    content: url("../assets/icons/close_white.svg");
-  }
+.taskDetailCloseButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 56px;
+  border: 0;
+}
 
-  button {
-    border: none;
-    background-color: transparent;
-    display: flex;
-    gap: 12px;
-  }
+.taskDetailCloseButton:hover {
+  cursor: pointer;
+  background: #29abe2;
+}
+
+.taskDetailCloseButton:hover .icon {
+  width: auto;
+  height: 16px;
+  cursor: pointer;
+  content: url("../assets/icons/close_white.svg");
+}
+
+button {
+  border: none;
+  background-color: transparent;
+  display: flex;
+  gap: 12px;
+}
 
 #task-detail-title {
   font-family: Inter;
@@ -57,7 +64,7 @@
 
 #task-detail-assigned {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   font-family: Inter;
   font-weight: 400;
   font-style: Regular;

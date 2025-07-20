@@ -1,9 +1,9 @@
-.policy-container {
+.legal-container {
   position: absolute;
   top: 115px;
   bottom: 0;
   left: 232px;
-  right: 0;
+  right: 0px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -11,7 +11,7 @@
   padding-bottom: 50px;
 }
 
-.policy-container > * {
+.legal-container > * {
   width: 100%;
   max-width: 1016px;
   padding: 0 96px; 
@@ -22,30 +22,29 @@ a:hover {
   color: #29abe2;
 }
 
-.d_none {
-  display: none;
+h3 {
+  margin-bottom: 0px;
 }
 
 .txtDeco-none {
   text-decoration: none;
 }
 
-
 @media (max-width: 768px) {
-  .policy-container{
+  .legal-container{
     left: 0;
     bottom: 80px; 
   }
 }
 
 @media (max-width: 576px) {
-   .policy-container{
+   .legal-container{
     top: 100px;
    }
 }
 
 @media (max-width: 450px) {
-  .policy-container > *{
+  .legal-container > *{
     padding: 0 32px;
   }
   p{

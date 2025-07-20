@@ -1,21 +1,25 @@
+// Setup dropdown with click outside to close
 export function setupDropdown(triggerSelector, menuSelector) {
-  const trigger = document.querySelector(triggerSelector)
-  const menu = document.querySelector(menuSelector)
+  const dropdownTriggerElement = document.querySelector(triggerSelector);
+  const dropdownMenuElement = document.querySelector(menuSelector);
 
-  function onTriggerClick(e) {
-    e.stopPropagation()
-    menu.classList.toggle('dp-none')
+  function onTriggerClick(clickEvent) {
+    clickEvent.stopPropagation();
+    dropdownMenuElement.classList.toggle('dp-none');
   }
 
-  function onMenuClick(e) {
-    e.stopPropagation()
+  function onMenuClick(clickEvent) {
+    clickEvent.stopPropagation();
   }
 
+  /**
+   * Closes dropdown when clicking outside
+   */
   function onDocumentClick() {
-    menu.classList.add('dp-none')
+    dropdownMenuElement.classList.add('dp-none');
   }
 
-  trigger.addEventListener('click', onTriggerClick)
-  menu.addEventListener('click', onMenuClick)
-  document.addEventListener('click', onDocumentClick)
+  dropdownTriggerElement.addEventListener('click', onTriggerClick);
+  dropdownMenuElement.addEventListener('click', onMenuClick);
+  document.addEventListener('click', onDocumentClick);
 }

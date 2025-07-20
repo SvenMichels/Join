@@ -1,8 +1,4 @@
 im mobile: lange gedrückt halten um eine task zu verschieben
-hinweis hinzu fügen wenn keine suchkriterien gefunden werden
 wenn kontakt gelöscht wird muss dieser auch aus den tasks verschwinden
-ordner struktur anpassen 
-JSDocs
-refactoring
-5 realistische user stories hinzufügen
 10 realistische kontakte müssen eingebaut werden
+big card wird nicht im mobile angezeigt wenn auf den contact geklickt wird

@@ -1,77 +1,122 @@
 import { loginAsGuest, loginUser } from "../auth/login.js";
-import { collectUserInput } from "../../signup/signup.js"
+import { collectUserInput } from "../../signup/signup.js";
 import { requestData } from "../firebase.js";
 
 export async function loginListeners() {
-  const loginForm = document.getElementById("loginForm");
-  if (!loginForm) return console.log("loginForm not found");
-  document.querySelector(".logIn").addEventListener("click", async () => {
-    
-   loginListenersTry();
-  });
+  const loginFormElement = document.getElementById("loginForm");
+  if (!loginFormElement) return;
 
-  async function loginListenersTry(){
-     const email = document.querySelector("#loginEmail").value.trim();
-    const password = document.querySelector("#loginPassword").value.trim();
-
-try {
-  await loginUser(email, password);
-  window.location.href = "../../startpage/startpage.html";
-} catch (err) {
-  console.warn(`Login failed: ${err.message}`);
-
-}
-  };
-
-  document.querySelector(".guestLogIn").addEventListener("click", async () => {
-    try {
-      await loginAsGuest();
-      window.location.href = "../../startpage/startpage.html";
-    } catch (err) {
-      console.log(`Guest login failed: ${err.message}`);
-    }
-  });
+  bindUserLoginButton();
+  bindGuestLoginButton();
   bindPolicyLinks();
+}
+
+function bindUserLoginButton() {
+  const loginButton = document.querySelector(".logIn");
+  loginButton.addEventListener("click", handleUserLogin);
+}
+
+function bindGuestLoginButton() {
+  const guestButton = document.querySelector(".guestLogIn");
+  guestButton.addEventListener("click", handleGuestLogin);
+}
+
+async function handleUserLogin() {
+  const credentials = collectLoginCredentials();
+  await attemptUserLogin(credentials);
+}
+
+async function handleGuestLogin() {
+  await loginAsGuest();
+  redirectToStartpage();
+}
+
+function collectLoginCredentials() {
+  return {
+    email: document.querySelector("#loginEmail").value.trim(),
+    password: document.querySelector("#loginPassword").value.trim(),
+  };
+}
+
+async function attemptUserLogin(credentials) {
+  await loginUser(credentials.email, credentials.password);
+  redirectToStartpage();
+}
+
+function redirectToStartpage() {
+  window.location.href = "../../startpage/startpage.html";
 }
 
 function bindPolicyLinks() {
-  const selectors = [
+  const policyLinks = getAllPolicyLinks();
+  attachPolicyListeners(policyLinks);
+}
+
+function getAllPolicyLinks() {
+  const linkSelectors = [
     'a[href$="privatpolicy.html"]',
-    'a[href$="legalnotice.html"]'
-  ].join()
-  const links = document.querySelectorAll(selectors)
-  links.forEach(async link => {
-    link.addEventListener("click", async event => {
-      if (!localStorage.getItem("token")) {
-        event.preventDefault()
-        await loginAsGuest()
-        window.location.href = link.href
-      }
-    })
-  })
+    'a[href$="legalnotice.html"]',
+  ];
+
+  const combinedSelectors = linkSelectors.join(",");
+  return document.querySelectorAll(combinedSelectors);
+}
+
+function attachPolicyListeners(policyLinks) {
+  for (let linkIndex = 0; linkIndex < policyLinks.length; linkIndex++) {
+    const currentLink = policyLinks[linkIndex];
+    currentLink.addEventListener("click", (event) =>
+      handlePolicyClick(event, currentLink)
+    );
+  }
+}
+
+async function handlePolicyClick(event, linkElement) {
+  if (userNeedsAuthentication()) {
+    event.preventDefault();
+    await authenticateAndRedirect(linkElement.href);
+  }
+}
+
+function userNeedsAuthentication() {
+  return !localStorage.getItem("token");
+}
+
+async function authenticateAndRedirect(targetUrl) {
+  await loginAsGuest();
+  window.location.href = targetUrl;
 }
 
 export async function signupListeners() {
-  const form = document.getElementById("signUpForm");
-  if (!form) return console.log("signUpForm not found");
+  const signupFormElement = document.getElementById("signUpForm");
+  if (!signupFormElement) return;
 
-formEventListener(form);
-
-  const checkBox = document.getElementById("checkBox");
-  const signUpBtn = document.getElementById("signUpBtn");
-  if (checkBox && signUpBtn) {
-    checkBox.addEventListener("change", () => {
-      signUpBtn.disabled = !checkBox.checked;
-    });
-  }
+  bindSignupForm(signupFormElement);
+  bindPrivacyCheckbox();
   bindPolicyLinks();
 }
 
-function formEventListener(form){
-   form.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    console.log("Submit triggered");
-    const userdata = await collectUserInput();
-  requestData("POST","/users/", userdata);
-  });
+function bindSignupForm(formElement) {
+  formElement.addEventListener("submit", handleSignupSubmission);
+}
+
+function bindPrivacyCheckbox() {
+  const checkbox = document.getElementById("checkBox");
+  const submitButton = document.getElementById("signUpBtn");
+
+  if (checkbox && submitButton) {
+    checkbox.addEventListener("change", () =>
+      toggleSubmitButton(checkbox, submitButton)
+    );
+  }
+}
+
+function toggleSubmitButton(checkbox, submitButton) {
+  submitButton.disabled = !checkbox.checked;
+}
+
+async function handleSignupSubmission(event) {
+  event.preventDefault();
+  const userRegistrationData = await collectUserInput();
+  requestData("POST", "/users/", userRegistrationData);
 }

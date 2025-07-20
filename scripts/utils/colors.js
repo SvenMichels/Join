@@ -1,18 +1,18 @@
-import { updateUser } from "../users/users.js";
+import { updateUserInformation } from "../users/users.js";
 
-export function getRandomColorClass() {
-  const num = Math.floor(Math.random() * 20) + 1;
-  return `color-${num}`;
+export function generateRandomColorClass() {
+  const randomColorNumber = Math.floor(Math.random() * 20) + 1;
+  return `color-${randomColorNumber}`;
 }
 
-export async function ensureUserHasColor(user) {
-  if (!user.colorClass) {
-    user.colorClass = getRandomColorClass();
+export async function ensureUserHasAssignedColor(userDataObject) {
+  if (!userDataObject.colorClass) {
+    userDataObject.colorClass = generateRandomColorClass();
     try {
-      await updateUser(user.id, user);
-    } catch (err) {
-      console.error("Fehler beim Speichern der Farbe für User:", user.userName, err);
+      await updateUserInformation(userDataObject.id, userDataObject);
+    } catch (colorAssignmentError) {
+      // Silently handle color assignment errors
     }
   }
-  return user;
+  return userDataObject;
 }

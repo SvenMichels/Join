@@ -1,21 +1,30 @@
-const BASE_URL =
+// Firebase configuration settings
+const FIREBASE_DATABASE_BASE_URL =
   "https://join-da-project-default-rtdb.europe-west1.firebasedatabase.app/";
 
-export async function requestData(method = "GET", path = "", data = {}) {
-  const options = {
-    method: method.toUpperCase(),
+// Handle HTTP requests to Firebase database
+export async function requestData(httpMethod = "GET", requestPath = "", requestDataObject = {}) {
+  const httpRequestOptions = {
+    method: httpMethod.toUpperCase(),
     headers: { "Content-Type": "application/json" },
   };
-  if (["POST", "PUT", "PATCH"].includes(options.method)) {
-    options.body = JSON.stringify(data);
+  
+  const methodsRequiringBody = ["POST", "PUT", "PATCH"];
+  const shouldIncludeBody = methodsRequiringBody.includes(httpRequestOptions.method);
+  
+  if (shouldIncludeBody) {
+    httpRequestOptions.body = JSON.stringify(requestDataObject);
   }
 
-  const response = await fetch(`${BASE_URL}${path}.json`, options);
-  const result   = await response.json();
+  const firebaseResponse = await fetch(`${FIREBASE_DATABASE_BASE_URL}${requestPath}.json`, httpRequestOptions);
+  const responseResultData = await firebaseResponse.json();
 
-  if (!response.ok) {
-    throw new Error(`Request failed: ${response.status} – ${JSON.stringify(result)}`);
+  if (!firebaseResponse.ok) {
+    throw new Error(`Request failed: ${firebaseResponse.status} – ${JSON.stringify(responseResultData)}`);
   }
 
-  return { status: response.status, data: result ?? {} };
+  return { 
+    status: firebaseResponse.status, 
+    data: responseResultData ?? {} 
+  };
 }
