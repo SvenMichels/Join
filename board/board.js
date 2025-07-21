@@ -183,7 +183,6 @@ async function fetchAndLoadTasks() {
     setupDragAndDrop(currentlyLoadedTasks);
     setupSearch(currentlyLoadedTasks);
     updateEmptyLists();
-    enableMobileLongPressDragDrop("task-${task.id}");
   } catch (taskFetchError) {
     console.log("Error fetching tasks:", taskFetchError);
   }
