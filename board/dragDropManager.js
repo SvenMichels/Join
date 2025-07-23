@@ -61,3 +61,41 @@ function moveTaskToNewStatusColumn(taskDataObject, newTaskStatus, targetColumnEl
   updateEmptyLists();
   updateTask(taskDataObject);
 }
+
+/**
+ * Öffnet oder schließt das MoveDropdown-Menü.
+ * @returns {void}
+ */
+function toggleMoveDropdown() {
+  const dropdown = document.querySelector('.MoveDropdown');
+  if (!dropdown) return;
+  if (dropdown.style.display === 'none' || !dropdown.style.display) {
+    dropdown.style.display = 'flex';
+  } else {
+    dropdown.style.display = 'none';
+  }
+}
+
+/**
+ * Initialisiert EventListener für das MoveDropdown und verhindert Event-Bubbling.
+ * @returns {void}
+ */
+function setupMoveDropdownEvents() {
+  const btn = document.getElementById('moveDropdownBtn');
+  const dropdown = document.querySelector('.MoveDropdown');
+
+  btn?.addEventListener('click', e => {
+    e.stopPropagation();
+    toggleMoveDropdown();
+  });
+
+  dropdown?.addEventListener('click', e => e.stopPropagation());
+
+  document.addEventListener('click', () => {
+    if (dropdown) dropdown.style.display = 'none';
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  setupMoveDropdownEvents();
+});

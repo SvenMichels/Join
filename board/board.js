@@ -17,7 +17,7 @@ import { setupDragAndDrop } from "./dragDropManager.js";
 import { setupSearch } from "./searchManager.js";
 import "./taskDetails.js";
 import "./subtaskProgress.js";
-import { enableMobileLongPressDragDrop } from "./dragDropManager.js";
+
 
 // Global variables for task management
 window.editingTaskId = null;

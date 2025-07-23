@@ -11,7 +11,6 @@ import { requestData } from "../scripts/firebase.js";
 export async function fetchTasksAndUsers() {
   const tasksRequest = requestData("GET", "/tasks/");
   const usersRequest = requestData("GET", "/users");
-  
   return Promise.all([tasksRequest, usersRequest]);
 }
 
@@ -87,6 +86,6 @@ export function getStatusFromElementId(boardElementId, statusMappingObject) {
       return statusKey;
     }
   }
-  
+  render
   return null;
 }
