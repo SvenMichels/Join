@@ -46,10 +46,18 @@ form {
 }
 
 .back-button {
+  width: 32px;
+  height: 32px;
+  display: flex;
   background: none;
   border: none;
   cursor: pointer;
   padding: 0;
+  border-radius: 50%;
+}
+
+.back-button:hover {
+  background-color: #eeeeee;
 }
 
 .form-title {
