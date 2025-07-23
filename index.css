@@ -244,6 +244,7 @@ form {
   font-weight: 400;
   font-size: 16px;
   height: 19px;
+  text-decoration: none;
 }
 
 .txtFooterDesign:hover {
