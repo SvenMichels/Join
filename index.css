@@ -135,11 +135,9 @@ form {
 }
 
 .email {
-  align-content: center;
   border: 1px solid #d1d1d1;
   border-radius: 10px;
   padding: 12px 21px 12px 21px;
-  gap: 10px;
   height: 48px;
   width: 422px;
   resize: none;
@@ -272,6 +270,21 @@ form {
   width: 150px;
   background-color: #29abe2;
   border: 1px solid #29abe2;
+}
+
+input::placeholder {
+  font-family: Inter;
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 20px;
+  leading-trim: NONE;
+  line-height: 120%;
+  letter-spacing: 0%;
+  color: #d1d1d1;
+}
+
+input:focus::placeholder {
+  color: transparent;
 }
 
 @media (max-width: 768px) {
