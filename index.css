@@ -206,7 +206,7 @@ form {
   height: 48px;
   gap: 4px;
   border-radius: 10px;
-  background: #FFFFFF;
+  background: #ffffff;
   border: 1px solid;
   font-weight: 700;
   font-size: 20px;
@@ -215,6 +215,7 @@ form {
 .button-guest-login:hover {
   cursor: pointer;
   color: #29abe2;
+  box-shadow: 0px 4px 4px 0px #00000040;
 }
 
 .signUpBtn {
@@ -231,14 +232,12 @@ form {
 }
 
 .footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   width: 246px;
   height: 35px;
-  top: 949px;
-  left: 597px;
-  display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
-  align-items: center;
   padding-bottom: 50px;
 }
 
@@ -246,8 +245,12 @@ form {
   color: #a8a8a8;
   font-weight: 400;
   font-size: 16px;
-  width: 105px;
   height: 19px;
+}
+
+.txtFooterDesign:hover {
+  color: #29abe2;
+  font-weight: 700;
 }
 
 .loginContainer {
