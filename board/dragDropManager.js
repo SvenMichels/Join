@@ -62,40 +62,29 @@ function moveTaskToNewStatusColumn(taskDataObject, newTaskStatus, targetColumnEl
   updateTask(taskDataObject);
 }
 
-/**
- * Öffnet oder schließt das MoveDropdown-Menü.
- * @returns {void}
- */
-function toggleMoveDropdown() {
-  const dropdown = document.querySelector('.MoveDropdown');
-  if (!dropdown) return;
-  if (dropdown.style.display === 'none' || !dropdown.style.display) {
-    dropdown.style.display = 'flex';
-  } else {
-    dropdown.style.display = 'none';
+export function setupTaskEvents(element, task) {
+  element.addEventListener("dragstart", handleDragStart);
+  element.addEventListener("click", () => {
+    if (window.openTaskDetails) window.openTaskDetails(task);
+  });
+
+  // MoveDropdown-Button und Dropdown-Events
+  const btnId = `moveDropdownBtn-${task.id}`;
+  const dropdownId = `moveDropdown-${task.id}`;
+  const btn = element.querySelector(`#${btnId}`);
+  const dropdown = element.querySelector(`#${dropdownId}`);
+
+  if (btn && dropdown) {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      document.querySelectorAll('.MoveDropdown').forEach(d => d.classList.add('dp-none'));
+      dropdown.classList.toggle('dp-none');
+    });
+    dropdown.addEventListener('click', e => e.stopPropagation());
   }
-}
 
-/**
- * Initialisiert EventListener für das MoveDropdown und verhindert Event-Bubbling.
- * @returns {void}
- */
-function setupMoveDropdownEvents() {
-  const btn = document.getElementById('moveDropdownBtn');
-  const dropdown = document.querySelector('.MoveDropdown');
-
-  btn?.addEventListener('click', e => {
-    e.stopPropagation();
-    toggleMoveDropdown();
-  });
-
-  dropdown?.addEventListener('click', e => e.stopPropagation());
-
+  // Schließt alle Dropdowns beim Klick außerhalb
   document.addEventListener('click', () => {
-    if (dropdown) dropdown.style.display = 'none';
+    document.querySelectorAll('.MoveDropdown').forEach(d => d.classList.add('dp-none'));
   });
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-  setupMoveDropdownEvents();
-});

@@ -72,31 +72,34 @@ async function generateTaskHTML(taskData, allSystemUsers, subtaskProgressInfo) {
   );
   const progressBarHTML = generateSubtaskProgressBar(taskData.id, subtaskProgressInfo);
 
-  const taskHtmlTemplate = `
-    <div class="task-icon">
-      <img src="../assets/icons/${iconFileName}" alt="${taskData.category}">
-      <img class="switchPositionBtn" src="../assets/icons/Frame 380.svg" alt="">
-      
+  const dropdownId = `moveDropdown-${taskData.id}`;
+const btnId = `moveDropdownBtn-${taskData.id}`;
+
+const taskHtmlTemplate = `
+  <div class="task-icon">
+    <img src="../assets/icons/${iconFileName}" alt="${taskData.category}">
+    <img class="switchPositionBtn" id="${btnId}" src="../assets/icons/Frame 380.svg" alt="">
+  </div>
+  <div class="MoveDropdown dp-none" id="${dropdownId}">
+    <p class="moveHeader">Move to</p>
+    <div class="moveList">
+      <p class="moveText"><img class="moveImg" src="../assets/icons/arrow_upward.svg" alt="">last List</p>
+      <p class="moveText"><img class="moveImg" src="../assets/icons/arrow_downward.svg" alt="">next List</p>
     </div>
-    <div class="MoveDropdown dp-none" id="moveDropdownBtn">
-        <p class="moveHeader">Move to</p>
-        <div class="moveList">
-        <p class="moveText"><img class="moveImg" src="../assets/icons/arrow_upward.svg" alt="">last List</p>
-        <p class="moveText"><img class="moveImg" src="../assets/icons/arrow_downward.svg" alt="">next List</p>
-        </div>
-        </div>
-    <div>
-      <h3>${taskData.title}</h3>
-      <p class="task-description-style">${taskData.description}</p>
-    </div>
-    ${progressBarHTML}
-    <div class="assigned-chips">
-      <div class="assigned-chip-container">${assignedUsersHTML}</div>
-      <img class="task-priority-img" src="${priorityIconPath}" alt="${taskData.prio}">
-    </div>
-  `;
-  
+  </div>
+  <div>
+    <h3>${taskData.title}</h3>
+    <p class="task-description-style">${taskData.description}</p>
+  </div>
+  ${progressBarHTML}
+  <div class="assigned-chips">
+    <div class="assigned-chip-container">${assignedUsersHTML}</div>
+    <img class="task-priority-img" src="${priorityIconPath}" alt="${taskData.prio}">
+  </div>
+`;
+
   return taskHtmlTemplate;
+
 }
 
 // Create progress bar HTML for subtask completion

@@ -1,4 +1,4 @@
-import { renderContact, openEditWindow } from "./contacts.js";
+
 import { getInitials } from "../scripts/utils/helpers.js";
 
 document.addEventListener("DOMContentLoaded", () => {
