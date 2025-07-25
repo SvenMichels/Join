@@ -65,7 +65,11 @@ async function generateTaskHTML(taskData, allSystemUsers, subtaskProgressInfo) {
   const categoryIconPath = getCategoryIcon(taskData.category);
   const iconFileName = categoryIconPath.split('/').pop();
   const priorityIconPath = getPriorityIconPath(taskData.prio);
-  const assignedUsersHTML = await generateAssignedChips(taskData.assigned, allSystemUsers);
+  // Nur noch neues Format: assignedUsers
+  const assignedUsersHTML = await generateAssignedChips(
+    taskData.assignedUsers, 
+    allSystemUsers
+  );
   const progressBarHTML = generateSubtaskProgressBar(taskData.id, subtaskProgressInfo);
 
   const taskHtmlTemplate = `

@@ -5,168 +5,109 @@
  */
 
 import { signupListeners } from "../scripts/events/loginevents.js";
+import { generateRandomColorClass } from "../scripts/utils/colors.js";
+import { getInitials } from "../scripts/utils/helpers.js";
 
 const userPasswordInputField = document.getElementById("inputPassword");
 const confirmPasswordInputField = document.getElementById("inputConfirmPassword");
 const privacyPolicyCheckbox = document.getElementById("checkBox");
 const signUpSubmitButton = document.getElementById("signUpBtn");
-const passwordVisibilityToggleIcon = document.querySelector("#inputPassword + .toggle-password");
-const confirmPasswordVisibilityToggleIcon = document.querySelector("#inputConfirmPassword + .toggle-password");
+const passwordToggleIcon = document.querySelector("#inputPassword + .toggle-password");
+const confirmToggleIcon = document.querySelector("#inputConfirmPassword + .toggle-password");
 
 /**
- * Initializes signup page when the page loads
+ * Initialisiert Signup-Seite wenn geladen
  */
 if (window.location.pathname.endsWith("signup.html")) {
-  initializeSignupPageFunctionality();
   signupListeners();
-}
-
-/**
- * Sets up all signup page functionality including password validation and form handling
- */
-function initializeSignupPageFunctionality() {
-  setupPasswordMatchValidation();
-  setupPasswordVisibilityToggle();
-  setupSignupFormHandler();
-}
-
-/**
- * Adds event listeners for password match validation
- */
-function setupPasswordMatchValidation() {
-  userPasswordInputField.addEventListener("input", validatePasswordsMatchCorrectly);
-  confirmPasswordInputField.addEventListener("input", validatePasswordsMatchCorrectly);
-}
-
-/**
- * Validates that password and confirm password fields match
- */
-function validatePasswordsMatchCorrectly() {
-  const passwordsDoNotMatch = userPasswordInputField.value !== confirmPasswordInputField.value;
-  const validationMessage = passwordsDoNotMatch ? "Passwords do not match" : "";
-  confirmPasswordInputField.setCustomValidity(validationMessage);
-}
-
-/**
- * Sets up password visibility toggle functionality for both password fields
- */
-function setupPasswordVisibilityToggle() {
-  addPasswordToggleListener(userPasswordInputField, passwordVisibilityToggleIcon);
-  addPasswordToggleListener(confirmPasswordInputField, confirmPasswordVisibilityToggleIcon);
-}
-
-/**
- * Adds click event listener to password visibility toggle icon
- * @param {HTMLInputElement} passwordField - The password input field
- * @param {HTMLElement} toggleIcon - The toggle icon element
- */
-function addPasswordToggleListener(passwordField, toggleIcon) {
-  toggleIcon.addEventListener("click", () => {
-    togglePasswordInputVisibility(passwordField, toggleIcon);
-  });
-}
-
-/**
- * Toggles password visibility for a given input field
- * @param {HTMLInputElement} passwordInputElement - The password input to toggle
- * @param {HTMLElement} visibilityToggleIcon - The icon element to update
- */
-function togglePasswordInputVisibility(passwordInputElement, visibilityToggleIcon) {
-  const isCurrentlyHidden = passwordInputElement.type === "password";
   
-  passwordInputElement.type = isCurrentlyHidden ? "text" : "password";
-  updateToggleIcon(visibilityToggleIcon, isCurrentlyHidden);
-}
-
-/**
- * Updates the visibility toggle icon based on password visibility state
- * @param {HTMLElement} toggleIcon - The icon element to update
- * @param {boolean} isVisible - Whether password is currently visible
- */
-function updateToggleIcon(toggleIcon, isVisible) {
-  const iconPath = isVisible ? "../assets/icons/visibility_off.svg" : "../assets/icons/visibility.svg";
-  toggleIcon.src = iconPath;
-}
-
-/**
- * Sets up the signup form submission handler
- */
-function setupSignupFormHandler() {
+  // Password validation setup
+  userPasswordInputField.addEventListener("input", validatePasswords);
+  confirmPasswordInputField.addEventListener("input", validatePasswords);
+  
+  // Password visibility toggles
+  passwordToggleIcon.addEventListener("click", () => 
+    togglePassword(userPasswordInputField, passwordToggleIcon)
+  );
+  confirmToggleIcon.addEventListener("click", () => 
+    togglePassword(confirmPasswordInputField, confirmToggleIcon)
+  );
+  
   signUpSubmitButton.addEventListener("click", handleSignupSubmission);
 }
 
 /**
- * Handles signup form submission with validation
- * @param {Event} event - The click event
+ * Validiert Passwort-Übereinstimmung
+ */
+function validatePasswords() {
+  const match = userPasswordInputField.value === confirmPasswordInputField.value;
+  confirmPasswordInputField.setCustomValidity(match ? "" : "Passwords do not match");
+}
+
+/**
+ * Schaltet Passwort-Sichtbarkeit um
+ * @param {HTMLInputElement} field - Passwort-Feld
+ * @param {HTMLElement} icon - Toggle-Icon
+ */
+function togglePassword(field, icon) {
+  const isHidden = field.type === "password";
+  field.type = isHidden ? "text" : "password";
+  icon.src = isHidden ? "../assets/icons/visibility_off.svg" : "../assets/icons/visibility.svg";
+}
+
+/**
+ * Behandelt Signup-Formular-Übermittlung
+ * @param {Event} event - Click-Event
  */
 async function handleSignupSubmission(event) {
   if (!privacyPolicyCheckbox.checked) return;
 
-  const userInputData = await collectUserInput();
-  if (!userInputData) return;
+  const userData = await collectUserInput();
+  if (!userData) return;
 
   await submitUser();
 }
 
 /**
- * Collects and validates user input from signup form
- * @returns {Object|null} User data object or null if validation fails
+ * Sammelt und validiert Benutzereingaben
+ * @returns {Object|null} Benutzerdaten oder null bei Fehler
  * @exports
  */
 export async function collectUserInput() {
   const userFullName = document.getElementById("inputName").value.trim();
-  const emailAddress = document.getElementById("inputEmail").value.trim();
+  const userEmailAddress = document.getElementById("inputEmail").value.trim();
   const userPassword = userPasswordInputField.value;
+  const userColor = generateRandomColorClass();
+  
+  const userInitials = getInitials(userFullName);
+  const firstCharacter = userFullName ? userFullName.charAt(0).toUpperCase() : "?";
 
-  return { userFullName, emailAddress, userPassword };
+  return { 
+    userFullName, 
+    userEmailAddress, 
+    userPassword, 
+    userPhoneNumber: "", 
+    userColor,
+    userInitials,
+    firstCharacter
+  };
 }
 
 /**
- * Submits user registration data and handles the response
+ * Übermittelt Benutzerregistrierung und zeigt Feedback
  */
 async function submitUser() {
-    showUserFeedback();
-  }
+  const feedback = document.getElementById("userFeedback");
+  if (!feedback) return;
 
-/**
- * Shows success feedback to user after registration
- */
-function showUserFeedback() {
-  const feedbackDisplayElement = document.getElementById("userFeedback");
-  if (!feedbackDisplayElement) return;
-
-  feedbackDisplayElement.classList.remove("dp-none");
-  feedbackDisplayElement.classList.add("centerFeedback");
-  setupFeedbackAnimation(feedbackDisplayElement);
-}
-
-/**
- * Sets up animation end listener for user feedback display
- * @param {HTMLElement} feedbackDisplayElement - The feedback element to animate
- */
-function setupFeedbackAnimation(feedbackDisplayElement) {
-  feedbackDisplayElement.addEventListener("animationend", () => {
-    redirectAfterDelay();
+  feedback.classList.remove("dp-none");
+  feedback.classList.add("centerFeedback");
+  
+  feedback.addEventListener("animationend", () => {
+    setTimeout(() => {
+      feedback.classList.add("dp-none");
+      feedback.classList.remove("centerFeedback");
+      window.location.href = "../index.html";
+    }, 1500);
   });
-}
-
-/**
- * Redirects user to login page after a delay
- */
-function redirectAfterDelay() {
-  setTimeout(() => {
-    hideFeedbackAndRedirect();
-  }, 1500);
-}
-
-/**
- * Hides feedback element and redirects to login page
- */
-function hideFeedbackAndRedirect() {
-  const feedbackElement = document.getElementById("userFeedback");
-  if (feedbackElement) {
-    feedbackElement.classList.add("dp-none");
-    feedbackElement.classList.remove("centerFeedback");
-  }
-  window.location.href = "../index.html";
 }

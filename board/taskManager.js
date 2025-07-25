@@ -1,18 +1,19 @@
 /**
- * @fileoverview Task management utilities for Firebase data operations
+ * @fileove/**
+ * Converts Firebase tasks response to normalized object format
+ * @param {Object} firebaseTaskResponse - Firebase response containing task datanagement utilities for Firebase data operations
  */
 
 import { requestData } from "../scripts/firebase.js";
 
 /**
- * Fetches tasks and users data simultaneously from Firebase
- * @returns {Promise<Array>} Array containing tasks response and users response
+ * Fetches task data from Firebase
+ * @returns {Promise<Array>} Array containing tasks response
  */
 export async function fetchTasksAndUsers() {
   const tasksRequest = requestData("GET", "/tasks/");
-  const usersRequest = requestData("GET", "/users");
   
-  return Promise.all([tasksRequest, usersRequest]);
+  return Promise.all([tasksRequest]);
 }
 
 /**

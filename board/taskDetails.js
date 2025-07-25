@@ -11,7 +11,8 @@ export async function renderTaskDetailData(task, allUsers) {
   renderTaskDetailIcon(task.category);
   renderTaskDetailText(task);
   renderTaskDetailPriority(task.prio);
-  await renderTaskDetailAssignees(task.assigned, allUsers);
+  // Nur noch neues Format: assignedUsers
+  await renderTaskDetailAssignees(task.assignedUsers, allUsers);
   renderTaskDetailSubtasks(task.subtasks, task.subtaskDone);
 
   if (typeof renderSubtasksInModal === "function") {

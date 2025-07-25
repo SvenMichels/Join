@@ -46,7 +46,7 @@
       <a class="txtDeco-none" href="../privatePolicy/privatpolicy.html">
         <p class="dropDownTxt">Privacy Policy</p>
       </a>
-      <a class="txtDeco-none" href="../index.html">
+      <a class="txtDeco-none" onclick="logoutUser()" href="../index.html">
         <p class="dropDownTxt">Log out</p>
       </a>
     </div>
@@ -131,7 +131,7 @@
 
         <div class="prio-container">
           <div class="prio-content">
-            <label for="taskPriority">Priority</label>
+            <label>Priority</label>
             <div class="prio-button-container">
               <button id="urgent-task" class="prioButtons" type="button">
                 Urgent
@@ -149,7 +149,7 @@
           </div>
 
           <div class="prio-assigned-container">
-            <label for="assignedUsers">Assigned to</label>
+            <label for="searchUser">Assigned to</label>
 
             <div class="assigned-input-wrapper">
               <div class="assigned-container">
@@ -212,6 +212,7 @@
 
   <footer></footer>
   <script type="module" src="addtask.js"></script>
+  <script type="module" src="../scripts/events/logoutevent.js"></script>
 </body>
 
 </html>

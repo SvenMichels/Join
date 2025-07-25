@@ -1,6 +1,5 @@
 import { toArray } from "../scripts/utils/taskUtils.js";
 import { getInitials } from "../scripts/utils/helpers.js";
-import { ensureUserHasAssignedColor } from "../scripts/utils/colors.js";
 
 // Available category icons for tasks
 const AVAILABLE_CATEGORY_ICONS = {
@@ -28,47 +27,46 @@ export function getPriorityIconPath(priorityLevel) {
 }
 
 // Create HTML chips for assigned users
-export async function generateAssignedChips(assignedUsersList, allSystemUsers = []) {
+export function generateAssignedChips(assignedUsersList, allSystemUsers = []) {
   const assignedUsersArray = toArray(assignedUsersList);
-  if (assignedUsersArray.length === 0) {
-    return "";
-  }
+  if (assignedUsersArray.length === 0) return "";
 
   const chipElements = [];
+  
   for (const userEntry of assignedUsersArray) {
-    const userName =
-      typeof userEntry === "string" ? userEntry : userEntry.userName;
-    let userRecord = findUserByName(allSystemUsers, userName);
+    const userName = extractUserName(userEntry);
+    const userRecord = findUserByName(allSystemUsers, userName);
     
-    if (userRecord) {
-      userRecord = await ensureUserHasAssignedColor(userRecord);
-    }
+    // Skip if user was deleted (not found in system users)
+    if (!userRecord) continue;
     
-    const userInitials = getInitials(userName);
-    const userColorClass = userRecord?.colorClass || "color-1";
-
-    const chipHtml = `<div class="contact-chip ${userColorClass}">${userInitials}</div>`;
-    chipElements.push(chipHtml);
+    const chip = createUserChip(userRecord);
+    chipElements.push(chip);
   }
 
   return chipElements.join("");
 }
 
+function extractUserName(userEntry) {
+  return typeof userEntry === "string" ? userEntry : userEntry.userFullName;
+}
+
+function createUserChip(userRecord) {
+  const userInitials = getInitials(userRecord.userFullName);
+  const userColorClass = userRecord.userColor || "color-1";
+  
+  return `<div class="contact-chip ${userColorClass}">${userInitials}</div>`;
+}
+
 // Look up user record by name
 function findUserByName(usersList, searchName) {
-  if (!Array.isArray(usersList)) {
-    return undefined;
-  }
+  if (!Array.isArray(usersList) || !searchName) return null;
 
-  for (const userRecord of usersList) {
-    const userNameLower = userRecord.userName?.toLowerCase();
-    const searchNameLower = searchName?.toLowerCase();
-    if (userNameLower === searchNameLower) {
-      return userRecord;
-    }
-  }
-
-  return undefined;
+  return usersList.find(user => {
+    const userFullName = user.userFullName?.toLowerCase();
+    const searchNameLower = searchName.toLowerCase();
+    return userFullName === searchNameLower;
+  });
 }
 
 // Create priority icon for task detail view
@@ -104,4 +102,25 @@ export function calculateSubtaskProgress(completedSubtasks, allSubtasks) {
   }
 
   return (completedCount / totalSubtasks) * 100;
+}
+
+// Remove deleted user from task assignments
+export function removeUserFromTaskAssignments(tasks, deletedUserName) {
+  const updatedTasks = {};
+  
+  Object.entries(tasks).forEach(([taskId, task]) => {
+    // Nur noch neues Format: assignedUsers
+    const assignedUsers = toArray(task.assignedUsers || []);
+    const filteredUsers = assignedUsers.filter(user => {
+      const userName = extractUserName(user);
+      return userName !== deletedUserName;
+    });
+    
+    updatedTasks[taskId] = {
+      ...task,
+      assignedUsers: filteredUsers
+    };
+  });
+  
+  return updatedTasks;
 }
