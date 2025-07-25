@@ -1,4 +1,5 @@
 import { requestData } from "../firebase.js";
+import { loadAllUsersForLogin } from "../../contactPage/contactService.js";
 
 const loginFormElement = document.getElementById("loginForm");
 
@@ -31,8 +32,9 @@ function redirectToStartpage() {
 }
 
 export async function loginUser(emailAddress, userPassword) {
-  try {
-    const allUsers = await fetchAllUsers();
+    const allUsers = await loadAllUsersForLogin();
+    console.log("Alle Benutzer:", allUsers);
+    
     const authenticatedUser = findMatchingUser(
       allUsers,
       emailAddress,
@@ -40,32 +42,15 @@ export async function loginUser(emailAddress, userPassword) {
     );
 
     if (!authenticatedUser) {
-      throw new Error("Invalid credentials");
+      console.log("Benutzer nicht gefunden oder ungültige Anmeldeinformationen.");
+      throw new Error("Login fehlgeschlagen");
     }
 
+    console.log("Authentifizierter Benutzer:", authenticatedUser);
+    
     storeCurrentUser(authenticatedUser);
+    console.log("User wurde ins localStorage gespeichert");
     return authenticatedUser;
-  } catch (loginError) {
-    console.warn("Fehler beim Login:", loginError);
-    throw loginError;
-  }
-}
-
-async function fetchAllUsers() {
-  const { data: allUsersData } = await requestData("GET", "/users/");
-  const userEntriesArray = Object.entries(allUsersData || {});
-  return convertToUsersList(userEntriesArray);
-}
-
-function convertToUsersList(userEntries) {
-  const completeUsersList = [];
-
-  for (let entryIndex = 0; entryIndex < userEntries.length; entryIndex++) {
-    const [userId, userData] = userEntries[entryIndex];
-    completeUsersList.push({ id: userId, ...userData });
-  }
-
-  return completeUsersList;
 }
 
 function findMatchingUser(usersList, emailAddress, userPassword) {
@@ -77,41 +62,53 @@ function findMatchingUser(usersList, emailAddress, userPassword) {
     }
   }
 
-  return null;
+  return null; // Kein User gefunden
 }
 
 function credentialsMatch(user, emailAddress, userPassword) {
-  const emailMatches =
-    user.userEmail?.toLowerCase() === emailAddress.toLowerCase();
-  const passwordMatches = user.password === userPassword;
+  // Nur noch neues Format verwenden
+  const userEmail = user.userEmailAddress;
+  const password = user.userPassword;
+  
+  const emailMatches = userEmail?.toLowerCase() === emailAddress.toLowerCase();
+  const passwordMatches = password === userPassword;
+  
+  console.log("Email-Vergleich:", userEmail, "===", emailAddress, "->", emailMatches);
+  console.log("Password-Vergleich:", passwordMatches);
+  
   return emailMatches && passwordMatches;
 }
 
 function storeCurrentUser(user) {
-  localStorage.setItem("currentUser", JSON.stringify(user));
+  console.log("Speichere User ins localStorage:", user);
+  
+  // Stelle sicher, dass der User im einheitlichen neuen Format gespeichert wird
+  const userToStore = {
+    id: user.userId || user.id,
+    userFullName: user.userFullName,
+    userEmailAddress: user.userEmailAddress,
+    userPassword: user.userPassword,
+    userPhoneNumber: user.userPhoneNumber,
+    userColor: user.userColor,
+    userInitials: user.userInitials,
+    firstCharacter: user.firstCharacter
+  };
+  
+  localStorage.setItem("currentUser", JSON.stringify(userToStore));
+  console.log("User gespeichert:", userToStore);
 }
 
 export async function loginAsGuest() {
-  try {
-    const guestUser = await findGuestUser();
-
-    if (!guestUser) {
-      console.warn("Gast-Zugang nicht gefunden.");
-      return;
-    }
-
-    storeCurrentUser(guestUser);
-    redirectToStartpage();
-  } catch (warning) {
-    console.warn("Fehler beim Gast-Login:", warning);
-  }
+  const guestUser = await findGuestUser();
+  storeCurrentUser(guestUser);
+  redirectToStartpage();
 }
 
 async function findGuestUser() {
   const { data: users } = await requestData("GET", "/users/");
 
   return Object.values(users || {}).find(
-    (user) => user.userName?.toLowerCase() === "guest"
+    (user) => user.userFullName?.toLowerCase() === "guest"
   );
 }
 
@@ -128,7 +125,7 @@ function updateUserGreeting() {
     if (!currentUser) return;
 
     const timeBasedGreeting = generateTimeBasedGreeting();
-    displayUserGreeting(timeBasedGreeting, currentUser.userName);
+    displayUserGreeting(timeBasedGreeting, currentUser.userFullName);
   } catch (warning) {
     console.warn("Fehler beim Parsen des Benutzers:", warning);
   }
@@ -173,7 +170,7 @@ function displayTaskCounts(allTasks) {
   setText(".taskInProgress", countByStatus(allTasks, "in-progress"));
   setText(".awaitingFeedback", countByStatus(allTasks, "await"));
   setText(".taskInBoard", allTasks.length);
-  setText(".urgentTaskAmount", countByPriority(allTasks, "High"));
+  setText(".urgentTaskAmount", countByPriority(allTasks, "Urgent"));
 }
 
 function displayUrgentTaskInfo(allTasks) {
@@ -193,7 +190,7 @@ function countByPriority(tasks, priority) {
 
 function getEarliestUrgentDueDate(tasks) {
   const urgentDates = tasks
-    .filter((t) => (t.prio || "").toLowerCase() === "high" && t.dueDate)
+    .filter((t) => (t.prio || "").toLowerCase() === "urgent" && t.dueDate)
     .map((t) => new Date(t.dueDate))
     .sort((a, b) => a - b);
 

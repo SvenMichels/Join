@@ -17,12 +17,28 @@ function bindUserLoginButton() {
 }
 
 function bindGuestLoginButton() {
-  const guestButton = document.querySelector(".guestLogIn");
+  const guestButton = document.querySelector(".button-guest-login");
   guestButton.addEventListener("click", handleGuestLogin);
 }
 
 async function handleUserLogin() {
+  const loginFormElement = document.getElementById("loginForm");
+
+  if (!loginFormElement) {
+    console.warn("Login-Formular nicht gefunden!");
+    return;
+  }
+
   const credentials = collectLoginCredentials();
+  if (!credentials.email || !credentials.password) {
+    console.warn("Bitte geben Sie sowohl E-Mail als auch Passwort ein!");
+    return;
+  }
+
+  if (!isValidEmail(credentials.email)) {
+    console.warn("Bitte geben Sie eine gültige E-Mail-Adresse ein!");
+    return;
+  }
   await attemptUserLogin(credentials);
 }
 
@@ -36,6 +52,11 @@ function collectLoginCredentials() {
     email: document.querySelector("#loginEmail").value.trim(),
     password: document.querySelector("#loginPassword").value.trim(),
   };
+}
+
+function isValidEmail(email) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
 }
 
 async function attemptUserLogin(credentials) {

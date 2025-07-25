@@ -9,8 +9,16 @@
   <link href="../styles/shared.css" rel="stylesheet">
     <link href="../media-querie.css" rel="stylesheet" />
   <link rel="stylesheet" href="../styles/fonts.css">
-  <script src="./contacts.js" type="module">
-  </script>
+  
+  <!-- Kontakt Module -->
+  <script src="./contactExternalService.js"></script>
+  <script src="./contactModal.js"></script>
+  <script src="./contactDataService.js"></script>
+  <script src="./contactRenderer.js"></script>
+  <script src="./contactEditor.js"></script>
+  <script src="./contactUtils.js"></script>
+  <script src="./contactsMain.js"></script>
+  
   <script type="module" src="./contactMyUser.js"></script>
   <title> 
    Document
@@ -199,8 +207,8 @@
         <a class="txtDeco-none" href="../privatePolicy/privatpolicy.html">
           <p class="dropDownTxt">Privacy Policy</p>
         </a>
-        <a class="txtDeco-none" href="../index.html">
-          <p class="dropDownTxt">Log out</p>
+<a class="txtDeco-none" onclick="logoutUser()" href="../index.html">
+        <p class="dropDownTxt">Log out</p>
         </a>
       </div>
     </div>
@@ -231,5 +239,7 @@
     </div>
    </div>
   </section>
+  <script type="module" src="../scripts/events/logoutevent.js"></script>
  </body>
+
 </html>

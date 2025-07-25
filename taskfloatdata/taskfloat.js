@@ -1,115 +1,53 @@
+/**
+ * Task Modal Main Controller
+ * Hauptsteuerung für das Task Modal
+ */
+
 import { requestData } from "../scripts/firebase.js";
-import { ensureUserHasAssignedColor } from "../scripts/utils/colors.js";
-import {
-  getSubtaskHTML,
-  getEditableSubtaskTemplate,
-  getUserCheckboxHTML,
-} from "./taskfloatHTML.js";
 import { getInitials } from "../scripts/utils/helpers.js";
-
-export const PRIORITY_ICONS = {
-  urgent: [
-    "../assets/icons/urgent_red.svg",
-    "../assets/icons/urgent_white.svg",
-  ],
-  medium: [
-    "../assets/icons/medium_yellow.svg",
-    "../assets/icons/medium_white.svg",
-  ],
-  low: ["../assets/icons/low_green.svg", "../assets/icons/low_white.svg"],
-};
-
-const PRIORITY_CONFIG = {
-  urgent: {
-    id: "urgent-task-modal",
-    icon: PRIORITY_ICONS.urgent,
-    className: "prioUrgentBtnActive",
-  },
-  medium: {
-    id: "medium-task-modal",
-    icon: PRIORITY_ICONS.medium,
-    className: "prioMediumBtnActive",
-  },
-  low: {
-    id: "low-task-modal",
-    icon: PRIORITY_ICONS.low,
-    className: "prioLowBtnActive",
-  },
-};
-
-const PRIORITY_CLASSES = [
-  "prioUrgentBtnActive",
-  "prioMediumBtnActive",
-  "prioLowBtnActive",
-];
-
-const SUBTASK_SELECTORS = [
-  ".subtask-edit-button-modal",
-  ".subtask-delete-button-second-modal",
-  ".subtask-save-button-modal",
-  ".subtask-delete-button-modal",
-  ".subtask-text-input-modal",
-];
+import { 
+  selectPriorityModal, 
+  getCurrentPriority, 
+  initPriorityEventListeners 
+} from "./priorityManager.js";
+import { 
+  loadAndRenderUsersModal, 
+  updateSelectedModal, 
+  toggleUserListModal, 
+  initUserSearchEventListener,
+  applyUserPreselection
+} from "./userAssignmentManager.js";
+import { 
+  addSubtaskModal, 
+  addSubtaskOnEnterModal, 
+  renderSubtasksModal, 
+  resetSubtasks, 
+  setSubtaskItems, 
+  setCompletedSubtasks, 
+  getSubtaskItems, 
+  getCompletedSubtasks, 
+  updateSubtasks 
+} from "./subtaskManager.js";
 
 const $ = {};
-let currentlySelectedPriorityModal = "medium";
-let allSystemUsersModal = [];
-let subtaskItemsListModal = [];
-export let completedSubtasksModal = [];
-let pendingTaskUpdateQueue = {};
 
-function toArray(val) {
-  if (Array.isArray(val)) return val;
-  if (val && typeof val === "object") return Object.values(val);
-  if (typeof val === "string") return val.split(",").map((s) => s.trim());
-  return [];
-}
-
-function capitalize(text) {
-  return text.charAt(0).toUpperCase() + text.slice(1);
-}
-
-function getPriorityClass(prio) {
-  return `prio${capitalize(prio)}BtnActive`;
-}
-
-function getPriorityClasses() {
-  return PRIORITY_CLASSES;
-}
-
-function getChecked(selector) {
-  return [...document.querySelectorAll(selector + ":checked")].map(
-    (c) => c.value
-  );
-}
-
-function getSubtaskInputValue() {
-  return $.subInput.value.trim();
-}
-
-function clearSubtaskInput() {
-  $.subInput.value = "";
-}
-
-function getFilteredUsers(query) {
-  const filteredQuery = query.trim().toLowerCase();
-  return !filteredQuery
-    ? allSystemUsersModal
-    : allSystemUsersModal.filter((u) =>
-        u.userName.toLowerCase().includes(filteredQuery)
-      );
-}
-
+/**
+ * Initialisiert das Task-Modal
+ * @returns {Promise} Promise für die Initialisierung
+ */
 export function initTaskFloat() {
   cacheDom();
   if (!$.modal) return Promise.resolve();
 
   loadUserInitialsModal();
-  eventHandleSearchModal();
+  initUserSearchEventListener();
 
   return initFormModal();
 }
 
+/**
+ * Cached DOM-Elemente für bessere Performance
+ */
 function cacheDom() {
   $.modal = document.querySelector(".form-wrapper-modal");
   if (!$.modal) return;
@@ -120,7 +58,6 @@ function cacheDom() {
   $.subInput = document.getElementById("subtask-modal");
   $.subAddBtn = $.modal?.querySelector(".subtask-add-button-modal");
   $.assignBtn = $.modal?.querySelector(".assigned-userlist-button-modal");
-  $.assignImg = document.getElementById("assignedBtnImg-modal");
 
   if ($.date) {
     $.date.min = new Date().toISOString().split("T")[0];
@@ -129,6 +66,9 @@ function cacheDom() {
   attachEventListeners();
 }
 
+/**
+ * Bindet Event-Listener an DOM-Elemente
+ */
 function attachEventListeners() {
   $.closeBtn?.addEventListener("click", closeModal);
   $.form?.addEventListener("submit", handleSubmitModal);
@@ -137,58 +77,69 @@ function attachEventListeners() {
   $.assignBtn?.addEventListener("click", toggleUserListModal);
 }
 
+/**
+ * Initialisiert das Modal-Formular
+ * @returns {Promise} Promise für die Initialisierung
+ */
 export async function initFormModal() {
-  subtaskItemsListModal = [];
-  completedSubtasksModal = [];
+  initializeSubtasks();
+  await initializeUsers();
+  initializePriority();
+  initializeCategoryValidation();
+  initializePriorityEvents();
+}
+
+/**
+ * Initialisiert Subtasks
+ */
+function initializeSubtasks() {
+  resetSubtasks();
   renderSubtasksModal();
+}
 
+/**
+ * Initialisiert das User-System
+ * @returns {Promise} Promise für das Laden der User
+ */
+async function initializeUsers() {
   await loadAndRenderUsersModal();
-  selectPriorityModal("medium");
+}
 
+/**
+ * Initialisiert die Standard-Priorität
+ */
+function initializePriority() {
+  selectPriorityModal("medium");
+}
+
+/**
+ * Initialisiert die Kategorie-Validierung
+ */
+function initializeCategoryValidation() {
   const category = document.getElementById("category-modal");
   const submit = $.form?.querySelector(".create-button");
-  const toggle = () => (submit.disabled = category.value.trim() === "");
-  toggle();
-  category.addEventListener("change", toggle);
-
-  ["urgent", "medium", "low"].forEach((p) =>
-    document
-      .getElementById(`${p}-task-modal`)
-      ?.addEventListener("click", () => selectPriorityModal(p))
-  );
+  
+  if (!category || !submit) return;
+  
+  const updateSubmitState = () => {
+    submit.disabled = category.value.trim() === "";
+  };
+  
+  updateSubmitState();
+  category.addEventListener("change", updateSubmitState);
 }
 
-function selectPriorityModal(priorityLevel) {
-  currentlySelectedPriorityModal = priorityLevel;
-
-  const priorityConfigEntries = Object.values(PRIORITY_CONFIG);
-  for (
-    let configIndex = 0;
-    configIndex < priorityConfigEntries.length;
-    configIndex++
-  ) {
-    const { id, icon, className } = priorityConfigEntries[configIndex];
-    const priorityElement = document.getElementById(id);
-    if (priorityElement) {
-      priorityElement.classList.remove(...getPriorityClasses());
-    }
-    const imageElement = document.getElementById(
-      `${id.replace("-task-modal", "")}-task-img-modal`
-    );
-    if (imageElement) imageElement.src = icon[0];
-  }
-
-  const { id, icon, className: activeClass } = PRIORITY_CONFIG[priorityLevel];
-  const activePriorityElement = document.getElementById(id);
-  if (activePriorityElement) {
-    activePriorityElement.classList.add(activeClass);
-  }
-  const activeImageElement = document.getElementById(
-    `${id.replace("-task-modal", "")}-task-img-modal`
-  );
-  if (activeImageElement) activeImageElement.src = icon[1];
+/**
+ * Initialisiert Priority Event-Listener
+ */
+function initializePriorityEvents() {
+  initPriorityEventListeners();
 }
 
+/**
+ * Behandelt das Absenden des Modal-Formulars
+ * @param {Event} event - Submit-Event
+ */
 async function handleSubmitModal(event) {
   event.preventDefault();
   const task = collectTaskDataModal(event.target);
@@ -197,304 +148,154 @@ async function handleSubmitModal(event) {
   resetFormState(task);
 }
 
+/**
+ * Sammelt Task-Daten aus dem Modal-Formular
+ * @param {HTMLFormElement} form - Das Formular-Element
+ * @returns {Object} Task-Objekt mit allen gesammelten Daten
+ */
 function collectTaskDataModal(form) {
-  const id = form.dataset.taskId || Date.now();
+  const id = form.dataset.taskId || crypto.randomUUID();
   const status = form.dataset.taskStatus || "todo";
 
-  const task = {
+  const assignedUsers = Array.from(
+    document.querySelectorAll(".user-checkbox-modal:checked")
+  ).map(checkbox => checkbox.value);
+
+  return {
     id,
     title: form.taskTitle.value.trim(),
     description: form.taskDescription.value.trim(),
     dueDate: form.taskDate.value,
     category: form.category.value,
-    prio: currentlySelectedPriorityModal,
-    assigned: getChecked(".user-checkbox-modal"),
-    subtasks: [...subtaskItemsListModal],
-    subtaskDone: [...completedSubtasksModal],
+    prio: getCurrentPriority(),
+    assignedUsers,
+    subtasks: [...getSubtaskItems()],
+    subtaskDone: [...getCompletedSubtasks()],
     status,
   };
-
-  return task;
 }
 
+/**
+ * Validiert Task-Daten
+ * @param {Object} task - Task-Objekt zum Validieren
+ * @returns {boolean} True wenn valid, false wenn invalid
+ */
 function validateTaskModal(task) {
-  let valid = true;
-  const show = (id, condition) => {
-    const element = document.getElementById(id);
-    if (!element) return;
-    element.style.display = condition ? "inline" : "none";
-    if (condition) valid = false;
-  };
-
-  show("titleAlert-modal", !task.title);
-  show("dateAlert-modal", !task.dueDate);
-  show("categoryAlert-modal", !task.category);
-
-  return valid;
+  const isValidTitle = validateField("titleAlert-modal", task.title);
+  const isValidDate = validateField("dateAlert-modal", task.dueDate);
+  const isValidCategory = validateField("categoryAlert-modal", task.category);
+  
+  return isValidTitle && isValidDate && isValidCategory;
 }
 
+/**
+ * Validiert ein einzelnes Feld
+ * @param {string} alertId - ID des Alert-Elements
+ * @param {*} value - Zu validierender Wert
+ * @returns {boolean} True wenn valid, false wenn invalid
+ */
+function validateField(alertId, value) {
+  const isValid = !!value;
+  const alertElement = document.getElementById(alertId);
+  
+  if (alertElement) {
+    alertElement.style.display = isValid ? "none" : "inline";
+  }
+  
+  return isValid;
+}
+
+/**
+ * Speichert einen Task über die API
+ * @param {Object} task - Task-Objekt zum Speichern
+ * @returns {Promise} Promise für die API-Anfrage
+ */
 const saveTaskModal = (task) => requestData("PUT", `/tasks/${task.id}`, task);
 
+/**
+ * Setzt den Formular-Zustand nach dem Speichern zurück
+ * @param {Object} task - Gespeicherter Task
+ */
 function resetFormState(task) {
-  $.form.removeAttribute("data-task-id");
-  $.form.removeAttribute("data-task-status");
-
-  const eventType = window.isEditMode ? "taskUpdated" : "taskCreated";
-  window.dispatchEvent(new CustomEvent(eventType, { detail: task }));
-
-  window.editingTaskId = null;
-  window.isEditMode = false;
-  subtaskItemsListModal = [];
-  completedSubtasksModal = [];
-  window.pendingAssignedUsers = null;
-  $.form.reset();
-  selectPriorityModal("medium");
+  clearFormAttributes();
+  dispatchTaskEvent(task);
+  resetModalState();
   closeModal();
 }
 
-function prefillModalWithTaskData(task) {
+/**
+ * Entfernt Formular-Attribute
+ */
+function clearFormAttributes() {
+  $.form.removeAttribute("data-task-id");
+  $.form.removeAttribute("data-task-status");
+}
+
+/**
+ * Sendet Task-Event
+ * @param {Object} task - Task-Objekt für Event
+ */
+function dispatchTaskEvent(task) {
+  const eventType = window.isEditMode ? "taskUpdated" : "taskCreated";
+  window.dispatchEvent(new CustomEvent(eventType, { detail: task }));
+}
+
+/**
+ * Setzt den Modal-Zustand zurück
+ */
+function resetModalState() {
+  window.editingTaskId = null;
+  window.isEditMode = false;
+  resetSubtasks();
+  window.pendingAssignedUsers = null;
+  $.form.reset();
+  selectPriorityModal("medium");
+}
+
+/**
+ * Befüllt das Modal mit Task-Daten für die Bearbeitung
+ * @param {Object} task - Task-Objekt zum Befüllen
+ */
+async function prefillModalWithTaskData(task) {
   fillBasicFields(task);
   updateSubtasks(task.subtasks, task.subtaskDone);
   renderSubtasksModal();
 
-  window.pendingAssignedUsers = task.assigned;
+  window.pendingAssignedUsers = task.assignedUsers;
+  
+  // Warte kurz auf das Rendering und wende dann die Vorauswahl an
+  setTimeout(() => {
+    if (window.pendingAssignedUsers && window.pendingAssignedUsers.length > 0) {
+      applyUserPreselection(window.pendingAssignedUsers);
+    }
+  }, 100);
 }
 
+/**
+ * Befüllt die Basis-Formularfelder
+ * @param {Object} task - Task-Objekt mit Daten
+ */
 function fillBasicFields(task) {
   document.getElementById("task-title-modal").value = task.title || "";
-  document.getElementById("task-description-modal").value =
-    task.description || "";
+  document.getElementById("task-description-modal").value = task.description || "";
   document.getElementById("task-date-modal").value = task.dueDate || "";
   document.getElementById("category-modal").value = task.category || "";
   selectPriorityModal((task.prio || "medium").toLowerCase());
 }
 
-function updateSubtasks(subtasks = [], subtaskDone = []) {
-  const fallbackDone = new Array(subtasks.length).fill(false);
-  subtaskItemsListModal = [...subtasks];
-  completedSubtasksModal = [
-    ...(subtaskDone.length === subtasks.length ? subtaskDone : fallbackDone),
-  ];
-}
-
-async function loadAndRenderUsersModal() {
-  const { data = {} } = await requestData("GET", "/users");
-  const listObj = data && typeof data === "object" ? data : {};
-
-  allSystemUsersModal = Object.entries(listObj).map(([id, u]) => ({
-    id,
-    ...u,
-  }));
-
-  if (allSystemUsersModal.length === 0) {
-    const me = JSON.parse(localStorage.getItem("currentUser") || "{}");
-    if (me.userName)
-      allSystemUsersModal.push({ id: me.id || "me", userName: me.userName });
-  }
-
-  renderUserCheckboxesModal(allSystemUsersModal);
-}
-
-async function renderUserCheckboxesModal(users) {
-  const container = document.getElementById("assignedUserList-modal");
-  if (!container) return;
-
-  container.innerHTML = "";
-  const seen = new Set();
-
-  for (let user of users) {
-    user = await ensureUserHasAssignedColor(user);
-    if (seen.has(user.userName)) continue;
-    seen.add(user.userName);
-
-    const checkboxEl = buildUserCheckboxElement(user);
-    container.appendChild(checkboxEl);
-  }
-
-  if (window.pendingAssignedUsers) {
-    updateUserCheckboxes(window.pendingAssignedUsers);
-    window.pendingAssignedUsers = null;
-  } else {
-    updateSelectedModal();
-  }
-}
-
-function buildUserCheckboxElement(user) {
-  const wrapper = document.createElement("div");
-  wrapper.className = "user-checkbox-wrapper-modal";
-
-  wrapper.innerHTML = getUserCheckboxHTML(user);
-  const checkbox = wrapper.querySelector("input");
-
-  wrapper.addEventListener("click", (ev) => {
-    if (ev.target !== checkbox) checkbox.checked = !checkbox.checked;
-    wrapper.classList.toggle("active", checkbox.checked);
-    updateSelectedModal();
-  });
-
-  return wrapper;
-}
-
-function updateUserCheckboxes(assignedUsers) {
-  const checkboxes = document.querySelectorAll(".user-checkbox-modal");
-  checkboxes.forEach((cb) => {
-    cb.checked = false;
-    cb.closest(".user-checkbox-wrapper-modal")?.classList.remove("active");
-  });
-
-  toArray(assignedUsers).forEach((name) => {
-    const cb = [...checkboxes].find((c) => c.value === name);
-    if (cb) {
-      cb.checked = true;
-      cb.closest(".user-checkbox-wrapper-modal")?.classList.add("active");
-    }
-  });
-
-  updateSelectedModal();
-}
-
-function updateSelectedModal() {
-  const tgt = document.getElementById("selectedUser-modal");
-  if (!tgt) return;
-
-  tgt.innerHTML = "";
-  const checkedUserNames = getChecked(".user-checkbox-modal");
-  for (let userIndex = 0; userIndex < checkedUserNames.length; userIndex++) {
-    const userName = checkedUserNames[userIndex];
-    const user = allSystemUsersModal.find((u) => u.userName === userName);
-    tgt.insertAdjacentHTML(
-      "beforeend",
-      `<div class="selected-contact-chip ${
-        user?.colorClass || "color-1"
-      }">${getInitials(userName)}</div>`
-    );
-  }
-}
-
-function toggleUserListModal(event) {
-  event.preventDefault();
-  const list = document.getElementById("assignedUserList-modal");
-  list.classList.toggle("visible");
-  $.assignImg?.classList.toggle("rotated", list.classList.contains("visible"));
-}
-
+/**
+ * Lädt und zeigt Benutzer-Initialen im Modal
+ */
 function loadUserInitialsModal() {
   const user = JSON.parse(localStorage.getItem("currentUser") || "{}");
   const btn = $.modal?.querySelector(".profile-button-modal");
-  if (btn && user.userName) btn.textContent = getInitials(user.userName);
+  const userName = user.userFullName;
+  if (btn && userName) btn.textContent = getInitials(userName);
 }
 
-function eventHandleSearchModal() {
-  const input = document.getElementById("searchUser-modal");
-  input?.addEventListener("input", () => {
-    const filtered = getFilteredUsers(input.value);
-    renderUserCheckboxesModal(filtered);
-  });
-}
-
-function addSubtaskModal(event) {
-  event.preventDefault();
-  const value = getSubtaskInputValue();
-  if (!value) return;
-
-  addSubtask(value);
-  clearSubtaskInput();
-  renderSubtasksModal();
-}
-
-function addSubtask(value) {
-  subtaskItemsListModal.push(value);
-  completedSubtasksModal.push(false);
-}
-
-function addSubtaskOnEnterModal(ev) {
-  if (ev.key === "Enter") {
-    ev.preventDefault();
-    addSubtaskModal(ev);
-  }
-}
-
-function renderSubtasksModal() {
-  const list = document.getElementById("subtaskList-modal");
-  if (!list) return;
-
-  list.innerHTML = "";
-  for (let index = 0; index < subtaskItemsListModal.length; index++) {
-    const text = subtaskItemsListModal[index];
-    list.insertAdjacentHTML("beforeend", getSubtaskHTML(text, index));
-  }
-
-  addSubtaskEventListeners(list);
-}
-
-function addSubtaskEventListeners(list) {
-  addDeleteListeners(list);
-  addEditListeners(list);
-  addCheckboxListeners(list);
-}
-
-function addDeleteListeners(list) {
-  list.querySelectorAll("[data-del]").forEach((btn) =>
-    btn.addEventListener("click", () => {
-      const i = +btn.dataset.del;
-      subtaskItemsListModal.splice(i, 1);
-      completedSubtasksModal.splice(i, 1);
-      renderSubtasksModal();
-    })
-  );
-}
-
-function addEditListeners(list) {
-  list
-    .querySelectorAll("[data-edit]")
-    .forEach((btn) =>
-      btn.addEventListener("click", () =>
-        makeSubtaskEditableModal(+btn.dataset.edit)
-      )
-    );
-}
-
-function addCheckboxListeners(list) {
-  list.querySelectorAll(".subtask-checkbox-modal").forEach((cb) =>
-    cb.addEventListener("change", (e) => {
-      const i = +e.target.dataset.index;
-      completedSubtasksModal[i] = e.target.checked;
-    })
-  );
-}
-
-function makeSubtaskEditableModal(index) {
-  const item = document.getElementById("subtaskList-modal")?.children[index];
-  if (!item) return;
-
-  item.innerHTML = getEditableSubtaskTemplate(subtaskItemsListModal[index]);
-  attachSubtaskEditListeners(item, index);
-}
-
-function attachSubtaskEditListeners(container, index) {
-  const input = container.querySelector("input");
-  const saveBtn = container.querySelector("[data-save]");
-  const deleteBtn = container.querySelector("[data-del]");
-
-  saveBtnInit(index, input, saveBtn);
-  deleteBtnInit(index, input, deleteBtn);
-}
-
-function saveBtnInit(index, input, saveBtn) {
-  saveBtn?.addEventListener("click", () => {
-    subtaskItemsListModal[index] = input.value.trim();
-    renderSubtasksModal();
-  });
-}
-
-function deleteBtnInit(index, input, deleteBtn) {
-  deleteBtn?.addEventListener("click", () => {
-    subtaskItemsListModal.splice(index, 1);
-    completedSubtasksModal.splice(index, 1);
-    renderSubtasksModal();
-  });
-}
-
+/**
+ * Schließt das Modal und räumt auf
+ */
 function closeModal() {
   const modal = document.getElementById("taskDetailModal");
   const overlay = document.getElementById("modal-overlay");
@@ -505,125 +306,22 @@ function closeModal() {
   }
 }
 
-function closeModals(detailModal, formModal, overlay) {
-  if (detailModal?.open && typeof detailModal.close === "function") {
-    detailModal.close();
-  }
-
-  if (formModal) formModal.style.display = "none";
-
-  if (overlay) {
-    overlay.classList.add("d_none");
-    overlay.innerHTML = "";
-  }
-
-  window.isEditMode = false;
-  window.editingTaskId = null;
-}
-
+/**
+ * Setzt das Modal-Formular komplett zurück (für externe Nutzung)
+ */
 function resetModalFormState() {
-  const form = document.getElementById("taskForm");
-  if (!form) return;
-
-  form.reset();
-  form.removeAttribute("data-task-id");
-  form.removeAttribute("data-task-status");
-
-  subtaskItemsListModal = [];
-  completedSubtasksModal = [];
-
-  window.pendingAssignedUsers = null;
+  clearFormAttributes();
+  resetModalState();
+  setSubtaskItems([]);
+  setCompletedSubtasks([]);
 }
 
-function handleGlobalClick(event) {
-  if (clickedOnSubtaskControl(event)) return;
-
-  const detailModal = document.getElementById("taskDetailModal");
-  const formModal = document.querySelector(".form-wrapper-modal");
-  const overlay = document.getElementById("modal-overlay");
-
-  const clickedOutsideDetail =
-    detailModal?.open &&
-    !detailModal.contains(event.target) &&
-    !event.composedPath().includes(detailModal);
-
-  const clickedOutsideForm =
-    formModal &&
-    getComputedStyle(formModal).display !== "none" &&
-    !formModal.contains(event.target);
-
-  if (clickedOutsideDetail || clickedOutsideForm) {
-    closeModals(detailModal, formModal, overlay);
-    resetModalFormState();
-  }
-}
-
-function clickedOnSubtaskControl(event) {
-  return SUBTASK_SELECTORS.some((selector) => event.target.closest(selector));
-}
-
-async function handleSubtaskCheckboxChange(e) {
-  if (!e.target.classList.contains("modal-subtask-checkbox")) return;
-
-  const index = parseInt(e.target.dataset.index);
-  const taskId = e.target.dataset.taskId;
-  const checked = e.target.checked;
-
-  if (!taskId || isNaN(index)) return;
-
-  if (!pendingTaskUpdateQueue[taskId]) {
-    const { data: task } = await requestData("GET", `/tasks/${taskId}`);
-    task.subtaskDone =
-      task.subtaskDone || new Array(task.subtasks.length).fill(false);
-    pendingTaskUpdateQueue[taskId] = task;
-  }
-  pendingTaskUpdateQueue[taskId].subtaskDone[index] = checked;
-}
-
-async function handleModalClose() {
-  for (const [taskId, updatedTask] of Object.entries(pendingTaskUpdateQueue)) {
-    await requestData("PATCH", `/tasks/${taskId}`, {
-      subtaskDone: updatedTask.subtaskDone,
-    });
-  }
-  pendingTaskUpdateQueue = {};
-
-  if (typeof window.renderBoard === "function") {
-    window.renderBoard();
-  } else {
-    location.reload();
-  }
-}
-
-// ==================== INITIALIZATION AND EVENT SETUP ====================
+// ==================== INITIALIZATION ====================
 
 document.addEventListener("DOMContentLoaded", initTaskFloat);
-document.addEventListener("change", handleSubtaskCheckboxChange);
-document.addEventListener("click", handleGlobalClick);
 
-const modal = document.getElementById("taskDetailModal");
-if (modal) {
-  modal.addEventListener("close", handleModalClose);
-}
+// ==================== REQUIRED GLOBAL FUNCTIONS ====================
+// Nur die wirklich nötigen Funktionen global verfügbar machen
 
-// ==================== WINDOW EXPORTS ====================
-// Diese Exports müssen sofort verfügbar sein, nicht erst bei DOMContentLoaded!!!
-
-window.initTaskFloat = initTaskFloat;
-window.selectPriorityModal = selectPriorityModal;
-window.updateSelectedModal = updateSelectedModal;
-window.renderSubtasksModal = renderSubtasksModal;
 window.prefillModalWithTaskData = prefillModalWithTaskData;
 window.resetModalFormState = resetModalFormState;
-window.editingTaskId = null;
-window.isEditMode = false;
-
-window.setSubtaskState = (arr) => {
-  subtaskItemsListModal = [...arr];
-};
-
-window.getSubtaskState = () => subtaskItemsListModal;
-
-// Make global state accessible for debugging
-window.subtaskItemsListModal = subtaskItemsListModal;
-window.completedSubtasksModal = completedSubtasksModal;

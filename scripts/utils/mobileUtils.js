@@ -1,37 +1,33 @@
-// Mobile device detection
-export function isMobileDevice() {
-  const userAgent = navigator.userAgent.toLowerCase();
-  const isMobileUserAgent = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
-  const hasTouchSupport = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-  const isSmallScreen = window.innerWidth <= 820;
-  
-  return isMobileUserAgent || (hasTouchSupport && isSmallScreen);
-}
+/**
+ * Mobile Utilities
+ * Hilfsfunktionen für Mobile-Device-Erkennung und -Handling
+ */
 
-// Check if device is in landscape mode
-export function isLandscapeMode() {
-  return window.matchMedia("(orientation: landscape)").matches;
-}
-
-// Show/hide rotation warning
-export function toggleRotateWarning() {
-  const warning = document.getElementById("rotateWarning");
-  if (!warning) return;
+/**
+ * Richtet Mobile-Device-Event-Listener ein
+ * Behandelt Rotation-Warnungen bei Orientierungs- und Resize-Events
+ */
+export function setupMobileDeviceListeners() {
+  const handleRotation = () => {
+    const warning = document.getElementById("rotateWarning");
+    if (!warning) return;
+    
+    const isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(navigator.userAgent.toLowerCase()) 
+                     || ('ontouchstart' in window && window.innerWidth <= 768);
+    const isLandscape = window.matchMedia("(orientation: landscape)").matches;
+    
+    warning.style.display = (isMobile && isLandscape) ? "flex" : "none";
+  };
   
-  const shouldShow = isMobileDevice() && isLandscapeMode();
-  warning.style.display = shouldShow ? "flex" : "none";
+  window.addEventListener("orientationchange", handleRotation);
+  window.addEventListener("resize", handleRotation);
+  document.addEventListener("DOMContentLoaded", handleRotation);
 }
 
 /**
- * Sets up event listeners for mobile device orientation changes
- * Automatically handles rotation warnings on orientation and resize events
+ * Prüft ob Mobile-Ansicht aktiv ist
+ * @returns {boolean} True wenn Bildschirmbreite <= 768px
  */
-export function setupMobileDeviceListeners() {
-  window.addEventListener("orientationchange", toggleRotateWarning);
-  window.addEventListener("resize", toggleRotateWarning);
-  document.addEventListener("DOMContentLoaded", toggleRotateWarning);
-}
-
 export function isMobileView() {
-  return window.matchMedia('(max-width: 768px)').matches
+  return window.matchMedia('(max-width: 768px)').matches;
 }

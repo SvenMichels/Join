@@ -1,5 +1,4 @@
 import { renderContact, openEditWindow } from "./contacts.js";
-import { ensureUserHasAssignedColor } from "../scripts/utils/colors.js";
 import { getInitials } from "../scripts/utils/helpers.js";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -14,44 +13,35 @@ async function currentUserCard() {
   const currentUserData = JSON.parse(localStorage.getItem("currentUser"));
   if (!currentUserData) return;
 
-  const updatedUserData = await ensureUserHasAssignedColor(currentUserData);
-  const phoneNumber = await getUserPhoneNumber(updatedUserData);
-  const contactData = extractContactInformation(updatedUserData);
-  
+  const contactData = extractContactInformation(currentUserData);
+
   renderContact(
-    contactData.fullUserName,
+    contactData.userFullName,
     contactData.userEmailAddress,
-    phoneNumber,
+    contactData.userPhoneNumber,
     contactData.userInitials,
     contactData.firstCharacter,
     contactData.userId,
-    contactData.userColorClass
+    contactData.userColor
   );
 }
 
-async function getUserPhoneNumber(userData) {
-  if (userData.phoneNumber) {
-    return userData.phoneNumber;
-  }
-  
-  try {
-    const { getUserDataById } = await import("../scripts/users/users.js");
-    const firebaseUserData = await getUserDataById(userData.id);
-    return firebaseUserData?.phoneNumber || "";
-  } catch (error) {
-    return "";
-  }
-}
-
 function extractContactInformation(userData) {
-  const { userName: fullUserName, userEmail: userEmailAddress } = userData;
-  
+  const userFullName = userData.userFullName;
+  const userEmailAddress = userData.userEmailAddress;
+  const userPhoneNumber = userData.userPhoneNumber;
+  const userInitials = getInitials(userData.userFullName);
+  const firstCharacter = userData.userFullName ? userData.userFullName.charAt(0).toUpperCase() : "?";
+  const userId = userData.id;
+  const userColor = userData.userColor;
+
   return {
-    fullUserName,
+    userFullName,
     userEmailAddress,
-    userInitials: getInitials(fullUserName),
-    firstCharacter: fullUserName[0]?.toUpperCase() || "",
-    userId: userData.id,
-    userColorClass: userData.colorClass
+    userPhoneNumber,
+    userInitials,
+    firstCharacter,
+    userId,
+    userColor
   };
 }

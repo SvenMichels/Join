@@ -1,8 +1,9 @@
-import { completedSubtasksModal } from "./taskfloat.js";
+import { getCompletedSubtasks } from "./subtaskManager.js";
 import { getInitials } from "../scripts/utils/helpers.js";
 
 export function getSubtaskHTML(text, index) {
-  const checked = completedSubtasksModal[index] ? "checked" : "";
+  const completedSubtasks = getCompletedSubtasks();
+  const checked = completedSubtasks[index] ? "checked" : "";
   return `
     <div class="subtask-container-modal">
       <input type="checkbox" class="subtask-checkbox-modal" data-index="${index}" ${checked}>
@@ -21,14 +22,16 @@ export function getSubtaskHTML(text, index) {
 }
 
 export function getUserCheckboxHTML(user) {
+  const checkboxId = `user-checkbox-modal-${user.userId || user.userFullName.replace(/\s+/g, '-').toLowerCase()}`;
+  
   return `
     <div class="user-info-wrapper">
-      <div class="selected-contact-chip ${user.colorClass}">
-        ${getInitials(user.userName)}
+      <div class="selected-contact-chip ${user.userColor || 'color-1'}">
+        ${user.userInitials || getInitials(user.userFullName)}
       </div>
-      <label>${user.userName}</label>
+      <label for="${checkboxId}">${user.userFullName}</label>
     </div>
-    <input type="checkbox" class="user-checkbox-modal" value="${user.userName}">
+    <input type="checkbox" id="${checkboxId}" class="user-checkbox-modal" value="${user.userFullName}">
   `;
 }
 
