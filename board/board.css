@@ -116,6 +116,20 @@ body {
   }
 }
 
+.task-icon{
+  display: flex;
+  justify-content: space-between;
+}
+
+.switchPositionBtn{
+  width: 20px;
+  height: 20px;
+}
+
+.switchPositionBtn:hover{
+  cursor: pointer;
+}
+
 h3 {
   margin: 0;
 }
@@ -290,4 +304,59 @@ h3 {
 .task-priority-img {
   width: 20px;
   height: 20px;
+}
+
+.MoveDropdown{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: absolute;
+  background-color: #2a3647;
+  width: 106px;
+  height: 113px;
+  border-radius: 20px 0px 20px 20px;
+  padding: 6px 8px 16px 8px;
+  gap: 16px;
+  z-index: 200;
+  left: 140px;
+}
+
+.moveHeader{
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.moveList{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.moveText{ 
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  height: 18px;
+  width: 90px;
+  padding: 4px 5px 4px 2px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #ffffff;
+}
+
+.moveText:hover{
+  cursor: pointer;
+  background-color: #091931;
+  border-radius: 10px;
+  border-radius: 8px;
+}
+
+.moveImg{
+  width: 15px;
+  height: 15px;
 }
