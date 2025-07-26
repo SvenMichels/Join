@@ -320,7 +320,8 @@ h3 {
   padding: 6px 8px 16px 8px;
   gap: 16px;
   z-index: 200;
-  left: 140px;
+  left: 110px;
+  top : 40px;
 }
 
 .moveHeader{
