@@ -96,6 +96,7 @@ body {
 }
 
 .task {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -357,6 +358,7 @@ h3 {
 }
 
 .moveImg{
+  pointer-events: all;
   width: 15px;
   height: 15px;
 }

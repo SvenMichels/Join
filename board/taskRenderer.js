@@ -5,6 +5,8 @@ import {
   calculateSubtaskProgress 
 } from "./boardUtils.js";
 
+import { setupMoveDropdown } from "./dragDropManager.js";
+
 // Board column IDs for different task statuses
 export const TASK_STATUS_COLUMN_MAPPING = {
   todo: "todoList",
@@ -128,7 +130,42 @@ function setupTaskElementEvents(element, task) {
       window.openTaskDetails(task);
     }
   });
+  setupMoveDropdown(element, task.id, task);
 }
+
+/**
+ * Moves a task one column forward or backward based on current status.
+ * 
+ * @param {Object} task - The full task object.
+ * @param {"prev"|"next"} direction - The direction to move ("prev" or "next").
+ */
+function moveTaskOneColumn(task, direction) {
+  const statusKeys = Object.keys(TASK_STATUS_COLUMN_MAPPING);
+  const currentIndex = statusKeys.indexOf(task.status);
+
+  if (currentIndex === -1) return;
+
+  const newIndex =
+    direction === "next"
+      ? Math.min(currentIndex + 1, statusKeys.length - 1)
+      : Math.max(currentIndex - 1, 0);
+
+  if (newIndex === currentIndex) return; // Kein Wechsel nötig
+
+  // Status aktualisieren
+  task.status = statusKeys[newIndex];
+
+  const taskElement = document.getElementById(`task-${task.id}`);
+  const targetColumnId = TASK_STATUS_COLUMN_MAPPING[task.status];
+  const targetColumn = document.getElementById(targetColumnId);
+
+  if (targetColumn && taskElement) {
+    targetColumn.appendChild(taskElement);
+    if (window.updateTask) window.updateTask(task); // falls global vorhanden
+    if (window.updateEmptyLists) window.updateEmptyLists(); // optional
+  }
+}
+
 
 function handleDragStart(event) {
   event.dataTransfer.setData("text/plain", event.target.id);

@@ -62,29 +62,126 @@ function moveTaskToNewStatusColumn(taskDataObject, newTaskStatus, targetColumnEl
   updateTask(taskDataObject);
 }
 
-export function setupTaskEvents(element, task) {
-  element.addEventListener("dragstart", handleDragStart);
-  element.addEventListener("click", () => {
-    if (window.openTaskDetails) window.openTaskDetails(task);
+/**
+ * Handles the dropdown toggle behavior for a task card.
+ *
+ * @param {HTMLElement} taskElement - The task DOM element.
+ * @param {string} taskId - The task ID.
+ */
+export function setupTaskDropdown(taskElement, taskId) {
+  const btnId = `moveDropdownBtn-${taskId}`;
+  const dropdownId = `moveDropdown-${taskId}`;
+
+  const btn = taskElement.querySelector(`#${btnId}`);
+  const dropdown = taskElement.querySelector(`#${dropdownId}`);
+
+  if (!btn || !dropdown) return;
+
+  // Toggle dropdown on button click
+  btn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    closeAllDropdowns();
+    dropdown.classList.toggle("dp-none");
   });
 
-  // MoveDropdown-Button und Dropdown-Events
-  const btnId = `moveDropdownBtn-${task.id}`;
-  const dropdownId = `moveDropdown-${task.id}`;
-  const btn = element.querySelector(`#${btnId}`);
-  const dropdown = element.querySelector(`#${dropdownId}`);
+  // Prevent click inside dropdown from closing it
+  dropdown.addEventListener("click", (e) => e.stopPropagation());
 
-  if (btn && dropdown) {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      document.querySelectorAll('.MoveDropdown').forEach(d => d.classList.add('dp-none'));
-      dropdown.classList.toggle('dp-none');
+  // Global click to close any open dropdowns
+  document.addEventListener("click", closeAllDropdowns);
+
+  /**
+   * Closes all move dropdowns globally.
+   */
+  function closeAllDropdowns() {
+    document.querySelectorAll(".MoveDropdown").forEach((d) => {
+      d.classList.add("dp-none");
     });
-    dropdown.addEventListener('click', e => e.stopPropagation());
   }
+}
 
-  // Schließt alle Dropdowns beim Klick außerhalb
-  document.addEventListener('click', () => {
-    document.querySelectorAll('.MoveDropdown').forEach(d => d.classList.add('dp-none'));
+/**
+ * Attaches event handlers for the move dropdown per task.
+ * Ensures dropdown toggles without affecting other tasks.
+ * 
+ * @param {HTMLElement} taskElement - The complete rendered task container.
+ * @param {string|number} taskId - The unique task ID to target button & dropdown.
+ */
+export function setupMoveDropdown(taskElement, taskId, task) {
+  const btn = taskElement.querySelector(`#moveDropdownBtn-${taskId}`);
+  const dropdown = taskElement.querySelector(`#moveDropdown-${taskId}`);
+
+  if (!btn || !dropdown) return;
+
+  btn.addEventListener("click", (e) => {
+    e.stopPropagation();
+
+    // Close other dropdowns
+    document.querySelectorAll(".MoveDropdown").forEach(d => {
+      if (d !== dropdown) d.classList.add("dp-none");
+    });
+
+    dropdown.classList.toggle("dp-none");
   });
+
+  // Prevent click inside dropdown from bubbling to close listener
+  dropdown.addEventListener("click", e => e.stopPropagation());
+
+  // Global close on outside click
+  document.addEventListener("click", () => {
+    dropdown.classList.add("dp-none");
+  });
+
+const lastListBtn = dropdown.querySelector(".moveText:first-child");
+const nextListBtn = dropdown.querySelector(".moveText:last-child");
+
+if (lastListBtn) {
+  lastListBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    moveTaskOneColumn(task, "prev");
+    dropdown.classList.add("dp-none");
+  });
+}
+
+if (nextListBtn) {
+  nextListBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    moveTaskOneColumn(task, "next");
+    dropdown.classList.add("dp-none");
+  });
+}
+
+}
+
+/**
+ * Moves a task one column forward or backward based on current status.
+ * 
+ * @param {Object} task - The full task object.
+ * @param {"prev"|"next"} direction - The direction to move ("prev" or "next").
+ */
+function moveTaskOneColumn(task, direction) {
+  const statusKeys = Object.keys(TASK_STATUS_COLUMN_MAPPING);
+  const currentIndex = statusKeys.indexOf(task.status);
+
+  if (currentIndex === -1) return;
+
+  const newIndex =
+    direction === "next"
+      ? Math.min(currentIndex + 1, statusKeys.length - 1)
+      : Math.max(currentIndex - 1, 0);
+
+  if (newIndex === currentIndex) return; // Kein Wechsel nötig
+
+  // Status aktualisieren
+  task.status = statusKeys[newIndex];
+
+  const taskElement = document.getElementById(`task-${task.id}`);
+  const targetColumnId = TASK_STATUS_COLUMN_MAPPING[task.status];
+  const targetColumn = document.getElementById(targetColumnId);
+
+  if (targetColumn && taskElement) {
+    targetColumn.appendChild(taskElement);
+    if (window.updateTask) window.updateTask(task); // falls global vorhanden
+    if (window.updateEmptyLists) window.updateEmptyLists(); // optional
+  }
 }
