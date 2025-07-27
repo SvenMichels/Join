@@ -6,7 +6,6 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  max-width: 1440px;
   background-color: #fefafa;
 }
 
@@ -28,8 +27,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: calc(100vh - 100px);
-  padding: 20px;
+  width: inherit;
+  height: calc(100vh - 120px);
 }
 
 .content-holder > div:nth-child(1),
@@ -37,16 +36,40 @@ body {
   position: absolute;
   top: 0;
 }
-.content-holder > div:nth-child(1) { left: 0; }
-.content-holder > div:nth-child(3) { right: 0; }
+.content-holder > div:nth-child(1) {
+  left: 0;
+}
+.content-holder > div:nth-child(3) {
+  right: 0;
+}
 
 .content-holder > div:nth-child(2) {
   margin: auto;
+  margin-bottom: 50px;
 }
 
-.logo {
+.big-logo {
+  position: absolute;
+  display: flex;
+  justify-content: center !important;
+  align-items: center !important;
   width: 100px;
   height: 122px;
+  background-color: #ffffff;
+  padding-top: 50px;
+  padding-left: 20px;
+  transition: all 0.5s ease;
+}
+
+.big-logo.shrinkToLogo {
+  position: absolute;
+  width: 100px;
+  height: 122px;
+  top: 80px;
+  left: 77px;
+  padding: 0;
+  background-color: transparent;
+  transition: all 1.6s ease;
 }
 
 .sign-up-container {
@@ -55,6 +78,7 @@ body {
   gap: 20px;
   width: 279px;
   height: 49px;
+  padding-top: 50px;
 }
 
 form {
@@ -184,12 +208,11 @@ input.password:focus {
   gap: 32px;
   width: 652px;
   height: 449px;
-  box-shadow: 0px 0px 14px 3px #0000000A;
+  box-shadow: 0px 0px 14px 3px #0000000a;
   background-color: #fff;
   padding: 48px 115px;
   border: 1px solid transparent;
   border-radius: 30px;
-
 }
 
 .bar {
@@ -208,33 +231,43 @@ input:focus::placeholder {
   color: transparent;
 }
 
-/* Media Queries – leer, aber vorbereitet */
 @media (max-width: 575px) {
-    .content-holder {
+  h1 {
+    margin: 0;
+  }
+  .content-holder {
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
     gap: 24px;
-    padding-top: 40px;
+    padding-top: 20px;
   }
 
+  .big-logo {
+    width: 64px;
+    height: 78px;
+    padding-top: 0;
+  }
   .content-holder > div:nth-child(1),
   .content-holder > div:nth-child(3) {
     position: static;
-  }
-
-  .logo {
-    width: 80px;
-    height: auto;
+    width: 100%;
   }
 
   .login-container {
     width: 90vw;
     padding: 24px;
+    box-sizing: border-box;
+  }
+
+  .sign-up-container {
+    display: flex;
+    justify-content: center;
+    padding-top: 0;
+    width: 100%;
   }
 
   .footer {
-    flex-direction: column;
     gap: 16px;
     padding: 24px 0;
   }
@@ -242,7 +275,15 @@ input:focus::placeholder {
   .btn,
   .button-guest-login {
     font-size: 16px;
+    width: 180px;
     height: 42px;
+  }
+
+  .button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 0;
   }
 
   .bar {
@@ -256,13 +297,16 @@ input:focus::placeholder {
 }
 
 @media (min-width: 575px) and (max-width: 768px) {
-    .login-container {
+  .content-holder {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 24px;
+    padding-top: 20px;
+  }
+  .login-container {
     width: 90%;
     padding: 32px;
-  }
-
-  .logo {
-    width: 90px;
   }
 
   input.email,
@@ -275,21 +319,13 @@ input:focus::placeholder {
   }
 }
 @media (min-width: 769px) and (max-width: 991px) {
-    .login-container {
+  .login-container {
     width: 600px;
     padding: 40px 60px;
   }
-
-  .logo {
-    width: 100px;
-  }
 }
 @media (min-width: 1200px) {
-    .login-container {
+  .login-container {
     padding: 64px 120px;
-  }
-
-  .logo {
-    width: 120px;
   }
 }
