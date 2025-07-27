@@ -1,59 +1,47 @@
-html {
-  display: flex;
-  justify-content: center;
-}
-
 body {
   font-family: "Inter";
   margin: 0;
+  width: 100vw;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: center;
   max-width: 1440px;
-  height: 100vh;
   background-color: #fefafa;
 }
 
 .landscape {
-  display: none;
+  display: flex;
   position: fixed;
   inset: 0;
   background: #000;
   color: #fff;
   z-index: 9999;
   font-size: 1.5rem;
-  display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
 }
 
-.logInHeader {
-  width: 90vw;
+.content-holder {
+  position: relative;
   display: flex;
-  align-items: start;
-  justify-content: flex-end;
-  flex-direction: row;
-  padding-top: 50px;
-}
-
-.signUpContainer {
-  display: flex;
-  flex-direction: row;
+  justify-content: center;
   align-items: center;
-  gap: 20px;
-  width: 279px;
-  height: 49px;
-  left: 90%;
+  height: calc(100vh - 100px);
+  padding: 20px;
 }
 
-.signUpTxt {
-  /* width: 153px; */
-  /* height: 24px; */
-  font-family: "Inter";
-  font-weight: 400;
-  font-size: 20px;
+.content-holder > div:nth-child(1),
+.content-holder > div:nth-child(3) {
+  position: absolute;
+  top: 0;
+}
+.content-holder > div:nth-child(1) { left: 0; }
+.content-holder > div:nth-child(3) { right: 0; }
+
+.content-holder > div:nth-child(2) {
+  margin: auto;
 }
 
 .logo {
@@ -61,110 +49,55 @@ body {
   height: 122px;
 }
 
-.bigLogo {
-  z-index: 999;
-  position: absolute;
+.sign-up-container {
   display: flex;
-  justify-content: center !important;
-  align-items: center !important;
-  width: 100%;
-  max-width: 1440px;
-  height: 100%;
-  background-color: #ffffff;
-  padding: 0;
-  transition: all 0.5s ease;
-}
-
-.bigLogo.shrinkToLogo {
-  position: absolute;
-  width: 100px;
-  height: 122px;
-  top: 80px;
-  left: 77px;
-  padding: 0;
-  background-color: transparent;
-  transition: all 1.6s ease;
-}
-
-h1 {
-  font-weight: 700;
-  font-size: 61px;
-  margin: 0;
-}
-
-.logInTxt {
-  display: flex;
-  justify-content: center;
   align-items: center;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.h1Underline {
-  width: 150px;
-  height: 0px;
-  border: 3px solid #29abe2;
-}
-
-.logInContainer {
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-  flex-direction: column;
-  border: 2px solid #000;
-  border-radius: 20px;
-  width: 652px;
-  height: 449px;
-  box-shadow: #000;
+  gap: 20px;
+  width: 279px;
+  height: 49px;
 }
 
 form {
-  width: 100%;
-  max-width: 422px;
-  height: 152px;
-  gap: 20px;
   display: flex;
   flex-direction: column;
+  gap: 20px;
+  max-width: 422px;
+  width: 100%;
+  height: 152px;
 }
 
-.textareaIconComb {
+.text-area-icon-comb {
   width: 100%;
   display: flex;
   justify-content: end;
   align-items: center;
 }
 
-.email {
+input.email,
+input.password {
   border: 1px solid #d1d1d1;
   border-radius: 10px;
-  padding: 12px 21px 12px 21px;
+  padding: 12px 21px;
   height: 48px;
   width: 422px;
   resize: none;
+  outline: none;
+  transition: border 0.2s ease, outline 0.2s ease;
 }
 
-.mailIcon {
+input.email:focus,
+input.password:focus {
+  border: 1px solid #29abe2;
+  outline: 1px solid #29abe2;
+}
+
+.mail-icon,
+.password-icon {
   position: absolute;
   padding-right: 30px;
 }
 
-.password {
-  align-content: center;
-  border: 1px solid #d1d1d1;
-  border-radius: 10px;
-  padding: 12px 21px 12px 21px;
-  gap: 10px;
-  height: 48px;
-  width: 422px;
-  resize: none;
-}
-
-.passwordIcon {
-  position: absolute;
-  padding-right: 30px;
-}
-
-.buttonContainer {
+.button-container {
   display: flex;
   flex-direction: row;
   gap: 35px;
@@ -173,55 +106,46 @@ form {
   padding-top: 52px;
 }
 
-.btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: row;
-  height: 48px;
-  gap: 4px;
-  border-radius: 10px;
-  background-color: #2a3647;
-  border: 1px solid;
-  color: #ffffff;
-  font-weight: 700;
-  font-size: 20px;
-}
-
-.btn:hover {
-  box-shadow: 0px 4px 4px 0px #00000040;
-  border: 1px solid #29abe2;
-  background: #29abe2;
-  cursor: pointer;
-}
-
+.btn,
 .button-guest-login {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: row;
-  width: 177px;
   height: 48px;
   gap: 4px;
   border-radius: 10px;
-  background: #ffffff;
   border: 1px solid;
   font-weight: 700;
   font-size: 20px;
+  cursor: pointer;
+}
+
+.btn {
+  background-color: #2a3647;
+  color: #fff;
+}
+
+.btn:hover {
+  background: #29abe2;
+  border-color: #29abe2;
+  box-shadow: 0 4px 4px #00000040;
+}
+
+.button-guest-login {
+  background: #fff;
+  width: 177px;
 }
 
 .button-guest-login:hover {
-  cursor: pointer;
   color: #29abe2;
-  box-shadow: 0px 4px 4px 0px #00000040;
+  box-shadow: 0 4px 4px #00000040;
 }
 
-.signUpBtn {
+.sign-up-button {
   width: 91px !important;
   height: 49px !important;
   gap: 10px !important;
-  font-family: "Inter";
-  font-weight: 700;
   font-size: 16px;
 }
 
@@ -232,39 +156,40 @@ form {
 .footer {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  width: 246px;
-  height: 35px;
-  flex-direction: row;
+  justify-content: center;
+  gap: 64px;
   padding-bottom: 50px;
 }
 
-.txtFooterDesign {
-  color: #a8a8a8;
+.footer-text {
   font-weight: 400;
   font-size: 16px;
   height: 19px;
+  color: #a8a8a8;
   text-decoration: none;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
 }
 
-.txtFooterDesign:hover {
+.footer-text:hover {
   color: #29abe2;
-  font-weight: 700;
+  opacity: 1;
 }
 
-.loginContainer {
+.login-container {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
   gap: 32px;
   width: 652px;
   height: 449px;
-  background-color: #ffffff;
-  box-shadow: 4px 4px 4px 4px rgba(0, 0, 0, 0.25);
-  padding: 48px 115px 48px 115px;
+  box-shadow: 0px 0px 14px 3px #0000000A;
+  background-color: #fff;
+  padding: 48px 115px;
   border: 1px solid transparent;
   border-radius: 30px;
+
 }
 
 .bar {
@@ -276,8 +201,6 @@ form {
 input::placeholder {
   font-weight: 400;
   font-size: 20px;
-  line-height: 120%;
-  letter-spacing: 0%;
   color: #d1d1d1;
 }
 
@@ -285,31 +208,88 @@ input:focus::placeholder {
   color: transparent;
 }
 
-@media (max-width: 768px) {
-  body {
-    justify-content: flex-end;
-    gap: 50px;
+/* Media Queries – leer, aber vorbereitet */
+@media (max-width: 575px) {
+    .content-holder {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 24px;
+    padding-top: 40px;
   }
-  .bigLogo.shrinkToLogo {
-    top: 20px;
-    left: 20px;
-  }
-  .loginForm {
-    order: 1;
-  }
-  .buttonContainer {
-    order: 2;
-  }
-  .logInHeader {
-    order: 3;
+
+  .content-holder > div:nth-child(1),
+  .content-holder > div:nth-child(3) {
     position: static;
-    align-self: center;
-    margin: 20px 0;
-    width: 100%;
-    display: flex;
-    justify-content: center;
   }
+
+  .logo {
+    width: 80px;
+    height: auto;
+  }
+
+  .login-container {
+    width: 90vw;
+    padding: 24px;
+  }
+
   .footer {
-    order: 4;
+    flex-direction: column;
+    gap: 16px;
+    padding: 24px 0;
+  }
+
+  .btn,
+  .button-guest-login {
+    font-size: 16px;
+    height: 42px;
+  }
+
+  .bar {
+    width: 100px;
+  }
+
+  input.email,
+  input.password {
+    width: 100%;
+  }
+}
+
+@media (min-width: 575px) and (max-width: 768px) {
+    .login-container {
+    width: 90%;
+    padding: 32px;
+  }
+
+  .logo {
+    width: 90px;
+  }
+
+  input.email,
+  input.password {
+    width: 100%;
+  }
+
+  .footer {
+    padding-bottom: 32px;
+  }
+}
+@media (min-width: 769px) and (max-width: 991px) {
+    .login-container {
+    width: 600px;
+    padding: 40px 60px;
+  }
+
+  .logo {
+    width: 100px;
+  }
+}
+@media (min-width: 1200px) {
+    .login-container {
+    padding: 64px 120px;
+  }
+
+  .logo {
+    width: 120px;
   }
 }

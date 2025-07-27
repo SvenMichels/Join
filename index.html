@@ -1,81 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>
-        Join – Kanban Board
-    </title>
-    <link rel="icon" href="../assets/icons/join_logo_2.svg" type="image/x-icon" />
+    <title>Join – Kanban Board</title>
+    <link
+      rel="icon"
+      href="../assets/icons/join_logo_2.svg"
+      type="image/x-icon"
+    />
     <link href="./index.css" rel="stylesheet" />
     <link href="styles/fonts.css" rel="stylesheet" />
     <link href="styles/shared.css" rel="stylesheet" />
     <link href="media-querie.css" rel="stylesheet" />
-    <script src="./index.js" type="module">
-    </script>
-</head>
+    <script src="./index.js" type="module"></script>
+  </head>
 
-<body>
-    <div id="rotateWarning" style="
-  display: none;
-  position: fixed;
-  inset: 0;
-  background-color: #000;
-  color: #fff;
-  z-index: 9999;
-  font-size: 1.5rem;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 2rem;
-">
-  Bitte drehe dein Gerät zurück ins Hochformat.
-</div>
+  <body>
+    <div
+      id="rotateWarning"
+      style="
+        display: none;
+        position: fixed;
+        inset: 0;
+        background-color: #000;
+        color: #fff;
+        z-index: 9999;
+        font-size: 1.5rem;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 2rem;
+      "
+    >
+      Bitte drehe dein Gerät zurück ins Hochformat.
+    </div>
+    <div class="content-holder">
+      <div>
+        <img
+          alt="Join logo groß"
+          class="big-logo"
+          id="bigLogo"
+          src="./assets/icons/join_logo_2.svg"
+        />
+      </div>
+      <div>
+        <div class="login-container">
+          <h1>Log in</h1>
+          <div class="bar"></div>
 
-    <img alt="Join logo groß" class="bigLogo" id="bigLogo" src="./assets/icons/join_logo_2.svg" />
-    <div class="logInHeader">
-
-        <div class="signUpContainer">
-            <p class="signUpTxt">
-                Not a Join user?
-            </p>
-            <button class="signUpBtn btn" onclick="window.location.href = '../signup/signup.html';">
+          <form class="login-form" id="loginForm">
+            <div class="text-area-icon-comb">
+              <img
+                alt="Mail Icon"
+                class="mail-icon"
+                src="./assets/icons/mail.svg"
+              />
+              <input
+                class="email"
+                id="loginEmail"
+                placeholder="E-Mail"
+                required=""
+                type="email"
+              />
+            </div>
+            <div class="text-area-icon-comb">
+              <img
+                alt="Password Icon"
+                class="password-icon"
+                src="./assets/icons/lock.svg"
+              />
+              <input
+                class="password"
+                id="loginPassword"
+                placeholder="Password"
+                required=""
+                type="password"
+              />
+            </div>
+          </form>
+          <div class="button-container">
+            <button class="btn logIn">Log in</button>
+            <button class="button-guest-login">Guest Log in</button>
+          </div>
+        </div>
+        <div>
+        </div>
+      </div>
+      <div>
+            <div class="sign-up-container">
+              <p>Not a Join user?</p>
+              <button
+                class="sign-up-button btn"
+                onclick="window.location.href = '../signup/signup.html';"
+              >
                 Sign up
-            </button>
-        </div>
+              </button>
+            </div>
+          </div>
     </div>
-    <div class="loginContainer">
-        <h1 class="loginHeader">
-            Log in
-        </h1>
-        <div class="bar"></div>
-        
-    <form class="loginForm" id="loginForm">
-        <div class="textareaIconComb">
-            <img alt="Mail Icon" class="mailIcon" src="./assets/icons/mail.svg" />
-            <input class="email" id="loginEmail" placeholder="E-Mail" required="" type="email" />
-        </div>
-        <div class="textareaIconComb">
-            <img alt="Password Icon" class="passwordIcon" src="./assets/icons/lock.svg" />
-            <input class="password" id="loginPassword" placeholder="Password" required="" type="password" />
-        </div>
-    </form>
-    <div class="buttonContainer">
-        <button class="btn logIn">
-            Log in
-        </button>
-        <button class="button-guest-login">
-            Guest Log in
-        </button>
-    </div>
-</div>
     <footer class="footer">
-        <a class="txtFooterDesign" href="./privatePolicy/privatePolicyNoAcc.html">Privacy Policy</a>
-        <a class="txtFooterDesign" href="./legalnotice/legalnoticeNoAcc.html">Legal notice</a>
+      <a class="footer-text" href="./privatePolicy/privatePolicyNoAcc.html"
+        >Privacy Policy</a
+      >
+      <a class="footer-text" href="./legalnotice/legalnoticeNoAcc.html"
+        >Legal notice</a
+      >
     </footer>
-    <script src="./scripts/app.js" type="module">
-    </script>
-</body>
-
+    <script src="./scripts/app.js" type="module"></script>
+  </body>
 </html>
