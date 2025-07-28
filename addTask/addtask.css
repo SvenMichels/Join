@@ -2,6 +2,7 @@
   width: 278px;
   height: 73px;
   display: flex;
+  padding-top: 100px;
   gap: 1px;
 }
 
@@ -16,51 +17,34 @@ h1 {
   line-height: 120%;
 }
 
-.task-title {
-  display: flex;
-  flex-direction: column;
-  height: 96px;
-  max-width: 440px;
-  gap: 8px;
-}
-
-.task-title-input {
-  height: 48px;
-  max-width: 440px;
-  border-radius: 10px;
-  border: 1px solid #d1d1d1;
-}
-
-.task-description {
-  display: flex;
-  flex-direction: column;
-  max-width: 440px;
-  height: 120px;
-  padding-bottom: 10px;
-  gap: 8px;
-}
-
-.task-description-input {
-  height: 120px;
-  border-radius: 10px;
-  border: 1px solid #d1d1d1;
-  max-width: 440px;
-}
-
+.task-title,
+.task-description,
 .task-date {
   display: flex;
   flex-direction: column;
   max-width: 440px;
-  height: 96px;
   gap: 8px;
 }
 
+.task-title { height: 96px; }
+.task-description { height: 120px; padding-bottom: 10px; }
+.task-date { height: 96px; }
+
+.task-title-input,
+.task-description-input,
 .task-dateInput {
-  padding-right: 10px;
-  max-width: 440px;
-  height: 48px;
-  border-radius: 10px;
   border: 1px solid #d1d1d1;
+  border-radius: 10px;
+  max-width: 440px;
+}
+
+.task-title-input,
+.task-dateInput {
+  height: 48px;
+}
+
+.task-description-input {
+  height: 120px;
 }
 
 .space-container {
@@ -80,31 +64,30 @@ h1 {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  max-width: 440px;
   height: 88px;
 }
 
 .prio-button-container {
   display: flex;
   justify-content: space-between;
-  max-width: 440px;
   gap: 16px;
 }
 
 .prioButtons {
   width: 136px;
   height: 56px;
-  border-style: none;
+  border: none;
   border-radius: 10px;
-  background: #ffffff;
-  box-shadow: 0px 0px 4px 0px #0000001a;
+  background: #fff;
+  box-shadow: 0 0 4px #0000001a;
+  cursor: pointer;
 }
 
 .prioButtons:hover {
-  box-shadow: 0px 4px 4px 0px #00000040;
+  box-shadow: 0 4px 4px #00000040;
 }
 
-.prioIcons {
+.prio-icons {
   width: 20px;
   height: 14.51px;
 }
@@ -139,23 +122,9 @@ input:valid + .error-message {
   width: 100%;
 }
 
-#searchUser {
-  width: 100%;
-  padding-right: 40px;
-  box-sizing: border-box;
-}
-
 .prio-assign-input {
-  width: 98%;
+  width: 100%;
   height: 48px;
-  display: flex;
-  justify-content: space-between;
-  border-radius: 10px;
-  border: 1px solid #d1d1d1;
-}
-
-.prio-assign-input {
-  width: 100%;
   padding: 12px 40px 12px 16px;
   border: 1px solid #d1d1d1;
   border-radius: 10px;
@@ -163,52 +132,8 @@ input:valid + .error-message {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
   font-size: 16px;
   box-sizing: border-box;
-}
-
-.assignUserListBtn {
-  position: absolute;
-  top: 50%;
-  right: 10px;
-  transform: translateY(-50%);
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  height: 24px;
-  width: 24px;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-}
-
-.assignUserListBtn:hover {
-  cursor: pointer;
-  background: #d1d1d1;
-  border-radius: 50%;
-}
-
-.prio-assign-input:hover {
-  border: 1px solid #a8a8a8;
-}
-
-.assignInput {
-  border: none;
-  outline: none;
-  width: 100%;
-  font-size: 16px;
-}
-
-.assigned-user-list {
-  background-color: #ffffff;
-  border: 1px solid #d1d1d1;
-  max-height: 0;
-  opacity: 0;
-  overflow-y: scroll;
-  overflow-x: hidden;
-  visibility: hidden;
-  transition: all 0.3s ease;
-  box-shadow: 0px 0px 14px 3px #0000000a;
-  border-radius: 10px;
+  justify-content: space-between;
 }
 
 .dropdown-arrow {
@@ -229,22 +154,6 @@ input:valid + .error-message {
 
 #assignedBtnImg.rotated {
   transform: rotate(180deg);
-}
-
-.assigned-user-list.visible {
-  max-height: 230px;
-  opacity: 1;
-  visibility: visible;
-}
-
-.assignedInputImg {
-  width: 15px;
-  height: 14px;
-}
-
-.assignedInputImg:hover {
-  cursor: pointer;
-  background: #d1d1d1;
 }
 
 .prio-category-container {
@@ -291,9 +200,175 @@ input:valid + .error-message {
   padding-right: 40px;
 }
 
-.taskPrioIcons {
+.taskprio-icons {
   width: 14px;
   height: 14px;
+}
+
+.assigned-user-list {
+  background: #fff;
+  border: 1px solid #d1d1d1;
+  box-shadow: 0 0 14px 3px #0000000a;
+  border-radius: 10px;
+  max-height: 0;
+  opacity: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.assigned-user-list.visible {
+  max-height: 230px;
+  opacity: 1;
+  visibility: visible;
+}
+
+#searchUser {
+  width: 100%;
+  padding-right: 40px;
+  box-sizing: border-box;
+}
+
+.assignUserListBtn {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  height: 24px;
+  width: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 50%;
+}
+
+.assignUserListBtn:hover {
+  background: #d1d1d1;
+}
+
+.prio-assign-input:hover {
+  border-color: #a8a8a8;
+}
+
+.assignInput {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 16px;
+}
+
+.assignedInputImg {
+  width: 15px;
+  height: 14px;
+  cursor: pointer;
+}
+
+.assignedInputImg:hover {
+  background: #d1d1d1;
+}
+
+.subtask-wrapper {
+  position: relative;
+  max-width: 440px;
+  width: 100%;
+}
+
+.subtask-add-button,
+.subtask-edit-button,
+.subtask-delete-button,
+.subtask-delete-buttonSecond,
+.subtask-save-button {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  padding: 0;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.subtask-add-button:hover,
+.subtask-edit-button:hover,
+.subtask-delete-button:hover,
+.subtask-delete-buttonSecond:hover,
+.subtask-save-button:hover {
+  background: #d1d1d1;
+}
+
+.subtask-add-button img.subtaskAdd,
+.subtask-save-buttonImg,
+.subtask-delete-buttonImg,
+.subtask-delete-buttonImgSecond,
+.subtask-edit-buttonImg {
+  width: 14px;
+  height: 14px;
+}
+
+.subtask-container {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 4px;
+}
+
+.subtask-container:hover {
+  background: #eee;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.subtask-display-text {
+  padding-left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.subtask-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.subtask-container:hover .subtask-controls {
+  pointer-events: auto;
+}
+
+.subtask-edit-wrapper {
+  display: flex;
+  align-items: center;
+  padding: 0 5px;
+  gap: 8px;
+  height: 32px;
+  background: white;
+  border-bottom: 1px solid #005dff;
+}
+
+.subtask-edit-wrapper input {
+  flex: 1;
+  padding: 8px;
+  font-size: 16px;
+  border: none;
+  outline: none;
 }
 
 .required-container {
@@ -422,40 +497,6 @@ select {
   border-radius: 4px;
 }
 
-.subtask-wrapper {
-  position: relative;
-  width: 100%;
-  max-width: 440px;
-}
-
-.subtask-add-button {
-  position: absolute;
-  top: 50%;
-  right: 10px;
-  transform: translateY(-50%);
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  height: 24px;
-  width: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  border-radius: 50%;
-}
-
-.subtask-add-button:hover {
-  cursor: pointer;
-  background: #d1d1d1;
-  border-radius: 50%;
-}
-
-.subtask-add-button img.subtaskAdd {
-  width: 14px;
-  height: 14px;
-}
-
 input {
   padding-left: 12px;
 }
@@ -518,26 +559,6 @@ textarea:focus::placeholder {
   overflow: auto;
 }
 
-.subtask-display-text {
-  padding-left: 20px;
-  display: flex;
-  align-items: center;
-  width: 100%;
-  height: fit-content;
-  gap: 8px;
-  cursor: pointer;
-  transition: background-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.subtask-container {
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  gap: 4px;
-  justify-content: space-between;
-  align-items: center;
-}
-
 .subtask-display-text::before {
   transform: translateY(-50%);
 }
@@ -568,39 +589,8 @@ textarea:focus::placeholder {
   border: 1px solid #a8a8a8;
 }
 
-.subtask-edit-wrapper {
-  display: flex;
-  align-items: center;
-  height: 32px;
-  width: -webkit-fill-available;
-  padding: 0 5px 0 5px;
-  gap: 8px;
-  background-color: white;
-  border-bottom: 1px solid #005dff;
-}
-
-.subtask-edit-wrapper input {
-  border: none;
-  outline: none;
-  flex: 1;
-  font-size: 16px;
-  padding: 8px;
-}
-
 .subtask-edit-wrapper input:focus {
   outline: none;
-}
-
-.subtask-save-button,
-.subtask-delete-button {
-  width: 24px;
-  height: 24px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 0px;
-  background-color: white;
-  border-radius: 50%;
 }
 
 .subtask-save-button:hover,
@@ -619,6 +609,7 @@ textarea:focus::placeholder {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  padding-top: 50px;
 }
 
 .form-container {
@@ -626,49 +617,8 @@ textarea:focus::placeholder {
   width: 90%;
 }
 
-.subtask-container:hover {
-  background: #eeeeee;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-  border-radius: 10px;
-}
-
-.subtask-edit-button {
-  width: 24px;
-  height: 24px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 0px;
-  border-radius: 50%;
-}
-
-.subtask-edit-button:hover {
-  cursor: pointer;
-  border-radius: 50px;
-  color: #eeeeeea8;
-}
-
-.subtask-delete-buttonSecond {
-  width: 24px;
-  height: 24px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 0px;
-  border-radius: 50%;
-}
-
 .subtask-delete-buttonSecond:hover {
   cursor: pointer;
-}
-
-.subtask-controls {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  cursor: pointer;
-  transition: opacity 0.2s ease;
 }
 
 .subtask-button-wrapper {
@@ -678,12 +628,6 @@ textarea:focus::placeholder {
   display: flex;
   gap: 6px;
   z-index: 2;
-}
-
-.subtask-container:hover .subtask-controls {
-  display: flex;
-  pointer-events: auto;
-  cursor: pointer;
 }
 
 .subtask-delete-buttonImgSecond,
@@ -716,14 +660,8 @@ textarea:focus::placeholder {
 }
 
 @keyframes slideUpFadeIn {
-  from {
-    bottom: -100px;
-    opacity: 0;
-  }
-  to {
-    bottom: 40%;
-    opacity: 1;
-  }
+  from {bottom: -100px; opacity: 0;}
+  to {bottom: 40%; opacity: 1;}
 }
 
 .userFeedback {
