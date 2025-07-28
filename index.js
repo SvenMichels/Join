@@ -2,10 +2,10 @@ import { setupMobileDeviceListeners } from "./scripts/utils/mobileUtils.js";
 
 // Handle logo animation sequence on page load
 function handleStartupLogoAnimation() {
-  const mainLogoElement = document.querySelector(".bigLogo");
+  const mainLogoElement = document.querySelector(".logo-fullscreen");
   if (!mainLogoElement) return;
 
-  mainLogoElement.classList.add("shrinkToLogo");
+  mainLogoElement.classList.add("shrink");
   mainLogoElement.addEventListener("animationend", () => {
     mainLogoElement.remove();
   });
