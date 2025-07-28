@@ -48,20 +48,21 @@ body {
   margin-bottom: 50px;
 }
 
-.big-logo {
+.bigLogo {
   position: absolute;
   display: flex;
   justify-content: center !important;
   align-items: center !important;
-  width: 100px;
-  height: 122px;
+  width: 100vw;
+  height: 100vh;
   background-color: #ffffff;
   padding-top: 50px;
   padding-left: 20px;
   transition: all 0.5s ease;
+  z-index: 10;
 }
 
-.big-logo.shrinkToLogo {
+.bigLogo.shrinkToLogo {
   position: absolute;
   width: 100px;
   height: 122px;
