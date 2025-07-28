@@ -6,7 +6,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background-color: #fefafa;
+  background-color: #f6f7f8 !important;
 }
 
 .landscape {
@@ -27,8 +27,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: inherit;
-  height: calc(100vh - 120px);
+  width: 100vw;
+  padding-top: 170px;
 }
 
 .content-holder > div:nth-child(1),
