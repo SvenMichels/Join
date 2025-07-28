@@ -66,8 +66,8 @@ body {
   position: absolute;
   width: 100px;
   height: 122px;
-  top: 80px;
-  left: 77px;
+  top: 50px;
+  left: 27px;
   padding: 0;
   background-color: transparent;
   transition: all 1.6s ease;
@@ -244,11 +244,17 @@ input:focus::placeholder {
     padding-top: 20px;
   }
 
-  .big-logo {
-    width: 64px;
-    height: 78px;
+  .bigLogo {
+    width: 100vw;
+    height: 100vh;
     padding-top: 0;
   }
+
+.bigLogo.shrinkToLogo {
+  width: 64px;
+  height: 74px;
+}
+
   .content-holder > div:nth-child(1),
   .content-holder > div:nth-child(3) {
     position: static;
