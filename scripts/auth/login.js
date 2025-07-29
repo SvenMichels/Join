@@ -5,12 +5,22 @@ const loginFormElement = document.getElementById("loginForm");
 
 loginFormElement?.addEventListener("submit", handleFormSubmission);
 
+/**
+ * Handles form submission and triggers login process.
+ * 
+ * @param {SubmitEvent} submitEvent - Form submit event.
+ */
 async function handleFormSubmission(submitEvent) {
   submitEvent.preventDefault();
   const credentials = collectFormCredentials();
   await processLoginAttempt(credentials);
 }
 
+/**
+ * Collects user credentials from the login form.
+ * 
+ * @returns {{ email: string, password: string }}
+ */
 function collectFormCredentials() {
   return {
     email: document.getElementById("email").value.trim(),
@@ -18,41 +28,60 @@ function collectFormCredentials() {
   };
 }
 
+/**
+ * Tries to log the user in with provided credentials.
+ * 
+ * @param {{ email: string, password: string }} credentials 
+ */
 async function processLoginAttempt(credentials) {
   try {
     await loginUser(credentials.email, credentials.password);
     redirectToStartpage();
   } catch (loginError) {
-    console.warn("Login fehlgeschlagen:", loginError);
+    console.warn("Login failed:", loginError);
   }
 }
 
+/**
+ * Redirects to the start page upon successful login.
+ */
 function redirectToStartpage() {
   window.location.href = "startpage.html";
 }
 
+/**
+ * Authenticates a user based on email and password.
+ * 
+ * @param {string} emailAddress 
+ * @param {string} userPassword 
+ * @returns {Promise<Object>}
+ */
 export async function loginUser(emailAddress, userPassword) {
-    const allUsers = await loadAllUsersForLogin();
-    console.log("Alle Benutzer:", allUsers);
-    
-    const authenticatedUser = findMatchingUser(
-      allUsers,
-      emailAddress,
-      userPassword
-    );
+  const allUsers = await loadAllUsersForLogin();
+  console.log("All users:", allUsers);
 
-    if (!authenticatedUser) {
-      console.log("Benutzer nicht gefunden oder ungültige Anmeldeinformationen.");
-      throw new Error("Login fehlgeschlagen");
-    }
+  const authenticatedUser = findMatchingUser(allUsers, emailAddress, userPassword);
 
-    console.log("Authentifizierter Benutzer:", authenticatedUser);
-    
-    storeCurrentUser(authenticatedUser);
-    console.log("User wurde ins localStorage gespeichert");
-    return authenticatedUser;
+  if (!authenticatedUser) {
+    console.log("User not found or invalid credentials.");
+    throw new Error("Login failed");
+  }
+
+  console.log("Authenticated user:", authenticatedUser);
+
+  storeCurrentUser(authenticatedUser);
+  console.log("User stored in localStorage");
+  return authenticatedUser;
 }
 
+/**
+ * Finds a user in the list that matches the provided credentials.
+ * 
+ * @param {Array} usersList 
+ * @param {string} emailAddress 
+ * @param {string} userPassword 
+ * @returns {Object|null}
+ */
 function findMatchingUser(usersList, emailAddress, userPassword) {
   for (let userIndex = 0; userIndex < usersList.length; userIndex++) {
     const currentUser = usersList[userIndex];
@@ -62,27 +91,38 @@ function findMatchingUser(usersList, emailAddress, userPassword) {
     }
   }
 
-  return null; // Kein User gefunden
+  return null;
 }
 
+/**
+ * Checks if provided credentials match user data.
+ * 
+ * @param {Object} user 
+ * @param {string} emailAddress 
+ * @param {string} userPassword 
+ * @returns {boolean}
+ */
 function credentialsMatch(user, emailAddress, userPassword) {
-  // Nur noch neues Format verwenden
   const userEmail = user.userEmailAddress;
   const password = user.userPassword;
-  
+
   const emailMatches = userEmail?.toLowerCase() === emailAddress.toLowerCase();
   const passwordMatches = password === userPassword;
-  
-  console.log("Email-Vergleich:", userEmail, "===", emailAddress, "->", emailMatches);
-  console.log("Password-Vergleich:", passwordMatches);
-  
+
+  console.log("Email match:", userEmail, "===", emailAddress, "->", emailMatches);
+  console.log("Password match:", passwordMatches);
+
   return emailMatches && passwordMatches;
 }
 
+/**
+ * Stores the currently logged-in user in localStorage.
+ * 
+ * @param {Object} user - The authenticated user object.
+ */
 function storeCurrentUser(user) {
-  console.log("Speichere User ins localStorage:", user);
-  
-  // Stelle sicher, dass der User im einheitlichen neuen Format gespeichert wird
+  console.log("Storing user in localStorage:", user);
+
   const userToStore = {
     id: user.userId || user.id,
     userFullName: user.userFullName,
@@ -93,17 +133,25 @@ function storeCurrentUser(user) {
     userInitials: user.userInitials,
     firstCharacter: user.firstCharacter
   };
-  
+
   localStorage.setItem("currentUser", JSON.stringify(userToStore));
-  console.log("User gespeichert:", userToStore);
+  console.log("User saved:", userToStore);
 }
 
+/**
+ * Logs in as a predefined guest user and redirects.
+ */
 export async function loginAsGuest() {
   const guestUser = await findGuestUser();
   storeCurrentUser(guestUser);
   redirectToStartpage();
 }
 
+/**
+ * Finds the guest user object from the database.
+ * 
+ * @returns {Promise<Object>}
+ */
 async function findGuestUser() {
   const { data: users } = await requestData("GET", "/users/");
 
@@ -114,11 +162,17 @@ async function findGuestUser() {
 
 document.addEventListener("DOMContentLoaded", initializeStartpage);
 
+/**
+ * Initializes the start page by updating UI elements.
+ */
 function initializeStartpage() {
   updateUserGreeting();
   updateSummary();
 }
 
+/**
+ * Updates the greeting section based on time and user.
+ */
 function updateUserGreeting() {
   try {
     const currentUser = getCurrentUser();
@@ -127,14 +181,24 @@ function updateUserGreeting() {
     const timeBasedGreeting = generateTimeBasedGreeting();
     displayUserGreeting(timeBasedGreeting, currentUser.userFullName);
   } catch (warning) {
-    console.warn("Fehler beim Parsen des Benutzers:", warning);
+    console.warn("Failed to parse user data:", warning);
   }
 }
 
+/**
+ * Returns the current user object from localStorage.
+ * 
+ * @returns {Object|null}
+ */
 function getCurrentUser() {
   return JSON.parse(localStorage.getItem("currentUser"));
 }
 
+/**
+ * Generates a greeting string based on current time.
+ * 
+ * @returns {string}
+ */
 function generateTimeBasedGreeting() {
   const currentHour = new Date().getHours();
 
@@ -143,6 +207,12 @@ function generateTimeBasedGreeting() {
   return "Good Evening";
 }
 
+/**
+ * Displays greeting and user name on the UI.
+ * 
+ * @param {string} greeting 
+ * @param {string} userName 
+ */
 function displayUserGreeting(greeting, userName) {
   const greetingElement = document.querySelector(".greetings > p:first-child");
   const nameElement = document.querySelector(".greetings .username");
@@ -151,6 +221,9 @@ function displayUserGreeting(greeting, userName) {
   if (nameElement) nameElement.textContent = userName || "Guest";
 }
 
+/**
+ * Loads all tasks and updates dashboard summary.
+ */
 async function updateSummary() {
   const allTasks = await fetchAllTasks();
   if (!allTasks) return;
@@ -159,11 +232,21 @@ async function updateSummary() {
   displayUrgentTaskInfo(allTasks);
 }
 
+/**
+ * Fetches all tasks from backend.
+ * 
+ * @returns {Promise<Array>}
+ */
 async function fetchAllTasks() {
   const { data: tasks } = await requestData("GET", "/tasks/");
   return Object.values(tasks || {});
 }
 
+/**
+ * Updates task count boxes on the summary dashboard.
+ * 
+ * @param {Array} allTasks 
+ */
 function displayTaskCounts(allTasks) {
   setText(".todoTaskAmount", countByStatus(allTasks, "todo"));
   setText(".doneTaskAmount", countByStatus(allTasks, "done"));
@@ -173,21 +256,46 @@ function displayTaskCounts(allTasks) {
   setText(".urgentTaskAmount", countByPriority(allTasks, "Urgent"));
 }
 
+/**
+ * Displays the earliest deadline among urgent tasks.
+ * 
+ * @param {Array} allTasks 
+ */
 function displayUrgentTaskInfo(allTasks) {
   const earliestUrgentDate = getEarliestUrgentDueDate(allTasks);
   setText(".urgentTaskDate", earliestUrgentDate || "No deadline");
 }
 
+/**
+ * Counts tasks by given status.
+ * 
+ * @param {Array} tasks 
+ * @param {string} status 
+ * @returns {number}
+ */
 function countByStatus(tasks, status) {
   return tasks.filter((t) => t.status === status).length;
 }
 
+/**
+ * Counts tasks by given priority.
+ * 
+ * @param {Array} tasks 
+ * @param {string} priority 
+ * @returns {number}
+ */
 function countByPriority(tasks, priority) {
   return tasks.filter(
     (t) => (t.prio || "").toLowerCase() === priority.toLowerCase()
   ).length;
 }
 
+/**
+ * Returns the earliest due date among urgent tasks.
+ * 
+ * @param {Array} tasks 
+ * @returns {string|null}
+ */
 function getEarliestUrgentDueDate(tasks) {
   const urgentDates = tasks
     .filter((t) => (t.prio || "").toLowerCase() === "urgent" && t.dueDate)
@@ -203,6 +311,12 @@ function getEarliestUrgentDueDate(tasks) {
   });
 }
 
+/**
+ * Sets text content for a given selector.
+ * 
+ * @param {string} selector 
+ * @param {string|number} text 
+ */
 function setText(selector, text) {
   const element = document.querySelector(selector);
   if (element) element.textContent = text;
