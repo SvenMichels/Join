@@ -1,29 +1,34 @@
 /**
- * Externe Service-Abhängigkeiten für Kontakte
- * Wrapper für Firebase und Utility-Funktionen
+ * Firebase und externe Services
  */
 
+import { singleContact } from './contactTemplate.js';
+import { FIREBASE_DATABASE_BASE_URL } from '../scripts/firebase.js';
+
+const BASE_URL = FIREBASE_DATABASE_BASE_URL.replace(/\/+$/, '');
+
 /**
- * Holt alle Kontakte aus der Datenbank
- * @returns {Promise<Array>} Liste aller Kontakte
+ * Alle Kontakte aus Firebase laden
  */
-async function getAllContactsFromDatabase() {
+export async function getAllContactsFromDatabase() {
   try {
     const response = await fetch(`${BASE_URL}/contacts.json`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
     const data = await response.json();
     return data ? Object.entries(data).map(([key, value]) => ({ ...value, userId: key })) : [];
   } catch (error) {
-    console.error('Error fetching contacts:', error);
+    console.error("Fehler beim Laden der Kontakte:", error);
     return [];
   }
 }
 
 /**
- * Erstellt Initialen aus Vollnamen
- * @param {string} fullName - Vollständiger Name
- * @returns {string} Initialen (max 2 Zeichen)
+ * Initialen aus Namen erstellen
  */
-function getInitials(fullName) {
+export function getInitials(fullName) {
   if (!fullName?.trim()) return "?";
   const names = fullName.trim().split(/\s+/);
   return names.length === 1 ? 
@@ -32,49 +37,8 @@ function getInitials(fullName) {
 }
 
 /**
- * Generiert zufällige CSS-Farb-Klasse
- * @returns {string} CSS-Klasse für Farbe
+ * Template für Kontaktansicht erstellen
  */
-function generateRandomColorClass() {
-  const colors = ["user1", "user2", "user3", "user4", "user5", "user6"];
-  return colors[Math.floor(Math.random() * colors.length)];
+export function generateBigContactTemplate(name, email, phone, initials, color) {
+  return singleContact(name, email, phone, initials, 'big-contact', color);
 }
-
-/**
- * Generiert Template für große Kontakt-Ansicht
- * @param {string} name - Name
- * @param {string} email - E-Mail
- * @param {string} phone - Telefon
- * @param {string} initials - Initialen
- * @param {string} color - Farb-Klasse
- * @returns {string} HTML Template
- */
-function generateBigContactTemplate(name, email, phone, initials, color) {
-  return `
-    <div class="big-contact-header">
-      <div class="contact-icon-big ${color}">
-        <span>${initials}</span>
-      </div>
-      <div class="contact-info">
-        <h2>${name}</h2>
-        <div class="contact-actions">
-          <button id="editContact" class="edit-btn">Edit</button>
-          <button id="deleteContact" class="delete-btn">Delete</button>
-        </div>
-      </div>
-    </div>
-    <div class="contact-details">
-      <h3>Contact Information</h3>
-      <div class="detail-item">
-        <span class="label">Email:</span>
-        <span class="value">${email}</span>
-      </div>
-      <div class="detail-item">
-        <span class="label">Phone:</span>
-        <span class="value">${phone}</span>
-      </div>
-    </div>`;
-}
-
-// Globale Konstanten
-const BASE_URL = 'https://join-42c03-default-rtdb.europe-west1.firebasedatabase.app';

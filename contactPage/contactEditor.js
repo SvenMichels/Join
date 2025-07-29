@@ -1,34 +1,38 @@
 /**
- * Kontakt-Editor für Bearbeitungsfunktionalität
+ * Kontakt bearbeiten
  */
 
+import { getInitials } from '../scripts/utils/helpers.js';
+import { updateContact } from './contactDataService.js';
+
+let editingContact = null;
+
 /**
- * Füllt Bearbeitungsformular
- * @param {Object} contact - Kontaktdaten
+ * Formular mit Kontaktdaten füllen
  */
-function fillEditForm(contact) {
-  document.getElementById("contactNameEdit").value = contact.userFullName;
-  document.getElementById("contactEmailEdit").value = contact.userEmailAddress;
-  document.getElementById("contactPhoneEdit").value = contact.userPhoneNumber;
+export function fillEditForm(contact) {
+  setTimeout(() => {
+    document.getElementById("editContactName").value = contact.userFullName || "";
+    document.getElementById("editContactEmail").value = contact.userEmailAddress || "";
+    document.getElementById("editContactPhone").value = contact.userPhoneNumber || "";
+  }, 100);
 }
 
 /**
- * Holt Bearbeitungseingaben
- * @returns {Object} Eingabedaten
+ * Eingaben aus Formular holen
  */
-function getEditContactInput() {
+export function getEditContactInput() {
   return {
-    userFullName: document.getElementById("contactNameEdit").value.trim(),
-    userEmailAddress: document.getElementById("contactEmailEdit").value.trim(),
-    userPhoneNumber: document.getElementById("contactPhoneEdit").value.trim()
+    userFullName: document.getElementById("editContactName").value.trim(),
+    userEmailAddress: document.getElementById("editContactEmail").value.trim(),
+    userPhoneNumber: document.getElementById("editContactPhone").value.trim()
   };
 }
 
 /**
- * Behandelt Kontakt-Bearbeitungsübermittlung
- * @param {Event} e - Submit Event
+ * Kontakt speichern
  */
-function handleContactEditSubmission(e) {
+export function handleContactEditSubmission(e) {
   e.preventDefault();
   const contact = editingContact;
   const updated = getEditContactInput();
@@ -41,21 +45,24 @@ function handleContactEditSubmission(e) {
 }
 
 /**
- * Leert Eingabefelder
+ * Felder leeren
  */
-function emptyInput() {
-  document.getElementById("contactName").value = "";
-  document.getElementById("contactEmail").value = "";
-  document.getElementById("contactPhone").value = "";
+export function emptyInput() {
+  const fields = ["contactName", "contactEmail", "contactPhone", "editContactName", "editContactEmail", "editContactPhone"];
+  fields.forEach(id => {
+    const field = document.getElementById(id);
+    if (field) field.value = "";
+  });
 }
 
 /**
- * Öffnet Bearbeitungsdialog
- * @param {Object} contact - Zu bearbeitender Kontakt
+ * Bearbeitung starten
  */
-function openEditDialog(contact) {
+export function openEditDialog(contact) {
   editingContact = contact;
-  fillEditForm(contact);
-  document.getElementById("myModalEdit").style.display = "block";
-  document.getElementById("myModalBgEdit").style.display = "block";
+  const editWindow = document.getElementById("editWindow");
+  if (editWindow) {
+    editWindow.classList.remove("dp-none");
+    fillEditForm(contact);
+  }
 }

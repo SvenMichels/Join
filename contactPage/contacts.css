@@ -161,9 +161,9 @@ h2{
     width: 120px;
     /* height: 120px; */
     aspect-ratio: 1;
-    background-color:#FF7A00;
+    /* background-color:#FF7A00; */
     border-radius: 70px;
-    border: 3px solid #FF7A00;
+    /* border: 3px solid #FF7A00; */
 }
 
 .profileName{
@@ -337,20 +337,16 @@ h2{
 .contact:hover{
     transform: scale(1.05);
     background-color: #2a3647;
-    color: white;
+    /* color: white; */
 }
 
-.active{
-    background-color: #2a3647;
-    /* border: 1px solid #2a3647; */
-    color: #FFFFFF;
-}
+
 
 .pic{
     width: 42px;
     height: 42px;
-    border: 2px solid #FFFFFF;
-    color: #FFFFFF;
+    /* border: 2px solid #FFFFFF; */
+    /* color: #FFFFFF; */
     border-radius: 50px;
     display: flex;
     justify-content: center;
@@ -380,6 +376,11 @@ h2{
 
 .txt:hover{
     color: #29ABE2;
+}
+.active{
+    background-color: #2a3647;
+    border: 1px solid #2a3647;
+    color: #FFFFFF;
 }
 
 .margin-top{

@@ -1,38 +1,105 @@
 /**
- * Hauptdatei für Kontaktverwaltung
- * Koordiniert alle Kontakt-Module
+ * Hauptdatei für die Kontaktverwaltung
  */
+
+import { handleContactEditSubmission, openEditDialog, emptyInput } from './contactEditor.js';
+import { getAllContactsFromDatabase, generateBigContactTemplate } from './contactExternalService.js';
+import { openContactAdditionWindow, closeAddWindow, closeEditWindow, showUserFeedback } from './contactModal.js';
+import { loadAllContactsFromFirebaseDatabase, createContact, deleteContactFromDatabase } from './contactDataService.js';
+import { getInitials } from '../scripts/utils/helpers.js';
+import { generateRandomColorClass } from '../scripts/utils/colors.js';
+import { bindButton, loadAndShowContactDetails } from './contactUtils.js';
+import { clearContactListUI, renderAllContacts } from './contactRenderer.js';
 
 let contactList = [];
-let alphabetLettersUsedSet = new Set();
 let editingContact = null;
 
-/**
- * Initialisiert Kontaktseite
- */
-function init() {
-  loadAllContactsFromFirebaseDatabase();
-  setupEventListeners();
-}
+window.contactList = contactList;
 
 /**
- * Richtet Event-Listener ein
+ * Event-Listener einrichten
  */
 function setupEventListeners() {
-  const createForm = document.getElementById("createContactForm");
+  setupProfileButton();
+  setupDropdown();
+  
+  const addBtn = document.getElementById("addBtn");
+  if (addBtn) addBtn.addEventListener("click", openContactAdditionWindow);
+
+  const addForm = document.getElementById("addContactForm");
+  if (addForm) addForm.addEventListener("submit", addNewContactToDatabase);
+
   const editForm = document.getElementById("editContactForm");
-  
-  if (createForm) createForm.addEventListener("submit", addNewContactToDatabase);
   if (editForm) editForm.addEventListener("submit", handleContactEditSubmission);
+
+  // Modals schließen
+  document.querySelectorAll(".closeBtn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      closeAddWindow();
+      closeEditWindow();
+    });
+  });
+
+  // Cancel Buttons
+  const cancelBtns = document.querySelectorAll(".cancelBtn");
+  cancelBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      closeAddWindow();
+      closeEditWindow();
+    });
+  });
+
+  // Außerhalb Modal klicken zum Schließen
+  const addWindow = document.getElementById("addWindow");
+  const editWindow = document.getElementById("editWindow");
   
-  document.addEventListener("DOMContentLoaded", renderContactsOnDifferentScreensizes);
-  window.addEventListener("resize", renderContactsOnDifferentScreensizes);
+  if (addWindow) {
+    addWindow.addEventListener("click", (e) => {
+      if (e.target === addWindow) {
+        closeAddWindow();
+      }
+    });
+  }
+  
+  if (editWindow) {
+    editWindow.addEventListener("click", (e) => {
+      if (e.target === editWindow) {
+        closeEditWindow();
+      }
+    });
+  }
+
+  // ESC-Taste zum Schließen der Modals
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      closeAddWindow();
+      closeEditWindow();
+    }
+  });
 }
 
 /**
- * Erstellt Kontakt-Objekt aus Formulardaten
- * @param {string} fullName - Vollständiger Name
- * @returns {Object} Kontakt-Objekt
+ * Zeigt Kontaktdetails an - im Mobile-Modus direkt bearbeiten
+ */
+function renderSingleContact(name, email, phone, initials, id, color) {
+  const contact = contactList.find(c => c.userId === id);
+  if (!contact) return;
+  
+  if (window.innerWidth <= 768) {
+    openEditDialog(contact);
+    return;
+  }
+  
+  const template = generateBigContactTemplate(name, email, phone, initials, color);
+  document.getElementById("bigContact").innerHTML = template;
+  bindContactActions(id, name, contact);
+  loadAndShowContactDetails();
+}
+
+window.renderSingleContact = renderSingleContact;
+
+/**
+ * Erstellt Kontakt aus Formulardaten
  */
 function createContactFromForm(fullName) {
   return {
@@ -53,12 +120,8 @@ async function addNewContactToDatabase(e) {
   e.preventDefault();
   const userFullName = document.getElementById("contactName").value.trim();
   const contact = createContactFromForm(userFullName);
+  await addContactTry(contact);
 
-  try {
-    await addContactTry(contact);
-  } catch (error) {
-    console.error('Error adding contact:', error);
-  }
 }
 
 /**
@@ -66,9 +129,13 @@ async function addNewContactToDatabase(e) {
  * @param {Object} contact - Kontaktdaten
  */
 async function saveNewContact(contact) {
-  const result = await createContact(contact);
-  contact.userId = result.data.name;
-  contactList.push(contact);
+    const result = await createContact(contact);
+    // Firebase gibt direkt ein Objekt mit 'name' (ID) zurück
+    if (result && result.name) {
+      contact.userId = result.name;
+      contactList.push(contact);
+      window.contactList = contactList;
+    }
 }
 
 /**
@@ -99,28 +166,8 @@ async function addContactTry(contact) {
  */
 function bindContactActions(id, name, contact) {
   const container = document.getElementById("bigContact");
-  bindButton(container, "#deleteContact", () => deleteContactFromDatabase(id, name));
-  bindButton(container, "#editContact", () => openEditDialog(contact));
-}
-
-/**
- * Rendert einzelnen Kontakt in Detailansicht
- * @param {string} name - Name
- * @param {string} email - E-Mail
- * @param {string} phone - Telefon
- * @param {string} initials - Initialen
- * @param {string} id - User ID
- * @param {string} color - Farbe
- */
-function renderSingleContact(name, email, phone, initials, id, color) {
-  const contact = contactList.find(c => c.userId === id);
-  if (!contact) return;
-
-  const template = generateBigContactTemplate(name, email, phone, initials, color);
-  document.getElementById("bigContact").innerHTML = template;
-  
-  bindContactActions(id, name, contact);
-  loadAndShowContactDetails();
+  bindButton(container, "#delete", () => deleteContactFromDatabase(id, name));
+  bindButton(container, "#edit", () => openEditDialog(contact));
 }
 
 /**
@@ -149,15 +196,11 @@ function updateTaskWithoutUser(task, userName) {
  * @param {string} deletedUserName - Name des gelöschten Users
  */
 async function removeUserFromAllTasks(deletedUserName) {
-  try {
-    const allTasks = await getAllTasks();
-    const filteredTasks = filterTasksByUser(allTasks, deletedUserName);
-    const updates = filteredTasks.map(task => updateTaskWithoutUser(task, deletedUserName));
-    
-    await Promise.all(updates);
-  } catch (error) {
-    console.error('Error removing user from tasks:', error);
-  }
+  const allTasks = await getAllTasks();
+  const filteredTasks = filterTasksByUser(allTasks, deletedUserName);
+  const updates = filteredTasks.map(task => updateTaskWithoutUser(task, deletedUserName));
+
+  await Promise.all(updates);
 }
 
 /**
@@ -174,7 +217,13 @@ function isMobileView() {
  * @param {HTMLElement} allContactsFrame - Alle Kontakte Frame
  */
 function handleMobileView(contactFrame, allContactsFrame) {
-  if (contactFrame?.style.display === "flex") {
+  // Prüfe ob beide Elemente existieren
+  if (!contactFrame || !allContactsFrame) {
+    console.warn("Mobile View Elemente nicht gefunden:", { contactFrame, allContactsFrame });
+    return;
+  }
+  
+  if (contactFrame.style.display === "flex") {
     allContactsFrame.style.display = "none";
   } else {
     allContactsFrame.style.display = "flex";
@@ -182,16 +231,76 @@ function handleMobileView(contactFrame, allContactsFrame) {
 }
 
 /**
- * Rendert Kontakte auf verschiedenen Bildschirmgrößen
+ * Initialisiert die Kontaktseite
  */
-function renderContactsOnDifferentScreensizes() {
-  const contactFrame = document.getElementById("mobileContactFrame");
-  const allContactsFrame = document.getElementById("allContactsFrame");
+async function init() {
+  const loadedContacts = await loadAllContactsFromFirebaseDatabase();
+  contactList = loadedContacts || [];
+  window.contactList = contactList;
+  setupEventListeners();
+}
 
-  if (isMobileView()) {
-    handleMobileView(contactFrame, allContactsFrame);
+/**
+ * Richtet Profile-Button mit Benutzer-Initialen ein
+ */
+function setupProfileButton() {
+  // Verwende die gleichen Daten wie für den ersten Kontakt
+  let userData = getUserFromStorage();
+
+  const userName = userData.userFullName || userData.name;
+  const profileButton = document.getElementById("openMenu");
+  
+  if (profileButton) {
+    const initials = getInitials(userName);
+    profileButton.textContent = initials;
+  }
+}
+
+/**
+ * Richtet Dropdown-Menu ein
+ */
+function setupDropdown() {
+  const openMenuButton = document.getElementById("openMenu");
+  const dropDownMenu = document.getElementById("dropDownMenu");
+  
+  if (openMenuButton && dropDownMenu) {
+    openMenuButton.addEventListener("click", (e) => {
+      e.stopPropagation();
+      dropDownMenu.classList.toggle("dp-none");
+    });
+    
+    // Schließe Dropdown bei Klick außerhalb
+    document.addEventListener("click", (e) => {
+      if (!dropDownMenu.contains(e.target) && !openMenuButton.contains(e.target)) {
+        dropDownMenu.classList.add("dp-none");
+      }
+    });
+  }
+}
+
+/**
+ * Holt Benutzer aus localStorage
+ * @returns {Object|null} Benutzerdaten oder null
+ */
+function getUserFromStorage() {
+  try {
+    const currentUserString = localStorage.getItem("currentUser");
+    const userDataString = localStorage.getItem("userData");
+    
+    if (currentUserString) {
+      return JSON.parse(currentUserString);
+    } else if (userDataString) {
+      return JSON.parse(userDataString);
+    }
+    
+    return null;
+  } catch (error) {
+    console.error("Fehler beim Laden der Benutzerdaten:", error);
+    return null;
   }
 }
 
 // Initialisierung
 document.addEventListener('DOMContentLoaded', init);
+
+export { setupEventListeners };

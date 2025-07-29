@@ -229,6 +229,7 @@ p {
   border: none;
   background-color: transparent;
   padding: 8px 16px;
+  /* height: 46px; */
   cursor: pointer;
 }
 
@@ -266,4 +267,10 @@ p {
   color: #ffffff;
   cursor: pointer;
 }
+
+/* @media screen and (orientation: landscape) and (max-width: 1390px) and (max-height: 950px) {
+  body {
+    display: none !important;
+  }
+} */
 

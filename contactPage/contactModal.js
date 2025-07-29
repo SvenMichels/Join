@@ -1,55 +1,46 @@
 /**
- * Modal Management für Kontakte
+ * Modals verwalten
  */
 
 /**
- * Behandelt Fenster-Schließung
+ * Alle Fenster schließen
  */
-function handleWindowClosing() {
+export function handleWindowClosing() {
   closeAddWindow();
   closeEditWindow();
   clearBigContactView();
 }
 
 /**
- * Öffnet Kontakt-Hinzufügungsfenster
+ * Kontakt hinzufügen öffnen
  */
-function openContactAdditionWindow() {
-  showElementsForContactHandling();
-  document.getElementById("myModal").style.display = "block";
-  document.getElementById("myModalBg").style.display = "block";
+export function openContactAdditionWindow() {
+  document.getElementById("addWindow").classList.remove("dp-none");
 }
 
 /**
- * Schließt Hinzufügungsfenster
+ * Hinzufügen-Fenster schließen
  */
-function closeAddWindow() {
-  document.getElementById("myModal").style.display = "none";
-  document.getElementById("myModalBg").style.display = "none";
+export function closeAddWindow() {
+  document.getElementById("addWindow").classList.add("dp-none");
 }
 
 /**
- * Schließt Bearbeitungsfenster
+ * Bearbeiten-Fenster schließen
  */
-function closeEditWindow() {
-  document.getElementById("myModalEdit").style.display = "none";
-  document.getElementById("myModalBgEdit").style.display = "none";
+export function closeEditWindow() {
+  document.getElementById("editWindow").classList.add("dp-none");
 }
 
 /**
- * Zeigt Elemente für Kontakt-Behandlung
+ * Erfolgs-Nachricht anzeigen
  */
-function showElementsForContactHandling() {
-  document.querySelector(".contact-dialog").style.display = "block";
-  document.querySelector(".contact-edit-dialog").style.display = "none";
-}
-
-/**
- * Zeigt User-Feedback
- */
-function showUserFeedback() {
-  document.getElementById("contactAddedText").style.display = "block";
-  setTimeout(() => {
-    document.getElementById("contactAddedText").style.display = "none";
-  }, 3000);
+export function showUserFeedback() {
+  const feedback = document.getElementById("userFeedback");
+  if (feedback) {
+    feedback.style.display = "block";
+    setTimeout(() => {
+      feedback.style.display = "none";
+    }, 3000);
+  }
 }

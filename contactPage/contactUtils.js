@@ -1,23 +1,13 @@
 /**
- * Kontakt-Utilities und Hilfsfunktionen
+ * Hilfsfunktionen für Kontakte
  */
 
-/**
- * Holt ersten Buchstaben des Namens
- * @param {string} name - Name
- * @returns {string} Erster Buchstabe
- */
-function getFirstLetter(name) {
-  return name ? name.charAt(0).toUpperCase() : "?";
-}
+import { clearContactListUI, renderAllContacts, clearBigContactView } from './contactRenderer.js';
 
 /**
- * Bindet Button-Event
- * @param {HTMLElement} container - Container Element
- * @param {string} selector - CSS Selector
- * @param {Function} callback - Callback Funktion
+ * Button-Event hinzufügen
  */
-function bindButton(container, selector, callback) {
+export function bindButton(container, selector, callback) {
   const button = container.querySelector(selector);
   if (button) {
     button.addEventListener('click', callback);
@@ -25,45 +15,19 @@ function bindButton(container, selector, callback) {
 }
 
 /**
- * Lädt und zeigt Kontaktdetails
+ * Kontaktdetails anzeigen
  */
-function loadAndShowContactDetails() {
-  const isMobile = window.innerWidth <= 768;
-  
-  if (isMobile) {
-    showBigContactAtMobile();
-  } else {
-    showBigContactAtDesktop();
+export function loadAndShowContactDetails() {
+  const bigContact = document.getElementById("bigContact");
+  if (bigContact) {
+    bigContact.classList.remove("dp-none");
   }
 }
 
 /**
- * Zeigt großen Kontakt auf Mobile
+ * Nach Löschung aufräumen
  */
-function showBigContactAtMobile() {
-  document.getElementById("mobileContactFrame").style.display = "flex";
-  document.getElementById("allContactsFrame").style.display = "none";
-}
-
-/**
- * Zeigt großen Kontakt auf Desktop
- */
-function showBigContactAtDesktop() {
-  document.getElementById("bigContact").style.display = "block";
-}
-
-/**
- * Behandelt Ansicht nach Löschung
- * @param {Array} list - Kontaktliste
- */
-function handlePostDeleteView(list) {
-  const isMobile = window.innerWidth <= 768;
-  
-  if (isMobile) {
-    document.getElementById("mobileContactFrame").style.display = "none";
-    document.getElementById("allContactsFrame").style.display = "flex";
-  }
-  
+export function handlePostDeleteView(list) {
   clearContactListUI();
   renderAllContacts(list);
   clearBigContactView();

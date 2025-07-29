@@ -1,12 +1,10 @@
 
 import { getInitials } from "../scripts/utils/helpers.js";
+import { renderContact } from "./contactRenderer.js";
+import { openEditWindow } from "./contacts.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   currentUserCard();
-  const editBtn = document.getElementById("edit");
-  if (editBtn) {
-    editBtn.addEventListener("click", openEditWindow);
-  }
 });
 
 async function currentUserCard() {
@@ -24,6 +22,14 @@ async function currentUserCard() {
     contactData.userId,
     contactData.userColor
   );
+
+  // Event-Listener NACH dem Rendern hinzufügen
+  setTimeout(() => {
+    const editBtn = document.getElementById("editContact");
+    if (editBtn) {
+      editBtn.addEventListener("click", () => openEditWindow());
+    }
+  }, 100);
 }
 
 function extractContactInformation(userData) {

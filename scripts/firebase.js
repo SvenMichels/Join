@@ -3,7 +3,7 @@
  */
 
 // Firebase Database Base URL
-const FIREBASE_DATABASE_BASE_URL =
+export const FIREBASE_DATABASE_BASE_URL =
   "https://join-da-project-default-rtdb.europe-west1.firebasedatabase.app/";
 
 /**
