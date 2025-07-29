@@ -1,5 +1,7 @@
 /**
- * @fileoverview Main board application controller for Kanban task management
+ * @fileoverview Main board application controller for Kanban task management.
+ * Handles board initialization, task loading, UI setup, search functionality,
+ * and mobile orientation feedback.
  */
 
 import { updateEmptyLists } from "../scripts/utils/emptylisthelper.js";
@@ -32,24 +34,36 @@ window.fetchTasks = loadTasksAndUsers;
 
 window.addEventListener("DOMContentLoaded", initializeBoard);
 
+/**
+ * Initializes the board when DOM is fully loaded.
+ */
 function initializeBoard() {
   setupUIComponents();
   setupEventHandlers();
   loadInitialData();
 }
 
+/**
+ * Initializes static UI components.
+ */
 function setupUIComponents() {
   setupDropdown("#openMenu", "#dropDownMenu");
   loadUserProfile();
   setupMobileDeviceListeners();
 }
 
+/**
+ * Sets up global event handlers.
+ */
 function setupEventHandlers() {
   setupTaskCreationEvents();
   setupSearchEvents();
   setupOrientationEvents();
 }
 
+/**
+ * Binds event listeners for task creation buttons and lifecycle.
+ */
 function setupTaskCreationEvents() {
   const addButton = document.getElementById("add-task-btn");
   if (addButton) {
@@ -65,6 +79,9 @@ function setupTaskCreationEvents() {
   window.addEventListener("taskUpdated", loadTasksAndUsers);
 }
 
+/**
+ * Sets up event listeners for the task search field.
+ */
 function setupSearchEvents() {
   const searchField = document.getElementById("searchFieldInput");
   const searchButton = document.getElementById("inputIcon");
@@ -80,6 +97,9 @@ function setupSearchEvents() {
   }
 }
 
+/**
+ * Adds orientation-related event listeners for mobile feedback.
+ */
 function setupOrientationEvents() {
   const events = ["orientationchange", "resize", "DOMContentLoaded"];
   events.forEach(event => {
@@ -87,10 +107,18 @@ function setupOrientationEvents() {
   });
 }
 
+/**
+ * Loads initial task and user data on board load.
+ * @returns {Promise<void>}
+ */
 async function loadInitialData() {
   await loadTasksAndUsers();
 }
 
+/**
+ * Loads and prepares tasks and user data.
+ * @returns {Promise<void>}
+ */
 async function loadTasksAndUsers() {
   const [tasksResponse] = await fetchTasksAndUsers();
   const contactsList = await loadContactsForTaskAssignment();
@@ -104,6 +132,9 @@ async function loadTasksAndUsers() {
   updateEmptyLists();
 }
 
+/**
+ * Loads the user profile from localStorage and updates UI.
+ */
 function loadUserProfile() {
   const userData = getUserFromStorage();
   if (!userData) return;
@@ -116,22 +147,38 @@ function loadUserProfile() {
   }
 }
 
+/**
+ * Returns current user from localStorage.
+ * @returns {Object|null}
+ */
 function getUserFromStorage() {
   const userString = localStorage.getItem("currentUser");
   return userString ? JSON.parse(userString) : null;
 }
 
+/**
+ * Executes the task search process.
+ */
 function executeSearch() {
   const searchTerm = getSearchTerm();
   const hasResults = filterTasks(searchTerm);
   showNoResultsMessage(!hasResults);
 }
 
+/**
+ * Gets the current search term from the input field.
+ * @returns {string}
+ */
 function getSearchTerm() {
   const input = document.getElementById("searchFieldInput");
   return input?.value?.toLowerCase().trim() || "";
 }
 
+/**
+ * Filters tasks based on the given search term.
+ * @param {string} searchTerm
+ * @returns {boolean} True if at least one task matches
+ */
 function filterTasks(searchTerm) {
   const tasks = Object.values(currentlyLoadedTasks);
   let hasVisibleTasks = false;
@@ -149,12 +196,22 @@ function filterTasks(searchTerm) {
   return hasVisibleTasks;
 }
 
+/**
+ * Checks whether the task matches the search term.
+ * @param {Object} task
+ * @param {string} searchTerm
+ * @returns {boolean}
+ */
 function taskMatchesSearch(task, searchTerm) {
   const titleMatch = task.title.toLowerCase().includes(searchTerm);
   const descriptionMatch = task.description.toLowerCase().includes(searchTerm);
   return titleMatch || descriptionMatch;
 }
 
+/**
+ * Toggles visibility of "no tasks found" message.
+ * @param {boolean} show
+ */
 function showNoResultsMessage(show) {
   const notice = document.getElementById("noTasksFoundNotice");
   if (notice) {
@@ -162,6 +219,9 @@ function showNoResultsMessage(show) {
   }
 }
 
+/**
+ * Handles display of landscape warning on mobile devices.
+ */
 function handleOrientationChange() {
   const warning = document.getElementById("rotateWarning");
   const shouldShow = isMobile() && isLandscape();
@@ -171,10 +231,18 @@ function handleOrientationChange() {
   }
 }
 
+/**
+ * Detects if current device width is mobile range.
+ * @returns {boolean}
+ */
 function isMobile() {
   return window.innerWidth <= 820;
 }
 
+/**
+ * Checks if device is currently in landscape mode.
+ * @returns {boolean}
+ */
 function isLandscape() {
   return window.matchMedia("(orientation: landscape)").matches;
 }
