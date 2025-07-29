@@ -1,0 +1,186 @@
+/* ============================= */
+/*    ADD TASK CORE STYLES      */
+/* ============================= */
+
+/* ---------- Überschrift ---------- */
+.task-h1-container {
+  width: 278px;
+  height: 73px;
+  display: flex;
+  gap: 1px;
+}
+
+h1 {
+  padding-left: 15px;
+}
+
+.redSpan {
+  font-family: Inter;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 120%;
+}
+
+
+/* ---------- Task-Eingabefelder ---------- */
+.task-title,
+.task-description,
+.task-date {
+  display: flex;
+  flex-direction: column;
+  max-width: 440px;
+  gap: 8px;
+}
+
+.task-title {
+  height: 96px;
+}
+
+.task-description {
+  height: 120px;
+  padding-bottom: 10px;
+}
+
+.task-date {
+  height: 96px;
+}
+
+.task-title-input,
+.task-description-input,
+.task-dateInput {
+  border: 1px solid #d1d1d1;
+  border-radius: 10px;
+  max-width: 440px;
+}
+
+.task-title-input,
+.task-dateInput {
+  height: 48px;
+}
+
+.task-description-input {
+  height: 120px;
+}
+
+
+/* ---------- Priorität ---------- */
+.prio-container {
+  display: flex;
+  flex-direction: column;
+  max-width: 440px;
+  gap: 24px;
+}
+
+.prio-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 88px;
+}
+
+.prio-button-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.prio-icons {
+  width: 20px;
+  height: 14.51px;
+}
+
+
+/* ---------- Kategorie ---------- */
+.prio-category-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 440px;
+  height: 80px;
+}
+
+.prio-category-input {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border: 1px solid #d1d1d1;
+  border-radius: 10px;
+  background-color: white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+}
+
+.categoryInput {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 16px;
+}
+
+
+/* ---------- Error-Messages ---------- */
+.error-message {
+  color: red;
+  font-size: 0.8rem;
+  display: none;
+}
+
+input:invalid + .error-message {
+  display: block;
+}
+
+input:valid + .error-message {
+  display: none;
+}
+
+
+/* ---------- Subtask-Spacer & Edit-Input ---------- */
+.subtask-spacer,
+.subtask-spacer-second {
+  border-width: 1px;
+  border: 1px solid #a8a8a8;
+}
+
+.subtask-spacer {
+  height: 20px;
+}
+
+.subtask-spacer-second {
+  height: 12px;
+}
+
+.subtask-edit-wrapper input:focus {
+  outline: none;
+}
+
+
+/* ---------- Form-Container ---------- */
+.form-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-top: 50px;
+}
+
+.form-container {
+  max-width: 1440px;
+  width: 90%;
+}
+
+.required-container {
+  padding-top: 20px;
+}
+
+.create-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  max-width: 900px;
+}
+
+.space-container {
+  width: 0px;
+  border: solid 1px;
+  color: #d1d1d1;
+}
