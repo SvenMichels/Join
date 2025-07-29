@@ -1,6 +1,8 @@
 /**
  * User Assignment Management for Add Task
- * Verwaltung der Benutzerzuordnungen
+ * Handles assigning users to a task during creation.
+ *
+ * @module userAssignmentHandler
  */
 
 import { getUserCheckboxTemplate } from "./addtasktemplates.js";
@@ -9,10 +11,21 @@ import { loadContactsForTaskAssignment } from "../contactPage/contactService.js"
 
 let allSystemUsers = [];
 
+/**
+ * Returns the list of all loaded system users.
+ *
+ * @returns {Array<Object>} List of users
+ */
 export function getAllSystemUsers() {
   return allSystemUsers;
 }
 
+/**
+ * Loads users from backend and renders them in the checkbox list.
+ *
+ * @async
+ * @returns {Promise<void>}
+ */
 export async function loadAndRenderUsers() {
   try {
     const contacts = await loadContactsForTaskAssignment();
@@ -24,6 +37,12 @@ export async function loadAndRenderUsers() {
   }
 }
 
+/**
+ * Renders user checkboxes inside the DOM container.
+ *
+ * @param {Array<Object>} users - User data list
+ * @param {Array<string>} [preselected=[]] - Optional list of preselected usernames
+ */
 export function renderUserCheckboxes(users, preselected = []) {
   const container = clearAndPrepareContainer("assignedUserList");
   if (!container) return;
@@ -32,6 +51,12 @@ export function renderUserCheckboxes(users, preselected = []) {
   updateSelectedUserDisplay();
 }
 
+/**
+ * Clears and returns the checkbox container element.
+ *
+ * @param {string} id - DOM ID
+ * @returns {HTMLElement|null}
+ */
 function clearAndPrepareContainer(id) {
   const container = document.getElementById(id);
   if (!container) return null;
@@ -39,6 +64,13 @@ function clearAndPrepareContainer(id) {
   return container;
 }
 
+/**
+ * Adds unique checkbox elements for users.
+ *
+ * @param {Array<Object>} users - All users
+ * @param {Array<string>} preSelected - Preselected users
+ * @param {HTMLElement} container - Parent DOM node
+ */
 function addUniqueCheckboxes(users, preSelected, container) {
   const uniqueNames = new Set();
 
@@ -52,6 +84,13 @@ function addUniqueCheckboxes(users, preSelected, container) {
   });
 }
 
+/**
+ * Creates a checkbox HTML element for a user.
+ *
+ * @param {Object} user - User object
+ * @param {boolean} isChecked - Whether the checkbox should be checked
+ * @returns {HTMLElement} Checkbox element wrapper
+ */
 function createUserCheckboxElement(user, isChecked) {
   const wrapper = document.createElement("div");
   wrapper.className = "user-checkbox-wrapper";
@@ -62,6 +101,11 @@ function createUserCheckboxElement(user, isChecked) {
   return wrapper;
 }
 
+/**
+ * Adds click listener to checkbox wrapper.
+ *
+ * @param {HTMLElement} wrapper - Wrapper element
+ */
 function attachCheckboxListener(wrapper) {
   const checkbox = wrapper.querySelector("input");
 
@@ -72,10 +116,13 @@ function attachCheckboxListener(wrapper) {
   });
 }
 
+/**
+ * Updates the visual display of selected user chips.
+ */
 export function updateSelectedUserDisplay() {
   const selectedContainer = document.getElementById("selectedUser");
   if (!selectedContainer) return;
-  
+
   selectedContainer.innerHTML = "";
   collectAssignedUsers().forEach(name => {
     const user = allSystemUsers.find(u => u.userFullName === name);
@@ -84,6 +131,13 @@ export function updateSelectedUserDisplay() {
   });
 }
 
+/**
+ * Creates a visual chip element for a user.
+ *
+ * @param {Object} user - User object
+ * @param {string} name - Username fallback
+ * @returns {HTMLElement} Chip element
+ */
 function createUserChip(user, name) {
   const chip = document.createElement("div");
   chip.className = `selected-contact-chip ${user?.userColor || "color-1"}`;
@@ -91,18 +145,26 @@ function createUserChip(user, name) {
   return chip;
 }
 
+/**
+ * Returns a list of currently assigned users.
+ *
+ * @returns {Array<string>} List of usernames
+ */
 function collectAssignedUsers() {
   return Array.from(
     document.querySelectorAll(".user-checkbox-wrapper .user-checkbox:checked")
   ).map(cb => cb.value);
 }
 
+/**
+ * Clears all selected user checkboxes and chips.
+ */
 export function clearSelectedUsers() {
   const selectedUserContainer = document.getElementById("selectedUser");
   if (selectedUserContainer) {
     selectedUserContainer.innerHTML = "";
   }
-  
+
   const checkboxes = document.querySelectorAll('.user-checkbox');
   checkboxes.forEach(cb => {
     cb.checked = false;
@@ -110,6 +172,11 @@ export function clearSelectedUsers() {
   });
 }
 
+/**
+ * Toggles the visibility of the user assignment list.
+ *
+ * @param {Event} clickEvent - Button click event
+ */
 export function toggleUserAssignmentList(clickEvent) {
   clickEvent.preventDefault();
   const userAssignmentList = document.getElementById("assignedUserList");
@@ -118,6 +185,9 @@ export function toggleUserAssignmentList(clickEvent) {
   arrowIndicator?.classList.toggle("rotated", isListVisible);
 }
 
+/**
+ * Sets up the user search input and filters the user list.
+ */
 export function setupUserSearch() {
   const searchBar = document.getElementById("searchUser");
   searchBar?.addEventListener("input", () => {
