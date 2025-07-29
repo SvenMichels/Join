@@ -2,7 +2,6 @@
   width: 278px;
   height: 73px;
   display: flex;
-  padding-top: 100px;
   gap: 1px;
 }
 
@@ -26,9 +25,16 @@ h1 {
   gap: 8px;
 }
 
-.task-title { height: 96px; }
-.task-description { height: 120px; padding-bottom: 10px; }
-.task-date { height: 96px; }
+.task-title {
+  height: 96px;
+}
+.task-description {
+  height: 120px;
+  padding-bottom: 10px;
+}
+.task-date {
+  height: 96px;
+}
 
 .task-title-input,
 .task-description-input,
@@ -283,10 +289,6 @@ input:valid + .error-message {
 .subtask-delete-button,
 .subtask-delete-buttonSecond,
 .subtask-save-button {
-  position: absolute;
-  top: 50%;
-  right: 10px;
-  transform: translateY(-50%);
   width: 24px;
   height: 24px;
   display: flex;
@@ -297,6 +299,13 @@ input:valid + .error-message {
   padding: 0;
   border-radius: 50%;
   cursor: pointer;
+}
+
+.subtask-button-in-input {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
 }
 
 .subtask-add-button:hover,
@@ -322,6 +331,7 @@ input:valid + .error-message {
   justify-content: space-between;
   align-items: center;
   gap: 4px;
+  overflow: visible;
 }
 
 .subtask-container:hover {
@@ -379,6 +389,7 @@ input:valid + .error-message {
   display: flex;
   justify-content: space-between;
   gap: 16px;
+  max-width: 900px;
 }
 
 .clear-button {
@@ -555,8 +566,16 @@ textarea:focus::placeholder {
 }
 
 #subtaskList {
-  height:70px;
+  height: 70px;
   overflow: auto;
+}
+
+.subtask-display-text::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  background-color: #2a3647;
+  border-radius: 50%;
 }
 
 .subtask-display-text::before {
@@ -564,12 +583,10 @@ textarea:focus::placeholder {
 }
 
 .subtask-text-input {
-  width: 100%;
   max-width: 440px;
   width: 100%;
   height: 32px;
   padding: 12px 6px 12px 6px;
-  justify-content: space-between;
   border-left: 0;
   border-top: 0;
   border-right: 0;
@@ -622,12 +639,11 @@ textarea:focus::placeholder {
 }
 
 .subtask-button-wrapper {
-  position: absolute;
-  top: 6px;
-  right: 6px;
   display: flex;
-  gap: 6px;
-  z-index: 2;
+  align-items: center;
+  gap: 4px;
+  position: absolute;
+  right: 10px;
 }
 
 .subtask-delete-buttonImgSecond,
@@ -660,8 +676,14 @@ textarea:focus::placeholder {
 }
 
 @keyframes slideUpFadeIn {
-  from {bottom: -100px; opacity: 0;}
-  to {bottom: 40%; opacity: 1;}
+  from {
+    bottom: -100px;
+    opacity: 0;
+  }
+  to {
+    bottom: 40%;
+    opacity: 1;
+  }
 }
 
 .userFeedback {
