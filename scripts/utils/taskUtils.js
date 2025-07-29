@@ -1,12 +1,12 @@
 /**
- * Task Utilities
- * Hilfsfunktionen für Task-Verarbeitung
+ * @fileoverview Utility function for normalizing task input into an array.
  */
 
 /**
- * Konvertiert Eingabe zu Array
- * @param {any} input - Eingabewert (Array, Object, String oder anderes)
- * @returns {Array} Konvertiertes Array
+ * Converts any input to an array format.
+ *
+ * @param {*} input - The input value (can be Array, Object, String, or other).
+ * @returns {Array} A normalized array.
  */
 export function toArray(input) {
   if (Array.isArray(input)) return input;

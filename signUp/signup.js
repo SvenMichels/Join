@@ -1,7 +1,8 @@
 /**
- * @fileoverview User registration functionality with password validation and form handling
- * @author Join Team
+ * @fileoverview User registration functionality with password validation and form handling.
+ * Initializes signup behavior, collects user input, handles password validation, and submits feedback.
  * @version 1.0.0
+ * @author Join Team
  */
 
 import { signupListeners } from "../scripts/events/loginevents.js";
@@ -16,28 +17,28 @@ const passwordToggleIcon = document.querySelector("#inputPassword + .toggle-pass
 const confirmToggleIcon = document.querySelector("#inputConfirmPassword + .toggle-password");
 
 /**
- * Initialisiert Signup-Seite wenn geladen
+ * Initializes signup page when loaded.
  */
 if (window.location.pathname.endsWith("signup.html")) {
   signupListeners();
-  
-  // Password validation setup
+
+  // Setup password validation
   userPasswordInputField.addEventListener("input", validatePasswords);
   confirmPasswordInputField.addEventListener("input", validatePasswords);
-  
-  // Password visibility toggles
-  passwordToggleIcon.addEventListener("click", () => 
+
+  // Setup password visibility toggles
+  passwordToggleIcon.addEventListener("click", () =>
     togglePassword(userPasswordInputField, passwordToggleIcon)
   );
-  confirmToggleIcon.addEventListener("click", () => 
+  confirmToggleIcon.addEventListener("click", () =>
     togglePassword(confirmPasswordInputField, confirmToggleIcon)
   );
-  
+
   signUpSubmitButton.addEventListener("click", handleSignupSubmission);
 }
 
 /**
- * Validiert Passwort-Übereinstimmung
+ * Validates whether both password fields match.
  */
 function validatePasswords() {
   const match = userPasswordInputField.value === confirmPasswordInputField.value;
@@ -45,9 +46,10 @@ function validatePasswords() {
 }
 
 /**
- * Schaltet Passwort-Sichtbarkeit um
- * @param {HTMLInputElement} field - Passwort-Feld
- * @param {HTMLElement} icon - Toggle-Icon
+ * Toggles visibility of the password input.
+ *
+ * @param {HTMLInputElement} field - Password input field.
+ * @param {HTMLElement} icon - Icon used to toggle visibility.
  */
 function togglePassword(field, icon) {
   const isHidden = field.type === "password";
@@ -56,8 +58,9 @@ function togglePassword(field, icon) {
 }
 
 /**
- * Behandelt Signup-Formular-Übermittlung
- * @param {Event} event - Click-Event
+ * Handles signup form submission.
+ *
+ * @param {Event} event - Click event.
  */
 async function handleSignupSubmission(event) {
   if (!privacyPolicyCheckbox.checked) return;
@@ -69,8 +72,9 @@ async function handleSignupSubmission(event) {
 }
 
 /**
- * Sammelt und validiert Benutzereingaben
- * @returns {Object|null} Benutzerdaten oder null bei Fehler
+ * Collects and validates user input from the signup form.
+ *
+ * @returns {Object|null} Collected user data object or null on failure.
  * @exports
  */
 export async function collectUserInput() {
@@ -78,15 +82,15 @@ export async function collectUserInput() {
   const userEmailAddress = document.getElementById("inputEmail").value.trim();
   const userPassword = userPasswordInputField.value;
   const userColor = generateRandomColorClass();
-  
+
   const userInitials = getInitials(userFullName);
   const firstCharacter = userFullName ? userFullName.charAt(0).toUpperCase() : "?";
 
-  return { 
-    userFullName, 
-    userEmailAddress, 
-    userPassword, 
-    userPhoneNumber: "", 
+  return {
+    userFullName,
+    userEmailAddress,
+    userPassword,
+    userPhoneNumber: "",
     userColor,
     userInitials,
     firstCharacter
@@ -94,7 +98,7 @@ export async function collectUserInput() {
 }
 
 /**
- * Übermittelt Benutzerregistrierung und zeigt Feedback
+ * Submits the user registration and displays feedback animation.
  */
 async function submitUser() {
   const feedback = document.getElementById("userFeedback");
@@ -102,7 +106,7 @@ async function submitUser() {
 
   feedback.classList.remove("dp-none");
   feedback.classList.add("centerFeedback");
-  
+
   feedback.addEventListener("animationend", () => {
     setTimeout(() => {
       feedback.classList.add("dp-none");
