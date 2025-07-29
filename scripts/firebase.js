@@ -1,5 +1,5 @@
 /**
- * Firebase-Konfiguration und HTTP-Request Utilities
+ * @fileoverview Firebase configuration and HTTP request utilities.
  */
 
 // Firebase Database Base URL
@@ -7,10 +7,11 @@ const FIREBASE_DATABASE_BASE_URL =
   "https://join-da-project-default-rtdb.europe-west1.firebasedatabase.app/";
 
 /**
- * Erstellt HTTP-Request-Optionen
- * @param {string} method - HTTP-Methode
- * @param {Object} data - Request-Daten
- * @returns {Object} Request-Optionen
+ * Creates HTTP request options for fetch calls.
+ *
+ * @param {string} method - The HTTP method (GET, POST, PUT, PATCH, DELETE).
+ * @param {Object} data - The request payload (for methods that require it).
+ * @returns {Object} The fetch options object.
  */
 function createRequestOptions(method, data) {
   const options = {
@@ -27,18 +28,21 @@ function createRequestOptions(method, data) {
 }
 
 /**
- * Erstellt vollständige Firebase-URL
- * @param {string} path - API-Pfad
- * @returns {string} Vollständige URL
+ * Builds a full Firebase REST endpoint URL.
+ *
+ * @param {string} path - The path segment to append to the Firebase base URL.
+ * @returns {string} The full Firebase request URL.
  */
 function createFirebaseUrl(path) {
   return `${FIREBASE_DATABASE_BASE_URL}${path}.json`;
 }
 
 /**
- * Verarbeitet Firebase-Response
- * @param {Response} response - Fetch Response
- * @returns {Promise<Object>} Verarbeitete Antwort
+ * Processes a fetch response from Firebase.
+ *
+ * @param {Response} response - The raw response from the fetch call.
+ * @returns {Promise<Object>} The processed response including status and data.
+ * @throws Will throw an error if the response is not OK.
  */
 async function processResponse(response) {
   const data = await response.json();
@@ -49,16 +53,17 @@ async function processResponse(response) {
 
   return {
     status: response.status,
-    data: data ?? {}
+    data: data ?? {},
   };
 }
 
 /**
- * Firebase HTTP-Request Handler
- * @param {string} method - HTTP-Methode (GET, POST, PUT, DELETE, PATCH)
- * @param {string} path - API-Pfad
- * @param {Object} data - Request-Daten
- * @returns {Promise<Object>} Firebase Response
+ * Performs an HTTP request to the Firebase Realtime Database.
+ *
+ * @param {string} [method="GET"] - The HTTP method to use.
+ * @param {string} [path=""] - The relative database path.
+ * @param {Object} [data={}] - The request payload for methods with a body.
+ * @returns {Promise<Object>} The processed Firebase response.
  */
 export async function requestData(method = "GET", path = "", data = {}) {
   const url = createFirebaseUrl(path);

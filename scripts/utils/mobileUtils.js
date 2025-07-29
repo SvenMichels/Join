@@ -1,33 +1,35 @@
 /**
- * Mobile Utilities
- * Hilfsfunktionen für Mobile-Device-Erkennung und -Handling
+ * @fileoverview Utility functions for mobile device detection and responsive handling.
  */
 
 /**
- * Richtet Mobile-Device-Event-Listener ein
- * Behandelt Rotation-Warnungen bei Orientierungs- und Resize-Events
+ * Sets up listeners for mobile device orientation and screen resizing.
+ * Displays a rotation warning if the device is in landscape mode on a small screen.
  */
 export function setupMobileDeviceListeners() {
   const handleRotation = () => {
     const warning = document.getElementById("rotateWarning");
     if (!warning) return;
-    
-    const isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(navigator.userAgent.toLowerCase()) 
-                     || ('ontouchstart' in window && window.innerWidth <= 768);
+
+    const isMobile =
+      /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(navigator.userAgent.toLowerCase()) ||
+      ("ontouchstart" in window && window.innerWidth <= 768);
+
     const isLandscape = window.matchMedia("(orientation: landscape)").matches;
-    
-    warning.style.display = (isMobile && isLandscape) ? "flex" : "none";
+
+    warning.style.display = isMobile && isLandscape ? "flex" : "none";
   };
-  
+
   window.addEventListener("orientationchange", handleRotation);
   window.addEventListener("resize", handleRotation);
   document.addEventListener("DOMContentLoaded", handleRotation);
 }
 
 /**
- * Prüft ob Mobile-Ansicht aktiv ist
- * @returns {boolean} True wenn Bildschirmbreite <= 768px
+ * Checks whether the current viewport qualifies as mobile view.
+ *
+ * @returns {boolean} Returns true if the screen width is 768px or less.
  */
 export function isMobileView() {
-  return window.matchMedia('(max-width: 768px)').matches;
+  return window.matchMedia("(max-width: 768px)").matches;
 }
