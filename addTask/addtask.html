@@ -8,7 +8,12 @@
   <link rel="icon" href="../assets/icons/join_logo_2.svg" type="image/x-icon" />
   <link href="./addtask.css" rel="stylesheet" />
   <link href="../styles/standard.css" rel="stylesheet" />
-  <link href="../styles/shared.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles/base/utilities.css">
+  <link rel="stylesheet" href="../styles/base/colors.css">
+  <link rel="stylesheet" href="../styles/base/buttons.css">
+  <link rel="stylesheet" href="../styles/base/inputs.css">
+  <link rel="stylesheet" href="../styles/modules/addtask.core.css">
+  <link rel="stylesheet" href="../styles/modules/modals.css">
   <link href="../media-querie.css" rel="stylesheet" />
 </head>
 
@@ -180,7 +185,7 @@
             <label for="subtask">Subtasks</label>
             <div class="subtask-wrapper">
               <input class="prio-subtask-input" name="subtask" id="subtask" type="text" maxlength="50" />
-              <button type="button" class="subtask-add-button">
+              <button type="button" class="subtask-add-button subtask-button-in-input">
                 <img src="../assets/icons/add.svg" />
               </button>
             </div>

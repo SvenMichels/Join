@@ -127,8 +127,6 @@
 
   .subtask-display-text::before {
     content: "";
-    left: 6px;
-    top: 50%;
     width: 6px;
     height: 6px;
     background-color: #2a3647;
@@ -282,8 +280,6 @@
 
   .subtask-display-text::before {
     content: "";
-    left: 6px;
-    top: 50%;
     width: 6px;
     height: 6px;
     background-color: #2a3647;
@@ -597,7 +593,7 @@
 
   .create-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     gap: 16px;
   }
 
