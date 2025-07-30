@@ -99,6 +99,25 @@ async function generateTaskHTML(taskData, allSystemUsers, subtaskProgressInfo) {
   const dropdownId = `moveDropdown-${taskData.id}`;
   const btnId = `moveDropdownBtn-${taskData.id}`;
 
+  return buildTaskHTMLTemplate({
+    taskData, iconFileName, priorityIconPath, assignedUsersHTML, progressBarHTML
+  });
+}
+/**
+ * Generiert das HTML-Template für eine einzelne Task-Kachel.
+ *
+ * @function
+ * @param {Object} taskData - Die Daten der Aufgabe (inkl. ID, Titel, Beschreibung, Kategorie, Priorität).
+ * @param {string} iconFileName - Der Dateiname des Kategorie-Icons.
+ * @param {string} priorityIconPath - Der Pfad zum Prioritäts-Icon.
+ * @param {string} assignedUsersHTML - Der bereits gerenderte HTML-Code für die zugewiesenen Benutzer.
+ * @param {string} progressBarHTML - Der bereits gerenderte HTML-Code für die Fortschrittsanzeige.
+ * @returns {string} HTML-String der gesamten Task-Darstellung.
+ */
+function buildTaskHTMLTemplate({ taskData, iconFileName, priorityIconPath, assignedUsersHTML, progressBarHTML }) {
+  const dropdownId = `moveDropdown-${taskData.id}`;
+  const btnId = `moveDropdownBtn-${taskData.id}`;
+
   return `
     <div class="task-icon">
       <img src="../assets/icons/${iconFileName}" alt="${taskData.category}">
