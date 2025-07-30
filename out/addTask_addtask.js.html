@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: addTask/addtask.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: addTask/addtask.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Add Task Main Controller
+ * Controls the entire Add Task form functionality.
+ * 
+ * @module AddTaskController
+ */
+
+import { requestData } from "../scripts/firebase.js";
+import { setupDropdown } from "../scripts/ui/dropdown.js";
+import { highlightActiveNavigationLinks } from "../scripts/utils/navUtils.js";
+import { getInitials } from "../scripts/utils/helpers.js";
+import { setupMobileDeviceListeners } from "../scripts/utils/mobileUtils.js";
+
+import { 
+  collectTaskData, 
+  validateTask, 
+  resetFormState, 
+  clearValidationAlerts 
+} from "./formManager.js";
+
+import { selectPriority, initPriorityEventListeners } from "./priorityHandler.js";
+
+import { 
+  loadAndRenderUsers, 
+  toggleUserAssignmentList, 
+  setupUserSearch, 
+  clearSelectedUsers 
+} from "./userAssignmentHandler.js";
+
+import { 
+  addNewSubtask, 
+  addSubtaskOnEnterKey, 
+  renderSubtasks 
+} from "./subtaskHandler.js";
+
+/** @type {Object&lt;string, HTMLElement>} */
+const domCache = {};
+
+document.addEventListener("DOMContentLoaded", () => {
+  initializeApplication();
+});
+
+/**
+ * Initializes the application by setting up everything.
+ */
+function initializeApplication() {
+  cacheDomElements();
+  setupEventListeners();
+  configureForm();
+  loadUserInitials();
+  setupUserSearch();
+  setupDropdown("#openMenu", "#dropDownMenu");
+  highlightActiveNavigationLinks();
+  setupMobileDeviceListeners();
+}
+
+/**
+ * Caches frequently used DOM elements.
+ */
+function cacheDomElements() {
+  domCache.taskForm = document.getElementById("taskForm");
+  domCache.taskDateInput = document.getElementById("task-date");
+  domCache.subtaskInput = document.getElementById("subtask");
+  domCache.subtaskAddBtn = document.querySelector(".subtask-add-button");
+  domCache.assignUserBtn = document.querySelector(".assignUserListBtn");
+  domCache.clearBtn = document.getElementById("clearBtn");
+
+  if (domCache.taskDateInput) {
+    domCache.taskDateInput.min = new Date().toISOString().split("T")[0];
+  }
+}
+
+/**
+ * Sets up all relevant event listeners.
+ */
+function setupEventListeners() {
+  domCache.taskForm?.addEventListener("submit", handleFormSubmission);
+  domCache.subtaskAddBtn?.addEventListener("click", addNewSubtask);
+  domCache.subtaskInput?.addEventListener("keydown", addSubtaskOnEnterKey);
+  domCache.assignUserBtn?.addEventListener("click", toggleUserAssignmentList);
+  domCache.clearBtn?.addEventListener("click", clearAllFormData);
+}
+
+/**
+ * Configures the form: sets up priorities, loads users, etc.
+ */
+function configureForm() {
+  loadAndRenderUsers();
+  selectPriority("medium");
+  initPriorityEventListeners();
+
+  const categorySelect = document.getElementById("category");
+  const submitButton = document.querySelector(".create-button");
+
+  if (submitButton &amp;&amp; categorySelect) {
+    submitButton.disabled = true;
+    categorySelect.addEventListener("change", () => {
+      submitButton.disabled = categorySelect.value.trim() === "";
+    });
+  }
+}
+
+/**
+ * Handles the task form submission event.
+ * 
+ * @param {SubmitEvent} event - The form submit event.
+ */
+async function handleFormSubmission(event) {
+  event.preventDefault();
+
+  const taskData = collectTaskData(event.target);
+  if (!validateTask(taskData)) return;
+
+  await saveTask(taskData);
+
+  setTimeout(() => {
+    showUserFeedback();
+    clearAllFormData();
+  }, 100);
+}
+
+/**
+ * Sends the task data to backend for saving.
+ * 
+ * @param {Object} taskData - The task object to be saved.
+ * @returns {Promise&lt;any>} Response from the backend.
+ */
+async function saveTask(taskData) {
+  const isNewTask = !taskData.id;
+  const httpMethod = isNewTask ? "POST" : "PUT";
+  const apiEndpoint = isNewTask ? "/tasks" : `/tasks/${taskData.id}`;
+
+  return await requestData(httpMethod, apiEndpoint, taskData);
+}
+
+/**
+ * Loads current user from localStorage and sets initials in profile menu.
+ */
+function loadUserInitials() {
+  const userString = localStorage.getItem("currentUser");
+  if (!userString) return;
+
+  const userData = JSON.parse(userString);
+  const userName = userData.userFullName || "Guest";
+
+  const menuButton = document.getElementById("openMenu");
+  if (menuButton) {
+    menuButton.textContent = getInitials(userName);
+  }
+}
+
+/**
+ * Displays visual feedback to the user after successful action.
+ */
+function showUserFeedback() {
+  const feedback = document.getElementById("userFeedback");
+  if (!feedback) return;
+
+  feedback.classList.remove("d_none");
+  feedback.classList.add("centerFeedback");
+
+  feedback.addEventListener("animationend", () => {
+    setTimeout(() => {
+      feedback.classList.add("d_none");
+      feedback.classList.remove("centerFeedback");
+    }, 1500);
+  });
+}
+
+/**
+ * Resets and clears the task form data and UI states.
+ */
+function clearAllFormData() {
+  domCache.taskForm?.reset();
+  resetFormState();
+  clearValidationAlerts();
+  clearSelectedUsers();
+  selectPriority("medium");
+  renderSubtasks();
+  setupMobileDeviceListeners();
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AddTaskController.html">AddTaskController</a></li><li><a href="module-dataServiceManager.html">dataServiceManager</a></li><li><a href="module-formManager.html">formManager</a></li><li><a href="module-init.html">init</a></li><li><a href="module-loadingStateManager.html">loadingStateManager</a></li><li><a href="module-priorityHandler.html">priorityHandler</a></li><li><a href="module-priorityModalManager.html">priorityModalManager</a></li><li><a href="module-startPageController.html">startPageController</a></li><li><a href="module-subtaskHandler.html">subtaskHandler</a></li><li><a href="module-subtaskModalManager.html">subtaskModalManager</a></li><li><a href="module-taskStatisticsManager.html">taskStatisticsManager</a></li><li><a href="module-taskfloatHTML.html">taskfloatHTML</a></li><li><a href="module-undefined.html">undefined</a></li><li><a href="module-userAssignmentHandler.html">userAssignmentHandler</a></li><li><a href="module-userAssignmentManager.html">userAssignmentManager</a></li><li><a href="module-userGreetingManager.html">userGreetingManager</a></li><li><a href="templates_userCheckbox%250DContains%2520template%2520generators%2520for%2520user%2520checkboxes%2520and%2520subtask%2520control%2520groups.module_.html">templates/userCheckboxContains template generators for user checkboxes and subtask control groups.</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AVAILABLE_CATEGORY_ICONS">AVAILABLE_CATEGORY_ICONS</a></li><li><a href="global.html#PRIORITY_ICONS_MODAL">PRIORITY_ICONS_MODAL</a></li><li><a href="global.html#PRIORITY_LEVEL_ICONS">PRIORITY_LEVEL_ICONS</a></li><li><a href="global.html#TASK_CONFIGS">TASK_CONFIGS</a></li><li><a href="global.html#TASK_STATUS_COLUMN_MAPPING">TASK_STATUS_COLUMN_MAPPING</a></li><li><a href="global.html#addContactTry">addContactTry</a></li><li><a href="global.html#addNewContactToDatabase">addNewContactToDatabase</a></li><li><a href="global.html#alphabetLettersUsedSet">alphabetLettersUsedSet</a></li><li><a href="global.html#alphabetfilter">alphabetfilter</a></li><li><a href="global.html#attachEventListeners">attachEventListeners</a></li><li><a href="global.html#attachPolicyListeners">attachPolicyListeners</a></li><li><a href="global.html#attemptUserLogin">attemptUserLogin</a></li><li><a href="global.html#authenticateAndRedirect">authenticateAndRedirect</a></li><li><a href="global.html#bindButton">bindButton</a></li><li><a href="global.html#bindContactActions">bindContactActions</a></li><li><a href="global.html#bindGuestLoginButton">bindGuestLoginButton</a></li><li><a href="global.html#bindPolicyLinks">bindPolicyLinks</a></li><li><a href="global.html#bindPrivacyCheckbox">bindPrivacyCheckbox</a></li><li><a href="global.html#bindSignupForm">bindSignupForm</a></li><li><a href="global.html#bindUserLoginButton">bindUserLoginButton</a></li><li><a href="global.html#buildTaskHTMLTemplate">buildTaskHTMLTemplate</a></li><li><a href="global.html#cacheDom">cacheDom</a></li><li><a href="global.html#calculateSubtaskProgress">calculateSubtaskProgress</a></li><li><a href="global.html#clearBigContactView">clearBigContactView</a></li><li><a href="global.html#clearContactListUI">clearContactListUI</a></li><li><a href="global.html#clearFormAttributes">clearFormAttributes</a></li><li><a href="global.html#clearTaskLists">clearTaskLists</a></li><li><a href="global.html#closeAddWindow">closeAddWindow</a></li><li><a href="global.html#closeAllMoveDropdowns">closeAllMoveDropdowns</a></li><li><a href="global.html#closeDetailModal">closeDetailModal</a></li><li><a href="global.html#closeEditWindow">closeEditWindow</a></li><li><a href="global.html#closeModal">closeModal</a></li><li><a href="global.html#closeOverlay">closeOverlay</a></li><li><a href="global.html#collectFormCredentials">collectFormCredentials</a></li><li><a href="global.html#collectLoginCredentials">collectLoginCredentials</a></li><li><a href="global.html#collectTaskDataModal">collectTaskDataModal</a></li><li><a href="global.html#contactCard">contactCard</a></li><li><a href="global.html#countByPriority">countByPriority</a></li><li><a href="global.html#countByStatus">countByStatus</a></li><li><a href="global.html#createBaseTaskElement">createBaseTaskElement</a></li><li><a href="global.html#createContact">createContact</a></li><li><a href="global.html#createContactFromForm">createContactFromForm</a></li><li><a href="global.html#createFirebaseUrl">createFirebaseUrl</a></li><li><a href="global.html#createNewUserAccount">createNewUserAccount</a></li><li><a href="global.html#createRequestOptions">createRequestOptions</a></li><li><a href="global.html#createTaskElement">createTaskElement</a></li><li><a href="global.html#createUserChip">createUserChip</a></li><li><a href="global.html#createUserContactObject">createUserContactObject</a></li><li><a href="global.html#credentialsMatch">credentialsMatch</a></li><li><a href="global.html#currentUserCard">currentUserCard</a></li><li><a href="global.html#deleteContact">deleteContact</a></li><li><a href="global.html#deleteContactFromDatabase">deleteContactFromDatabase</a></li><li><a href="global.html#deleteContactFromFirebase">deleteContactFromFirebase</a></li><li><a href="global.html#deleteTask">deleteTask</a></li><li><a href="global.html#deleteUserAccount">deleteUserAccount</a></li><li><a href="global.html#dispatchTaskEvent">dispatchTaskEvent</a></li><li><a href="global.html#displayTaskCounts">displayTaskCounts</a></li><li><a href="global.html#displayUrgentTaskInfo">displayUrgentTaskInfo</a></li><li><a href="global.html#displayUserGreeting">displayUserGreeting</a></li><li><a href="global.html#editContact">editContact</a></li><li><a href="global.html#emptyInput">emptyInput</a></li><li><a href="global.html#ensureCurrentUserAsFirstContact">ensureCurrentUserAsFirstContact</a></li><li><a href="global.html#ensureCurrentUserInContactsList">ensureCurrentUserInContactsList</a></li><li><a href="global.html#executeSearch">executeSearch</a></li><li><a href="global.html#extractContactInformation">extractContactInformation</a></li><li><a href="global.html#extractTaskDataFromDropEvent">extractTaskDataFromDropEvent</a></li><li><a href="global.html#extractUserName">extractUserName</a></li><li><a href="global.html#extractUsers">extractUsers</a></li><li><a href="global.html#fetchAllTasks">fetchAllTasks</a></li><li><a href="global.html#fetchContactsFromFirebase">fetchContactsFromFirebase</a></li><li><a href="global.html#fetchModalHTML">fetchModalHTML</a></li><li><a href="global.html#fetchTasksAndUsers">fetchTasksAndUsers</a></li><li><a href="global.html#fetchUsersFromDatabase">fetchUsersFromDatabase</a></li><li><a href="global.html#fillBasicFields">fillBasicFields</a></li><li><a href="global.html#fillEditForm">fillEditForm</a></li><li><a href="global.html#filterTasks">filterTasks</a></li><li><a href="global.html#filterTasksByUser">filterTasksByUser</a></li><li><a href="global.html#findContactById">findContactById</a></li><li><a href="global.html#findGuestUser">findGuestUser</a></li><li><a href="global.html#findMatchingUser">findMatchingUser</a></li><li><a href="global.html#findUserByName">findUserByName</a></li><li><a href="global.html#formatFirebaseDataToArray">formatFirebaseDataToArray</a></li><li><a href="global.html#generateAssignedChips">generateAssignedChips</a></li><li><a href="global.html#generateBigContactTemplate">generateBigContactTemplate</a></li><li><a href="global.html#generateRandomColorClass">generateRandomColorClass</a></li><li><a href="global.html#generateSubtaskProgressBar">generateSubtaskProgressBar</a></li><li><a href="global.html#generateTaskHTML">generateTaskHTML</a></li><li><a href="global.html#generateTimeBasedGreeting">generateTimeBasedGreeting</a></li><li><a href="global.html#getAllContactsFromDatabase">getAllContactsFromDatabase</a></li><li><a href="global.html#getAllPolicyLinks">getAllPolicyLinks</a></li><li><a href="global.html#getCategoryIcon">getCategoryIcon</a></li><li><a href="global.html#getCurrentPageName">getCurrentPageName</a></li><li><a href="global.html#getCurrentUser">getCurrentUser</a></li><li><a href="global.html#getCurrentUserAsContact">getCurrentUserAsContact</a></li><li><a href="global.html#getCurrentUserData">getCurrentUserData</a></li><li><a href="global.html#getCurrentUserForEdit">getCurrentUserForEdit</a></li><li><a href="global.html#getEarliestUrgentDueDate">getEarliestUrgentDueDate</a></li><li><a href="global.html#getEditContactInput">getEditContactInput</a></li><li><a href="global.html#getFabElements">getFabElements</a></li><li><a href="global.html#getInitials">getInitials</a></li><li><a href="global.html#getInitialsFromName">getInitialsFromName</a></li><li><a href="global.html#getPageNameFromHref">getPageNameFromHref</a></li><li><a href="global.html#getPriorityIcon">getPriorityIcon</a></li><li><a href="global.html#getPriorityIconPath">getPriorityIconPath</a></li><li><a href="global.html#getSearchTerm">getSearchTerm</a></li><li><a href="global.html#getSubtaskProgressData">getSubtaskProgressData</a></li><li><a href="global.html#getUserDataById">getUserDataById</a></li><li><a href="global.html#getUserFromStorage">getUserFromStorage</a></li><li><a href="global.html#handleContactEditSubmission">handleContactEditSubmission</a></li><li><a href="global.html#handleDragLeaveEvent">handleDragLeaveEvent</a></li><li><a href="global.html#handleDragOverEvent">handleDragOverEvent</a></li><li><a href="global.html#handleDragStart">handleDragStart</a></li><li><a href="global.html#handleDropEvent">handleDropEvent</a></li><li><a href="global.html#handleFormSubmission">handleFormSubmission</a></li><li><a href="global.html#handleGuestLogin">handleGuestLogin</a></li><li><a href="global.html#handleMobileView">handleMobileView</a></li><li><a href="global.html#handleOrientationChange">handleOrientationChange</a></li><li><a href="global.html#handlePolicyClick">handlePolicyClick</a></li><li><a href="global.html#handlePostDeleteView">handlePostDeleteView</a></li><li><a href="global.html#handleSignupSubmission">handleSignupSubmission</a></li><li><a href="global.html#handleSubmitModal">handleSubmitModal</a></li><li><a href="global.html#handleUserLogin">handleUserLogin</a></li><li><a href="global.html#handleWindowClosing">handleWindowClosing</a></li><li><a href="global.html#hasTaskElements">hasTaskElements</a></li><li><a href="global.html#hideEmptyState">hideEmptyState</a></li><li><a href="global.html#highlightActiveNavigationLinks">highlightActiveNavigationLinks</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initFormModal">initFormModal</a></li><li><a href="global.html#initModalContents">initModalContents</a></li><li><a href="global.html#initSubtaskProgress">initSubtaskProgress</a></li><li><a href="global.html#initTaskFloat">initTaskFloat</a></li><li><a href="global.html#initializeBackButton">initializeBackButton</a></li><li><a href="global.html#initializeBoard">initializeBoard</a></li><li><a href="global.html#initializeCategoryValidation">initializeCategoryValidation</a></li><li><a href="global.html#initializeFabMenu">initializeFabMenu</a></li><li><a href="global.html#initializePriority">initializePriority</a></li><li><a href="global.html#initializePriorityEvents">initializePriorityEvents</a></li><li><a href="global.html#initializeStartpage">initializeStartpage</a></li><li><a href="global.html#initializeSubtasks">initializeSubtasks</a></li><li><a href="global.html#initializeUsers">initializeUsers</a></li><li><a href="global.html#isLandscape">isLandscape</a></li><li><a href="global.html#isMobile">isMobile</a></li><li><a href="global.html#isMobileView">isMobileView</a></li><li><a href="global.html#isValidEmail">isValidEmail</a></li><li><a href="global.html#loadAllContactsFromFirebaseDatabase">loadAllContactsFromFirebaseDatabase</a></li><li><a href="global.html#loadAllTasksFromDatabase">loadAllTasksFromDatabase</a></li><li><a href="global.html#loadAllUsersForLogin">loadAllUsersForLogin</a></li><li><a href="global.html#loadAndShowContactDetails">loadAndShowContactDetails</a></li><li><a href="global.html#loadContacts">loadContacts</a></li><li><a href="global.html#loadContactsForTaskAssignment">loadContactsForTaskAssignment</a></li><li><a href="global.html#loadInitialData">loadInitialData</a></li><li><a href="global.html#loadTasksAndUsers">loadTasksAndUsers</a></li><li><a href="global.html#loadUserInitialsModal">loadUserInitialsModal</a></li><li><a href="global.html#loadUserProfile">loadUserProfile</a></li><li><a href="global.html#loginAsGuest">loginAsGuest</a></li><li><a href="global.html#loginListeners">loginListeners</a></li><li><a href="global.html#loginUser">loginUser</a></li><li><a href="global.html#logoutUser">logoutUser</a></li><li><a href="global.html#moveTaskOneColumn">moveTaskOneColumn</a></li><li><a href="global.html#moveTaskToNewStatusColumn">moveTaskToNewStatusColumn</a></li><li><a href="global.html#normalizeTasks">normalizeTasks</a></li><li><a href="global.html#openContactAdditionWindow">openContactAdditionWindow</a></li><li><a href="global.html#openEditDialog">openEditDialog</a></li><li><a href="global.html#openEditWindow">openEditWindow</a></li><li><a href="global.html#openTaskDetails">openTaskDetails</a></li><li><a href="global.html#openTaskModal">openTaskModal</a></li><li><a href="global.html#persistTaskStatus">persistTaskStatus</a></li><li><a href="global.html#prefillModalWithTaskData">prefillModalWithTaskData</a></li><li><a href="global.html#prepareCreateMode">prepareCreateMode</a></li><li><a href="global.html#prepareEditMode">prepareEditMode</a></li><li><a href="global.html#prepareTaskData">prepareTaskData</a></li><li><a href="global.html#processContactsData">processContactsData</a></li><li><a href="global.html#processLoginAttempt">processLoginAttempt</a></li><li><a href="global.html#processResponse">processResponse</a></li><li><a href="global.html#redirectToStartpage">redirectToStartpage</a></li><li><a href="global.html#removeUserFromAllTasks">removeUserFromAllTasks</a></li><li><a href="global.html#removeUserFromTaskAssignments">removeUserFromTaskAssignments</a></li><li><a href="global.html#renderAllContacts">renderAllContacts</a></li><li><a href="global.html#renderAlphabetFilter">renderAlphabetFilter</a></li><li><a href="global.html#renderContact">renderContact</a></li><li><a href="global.html#renderContactCard">renderContactCard</a></li><li><a href="global.html#renderSingleContact">renderSingleContact</a></li><li><a href="global.html#renderTaskDetailAssignees">renderTaskDetailAssignees</a></li><li><a href="global.html#renderTaskDetailIcon">renderTaskDetailIcon</a></li><li><a href="global.html#renderTaskDetailPriority">renderTaskDetailPriority</a></li><li><a href="global.html#renderTaskDetailSubtasks">renderTaskDetailSubtasks</a></li><li><a href="global.html#renderTaskDetailText">renderTaskDetailText</a></li><li><a href="global.html#renderTasks">renderTasks</a></li><li><a href="global.html#requestData">requestData</a></li><li><a href="global.html#resetFormState">resetFormState</a></li><li><a href="global.html#resetModalFormState">resetModalFormState</a></li><li><a href="global.html#resetModalState">resetModalState</a></li><li><a href="global.html#resetOverlay">resetOverlay</a></li><li><a href="global.html#resetSubtasks">resetSubtasks</a></li><li><a href="global.html#saveNewContact">saveNewContact</a></li><li><a href="global.html#saveSubtaskState">saveSubtaskState</a></li><li><a href="global.html#saveTaskModal">saveTaskModal</a></li><li><a href="global.html#searchTasks">searchTasks</a></li><li><a href="global.html#setModalMode">setModalMode</a></li><li><a href="global.html#setProgressBar">setProgressBar</a></li><li><a href="global.html#setProgressText">setProgressText</a></li><li><a href="global.html#setText">setText</a></li><li><a href="global.html#setupCloseButton">setupCloseButton</a></li><li><a href="global.html#setupColumnDragEvents">setupColumnDragEvents</a></li><li><a href="global.html#setupDragAndDrop">setupDragAndDrop</a></li><li><a href="global.html#setupDropdown">setupDropdown</a></li><li><a href="global.html#setupEditAndDelete">setupEditAndDelete</a></li><li><a href="global.html#setupEventHandlers">setupEventHandlers</a></li><li><a href="global.html#setupEventListeners">setupEventListeners</a></li><li><a href="global.html#setupFabActions">setupFabActions</a></li><li><a href="global.html#setupFabToggle">setupFabToggle</a></li><li><a href="global.html#setupMobileDeviceListeners">setupMobileDeviceListeners</a></li><li><a href="global.html#setupMoveDropdown">setupMoveDropdown</a></li><li><a href="global.html#setupOrientationEvents">setupOrientationEvents</a></li><li><a href="global.html#setupOutsideClickHandler">setupOutsideClickHandler</a></li><li><a href="global.html#setupProfileButton">setupProfileButton</a></li><li><a href="global.html#setupSearch">setupSearch</a></li><li><a href="global.html#setupSearchEvents">setupSearchEvents</a></li><li><a href="global.html#setupTaskCreationEvents">setupTaskCreationEvents</a></li><li><a href="global.html#setupTaskDropdown">setupTaskDropdown</a></li><li><a href="global.html#setupTaskElementEvents">setupTaskElementEvents</a></li><li><a href="global.html#setupUIComponents">setupUIComponents</a></li><li><a href="global.html#showEmptyState">showEmptyState</a></li><li><a href="global.html#showNoResultsMessage">showNoResultsMessage</a></li><li><a href="global.html#showUserFeedback">showUserFeedback</a></li><li><a href="global.html#signupListeners">signupListeners</a></li><li><a href="global.html#singleContact">singleContact</a></li><li><a href="global.html#storeCurrentUser">storeCurrentUser</a></li><li><a href="global.html#taskMatchesSearch">taskMatchesSearch</a></li><li><a href="global.html#taskMatchesSearchTerm">taskMatchesSearchTerm</a></li><li><a href="global.html#toArray">toArray</a></li><li><a href="global.html#togglePassword">togglePassword</a></li><li><a href="global.html#toggleSubmitButton">toggleSubmitButton</a></li><li><a href="global.html#transformUsersForLogin">transformUsersForLogin</a></li><li><a href="global.html#updateContact">updateContact</a></li><li><a href="global.html#updateContactInFirebase">updateContactInFirebase</a></li><li><a href="global.html#updateEmptyLists">updateEmptyLists</a></li><li><a href="global.html#updateListState">updateListState</a></li><li><a href="global.html#updateSubtaskProgress">updateSubtaskProgress</a></li><li><a href="global.html#updateSummary">updateSummary</a></li><li><a href="global.html#updateSwitchButtonVisibility">updateSwitchButtonVisibility</a></li><li><a href="global.html#updateTask">updateTask</a></li><li><a href="global.html#updateTaskPositionInDOM">updateTaskPositionInDOM</a></li><li><a href="global.html#updateTaskWithoutUser">updateTaskWithoutUser</a></li><li><a href="global.html#updateUIAfterContactCreation">updateUIAfterContactCreation</a></li><li><a href="global.html#updateUserGreeting">updateUserGreeting</a></li><li><a href="global.html#updateUserInformation">updateUserInformation</a></li><li><a href="global.html#userNeedsAuthentication">userNeedsAuthentication</a></li><li><a href="global.html#validateField">validateField</a></li><li><a href="global.html#validatePasswords">validatePasswords</a></li><li><a href="global.html#validateTaskModal">validateTaskModal</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed Jul 30 2025 20:02:37 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
