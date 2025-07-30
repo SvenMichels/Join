@@ -1,6 +1,7 @@
 /**
- * Start Page Main Controller
- * Hauptsteuerung für die Start-/Dashboard-Seite
+ * @fileoverview Start Page Main Controller
+ * Manages the initialization and update logic for the dashboard/start page.
+ * @module startPageController
  */
 
 import { setupDropdown } from "../scripts/ui/dropdown.js";
@@ -9,7 +10,7 @@ import { updateUserGreetingDisplay, handleMobileGreetingFadeEffect } from "./use
 import { updateTaskSummaryWithRetryLogic } from "./dataServiceManager.js";
 
 /**
- * Initialisiert die Startseite beim Laden
+ * Initializes the start page on DOMContentLoaded.
  */
 document.addEventListener("DOMContentLoaded", async () => {
   updateUserGreetingDisplay();
@@ -17,22 +18,25 @@ document.addEventListener("DOMContentLoaded", async () => {
   handleMobileGreetingFadeEffect();
   setupDropdown("#openMenu", "#dropDownMenu");
   highlightActiveNavigationLinks();
-  
+
   window.addEventListener("focus", refreshData);
   window.addEventListener("pageshow", handlePageShow);
   document.addEventListener("visibilitychange", handleVisibilityChange);
 });
 
 /**
- * Aktualisiert Daten beim Fokus
+ * Refreshes data when window gains focus.
+ * @returns {Promise<void>}
  */
 async function refreshData() {
   await updateTaskSummaryWithRetryLogic();
 }
 
 /**
- * Behandelt PageShow-Event
- * @param {PageTransitionEvent} event - PageShow Event
+ * Handles the pageshow event to refresh data when loaded from bfcache.
+ * 
+ * @param {PageTransitionEvent} event - The pageshow event.
+ * @returns {Promise<void>}
  */
 async function handlePageShow(event) {
   if (event.persisted) {
@@ -41,7 +45,8 @@ async function handlePageShow(event) {
 }
 
 /**
- * Behandelt Sichtbarkeitsänderungen
+ * Handles visibility changes to refresh data when tab becomes active.
+ * @returns {Promise<void>}
  */
 async function handleVisibilityChange() {
   if (!document.hidden) {

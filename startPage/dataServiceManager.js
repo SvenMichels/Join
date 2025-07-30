@@ -1,6 +1,7 @@
 /**
- * Data Service Manager
- * Verwaltet Datenabruf und Task-Summary-Updates
+ * @fileoverview Data Service Manager
+ * Handles data fetching and task summary updates with retry logic.
+ * @module dataServiceManager
  */
 
 import { requestData } from "../scripts/firebase.js";
@@ -8,34 +9,38 @@ import { displayDataLoadingState, displayErrorState } from "./loadingStateManage
 import { validateTaskData, setTextUpdateSummary } from "./taskStatisticsManager.js";
 
 /**
- * Aktualisiert Task-Summary mit Retry-Logik
- * @param {Object} config - Retry-Konfiguration mit maxRetries und retryDelayMs
+ * Updates the task summary with retry logic on failure.
+ *
+ * @param {Object} config - Configuration for retries.
+ * @param {number} config.maxRetries - Maximum number of retry attempts.
+ * @param {number} config.retryDelayMs - Delay between retries in milliseconds.
  * @returns {Promise<void>}
  */
 export async function updateTaskSummaryWithRetryLogic(config = { maxRetries: 3, retryDelayMs: 800 }) {
   displayDataLoadingState();
-  
+
   for (let attempt = 1; attempt <= config.maxRetries; attempt++) {
     const success = await loadAndUpdateSummary();
     if (success) return;
-    
+
     if (attempt < config.maxRetries) {
       await new Promise(resolve => setTimeout(resolve, config.retryDelayMs));
     }
   }
-  
+
   displayErrorState();
 }
 
 /**
- * Lädt Tasks und aktualisiert Summary
- * @returns {Promise<boolean>} True bei Erfolg, false bei Fehler
+ * Loads tasks from the database and updates the summary.
+ *
+ * @returns {Promise<boolean>} Returns true if successful, false otherwise.
  */
 async function loadAndUpdateSummary() {
   try {
     const response = await requestData("GET", "/tasks/");
     if (!response || typeof response !== "object") return false;
-    
+
     const tasks = response.data;
     if (!tasks) {
       if (response.hasOwnProperty("data")) {
@@ -44,10 +49,10 @@ async function loadAndUpdateSummary() {
       }
       return false;
     }
-    
+
     const tasksArray = Object.values(tasks);
     if (!validateTaskData(tasksArray)) return false;
-    
+
     setTextUpdateSummary(tasksArray);
     return true;
   } catch {
