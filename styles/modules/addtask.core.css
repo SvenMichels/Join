@@ -173,9 +173,9 @@ input:valid + .error-message {
 }
 
 .create-container {
-  display: flex;
+  /* display: flex;
   justify-content: space-between;
-  gap: 16px;
+  gap: 16px; */
   max-width: 900px;
 }
 

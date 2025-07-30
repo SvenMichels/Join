@@ -1,0 +1,51 @@
+/* ============================= */
+/*        SHARED LAYOUTS        */
+/* ============================= */
+
+/* ---------- Formular-Layout ---------- */
+.form-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-top: 50px;
+}
+
+.form-container {
+  max-width: 1440px;
+  width: 90%;
+}
+
+
+/* ---------- Eingabebereich ---------- */
+.required-container {
+  padding-top: 20px;
+}
+
+.create-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  max-width: 900px;
+}
+
+
+/* ---------- Trennelemente ---------- */
+.space-container {
+  width: 0px;
+  border: solid 1px;
+  color: #d1d1d1;
+}
+
+.subtask-spacer,
+.subtask-spacer-second {
+  border-width: 1px;
+  border: 1px solid #a8a8a8;
+}
+
+.subtask-spacer {
+  height: 20px;
+}
+
+.subtask-spacer-second {
+  height: 12px;
+}
