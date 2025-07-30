@@ -168,7 +168,6 @@ function bindMoveAction(dropdown, selector, task, direction) {
   });
 }
 
-
 /**
  * Moves a task one column forward or backward and saves it persistently.
  * 
@@ -230,4 +229,24 @@ function updateTaskPositionInDOM(task) {
 function persistTaskStatus(task) {
   requestData("PUT", `/tasks/${task.id}`, task)
     .catch(error => console.error("Failed to save task status:", error));
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  updateSwitchButtonVisibility();
+});
+
+window.addEventListener("resize", updateSwitchButtonVisibility);
+
+/**
+ * Toggles visibility of `.switchPositionBtn` based on screen width.
+ * 
+ * - Adds `dp-none` class on devices wider than 767px (desktop/tablet).
+ * - Removes `dp-none` class on mobile devices (width < 768px).
+ */
+function updateSwitchButtonVisibility() {
+  const isMobile = window.innerWidth < 900;
+
+  document.querySelectorAll(".switchPositionBtn").forEach(btn => {
+    btn.classList.toggle("dp-none", !isMobile);
+  });
 }
