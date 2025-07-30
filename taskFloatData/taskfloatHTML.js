@@ -1,6 +1,20 @@
+/**
+ * @fileoverview Generates HTML templates for subtasks and user checkboxes in the task modal.
+ * Provides utilities to render subtasks (view and edit mode) and user assignment elements.
+ * @module taskfloatHTML
+ */
+
 import { getCompletedSubtasks } from "./subtaskManager.js";
 import { getInitials } from "../scripts/utils/helpers.js";
 
+/**
+ * Generates HTML for a subtask item in view mode.
+ * Includes checkbox, text, and edit/delete buttons.
+ *
+ * @param {string} text - The subtask text content.
+ * @param {number} index - Index of the subtask in the array.
+ * @returns {string} HTML string for the subtask container.
+ */
 export function getSubtaskHTML(text, index) {
   const completedSubtasks = getCompletedSubtasks();
   const checked = completedSubtasks[index] ? "checked" : "";
@@ -21,6 +35,17 @@ export function getSubtaskHTML(text, index) {
   `;
 }
 
+/**
+ * Generates HTML for a user assignment checkbox element.
+ * Includes a styled user chip with initials and a labeled checkbox.
+ *
+ * @param {Object} user - User object containing name and style info.
+ * @param {string} user.userFullName - Full name of the user.
+ * @param {string} [user.userId] - Optional unique user ID (used in checkbox ID).
+ * @param {string} [user.userColor] - CSS class for background color.
+ * @param {string} [user.userInitials] - Optional precomputed initials.
+ * @returns {string} HTML string for user checkbox UI.
+ */
 export function getUserCheckboxHTML(user) {
   const checkboxId = `user-checkbox-modal-${user.userId || user.userFullName.replace(/\s+/g, '-').toLowerCase()}`;
   
@@ -35,6 +60,13 @@ export function getUserCheckboxHTML(user) {
   `;
 }
 
+/**
+ * Generates HTML template for a subtask in editable mode.
+ * Includes a text input, save, and delete buttons.
+ *
+ * @param {string} value - The current value of the subtask.
+ * @returns {string} HTML string for editable subtask input UI.
+ */
 export function getEditableSubtaskTemplate(value) {
   return `
     <input type="text" class="subtask-text-input-modal" value="${value}">

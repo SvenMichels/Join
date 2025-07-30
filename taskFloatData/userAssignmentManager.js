@@ -1,6 +1,7 @@
 /**
- * User Assignment Management for Task Modal
- * Verwaltung der Benutzerzuordnungen
+ * @fileoverview User Assignment Management for Task Modal.
+ * Handles loading, rendering, selection, and search of users to assign tasks.
+ * @module userAssignmentManager
  */
 
 import { loadContactsForTaskAssignment } from "../contactPage/contactService.js";
@@ -10,7 +11,8 @@ import { getInitials } from "../scripts/utils/helpers.js";
 let allSystemUsersModal = [];
 
 /**
- * Lädt und rendert User-Daten für das Modal
+ * Loads contacts and renders them as checkboxes in the modal.
+ * @returns {Promise<void>}
  */
 export async function loadAndRenderUsersModal() {
   await loadContactData();
@@ -18,7 +20,9 @@ export async function loadAndRenderUsersModal() {
 }
 
 /**
- * Lädt Kontaktdaten vom Service
+ * Loads contact data from the contact service.
+ * Populates the global user array.
+ * @private
  */
 async function loadContactData() {
   try {
@@ -31,8 +35,9 @@ async function loadContactData() {
 }
 
 /**
- * Rendert User-Checkboxen im Modal
- * @param {Array} users - Array von User-Objekten
+ * Renders user checkboxes in the modal.
+ * @param {Array<Object>} users - Array of user objects.
+ * @returns {Promise<void>}
  */
 export async function renderUserCheckboxesModal(users) {
   const container = document.getElementById("assignedUserList-modal");
@@ -43,9 +48,10 @@ export async function renderUserCheckboxesModal(users) {
 }
 
 /**
- * Rendert die Checkbox-Liste
- * @param {HTMLElement} container - Container-Element
- * @param {Array} users - User-Array
+ * Renders the checkbox list in the container.
+ * @param {HTMLElement} container - Target DOM container.
+ * @param {Array<Object>} users - List of users to render.
+ * @private
  */
 function renderCheckboxList(container, users) {
   container.innerHTML = "";
@@ -56,7 +62,8 @@ function renderCheckboxList(container, users) {
 }
 
 /**
- * Behandelt ausstehende Vorauswahl
+ * Applies any pending preselection of users.
+ * @private
  */
 function handlePendingPreselection() {
   if (window.pendingAssignedUsers) {
@@ -68,19 +75,20 @@ function handlePendingPreselection() {
 }
 
 /**
- * Wendet User-Vorauswahl an
- * @param {Array} assignedUsers - Array von vorausgewählten Usern
+ * Applies a predefined user selection to the checkboxes.
+ * @param {Array<string>} assignedUsers - User names to select.
  */
 export function applyUserPreselection(assignedUsers) {
   if (!Array.isArray(assignedUsers)) return;
-  
+
   resetAllCheckboxes();
   selectAssignedUsers(assignedUsers);
   updateSelectedModal();
 }
 
 /**
- * Setzt alle Checkboxen zurück
+ * Resets all checkboxes to unchecked state.
+ * @private
  */
 function resetAllCheckboxes() {
   const checkboxes = document.querySelectorAll(".user-checkbox-modal");
@@ -91,8 +99,9 @@ function resetAllCheckboxes() {
 }
 
 /**
- * Wählt zugewiesene User aus
- * @param {Array} assignedUsers - Array von User-Namen
+ * Selects the checkboxes for the given user names.
+ * @param {Array<string>} assignedUsers - Array of user names to select.
+ * @private
  */
 function selectAssignedUsers(assignedUsers) {
   assignedUsers.forEach(userName => {
@@ -106,8 +115,9 @@ function selectAssignedUsers(assignedUsers) {
 }
 
 /**
- * Aktiviert eine Checkbox
- * @param {HTMLElement} checkbox - Checkbox-Element
+ * Activates and highlights a checkbox wrapper.
+ * @param {HTMLInputElement} checkbox - Target checkbox element.
+ * @private
  */
 function activateCheckbox(checkbox) {
   checkbox.checked = true;
@@ -115,9 +125,10 @@ function activateCheckbox(checkbox) {
 }
 
 /**
- * Erstellt ein User-Checkbox-Element
- * @param {Object} user - User-Objekt
- * @returns {HTMLElement} Wrapper-Element
+ * Creates a DOM element for a user checkbox.
+ * @param {Object} user - User object.
+ * @returns {HTMLElement} Wrapper DOM element.
+ * @private
  */
 function createUserCheckboxElement(user) {
   const wrapper = createCheckboxWrapper(user);
@@ -126,9 +137,10 @@ function createUserCheckboxElement(user) {
 }
 
 /**
- * Erstellt Checkbox-Wrapper
- * @param {Object} user - User-Objekt
- * @returns {HTMLElement} Wrapper-Element
+ * Creates a wrapper for a user checkbox element.
+ * @param {Object} user - User object.
+ * @returns {HTMLElement} The wrapper DOM element.
+ * @private
  */
 function createCheckboxWrapper(user) {
   const wrapper = document.createElement("div");
@@ -138,8 +150,9 @@ function createCheckboxWrapper(user) {
 }
 
 /**
- * Bindet Checkbox-Event-Listener
- * @param {HTMLElement} wrapper - Wrapper-Element
+ * Attaches a click listener to a checkbox wrapper.
+ * @param {HTMLElement} wrapper - Checkbox wrapper element.
+ * @private
  */
 function attachCheckboxListener(wrapper) {
   const checkbox = wrapper.querySelector("input");
@@ -149,10 +162,11 @@ function attachCheckboxListener(wrapper) {
 }
 
 /**
- * Behandelt Checkbox-Klick
- * @param {Event} event - Click-Event
- * @param {HTMLElement} checkbox - Checkbox-Element
- * @param {HTMLElement} wrapper - Wrapper-Element
+ * Handles the checkbox toggle behavior.
+ * @param {Event} event - Click event.
+ * @param {HTMLInputElement} checkbox - The checkbox input.
+ * @param {HTMLElement} wrapper - The checkbox wrapper.
+ * @private
  */
 function handleCheckboxClick(event, checkbox, wrapper) {
   if (event.target !== checkbox) {
@@ -163,7 +177,7 @@ function handleCheckboxClick(event, checkbox, wrapper) {
 }
 
 /**
- * Aktualisiert die Anzeige der ausgewählten User
+ * Updates the UI to show selected users as colored chips.
  */
 export function updateSelectedModal() {
   const container = document.getElementById("selectedUser-modal");
@@ -174,8 +188,9 @@ export function updateSelectedModal() {
 }
 
 /**
- * Rendert die ausgewählten User-Chips
- * @param {HTMLElement} container - Container-Element
+ * Renders selected user chips in the container.
+ * @param {HTMLElement} container - Target container for chips.
+ * @private
  */
 function renderSelectedChips(container) {
   const checkedBoxes = document.querySelectorAll(".user-checkbox-modal:checked");
@@ -186,9 +201,10 @@ function renderSelectedChips(container) {
 }
 
 /**
- * Erstellt einen User-Chip
- * @param {string} userName - Name des Users
- * @returns {HTMLElement} Chip-Element
+ * Creates a chip for the selected user.
+ * @param {string} userName - Name of the user.
+ * @returns {HTMLElement} The chip element.
+ * @private
  */
 function createUserChip(userName) {
   const user = allSystemUsersModal.find(u => u.userFullName === userName);
@@ -199,21 +215,22 @@ function createUserChip(userName) {
 }
 
 /**
- * Togglet die Sichtbarkeit der User-Liste
- * @param {Event} event - Click-Event
+ * Toggles the visibility of the user selection list and rotates the dropdown icon.
+ * @param {Event} event - Click event.
  */
 export function toggleUserListModal(event) {
   event.preventDefault();
   const list = document.getElementById("assignedUserList-modal");
   const assignImg = document.getElementById("assignedBtnImg-modal");
-  
+
   toggleListVisibility(list, assignImg);
 }
 
 /**
- * Togglet List-Sichtbarkeit und Icon-Rotation
- * @param {HTMLElement} list - Listen-Element
- * @param {HTMLElement} assignImg - Icon-Element
+ * Toggles list visibility and icon rotation.
+ * @param {HTMLElement} list - The user list container.
+ * @param {HTMLElement} assignImg - The icon element.
+ * @private
  */
 function toggleListVisibility(list, assignImg) {
   list.classList.toggle("visible");
@@ -221,17 +238,19 @@ function toggleListVisibility(list, assignImg) {
 }
 
 /**
- * Initialisiert User-Search Event-Listener
+ * Initializes the event listener for the user search input field.
  */
 export function initUserSearchEventListener() {
   const searchInput = document.getElementById("searchUser-modal");
   if (!searchInput) return;
-  
+
   searchInput.addEventListener("input", handleSearchInput);
 }
 
 /**
- * Behandelt Search-Input
+ * Handles input change in the user search field.
+ * Filters and re-renders user checkboxes.
+ * @private
  */
 function handleSearchInput() {
   const searchInput = document.getElementById("searchUser-modal");
@@ -240,14 +259,15 @@ function handleSearchInput() {
 }
 
 /**
- * Filtert User nach Suchbegriff
- * @param {string} query - Suchbegriff
- * @returns {Array} Gefilterte User
+ * Filters users by a search query.
+ * @param {string} query - The search query.
+ * @returns {Array<Object>} Filtered array of user objects.
+ * @private
  */
 function getFilteredUsers(query) {
   const searchTerm = query.trim().toLowerCase();
   if (!searchTerm) return allSystemUsersModal;
-  
+
   return allSystemUsersModal.filter(user =>
     user.userFullName.toLowerCase().includes(searchTerm)
   );

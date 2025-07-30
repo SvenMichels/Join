@@ -1,6 +1,6 @@
 /**
- * Priority Management for Task Modal
- * Verwaltung der Task-Prioritäten
+ * @fileoverview Priority management for the task modal, including state control and event binding
+ * @module priorityModalManager
  */
 
 import { PRIORITY_ICONS_MODAL } from "../scripts/utils/constants.js";
@@ -26,16 +26,16 @@ const PRIORITY_CONFIG = {
 let currentlySelectedPriorityModal = "medium";
 
 /**
- * Gibt die aktuell ausgewählte Priorität zurück
- * @returns {string} Aktuell ausgewählte Priorität
+ * Returns the currently selected priority
+ * @returns {string} Currently selected priority
  */
 export function getCurrentPriority() {
   return currentlySelectedPriorityModal;
 }
 
 /**
- * Wählt eine Priorität aus und aktualisiert die UI
- * @param {string} priorityLevel - Prioritätslevel (urgent, medium, low)
+ * Selects a priority level and updates the UI accordingly
+ * @param {string} priorityLevel - Priority level ("urgent", "medium", "low")
  */
 export function selectPriorityModal(priorityLevel) {
   currentlySelectedPriorityModal = priorityLevel;
@@ -44,7 +44,7 @@ export function selectPriorityModal(priorityLevel) {
 }
 
 /**
- * Setzt alle Prioritäts-Zustände zurück
+ * Resets the state for all priority buttons
  */
 function resetAllPriorityStates() {
   Object.values(PRIORITY_CONFIG).forEach(config => {
@@ -53,20 +53,20 @@ function resetAllPriorityStates() {
 }
 
 /**
- * Setzt ein einzelnes Prioritäts-Element zurück
- * @param {Object} config - Prioritäts-Konfiguration
+ * Resets a single priority button to its default state
+ * @param {Object} config - Priority configuration object
  */
 function resetPriorityElement(config) {
   const { id, icon, className } = config;
-  
+
   removeActiveClass(id, className);
   setDefaultIcon(id, icon[0]);
 }
 
 /**
- * Entfernt aktive CSS-Klasse von einem Element
- * @param {string} elementId - Element-ID
- * @param {string} activeClass - Zu entfernende CSS-Klasse
+ * Removes the active CSS class from a priority button
+ * @param {string} elementId - DOM element ID
+ * @param {string} activeClass - Class to remove
  */
 function removeActiveClass(elementId, activeClass) {
   const element = document.getElementById(elementId);
@@ -76,9 +76,9 @@ function removeActiveClass(elementId, activeClass) {
 }
 
 /**
- * Setzt das Standard-Icon für ein Element
- * @param {string} elementId - Element-ID
- * @param {string} defaultIcon - Standard-Icon-URL
+ * Sets the default (inactive) icon for a priority button
+ * @param {string} elementId - DOM element ID
+ * @param {string} defaultIcon - Path to the default icon
  */
 function setDefaultIcon(elementId, defaultIcon) {
   const imageId = getImageId(elementId);
@@ -89,23 +89,23 @@ function setDefaultIcon(elementId, defaultIcon) {
 }
 
 /**
- * Aktiviert die ausgewählte Priorität
- * @param {string} priorityLevel - Prioritätslevel
+ * Activates the selected priority visually and functionally
+ * @param {string} priorityLevel - Priority level to activate
  */
 function activateSelectedPriority(priorityLevel) {
   const config = PRIORITY_CONFIG[priorityLevel];
   if (!config) return;
-  
+
   const { id, icon, className } = config;
-  
+
   addActiveClass(id, className);
   setActiveIcon(id, icon[1]);
 }
 
 /**
- * Fügt aktive CSS-Klasse zu einem Element hinzu
- * @param {string} elementId - Element-ID
- * @param {string} activeClass - Hinzuzufügende CSS-Klasse
+ * Adds the active class to a priority button
+ * @param {string} elementId - DOM element ID
+ * @param {string} activeClass - Class to add
  */
 function addActiveClass(elementId, activeClass) {
   const element = document.getElementById(elementId);
@@ -115,9 +115,9 @@ function addActiveClass(elementId, activeClass) {
 }
 
 /**
- * Setzt das aktive Icon für ein Element
- * @param {string} elementId - Element-ID
- * @param {string} activeIcon - Aktive Icon-URL
+ * Sets the active (highlighted) icon for a priority button
+ * @param {string} elementId - DOM element ID
+ * @param {string} activeIcon - Path to the active icon
  */
 function setActiveIcon(elementId, activeIcon) {
   const imageId = getImageId(elementId);
@@ -128,16 +128,16 @@ function setActiveIcon(elementId, activeIcon) {
 }
 
 /**
- * Generiert die Image-ID aus der Element-ID
- * @param {string} elementId - Element-ID
- * @returns {string} Image-Element-ID
+ * Derives the image element ID from a given button element ID
+ * @param {string} elementId - Priority button element ID
+ * @returns {string} The corresponding image element ID
  */
 function getImageId(elementId) {
   return `${elementId.replace("-task-modal", "")}-task-img-modal`;
 }
 
 /**
- * Initialisiert Event-Listener für Prioritäts-Buttons
+ * Initializes event listeners for all priority buttons in the modal
  */
 export function initPriorityEventListeners() {
   attachUrgentListener();
@@ -146,7 +146,7 @@ export function initPriorityEventListeners() {
 }
 
 /**
- * Bindet Event-Listener für Urgent-Button
+ * Adds click event listener for the "urgent" priority button
  */
 function attachUrgentListener() {
   const urgentBtn = document.getElementById("urgent-task-modal");
@@ -154,7 +154,7 @@ function attachUrgentListener() {
 }
 
 /**
- * Bindet Event-Listener für Medium-Button
+ * Adds click event listener for the "medium" priority button
  */
 function attachMediumListener() {
   const mediumBtn = document.getElementById("medium-task-modal");
@@ -162,7 +162,7 @@ function attachMediumListener() {
 }
 
 /**
- * Bindet Event-Listener für Low-Button
+ * Adds click event listener for the "low" priority button
  */
 function attachLowListener() {
   const lowBtn = document.getElementById("low-task-modal");

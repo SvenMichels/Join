@@ -1,6 +1,6 @@
 /**
- * Subtask Management for Task Modal
- * Verwaltung der Subtasks
+ * @fileoverview Subtask management logic for the task modal, including creation, editing, deletion and rendering
+ * @module subtaskModalManager
  */
 
 import { getSubtaskHTML, getEditableSubtaskTemplate } from "./taskfloatHTML.js";
@@ -9,39 +9,39 @@ let subtaskItemsListModal = [];
 let completedSubtasksModal = [];
 
 /**
- * Gibt die Subtask-Items zurück
- * @returns {Array} Array der Subtask-Items
+ * Returns the current subtask items
+ * @returns {Array<string>} Array of subtask texts
  */
 export function getSubtaskItems() {
   return subtaskItemsListModal;
 }
 
 /**
- * Gibt die abgeschlossenen Subtasks zurück
- * @returns {Array} Array der abgeschlossenen Subtasks
+ * Returns the current completed subtasks
+ * @returns {Array<boolean>} Array of completed statuses
  */
 export function getCompletedSubtasks() {
   return completedSubtasksModal;
 }
 
 /**
- * Setzt die Subtask-Items
- * @param {Array} items - Array der Subtask-Items
+ * Sets the list of subtask items
+ * @param {Array<string>} items - Subtask item texts
  */
 export function setSubtaskItems(items) {
   subtaskItemsListModal = [...items];
 }
 
 /**
- * Setzt die abgeschlossenen Subtasks
- * @param {Array} completed - Array der abgeschlossenen Subtasks
+ * Sets the list of completed subtasks
+ * @param {Array<boolean>} completed - Completion status of each subtask
  */
 export function setCompletedSubtasks(completed) {
   completedSubtasksModal = [...completed];
 }
 
 /**
- * Setzt alle Subtasks zurück
+ * Resets all subtasks
  */
 export function resetSubtasks() {
   subtaskItemsListModal = [];
@@ -49,8 +49,8 @@ export function resetSubtasks() {
 }
 
 /**
- * Gibt den Wert des Subtask-Inputs zurück
- * @returns {string} Trimmed Input-Wert
+ * Gets the trimmed value of the subtask input field
+ * @returns {string} Input value
  */
 function getSubtaskInputValue() {
   const subInput = document.getElementById("subtask-modal");
@@ -58,7 +58,7 @@ function getSubtaskInputValue() {
 }
 
 /**
- * Leert das Subtask-Input-Feld
+ * Clears the subtask input field
  */
 function clearSubtaskInput() {
   const subInput = document.getElementById("subtask-modal");
@@ -66,8 +66,8 @@ function clearSubtaskInput() {
 }
 
 /**
- * Fügt einen neuen Subtask hinzu
- * @param {Event} event - Click-Event
+ * Handles the add-subtask button click
+ * @param {Event} event - Click event
  */
 export function addSubtaskModal(event) {
   event.preventDefault();
@@ -80,8 +80,8 @@ export function addSubtaskModal(event) {
 }
 
 /**
- * Fügt Subtask zur Liste hinzu
- * @param {string} value - Subtask-Text
+ * Adds a subtask and its initial completion state to the list
+ * @param {string} value - Subtask text
  */
 function addSubtaskToList(value) {
   subtaskItemsListModal.push(value);
@@ -89,8 +89,8 @@ function addSubtaskToList(value) {
 }
 
 /**
- * Behandelt Enter-Taste für Subtask-Hinzufügung
- * @param {KeyboardEvent} event - Keyboard-Event
+ * Handles Enter key press in the subtask input field
+ * @param {KeyboardEvent} event - Key event
  */
 export function addSubtaskOnEnterModal(event) {
   if (event.key === "Enter") {
@@ -100,7 +100,7 @@ export function addSubtaskOnEnterModal(event) {
 }
 
 /**
- * Rendert die Subtasks im Modal
+ * Renders all subtasks in the modal list
  */
 export function renderSubtasksModal() {
   const list = document.getElementById("subtaskList-modal");
@@ -112,16 +112,16 @@ export function renderSubtasksModal() {
 }
 
 /**
- * Leert die Subtask-Liste
- * @param {HTMLElement} list - Listen-Element
+ * Clears the subtask list container
+ * @param {HTMLElement} list - List DOM element
  */
 function clearSubtaskList(list) {
   list.innerHTML = "";
 }
 
 /**
- * Rendert alle Subtask-Items
- * @param {HTMLElement} list - Listen-Element
+ * Renders all subtask items
+ * @param {HTMLElement} list - List DOM element
  */
 function renderSubtaskItems(list) {
   subtaskItemsListModal.forEach((text, index) => {
@@ -131,10 +131,10 @@ function renderSubtaskItems(list) {
 }
 
 /**
- * Erstellt ein Subtask-Element
- * @param {string} text - Subtask-Text
- * @param {number} index - Index des Subtasks
- * @returns {HTMLElement} Subtask-Element
+ * Creates a DOM element for a subtask
+ * @param {string} text - Subtask text
+ * @param {number} index - Subtask index
+ * @returns {HTMLElement} Subtask DOM element
  */
 function createSubtaskElement(text, index) {
   const container = document.createElement("div");
@@ -143,8 +143,8 @@ function createSubtaskElement(text, index) {
 }
 
 /**
- * Bindet alle Event-Listener
- * @param {HTMLElement} list - Listen-Element
+ * Attaches all necessary event listeners to the subtask list
+ * @param {HTMLElement} list - List DOM element
  */
 function attachAllEventListeners(list) {
   attachDeleteListeners(list);
@@ -153,8 +153,8 @@ function attachAllEventListeners(list) {
 }
 
 /**
- * Bindet Delete-Event-Listener
- * @param {HTMLElement} list - Listen-Element
+ * Attaches delete button event listeners
+ * @param {HTMLElement} list - List DOM element
  */
 function attachDeleteListeners(list) {
   const deleteButtons = list.querySelectorAll("[data-del]");
@@ -167,8 +167,8 @@ function attachDeleteListeners(list) {
 }
 
 /**
- * Löscht einen Subtask
- * @param {number} index - Index des zu löschenden Subtasks
+ * Deletes a subtask from the list
+ * @param {number} index - Index of the subtask to delete
  */
 function deleteSubtask(index) {
   subtaskItemsListModal.splice(index, 1);
@@ -177,8 +177,8 @@ function deleteSubtask(index) {
 }
 
 /**
- * Bindet Edit-Event-Listener
- * @param {HTMLElement} list - Listen-Element
+ * Attaches edit button event listeners
+ * @param {HTMLElement} list - List DOM element
  */
 function attachEditListeners(list) {
   const editButtons = list.querySelectorAll("[data-edit]");
@@ -191,8 +191,8 @@ function attachEditListeners(list) {
 }
 
 /**
- * Bindet Checkbox-Event-Listener
- * @param {HTMLElement} list - Listen-Element
+ * Attaches checkbox change listeners
+ * @param {HTMLElement} list - List DOM element
  */
 function attachCheckboxListeners(list) {
   const checkboxes = list.querySelectorAll(".subtask-checkbox-modal");
@@ -205,8 +205,8 @@ function attachCheckboxListeners(list) {
 }
 
 /**
- * Macht einen Subtask editierbar
- * @param {number} index - Index des zu editierenden Subtasks
+ * Converts a subtask to editable mode
+ * @param {number} index - Subtask index
  */
 function makeSubtaskEditableModal(index) {
   const item = getSubtaskElement(index);
@@ -217,9 +217,9 @@ function makeSubtaskEditableModal(index) {
 }
 
 /**
- * Holt das Subtask-Element
- * @param {number} index - Index des Elements
- * @returns {HTMLElement|null} Subtask-Element
+ * Gets the DOM element of a subtask by index
+ * @param {number} index - Index of the subtask
+ * @returns {HTMLElement|null} Subtask element or null
  */
 function getSubtaskElement(index) {
   const list = document.getElementById("subtaskList-modal");
@@ -227,9 +227,9 @@ function getSubtaskElement(index) {
 }
 
 /**
- * Ersetzt Element mit Edit-Template
- * @param {HTMLElement} item - Zu ersetzendes Element
- * @param {number} index - Index des Subtasks
+ * Replaces the current subtask element with editable template
+ * @param {HTMLElement} item - DOM element to replace
+ * @param {number} index - Index of the subtask
  */
 function replaceWithEditTemplate(item, index) {
   const currentText = subtaskItemsListModal[index];
@@ -237,9 +237,9 @@ function replaceWithEditTemplate(item, index) {
 }
 
 /**
- * Bindet Edit-Mode Event-Listener
- * @param {HTMLElement} container - Container-Element
- * @param {number} index - Index des Subtasks
+ * Attaches save and delete listeners to edit-mode subtask
+ * @param {HTMLElement} container - Container DOM element
+ * @param {number} index - Index of the subtask
  */
 function attachEditModeListeners(container, index) {
   const input = container.querySelector("input");
@@ -251,23 +251,23 @@ function attachEditModeListeners(container, index) {
 }
 
 /**
- * Bindet Save-Event-Listener
- * @param {HTMLElement} saveBtn - Save-Button
- * @param {HTMLElement} input - Input-Element
- * @param {number} index - Index des Subtasks
+ * Attaches save button event listener
+ * @param {HTMLElement} saveBtn - Save button element
+ * @param {HTMLInputElement} input - Input field element
+ * @param {number} index - Index of the subtask
  */
 function attachSaveListener(saveBtn, input, index) {
   if (!saveBtn) return;
-  
+
   saveBtn.addEventListener("click", () => {
     saveSubtaskEdit(input, index);
   });
 }
 
 /**
- * Speichert Subtask-Bearbeitung
- * @param {HTMLElement} input - Input-Element
- * @param {number} index - Index des Subtasks
+ * Saves edited subtask
+ * @param {HTMLInputElement} input - Input field
+ * @param {number} index - Index of the subtask
  */
 function saveSubtaskEdit(input, index) {
   subtaskItemsListModal[index] = input.value.trim();
@@ -275,22 +275,22 @@ function saveSubtaskEdit(input, index) {
 }
 
 /**
- * Bindet Delete-Event-Listener für Edit-Mode
- * @param {HTMLElement} deleteBtn - Delete-Button
- * @param {number} index - Index des Subtasks
+ * Attaches delete button listener for edit mode
+ * @param {HTMLElement} deleteBtn - Delete button element
+ * @param {number} index - Index of the subtask
  */
 function attachDeleteListener(deleteBtn, index) {
   if (!deleteBtn) return;
-  
+
   deleteBtn.addEventListener("click", () => {
     deleteSubtask(index);
   });
 }
 
 /**
- * Aktualisiert Subtasks mit neuen Daten
- * @param {Array} subtasks - Array der Subtasks
- * @param {Array} subtaskDone - Array der abgeschlossenen Status
+ * Updates the modal subtasks with external data
+ * @param {Array<string>} subtasks - Array of subtask texts
+ * @param {Array<boolean>} subtaskDone - Array of completion states
  */
 export function updateSubtasks(subtasks = [], subtaskDone = []) {
   subtaskItemsListModal = [...subtasks];
@@ -298,10 +298,10 @@ export function updateSubtasks(subtasks = [], subtaskDone = []) {
 }
 
 /**
- * Erstellt Array für abgeschlossene Subtasks
- * @param {Array} subtasks - Array der Subtasks
- * @param {Array} subtaskDone - Array der abgeschlossenen Status
- * @returns {Array} Array der abgeschlossenen Status
+ * Ensures the completed state array matches the number of subtasks
+ * @param {Array<string>} subtasks - Subtask texts
+ * @param {Array<boolean>} subtaskDone - Completed states
+ * @returns {Array<boolean>} Resulting boolean array
  */
 function createCompletedArray(subtasks, subtaskDone) {
   const hasValidDoneArray = subtaskDone.length === subtasks.length;
