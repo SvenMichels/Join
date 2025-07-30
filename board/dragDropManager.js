@@ -3,6 +3,7 @@
  * including dropdown behavior for status changes.
  */
 
+import { requestData } from "../scripts/firebase.js";
 import { updateEmptyLists } from "../scripts/utils/emptylisthelper.js";
 import { TASK_STATUS_COLUMN_MAPPING } from "./taskRenderer.js";
 import { updateTask, getStatusFromElementId } from "./taskManager.js";
@@ -110,79 +111,66 @@ function moveTaskToNewStatusColumn(taskDataObject, newTaskStatus, targetColumnEl
  * @param {string} taskId - Unique task ID.
  */
 export function setupTaskDropdown(taskElement, taskId) {
-  const btnId = `moveDropdownBtn-${taskId}`;
-  const dropdownId = `moveDropdown-${taskId}`;
-
-  const btn = taskElement.querySelector(`#${btnId}`);
-  const dropdown = taskElement.querySelector(`#${dropdownId}`);
-
+  const btn = taskElement.querySelector(`#moveDropdownBtn-${taskId}`);
+  const dropdown = taskElement.querySelector(`#moveDropdown-${taskId}`);
   if (!btn || !dropdown) return;
 
   btn.addEventListener("click", (e) => {
     e.stopPropagation();
-    closeAllDropdowns();
+    closeAllMoveDropdowns();
     dropdown.classList.toggle("dp-none");
   });
 
   dropdown.addEventListener("click", (e) => e.stopPropagation());
-  document.addEventListener("click", closeAllDropdowns);
-
-  /**
-   * Closes all move dropdowns globally.
-   */
-  function closeAllDropdowns() {
-    document.querySelectorAll(".MoveDropdown").forEach((d) => {
-      d.classList.add("dp-none");
-    });
-  }
+  document.addEventListener("click", closeAllMoveDropdowns);
 }
 
 /**
- * Adds event listeners to the dropdown buttons for moving tasks forward or backward.
+ * Closes all move dropdowns globally.
+ */
+function closeAllMoveDropdowns() {
+  document.querySelectorAll(".MoveDropdown").forEach(d => d.classList.add("dp-none"));
+}
+
+/**
+ * Adds event listeners to the dropdown for moving tasks between columns.
  * 
- * @param {HTMLElement} taskElement - Full task container.
- * @param {string|number} taskId - Task identifier.
- * @param {Object} task - Task data object.
+ * @param {HTMLElement} taskElement - The task container element.
+ * @param {string|number} taskId - The unique task identifier.
+ * @param {Object} task - The task data object.
  */
 export function setupMoveDropdown(taskElement, taskId, task) {
   const btn = taskElement.querySelector(`#moveDropdownBtn-${taskId}`);
   const dropdown = taskElement.querySelector(`#moveDropdown-${taskId}`);
-
   if (!btn || !dropdown) return;
 
-  btn.addEventListener("click", (e) => {
-    e.stopPropagation();
-    document.querySelectorAll(".MoveDropdown").forEach(d => {
-      if (d !== dropdown) d.classList.add("dp-none");
-    });
-    dropdown.classList.toggle("dp-none");
-  });
-
+  btn.addEventListener("click", (e) => toggleDropdown(e, dropdown));
   dropdown.addEventListener("click", e => e.stopPropagation());
   document.addEventListener("click", () => dropdown.classList.add("dp-none"));
 
-  const lastListBtn = dropdown.querySelector(".moveText:first-child");
-  const nextListBtn = dropdown.querySelector(".moveText:last-child");
-
-  if (lastListBtn) {
-    lastListBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      moveTaskOneColumn(task, "prev");
-      dropdown.classList.add("dp-none");
-    });
-  }
-
-  if (nextListBtn) {
-    nextListBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      moveTaskOneColumn(task, "next");
-      dropdown.classList.add("dp-none");
-    });
-  }
+  bindMoveAction(dropdown, ".moveText:first-child", task, "prev");
+  bindMoveAction(dropdown, ".moveText:last-child", task, "next");
 }
 
+function toggleDropdown(e, dropdown) {
+  e.stopPropagation();
+  document.querySelectorAll(".MoveDropdown").forEach(d => d.classList.add("dp-none"));
+  dropdown.classList.toggle("dp-none");
+}
+
+function bindMoveAction(dropdown, selector, task, direction) {
+  const btn = dropdown.querySelector(selector);
+  if (!btn) return;
+  btn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    moveTaskOneColumn(task, direction);
+    dropdown.classList.add("dp-none");
+  });
+}
+
+
 /**
- * Moves a task one column forward or backward.
+ * Moves a task one column forward or backward and saves it persistently.
  * 
  * @param {Object} task - Task object.
  * @param {"prev"|"next"} direction - Movement direction.
@@ -190,25 +178,56 @@ export function setupMoveDropdown(taskElement, taskId, task) {
 function moveTaskOneColumn(task, direction) {
   const statusKeys = Object.keys(TASK_STATUS_COLUMN_MAPPING);
   const currentIndex = statusKeys.indexOf(task.status);
-
   if (currentIndex === -1) return;
 
-  const newIndex =
-    direction === "next"
-      ? Math.min(currentIndex + 1, statusKeys.length - 1)
-      : Math.max(currentIndex - 1, 0);
-
+  const newIndex = direction === "next"
+    ? Math.min(currentIndex + 1, statusKeys.length - 1)
+    : Math.max(currentIndex - 1, 0);
   if (newIndex === currentIndex) return;
 
   task.status = statusKeys[newIndex];
+  updateTaskPositionInDOM(task);
+  persistTaskStatus(task);
+}
 
+function getNewIndex(currentIndex, direction, max) {
+  return direction === "next"
+    ? Math.min(currentIndex + 1, max - 1)
+    : Math.max(currentIndex - 1, 0);
+}
+
+function moveTaskInDOM(task) {
+  const taskEl = document.getElementById(`task-${task.id}`);
+  const targetCol = document.getElementById(TASK_STATUS_COLUMN_MAPPING[task.status]);
+  if (!taskEl || !targetCol) return;
+
+  targetCol.appendChild(taskEl);
+  window.updateTask?.(task);
+  window.updateEmptyLists?.();
+}
+
+/**
+ * Moves the task element in the DOM.
+ * 
+ * @param {Object} task - Task object.
+ */
+function updateTaskPositionInDOM(task) {
   const taskElement = document.getElementById(`task-${task.id}`);
-  const targetColumnId = TASK_STATUS_COLUMN_MAPPING[task.status];
-  const targetColumn = document.getElementById(targetColumnId);
+  const targetColumn = document.getElementById(TASK_STATUS_COLUMN_MAPPING[task.status]);
 
   if (targetColumn && taskElement) {
     targetColumn.appendChild(taskElement);
-    if (window.updateTask) window.updateTask(task);
-    if (window.updateEmptyLists) window.updateEmptyLists();
+    window.updateTask?.(task);
+    window.updateEmptyLists?.();
   }
+}
+
+/**
+ * Saves the updated task status to the backend.
+ * 
+ * @param {Object} task - Task object.
+ */
+function persistTaskStatus(task) {
+  requestData("PUT", `/tasks/${task.id}`, task)
+    .catch(error => console.error("Failed to save task status:", error));
 }
