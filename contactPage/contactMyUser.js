@@ -1,4 +1,3 @@
-
 import { getInitials } from "../scripts/utils/helpers.js";
 import { renderContact } from "./contactRenderer.js";
 import { openEditWindow } from "./contacts.js";
@@ -8,18 +7,18 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 /**
- * Rendert die Kontaktkarte des aktuell eingeloggten Benutzers 
- * und fügt einen Event-Listener zum Bearbeiten-Button hinzu.
+ * Renders the contact card of the currently logged-in user
+ * and attaches an event listener to the edit button.
  *
- * Diese Funktion:
- * - Lädt die aktuellen Benutzerdaten aus dem `localStorage`
- * - Extrahiert die Kontaktinformationen via `extractContactInformation()`
- * - Rendert die Kontaktkarte mit `renderContact()`
- * - Fügt nach dem Rendering einen Click-Listener für den Button mit der ID `editContact` hinzu
+ * This function:
+ * - Loads the current user data from `localStorage`
+ * - Extracts contact info via `extractContactInformation()`
+ * - Renders the contact card using `renderContact()`
+ * - Adds a click listener to the button with ID `editContact` after rendering
  *
  * @async
  * @function currentUserCard
- * @returns {Promise<void>} Gibt nichts zurück. Führt UI-Manipulationen aus.
+ * @returns {Promise<void>} No return value. Manipulates the DOM.
  *
  * @example
  * await currentUserCard();
@@ -40,7 +39,7 @@ async function currentUserCard() {
     contactData.userColor
   );
 
-  // Event-Listener NACH dem Rendern hinzufügen
+  // Add event listener AFTER rendering
   setTimeout(() => {
     const editBtn = document.getElementById("editContact");
     if (editBtn) {
@@ -50,27 +49,27 @@ async function currentUserCard() {
 }
 
 /**
- * Extrahiert relevante Kontaktinformationen aus einem User-Objekt.
+ * Extracts relevant contact information from a user object.
  * 
- * Wandelt ein Benutzerobjekt in ein strukturiertes Objekt mit Informationen um, 
- * die für die Darstellung einer Kontaktkarte benötigt werden.
+ * Converts a user object into a structured object used for rendering
+ * a contact card.
  *
  * @function extractContactInformation
- * @param {Object} userData - Das Benutzerobjekt mit den gespeicherten Userdaten.
- * @param {string} userData.userFullName - Vollständiger Name des Benutzers.
- * @param {string} userData.userEmailAddress - E-Mail-Adresse des Benutzers.
- * @param {string} userData.userPhoneNumber - Telefonnummer des Benutzers.
- * @param {string} userData.userColor - Farbcode, der dem Benutzer zugeordnet ist.
- * @param {string|number} userData.id - Eindeutige Benutzer-ID.
+ * @param {Object} userData - The user object with stored user data.
+ * @param {string} userData.userFullName - Full name of the user.
+ * @param {string} userData.userEmailAddress - User's email address.
+ * @param {string} userData.userPhoneNumber - User's phone number.
+ * @param {string} userData.userColor - Color assigned to the user.
+ * @param {string|number} userData.id - Unique user ID.
  *
- * @returns {Object} Ein Objekt mit extrahierten Kontaktdaten:
- * @returns {string} return.userFullName - Vollständiger Name.
- * @returns {string} return.userEmailAddress - E-Mail-Adresse.
- * @returns {string} return.userPhoneNumber - Telefonnummer.
- * @returns {string} return.userInitials - Initialen aus dem Namen.
- * @returns {string} return.firstCharacter - Erster Buchstabe des Namens (groß).
- * @returns {string|number} return.userId - Benutzer-ID.
- * @returns {string} return.userColor - Zugeordnete Farbe.
+ * @returns {Object} Object containing extracted contact data:
+ * @returns {string} return.userFullName - Full name.
+ * @returns {string} return.userEmailAddress - Email address.
+ * @returns {string} return.userPhoneNumber - Phone number.
+ * @returns {string} return.userInitials - Initials from name.
+ * @returns {string} return.firstCharacter - First letter of name (uppercase).
+ * @returns {string|number} return.userId - User ID.
+ * @returns {string} return.userColor - Assigned color.
  *
  * @example
  * const contactData = extractContactInformation(currentUser);

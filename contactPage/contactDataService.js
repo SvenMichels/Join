@@ -1,5 +1,5 @@
 /**
- * Kontakt-Datenservice für Firebase-Operationen
+ * Contact data service for Firebase operations.
  */
 
 import { getAllContactsFromDatabase } from './contactExternalService.js';
@@ -7,12 +7,14 @@ import { clearContactListUI, renderAllContacts } from './contactRenderer.js';
 import { closeEditWindow } from './contactModal.js';
 import { handlePostDeleteView } from './contactUtils.js';
 
-// Firebase Base URL Import
 import { FIREBASE_DATABASE_BASE_URL } from '../scripts/firebase.js';
-const BASE_URL = FIREBASE_DATABASE_BASE_URL.replace(/\/+$/, ''); // Entferne alle trailing slashes
+const BASE_URL = FIREBASE_DATABASE_BASE_URL.replace(/\/+$/, ''); // Remove trailing slashes
 
 /**
- * Lädt alle Kontakte aus Firebase
+ * Loads all contacts from Firebase.
+ * Ensures the current user is listed first.
+ * 
+ * @returns {Promise<Array>} List of all contacts
  */
 export async function loadAllContactsFromFirebaseDatabase() {
   try {
@@ -33,14 +35,15 @@ export async function loadAllContactsFromFirebaseDatabase() {
     renderAllContacts(contactsArray);
     return contactsArray;
   } catch (error) {
-    console.error("Fehler beim Laden der Kontakte:", error);
+    console.error("Error loading contacts:", error);
   }
 }
 
 /**
- * Stellt sicher, dass der aktuelle Benutzer der erste Kontakt ist
- * @param {Array} contacts - Bestehende Kontakte
- * @returns {Array} Kontakte mit aktuellem Benutzer als ersten
+ * Ensures the current user is the first entry in the contact list.
+ * 
+ * @param {Array} contacts - Existing contact list
+ * @returns {Array} Contact list with current user first
  */
 async function ensureCurrentUserAsFirstContact(contacts) {
   const currentUserContact = await getCurrentUserAsContact();
@@ -49,36 +52,34 @@ async function ensureCurrentUserAsFirstContact(contacts) {
     return contacts;
   }
 
-  // Prüfe ob aktueller Benutzer bereits in der Liste ist
   const userIndex = contacts.findIndex(contact =>
     contact.userEmailAddress === currentUserContact.userEmailAddress ||
     contact.userId === currentUserContact.userId
   );
 
   if (userIndex !== -1) {
-    // Benutzer existiert bereits, verschiebe ihn an den Anfang
     const [user] = contacts.splice(userIndex, 1);
     return [user, ...contacts];
   } else {
-    // Benutzer existiert nicht, füge ihn am Anfang hinzu
     try {
       await createContact(currentUserContact);
-      console.log("Aktueller Benutzer als Kontakt erstellt");
+      console.log("Created current user as contact.");
     } catch (error) {
-      console.error("Fehler beim Erstellen des aktuellen Benutzers als Kontakt:", error);
+      console.error("Error creating current user as contact:", error);
     }
     return [currentUserContact, ...contacts];
   }
 }
 
 /**
- * Erstellt neuen Kontakt in Firebase
- * @param {Object} contact - Kontaktdaten
- * @returns {Promise} Firebase Response
+ * Creates a new contact in Firebase.
+ * 
+ * @param {Object} contact - Contact data
+ * @returns {Promise<Object>} Firebase response
  */
 export async function createContact(contact) {
   try {
-    console.log("Erstelle Kontakt:", contact);
+    console.log("Creating contact:", contact);
     const response = await fetch(`${BASE_URL}/contacts.json`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -90,18 +91,19 @@ export async function createContact(contact) {
     }
 
     const result = await response.json();
-    console.log("Firebase createContact Antwort:", result);
+    console.log("Firebase createContact response:", result);
     return result;
   } catch (error) {
-    console.error("Fehler in createContact:", error);
+    console.error("Error in createContact:", error);
     throw error;
   }
 }
 
 /**
- * Aktualisiert existierenden Kontakt
- * @param {Object} contact - Originalkontakt
- * @param {Object} updated - Aktualisierte Daten
+ * Updates an existing contact in Firebase and refreshes the UI.
+ * 
+ * @param {Object} contact - Original contact object
+ * @param {Object} updated - Updated data
  */
 export async function updateContact(contact, updated) {
   try {
@@ -114,7 +116,6 @@ export async function updateContact(contact, updated) {
     if (response.ok) {
       Object.assign(contact, updated);
 
-      // Update globale contactList
       if (window.contactList) {
         const index = window.contactList.findIndex(c => c.userId === contact.userId);
         if (index !== -1) {
@@ -122,14 +123,11 @@ export async function updateContact(contact, updated) {
         }
       }
 
-      // Kontaktliste neu rendern
       clearContactListUI();
       renderAllContacts(window.contactList || []);
 
-      // BigCard mit aktualisierten Daten neu rendern, falls sie geöffnet ist
       const bigContact = document.getElementById("bigContact");
       if (bigContact && !bigContact.classList.contains("dp-none")) {
-        // BigCard ist sichtbar, aktualisiere sie mit den neuen Daten
         const { generateBigContactTemplate } = await import('./contactExternalService.js');
         bigContact.innerHTML = generateBigContactTemplate(
           contact.userFullName,
@@ -139,7 +137,6 @@ export async function updateContact(contact, updated) {
           contact.userColor
         );
 
-        // Rebind die Buttons für die aktualisierte BigCard
         const { bindButton } = await import('./contactUtils.js');
         const { deleteContactFromDatabase } = await import('./contactDataService.js');
         const { openEditDialog } = await import('./contactEditor.js');
@@ -148,19 +145,20 @@ export async function updateContact(contact, updated) {
       }
 
       closeEditWindow();
-      console.log("Kontakt erfolgreich aktualisiert");
+      console.log("Contact updated successfully.");
     } else {
-      console.error("Fehler beim Aktualisieren des Kontakts:", response.status);
+      console.error("Error updating contact:", response.status);
     }
   } catch (error) {
-    console.error("Fehler beim Aktualisieren des Kontakts:", error);
+    console.error("Error updating contact:", error);
   }
 }
 
 /**
- * Löscht Kontakt aus Firebase
- * @param {string} userId - User ID
- * @param {string} userName - Benutzername für Task-Bereinigung
+ * Deletes a contact from Firebase and updates the UI.
+ * 
+ * @param {string} userId - User ID of the contact
+ * @param {string} userName - Name of the contact (for task cleanup if needed)
  */
 export async function deleteContactFromDatabase(userId, userName) {
   const response = await fetch(`${BASE_URL}/contacts/${userId}.json`, {
@@ -168,12 +166,11 @@ export async function deleteContactFromDatabase(userId, userName) {
   });
 
   if (response.ok) {
-    // Update globale contactList
     if (window.contactList) {
       window.contactList = window.contactList.filter(c => c.userId !== userId);
     }
 
-    // TODO: Task-Bereinigung implementieren falls nötig
+    // TODO: Implement task cleanup if necessary
     // await removeUserFromAllTasks(userName);
 
     handlePostDeleteView(window.contactList || []);
@@ -181,7 +178,9 @@ export async function deleteContactFromDatabase(userId, userName) {
 }
 
 /**
- * Lädt aktuellen Benutzer aus localStorage als Kontakt-Objekt
+ * Loads the current user from localStorage as a contact object.
+ * 
+ * @returns {Promise<Object|null>} Contact object or null if unavailable
  */
 async function getCurrentUserAsContact() {
   try {
@@ -191,7 +190,7 @@ async function getCurrentUserAsContact() {
     const userData = JSON.parse(currentUserString);
     
     return {
-      userFullName: userData.userFullName || userData.name || "Aktueller Benutzer",
+      userFullName: userData.userFullName || userData.name || "Current User",
       userEmailAddress: userData.userEmailAddress || userData.email || "",
       userPhoneNumber: userData.userPhoneNumber || userData.phone || "",
       userInitials: userData.userInitials || getInitialsFromName(userData.userFullName || userData.name || "AB"),
@@ -200,18 +199,21 @@ async function getCurrentUserAsContact() {
       userColor: userData.userColor || "color-1"
     };
   } catch (error) {
-    console.error("Fehler beim Laden des aktuellen Benutzers:", error);
+    console.error("Error loading current user:", error);
     return null;
   }
 }
 
 /**
- * Erstellt Initialen aus Namen
+ * Generates initials from a full name.
+ * 
+ * @param {string} fullName - Full name string
+ * @returns {string} Initials (e.g. "JD" from "John Doe")
  */
 function getInitialsFromName(fullName) {
   if (!fullName?.trim()) return "AB";
   const names = fullName.trim().split(/\s+/);
-  return names.length === 1 ? 
-    names[0].charAt(0).toUpperCase() : 
-    names[0].charAt(0).toUpperCase() + names[names.length - 1].charAt(0).toUpperCase();
+  return names.length === 1
+    ? names[0].charAt(0).toUpperCase()
+    : names[0].charAt(0).toUpperCase() + names[names.length - 1].charAt(0).toUpperCase();
 }

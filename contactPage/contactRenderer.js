@@ -1,11 +1,13 @@
 /**
- * Kontakte anzeigen
+ * Displays and manages contact list rendering.
  */
 
 let alphabetLettersUsedSet = new Set();
 
 /**
- * Alle Kontakte rendern
+ * Renders all contacts from the given list.
+ *
+ * @param {Array} contactList - Array of contact objects.
  */
 export function renderAllContacts(contactList) {
   let contacts = [];
@@ -39,7 +41,15 @@ export function renderAllContacts(contactList) {
 }
 
 /**
- * Einzelnen Kontakt rendern
+ * Renders a single contact card and its alphabet filter letter.
+ *
+ * @param {string} name - Full name of the contact.
+ * @param {string} email - Email address.
+ * @param {string} phone - Phone number.
+ * @param {string} initials - Initials of the contact.
+ * @param {string} firstChar - First letter of the name (used for alphabet filter).
+ * @param {string|number} id - Unique ID of the contact.
+ * @param {string} color - Color class of the contact.
  */
 export function renderContact(name, email, phone, initials, firstChar, id, color) {
   renderAlphabetFilter(firstChar);
@@ -48,7 +58,9 @@ export function renderContact(name, email, phone, initials, firstChar, id, color
 }
 
 /**
- * Buchstabe für Alphabet-Filter
+ * Renders a new alphabet letter heading if not already rendered.
+ *
+ * @param {string} letter - First letter of a contact name.
  */
 export function renderAlphabetFilter(letter) {
   if (!alphabetLettersUsedSet.has(letter)) {
@@ -59,7 +71,15 @@ export function renderAlphabetFilter(letter) {
 }
 
 /**
- * HTML für Kontakt-Karte
+ * Generates the HTML string for a contact card.
+ *
+ * @param {string} name - Full name.
+ * @param {string} email - Email address.
+ * @param {string} initials - Initials.
+ * @param {string|number} id - Unique contact ID.
+ * @param {string} color - Color class.
+ * @param {string} phone - Phone number.
+ * @returns {string} HTML markup for the contact card.
  */
 export function renderContactCard(name, email, initials, id, color, phone) {
   return `
@@ -75,7 +95,7 @@ export function renderContactCard(name, email, initials, id, color, phone) {
 }
 
 /**
- * Liste leeren
+ * Clears the entire contact list UI.
  */
 export function clearContactListUI() {
   document.getElementById("allContacts").innerHTML = "";
@@ -83,7 +103,7 @@ export function clearContactListUI() {
 }
 
 /**
- * Kontaktansicht leeren
+ * Clears the big contact detail view.
  */
 export function clearBigContactView() {
   document.getElementById("bigContact").innerHTML = "";

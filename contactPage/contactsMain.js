@@ -1,5 +1,5 @@
 /**
- * Hauptdatei für die Kontaktverwaltung
+ * Main file for contact management
  */
 
 import { handleContactEditSubmission, openEditDialog, emptyInput } from './contactEditor.js';
@@ -17,7 +17,7 @@ let editingContact = null;
 window.contactList = contactList;
 
 /**
- * Event-Listener einrichten
+ * Sets up all contact-related event listeners
  */
 function setupEventListeners() {
   setupProfileButton();
@@ -32,7 +32,6 @@ function setupEventListeners() {
   const editForm = document.getElementById("editContactForm");
   if (editForm) editForm.addEventListener("submit", handleContactEditSubmission);
 
-  // Modals schließen
   document.querySelectorAll(".closeBtn").forEach(btn => {
     btn.addEventListener("click", () => {
       closeAddWindow();
@@ -40,7 +39,6 @@ function setupEventListeners() {
     });
   });
 
-  // Cancel Buttons
   const cancelBtns = document.querySelectorAll(".cancelBtn");
   cancelBtns.forEach(btn => {
     btn.addEventListener("click", () => {
@@ -49,7 +47,6 @@ function setupEventListeners() {
     });
   });
 
-  // Außerhalb Modal klicken zum Schließen
   const addWindow = document.getElementById("addWindow");
   const editWindow = document.getElementById("editWindow");
   
@@ -69,7 +66,6 @@ function setupEventListeners() {
     });
   }
 
-  // ESC-Taste zum Schließen der Modals
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
       closeAddWindow();
@@ -79,7 +75,14 @@ function setupEventListeners() {
 }
 
 /**
- * Zeigt Kontaktdetails an - im Mobile-Modus direkt bearbeiten
+ * Displays a contact in detail view or opens edit view on mobile
+ * 
+ * @param {string} name - Contact's full name
+ * @param {string} email - Contact email
+ * @param {string} phone - Contact phone number
+ * @param {string} initials - Contact initials
+ * @param {string} id - Contact ID
+ * @param {string} color - Assigned color
  */
 function renderSingleContact(name, email, phone, initials, id, color) {
   const contact = contactList.find(c => c.userId === id);
@@ -99,7 +102,10 @@ function renderSingleContact(name, email, phone, initials, id, color) {
 window.renderSingleContact = renderSingleContact;
 
 /**
- * Erstellt Kontakt aus Formulardaten
+ * Creates a contact object from input form
+ * 
+ * @param {string} fullName - Full name from input
+ * @returns {Object} contact - Contact object
  */
 function createContactFromForm(fullName) {
   return {
@@ -113,33 +119,33 @@ function createContactFromForm(fullName) {
 }
 
 /**
- * Fügt neuen Kontakt zur Datenbank hinzu
- * @param {Event} e - Submit Event
+ * Adds a new contact to Firebase and updates UI
+ * 
+ * @param {Event} e - Submit event
  */
 async function addNewContactToDatabase(e) {
   e.preventDefault();
   const userFullName = document.getElementById("contactName").value.trim();
   const contact = createContactFromForm(userFullName);
   await addContactTry(contact);
-
 }
 
 /**
- * Speichert neuen Kontakt
- * @param {Object} contact - Kontaktdaten
+ * Saves contact to Firebase
+ * 
+ * @param {Object} contact - Contact object
  */
 async function saveNewContact(contact) {
-    const result = await createContact(contact);
-    // Firebase gibt direkt ein Objekt mit 'name' (ID) zurück
-    if (result && result.name) {
-      contact.userId = result.name;
-      contactList.push(contact);
-      window.contactList = contactList;
-    }
+  const result = await createContact(contact);
+  if (result && result.name) {
+    contact.userId = result.name;
+    contactList.push(contact);
+    window.contactList = contactList;
+  }
 }
 
 /**
- * Aktualisiert UI nach Kontakt-Erstellung
+ * Updates UI after contact creation
  */
 function updateUIAfterContactCreation() {
   clearContactListUI();
@@ -150,8 +156,9 @@ function updateUIAfterContactCreation() {
 }
 
 /**
- * Versucht neuen Kontakt hinzuzufügen
- * @param {Object} contact - Kontaktdaten
+ * Tries to save contact and update UI
+ * 
+ * @param {Object} contact - Contact object
  */
 async function addContactTry(contact) {
   await saveNewContact(contact);
@@ -159,10 +166,11 @@ async function addContactTry(contact) {
 }
 
 /**
- * Bindet Kontakt-Aktionen
- * @param {string} id - Kontakt ID
- * @param {string} name - Kontakt Name
- * @param {Object} contact - Kontakt Objekt
+ * Binds actions to the big contact view buttons
+ * 
+ * @param {string} id - Contact ID
+ * @param {string} name - Contact name
+ * @param {Object} contact - Contact object
  */
 function bindContactActions(id, name, contact) {
   const container = document.getElementById("bigContact");
@@ -171,20 +179,22 @@ function bindContactActions(id, name, contact) {
 }
 
 /**
- * Filtert Tasks nach gelöschtem User
- * @param {Array} tasks - Alle Tasks
- * @param {string} userName - Gelöschter Username
- * @returns {Array} Gefilterte Tasks
+ * Filters tasks assigned to a deleted user
+ * 
+ * @param {Array} tasks - All tasks
+ * @param {string} userName - Name of the deleted user
+ * @returns {Array} Filtered tasks
  */
 function filterTasksByUser(tasks, userName) {
   return tasks.filter(task => task.assignedTo?.includes(userName));
 }
 
 /**
- * Aktualisiert Task ohne User
- * @param {Object} task - Task Objekt
- * @param {string} userName - Zu entfernender Username
- * @returns {Promise} Update Promise
+ * Removes user from assigned task and updates task
+ * 
+ * @param {Object} task - Task object
+ * @param {string} userName - Username to remove
+ * @returns {Promise}
  */
 function updateTaskWithoutUser(task, userName) {
   task.assignedTo = task.assignedTo.filter(user => user !== userName);
@@ -192,8 +202,9 @@ function updateTaskWithoutUser(task, userName) {
 }
 
 /**
- * Entfernt User aus allen Tasks
- * @param {string} deletedUserName - Name des gelöschten Users
+ * Removes a deleted user from all tasks
+ * 
+ * @param {string} deletedUserName - Name of the deleted user
  */
 async function removeUserFromAllTasks(deletedUserName) {
   const allTasks = await getAllTasks();
@@ -204,22 +215,23 @@ async function removeUserFromAllTasks(deletedUserName) {
 }
 
 /**
- * Prüft ob Mobile-Ansicht aktiv ist
- * @returns {boolean} True wenn Mobile
+ * Checks whether current view is mobile
+ * 
+ * @returns {boolean}
  */
 function isMobileView() {
   return window.innerWidth <= 768;
 }
 
 /**
- * Behandelt Mobile-Ansicht
- * @param {HTMLElement} contactFrame - Mobile Kontakt Frame
- * @param {HTMLElement} allContactsFrame - Alle Kontakte Frame
+ * Handles UI display logic for mobile contact view
+ * 
+ * @param {HTMLElement} contactFrame 
+ * @param {HTMLElement} allContactsFrame 
  */
 function handleMobileView(contactFrame, allContactsFrame) {
-  // Prüfe ob beide Elemente existieren
   if (!contactFrame || !allContactsFrame) {
-    console.warn("Mobile View Elemente nicht gefunden:", { contactFrame, allContactsFrame });
+    console.warn("Mobile view elements not found:", { contactFrame, allContactsFrame });
     return;
   }
   
@@ -231,7 +243,7 @@ function handleMobileView(contactFrame, allContactsFrame) {
 }
 
 /**
- * Initialisiert die Kontaktseite
+ * Initializes the contact page
  */
 async function init() {
   const loadedContacts = await loadAllContactsFromFirebaseDatabase();
@@ -241,12 +253,10 @@ async function init() {
 }
 
 /**
- * Richtet Profile-Button mit Benutzer-Initialen ein
+ * Sets initials into the profile button
  */
 function setupProfileButton() {
-  // Verwende die gleichen Daten wie für den ersten Kontakt
-  let userData = getUserFromStorage();
-
+  const userData = getUserFromStorage();
   const userName = userData.userFullName || userData.name;
   const profileButton = document.getElementById("openMenu");
   
@@ -257,7 +267,7 @@ function setupProfileButton() {
 }
 
 /**
- * Richtet Dropdown-Menu ein
+ * Sets up dropdown menu for profile
  */
 function setupDropdown() {
   const openMenuButton = document.getElementById("openMenu");
@@ -269,7 +279,6 @@ function setupDropdown() {
       dropDownMenu.classList.toggle("dp-none");
     });
     
-    // Schließe Dropdown bei Klick außerhalb
     document.addEventListener("click", (e) => {
       if (!dropDownMenu.contains(e.target) && !openMenuButton.contains(e.target)) {
         dropDownMenu.classList.add("dp-none");
@@ -279,8 +288,9 @@ function setupDropdown() {
 }
 
 /**
- * Holt Benutzer aus localStorage
- * @returns {Object|null} Benutzerdaten oder null
+ * Loads user data from localStorage
+ * 
+ * @returns {Object|null} User data or null
  */
 function getUserFromStorage() {
   try {
@@ -295,12 +305,12 @@ function getUserFromStorage() {
     
     return null;
   } catch (error) {
-    console.error("Fehler beim Laden der Benutzerdaten:", error);
+    console.error("Error loading user data:", error);
     return null;
   }
 }
 
-// Initialisierung
+// Initialize page on DOM load
 document.addEventListener('DOMContentLoaded', init);
 
 export { setupEventListeners };

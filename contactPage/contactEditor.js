@@ -1,5 +1,5 @@
 /**
- * Kontakt bearbeiten
+ * Edit contact functionality
  */
 
 import { getInitials } from '../scripts/utils/helpers.js';
@@ -8,7 +8,9 @@ import { updateContact } from './contactDataService.js';
 let editingContact = null;
 
 /**
- * Formular mit Kontaktdaten füllen
+ * Fills the form fields with contact data.
+ * 
+ * @param {Object} contact - Contact object to populate the form with
  */
 export function fillEditForm(contact) {
   setTimeout(() => {
@@ -19,7 +21,9 @@ export function fillEditForm(contact) {
 }
 
 /**
- * Eingaben aus Formular holen
+ * Retrieves edited values from the form.
+ * 
+ * @returns {Object} Form input values (name, email, phone)
  */
 export function getEditContactInput() {
   return {
@@ -30,7 +34,9 @@ export function getEditContactInput() {
 }
 
 /**
- * Kontakt speichern
+ * Handles contact save action after editing.
+ * 
+ * @param {Event} e - Submit event
  */
 export function handleContactEditSubmission(e) {
   e.preventDefault();
@@ -45,7 +51,7 @@ export function handleContactEditSubmission(e) {
 }
 
 /**
- * Felder leeren
+ * Clears all relevant input fields.
  */
 export function emptyInput() {
   const fields = ["contactName", "contactEmail", "contactPhone", "editContactName", "editContactEmail", "editContactPhone"];
@@ -56,7 +62,9 @@ export function emptyInput() {
 }
 
 /**
- * Bearbeitung starten
+ * Opens the contact edit dialog and sets the current editing contact.
+ * 
+ * @param {Object} contact - Contact to be edited
  */
 export function openEditDialog(contact) {
   editingContact = contact;

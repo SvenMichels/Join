@@ -1,9 +1,9 @@
 /**
- * Modals verwalten
+ * Modal management logic
  */
 
 /**
- * Alle Fenster schließen
+ * Closes all modal windows.
  */
 export function handleWindowClosing() {
   closeAddWindow();
@@ -12,28 +12,28 @@ export function handleWindowClosing() {
 }
 
 /**
- * Kontakt hinzufügen öffnen
+ * Opens the modal window for adding a new contact.
  */
 export function openContactAdditionWindow() {
   document.getElementById("addWindow").classList.remove("dp-none");
 }
 
 /**
- * Hinzufügen-Fenster schließen
+ * Closes the "add contact" modal window.
  */
 export function closeAddWindow() {
   document.getElementById("addWindow").classList.add("dp-none");
 }
 
 /**
- * Bearbeiten-Fenster schließen
+ * Closes the "edit contact" modal window.
  */
 export function closeEditWindow() {
   document.getElementById("editWindow").classList.add("dp-none");
 }
 
 /**
- * Erfolgs-Nachricht anzeigen
+ * Displays a user feedback message for 3 seconds.
  */
 export function showUserFeedback() {
   const feedback = document.getElementById("userFeedback");

@@ -1,34 +1,24 @@
 import { requestData } from "../scripts/firebase.js";
 import { getInitials } from "../scripts/utils/helpers.js";
 
-
 /**
- * Erstellt einen neuen Kontakt für den aktuell eingeloggten Benutzer.
+ * Creates a new contact for the currently logged-in user.
  * 
- * Diese Funktion:
- * - Liest den aktuellen Benutzer aus dem `localStorage`
- * - Validiert, ob ein Benutzer eingeloggt ist
- * - Sendet die Kontaktdaten per POST-Request an die API unter `/contacts/{userId}`
+ * This function:
+ * - Reads the current user from localStorage
+ * - Validates that a user is logged in
+ * - Sends the contact data via POST to `/contacts/{userId}`
  *
  * @async
  * @function createContact
- * @param {Object} contactData - Das Kontaktobjekt mit den zu speichernden Daten.
- * @returns {Promise<Object>} Das Ergebnis des API-Requests (z. B. gespeicherter Kontakt oder Serverantwort).
- *
- * @throws {Error} Wenn kein Benutzer im `localStorage` gefunden wird oder keine Benutzer-ID existiert.
- *
- * @example
- * const contact = {
- *   userFullName: "Max Mustermann",
- *   userEmailAddress: "max@example.com",
- *   userPhoneNumber: "0123456789"
- * };
- * const result = await createContact(contact);
+ * @param {Object} contactData - The contact object to store.
+ * @returns {Promise<Object>} The result of the API request (e.g. saved contact or response).
+ * @throws {Error} If no user is found in localStorage or user ID is missing.
  */
 export async function createContact(contactData) {
   const currentUserString = localStorage.getItem("currentUser");
   const currentUserData = JSON.parse(currentUserString);
-  if (!currentUserData?.id) throw new Error("Kein eingeloggter Benutzer");
+  if (!currentUserData?.id) throw new Error("No user logged in");
 
   const apiPath = `contacts/${currentUserData.id}`;
   const creationResult = await requestData("POST", apiPath, contactData);
@@ -36,22 +26,11 @@ export async function createContact(contactData) {
 }
 
 /**
- * Lädt alle Kontakte des aktuell eingeloggten Benutzers aus der Datenbank.
- * 
- * Diese Funktion:
- * - Holt die Benutzerdaten über `getCurrentUserData()`
- * - Ruft die Kontaktliste aus Firebase ab
- * - Verarbeitet die rohen Kontaktdaten in ein nutzbares Format
- * - Stellt sicher, dass der aktuelle Benutzer in der Kontaktliste enthalten ist
- * - Gibt die vollständige Liste der Kontakte zurück
+ * Loads all contacts of the currently logged-in user from the database.
  *
  * @async
  * @function loadContacts
- * @returns {Promise<Object[]>} Ein Array von Kontaktobjekten, mindestens mit dem aktuellen Benutzer.
- *
- * @example
- * const contacts = await loadContacts();
- * console.log(contacts); // → Array von Kontaktobjekten
+ * @returns {Promise<Object[]>} An array of contact objects, including the current user.
  */
 export async function loadContacts() {
   const currentUserData = getCurrentUserData();
@@ -68,14 +47,10 @@ export async function loadContacts() {
 }
 
 /**
- * Gibt die im `localStorage` gespeicherten Daten des aktuell eingeloggten Benutzers zurück.
- *
+ * Returns the current user data from localStorage.
+ * 
  * @function getCurrentUserData
- * @returns {Object|null} Das Benutzerobjekt oder `null`, wenn keine Daten vorhanden sind.
- *
- * @example
- * const user = getCurrentUserData();
- * if (user) console.log(user.userFullName);
+ * @returns {Object|null} The user object or null if not found.
  */
 function getCurrentUserData() {
   const currentUserString = localStorage.getItem("currentUser");
@@ -83,15 +58,12 @@ function getCurrentUserData() {
 }
 
 /**
- * Holt die Kontaktdaten eines Benutzers aus der Firebase-Datenbank.
+ * Fetches contacts for a given user ID from Firebase.
  *
  * @async
  * @function fetchContactsFromFirebase
- * @param {string|number} userId - Die ID des Benutzers, dessen Kontakte geladen werden sollen.
- * @returns {Promise<Object|null>} Die rohen Kontaktdaten oder `null`, falls keine Daten vorhanden sind.
- *
- * @example
- * const contacts = await fetchContactsFromFirebase(123);
+ * @param {string|number} userId - The user ID whose contacts are to be loaded.
+ * @returns {Promise<Object|null>} Raw contact data or null if not found.
  */
 async function fetchContactsFromFirebase(userId) {
   const response = await requestData("GET", `contacts/${userId}`);
@@ -99,24 +71,11 @@ async function fetchContactsFromFirebase(userId) {
 }
 
 /**
- * Erstellt ein standardisiertes Kontaktobjekt aus Benutzerdaten.
- *
- * Falls Initialen oder der erste Buchstabe fehlen, werden sie automatisch generiert.
+ * Creates a standardized contact object from user data.
  *
  * @function createUserContactObject
- * @param {Object} userData - Das Benutzerobjekt mit den verfügbaren Feldern.
- * @param {string} userData.userFullName - Vollständiger Name des Benutzers.
- * @param {string} userData.userEmailAddress - E-Mail-Adresse.
- * @param {string} userData.userPhoneNumber - Telefonnummer.
- * @param {string} [userData.userInitials] - Optional: Initialen des Benutzers.
- * @param {string} [userData.firstCharacter] - Optional: Erster Buchstabe des Namens.
- * @param {string|number} userData.id - Benutzer-ID.
- * @param {string} userData.userColor - Zugeordnete Benutzerfarbe.
- * 
- * @returns {Object} Ein Objekt mit formatierten Kontaktdaten.
- *
- * @example
- * const contact = createUserContactObject(currentUser);
+ * @param {Object} userData - The user object with fields.
+ * @returns {Object} A formatted contact object.
  */
 function createUserContactObject(userData) {
   return {
@@ -131,14 +90,11 @@ function createUserContactObject(userData) {
 }
 
 /**
- * Wandelt rohe Kontaktdaten aus der Datenbank in ein Array formatierter Kontaktobjekte um.
+ * Converts raw contact data into an array of formatted contact objects.
  * 
  * @function processContactsData
- * @param {Object} contactsRawData - Die rohen Kontaktdaten aus der Datenbank (z. B. Firebase).
- * @returns {Object[]} Array von formatierten Kontaktobjekten mit Benutzerinformationen.
- *
- * @example
- * const contacts = processContactsData(rawData);
+ * @param {Object} contactsRawData - Raw contact data (e.g. from Firebase).
+ * @returns {Object[]} Array of formatted contact objects.
  */
 function processContactsData(contactsRawData) {
   const contactEntriesArray = Object.entries(contactsRawData);
@@ -155,17 +111,13 @@ function processContactsData(contactsRawData) {
 }
 
 /**
- * Stellt sicher, dass der aktuell eingeloggte Benutzer in der Kontaktliste enthalten ist.
- * 
- * Falls nicht vorhanden, wird der Benutzer an den Anfang der Liste eingefügt.
+ * Ensures that the currently logged-in user is present in the contacts list.
+ * If not, adds the user to the beginning of the list.
  * 
  * @function ensureCurrentUserInContactsList
- * @param {Object[]} contactsList - Liste von Kontaktobjekten.
- * @param {Object} currentUserData - Daten des aktuell eingeloggten Benutzers.
- * @returns {Object[]} Die aktualisierte Kontaktliste.
- *
- * @example
- * const safeList = ensureCurrentUserInContactsList(contacts, currentUser);
+ * @param {Object[]} contactsList - Array of contact objects.
+ * @param {Object} currentUserData - The current user data.
+ * @returns {Object[]} The updated contacts list.
  */
 function ensureCurrentUserInContactsList(contactsList, currentUserData) {
   const userExistsInContacts = contactsList.some(contact => contact.userId === currentUserData.id);
@@ -178,35 +130,29 @@ function ensureCurrentUserInContactsList(contactsList, currentUserData) {
 }
 
 /**
- * Aktualisiert einen bestehenden Kontakt in der Firebase-Datenbank.
- * 
+ * Updates a contact in the Firebase database.
+ *
  * @async
  * @function updateContactInFirebase
- * @param {Object} contact - Das zu aktualisierende Kontaktobjekt.
- * @throws {Error} Wenn kein eingeloggter Benutzer im `localStorage` gefunden wird.
- *
- * @example
- * await updateContactInFirebase(updatedContact);
+ * @param {Object} contact - The contact object to update.
+ * @throws {Error} If no user is found in localStorage.
  */
 export async function updateContactInFirebase(contact) {
   const user = JSON.parse(localStorage.getItem("currentUser"));
   if (!user?.id) {
-    throw new Error("Kein eingeloggter Benutzer");
+    throw new Error("No user logged in");
   }
   
   await requestData("PUT", `contacts/${user.id}/${contact.userId}`, contact);
 }
 
 /**
- * Löscht einen Kontakt aus der Firebase-Datenbank für den aktuell eingeloggten Benutzer.
- * 
+ * Deletes a contact from the Firebase database for the current user.
+ *
  * @async
  * @function deleteContactFromFirebase
- * @param {string} contactId - Die ID des zu löschenden Kontakts.
- * @returns {Promise<void>} Keine Rückgabe, Aktion wird nur ausgeführt.
- *
- * @example
- * await deleteContactFromFirebase("contact123");
+ * @param {string} contactId - ID of the contact to delete.
+ * @returns {Promise<void>} No return, only executes the action.
  */
 export async function deleteContactFromFirebase(contactId) {
   const user = JSON.parse(localStorage.getItem("currentUser"));
@@ -214,14 +160,11 @@ export async function deleteContactFromFirebase(contactId) {
 }
 
 /**
- * Lädt alle Benutzer aus der Datenbank und bereitet sie für den Login vor.
+ * Loads all users from the database and prepares them for login.
  *
  * @async
  * @function loadAllUsersForLogin
- * @returns {Promise<Object[]>} Ein Array vorbereiteter Benutzerobjekte.
- *
- * @example
- * const users = await loadAllUsersForLogin();
+ * @returns {Promise<Object[]>} Array of user objects.
  */
 export async function loadAllUsersForLogin() {
   const usersData = await fetchUsersFromDatabase();
@@ -229,14 +172,11 @@ export async function loadAllUsersForLogin() {
 }
 
 /**
- * Ruft alle Benutzerdaten aus der Datenbank ab.
+ * Fetches all users from the Firebase database.
  *
  * @async
  * @function fetchUsersFromDatabase
- * @returns {Promise<Object>} Ein Objekt mit allen Benutzerdaten oder ein leeres Objekt.
- *
- * @example
- * const usersData = await fetchUsersFromDatabase();
+ * @returns {Promise<Object>} Object containing all user entries or empty object.
  */
 async function fetchUsersFromDatabase() {
   const response = await requestData("GET", "users");
@@ -245,14 +185,11 @@ async function fetchUsersFromDatabase() {
 }
 
 /**
- * Wandelt rohe Benutzerdaten aus der Datenbank in ein formatgerechtes Login-Array um.
+ * Transforms raw Firebase user data into an array for login usage.
  *
  * @function transformUsersForLogin
- * @param {Object} usersData - Die rohen Benutzerdaten (Key-Value-Format).
- * @returns {Object[]} Array von Benutzerobjekten mit allen nötigen Feldern für den Login.
- *
- * @example
- * const users = transformUsersForLogin(data);
+ * @param {Object} usersData - Raw user data as key-value pairs.
+ * @returns {Object[]} Array of formatted user objects.
  */
 function transformUsersForLogin(usersData) {
   const userEntries = Object.entries(usersData);
@@ -270,9 +207,11 @@ function transformUsersForLogin(usersData) {
 }
 
 /**
- * Load contacts for task assignment (used in modals and task creation)
- * Single responsibility: Provide unified contact data for task assignments
- * @returns {Array} Array of contact objects in unified format
+ * Loads contacts for task assignment (used in modals and task creation).
+ * 
+ * @async
+ * @function loadContactsForTaskAssignment
+ * @returns {Promise<Object[]>} Array of contact objects in a unified format.
  */
 export async function loadContactsForTaskAssignment() {
   try {

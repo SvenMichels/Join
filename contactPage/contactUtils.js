@@ -1,11 +1,19 @@
 /**
- * Hilfsfunktionen für Kontakte
+ * Helper functions for contact-related operations
  */
 
 import { clearContactListUI, renderAllContacts, clearBigContactView } from './contactRenderer.js';
 
 /**
- * Button-Event hinzufügen
+ * Adds a click event listener to a button inside a container.
+ *
+ * @function bindButton
+ * @param {HTMLElement} container - The DOM element containing the button.
+ * @param {string} selector - The CSS selector for the target button inside the container.
+ * @param {Function} callback - The function to execute on click.
+ *
+ * @example
+ * bindButton(document, "#deleteBtn", handleDelete);
  */
 export function bindButton(container, selector, callback) {
   const button = container.querySelector(selector);
@@ -15,7 +23,11 @@ export function bindButton(container, selector, callback) {
 }
 
 /**
- * Kontaktdetails anzeigen
+ * Displays the detailed contact view by removing the "dp-none" class.
+ *
+ * @function loadAndShowContactDetails
+ * @example
+ * loadAndShowContactDetails();
  */
 export function loadAndShowContactDetails() {
   const bigContact = document.getElementById("bigContact");
@@ -25,7 +37,14 @@ export function loadAndShowContactDetails() {
 }
 
 /**
- * Nach Löschung aufräumen
+ * Handles the UI update after a contact has been deleted.
+ *
+ * Clears the contact list, re-renders it, and clears the detailed contact view.
+ *
+ * @function handlePostDeleteView
+ * @param {Object[]} list - The updated list of contacts.
+ * @example
+ * handlePostDeleteView(updatedContactList);
  */
 export function handlePostDeleteView(list) {
   clearContactListUI();
