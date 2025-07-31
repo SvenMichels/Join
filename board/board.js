@@ -38,7 +38,7 @@ window.addEventListener("DOMContentLoaded", initializeBoard);
 /**
  * Initializes the board when DOM is fully loaded.
  */
-function initializeBoard() {
+export function initializeBoard() {
   setupUIComponents();
   setupEventHandlers();
   loadInitialData();

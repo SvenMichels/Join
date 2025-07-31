@@ -3,9 +3,10 @@
  * including dropdown behavior for status changes.
  */
 
+import { initializeBoard } from "./board.js";
 import { requestData } from "../scripts/firebase.js";
 import { updateEmptyLists } from "../scripts/utils/emptylisthelper.js";
-import { TASK_STATUS_COLUMN_MAPPING } from "./taskRenderer.js";
+import { renderTasks, TASK_STATUS_COLUMN_MAPPING } from "./taskRenderer.js";
 import { updateTask, getStatusFromElementId } from "./taskManager.js";
 
 /**
@@ -233,6 +234,7 @@ function persistTaskStatus(task) {
 
 window.addEventListener("DOMContentLoaded", () => {
   updateSwitchButtonVisibility();
+  initializeBoard();
 });
 
 window.addEventListener("resize", updateSwitchButtonVisibility);
