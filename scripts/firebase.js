@@ -58,6 +58,19 @@ async function processResponse(response) {
 }
 
 /**
+ * Fetches all users from the Firebase database.
+ *
+ * @async
+ * @function fetchUsersFromDatabase
+ * @returns {Promise<Object>} Object containing all user entries or empty object.
+ */
+export async function fetchUsersFromDatabase() {
+  const response = await requestData("GET", "users");
+  if (!response.data) return {};
+  return response.data;
+}
+
+/**
  * Performs an HTTP request to the Firebase Realtime Database.
  *
  * @param {string} [method="GET"] - The HTTP method to use.
@@ -71,3 +84,4 @@ export async function requestData(method = "GET", path = "", data = {}) {
   const response = await fetch(url, options);
   return processResponse(response);
 }
+

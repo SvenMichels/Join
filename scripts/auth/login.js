@@ -1,5 +1,5 @@
 import { requestData } from "../firebase.js";
-import { loadAllUsersForLogin } from "../../contactPage/contactService.js";
+import { fetchUsersFromDatabase } from "../firebase.js";
 
 const loginFormElement = document.getElementById("loginForm");
 
@@ -320,4 +320,39 @@ function getEarliestUrgentDueDate(tasks) {
 function setText(selector, text) {
   const element = document.querySelector(selector);
   if (element) element.textContent = text;
+}
+
+
+/**
+ * Transforms raw Firebase user data into an array for login usage.
+ *
+ * @function transformUsersForLogin
+ * @param {Object} usersData - Raw user data as key-value pairs.
+ * @returns {Object[]} Array of formatted user objects.
+ */
+function transformUsersForLogin(usersData) {
+  const userEntries = Object.entries(usersData);
+  
+  return userEntries.map(([id, user]) => ({
+    userId: id,
+    userFullName: user.userFullName,
+    userEmailAddress: user.userEmailAddress,
+    userPassword: user.userPassword,
+    userPhoneNumber: user.userPhoneNumber,
+    userInitials: user.userInitials,
+    firstCharacter: user.firstCharacter,
+    userColor: user.userColor
+  }));
+}
+
+/**
+ * Loads all users from the database and prepares them for login.
+ *
+ * @async
+ * @function loadAllUsersForLogin
+ * @returns {Promise<Object[]>} Array of user objects.
+ */
+export async function loadAllUsersForLogin() {
+  const usersData = await fetchUsersFromDatabase();
+  return transformUsersForLogin(usersData);
 }
