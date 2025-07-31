@@ -2,7 +2,7 @@
 /*    ADD TASK CORE STYLES      */
 /* ============================= */
 
-/* ---------- Überschrift ---------- */
+/* ---------- Headline ---------- */
 .task-h1-container {
   width: 278px;
   height: 73px;
@@ -22,7 +22,7 @@ h1 {
 }
 
 
-/* ---------- Task-Eingabefelder ---------- */
+/* ---------- Task input fields ---------- */
 .task-title,
 .task-description,
 .task-date {
@@ -63,7 +63,7 @@ h1 {
 }
 
 
-/* ---------- Priorität ---------- */
+/* ---------- Priority ---------- */
 .prio-container {
   display: flex;
   flex-direction: column;
@@ -90,7 +90,7 @@ h1 {
 }
 
 
-/* ---------- Kategorie ---------- */
+/* ---------- Category ---------- */
 .prio-category-container {
   display: flex;
   flex-direction: column;
@@ -156,28 +156,28 @@ input:valid + .error-message {
 
 
 /* ---------- Form-Container ---------- */
-.form-wrapper {
+/* .form-wrapper {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding-top: 50px;
-}
+} */
 
-.form-container {
+/* .form-container {
   max-width: 1440px;
   width: 90%;
-}
+} */
 
-.required-container {
+/* .required-container {
   padding-top: 20px;
-}
+} */
 
-.create-container {
-  /* display: flex;
+/* .create-container {
+  display: flex;
   justify-content: space-between;
-  gap: 16px; */
+  gap: 16px;
   max-width: 900px;
-}
+} */
 
 .space-container {
   width: 0px;

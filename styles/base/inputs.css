@@ -2,7 +2,7 @@
 /*            INPUTS            */
 /* ============================= */
 
-/* ---------- Allgemeine Inputs ---------- */
+/* ---------- General inputs ---------- */
 input,
 textarea {
   padding-left: 12px;
@@ -37,7 +37,7 @@ textarea::placeholder {
 }
 
 
-/* ---------- Validierung & Fehler ---------- */
+/* ---------- Validation & Errors ---------- */
 .error-message {
   color: red;
   font-size: 0.8rem;
@@ -111,7 +111,7 @@ select {
 }
 
 
-/* ---------- Suche & Assignee-Suche ---------- */
+/* ---------- Search & Assignee Search ---------- */
 #searchUser {
   width: 100%;
   padding-right: 40px;

@@ -16,7 +16,7 @@
 }
 
 
-/* ---------- Eingabebereich ---------- */
+/* ---------- Input Area ---------- */
 .required-container {
   padding-top: 20px;
 }
@@ -29,7 +29,7 @@
 }
 
 
-/* ---------- Trennelemente ---------- */
+/* ---------- Separating elements ---------- */
 .space-container {
   width: 0px;
   border: solid 1px;

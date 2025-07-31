@@ -3,7 +3,7 @@
 /* ============================= */
 
 /* ---------- Overlay ---------- */
-.modal-overlay {
+/* .modal-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.4);
@@ -11,11 +11,11 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
-}
+} */
 
-.modal-overlay.hidden {
+/* .modal-overlay.hidden {
   display: none;
-}
+} */
 
 
 /* ---------- Feedback Box ---------- */
@@ -55,8 +55,8 @@
 }
 
 
-/* ---------- Leeres Platzhalter-Element ---------- */
-.empty-placeholder {
+/* ---------- Empty placeholder element ---------- */
+/* .empty-placeholder {
   padding: 1rem;
   text-align: center;
   font-style: italic;
@@ -67,4 +67,4 @@
   display: flex;
   align-items: center;
   justify-content: center;
-}
+} */
