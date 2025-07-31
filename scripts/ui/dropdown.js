@@ -1,30 +1,32 @@
 /**
  * Initializes a dropdown menu that toggles on trigger click and closes when clicking outside.
- *
- * @param {string} triggerSelector - CSS selector for the trigger element that toggles the dropdown.
- * @param {string} menuSelector - CSS selector for the dropdown menu element.
  */
-export function setupDropdown(triggerSelector, menuSelector) {
-  const dropdownTriggerElement = document.querySelector(triggerSelector);
-  const dropdownMenuElement = document.querySelector(menuSelector);
+export function setupDropdown() {
+  const dropdownTriggerElement = document.getElementById("openMenu");
+  const dropdownMenuElement = document.getElementById("dropDownMenu");
 
-  function onTriggerClick(clickEvent) {
-    clickEvent.stopPropagation();
-    dropdownMenuElement.classList.toggle('dp-none');
+  if (!dropdownTriggerElement || !dropdownMenuElement) return;
+
+  dropdownTriggerElement.addEventListener("click", onTriggerClick);
+  dropdownMenuElement.addEventListener("click", onMenuClick);
+  document.addEventListener("click", onDocumentClick);
+
+  function onTriggerClick(event) {
+    event.stopPropagation();
+    dropdownMenuElement.classList.toggle("dp-none");
   }
 
-  function onMenuClick(clickEvent) {
-    clickEvent.stopPropagation();
+  function onMenuClick(event) {
+    event.stopPropagation();
   }
 
-  /**
-   * Closes dropdown when clicking outside the menu or trigger.
-   */
-  function onDocumentClick() {
-    dropdownMenuElement.classList.add('dp-none');
-  }
+  function onDocumentClick(event) {
+    const clickedOutside =
+      !dropdownTriggerElement.contains(event.target) &&
+      !dropdownMenuElement.contains(event.target);
 
-  dropdownTriggerElement.addEventListener('click', onTriggerClick);
-  dropdownMenuElement.addEventListener('click', onMenuClick);
-  document.addEventListener('click', onDocumentClick);
+    if (clickedOutside) {
+      dropdownMenuElement.classList.add("dp-none");
+    }
+  }
 }

@@ -34,6 +34,7 @@ window.allUsers = () => allSystemUsers;
 window.fetchTasks = loadTasksAndUsers;
 
 window.addEventListener("DOMContentLoaded", initializeBoard);
+window.addEventListener("click", setupDropdown);
 
 /**
  * Initializes the board when DOM is fully loaded.
@@ -48,7 +49,6 @@ export function initializeBoard() {
  * Initializes static UI components.
  */
 function setupUIComponents() {
-  setupDropdown("#openMenu", "#dropDownMenu");
   loadUserProfile();
   setupMobileDeviceListeners();
   highlightActiveNavigationLinks();
