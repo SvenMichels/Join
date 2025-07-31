@@ -195,6 +195,7 @@
   border-radius: 10px;
   background: #ffffff;
   box-shadow: 0px 0px 4px 0px #0000001a;
+  cursor: pointer;
 }
 
 .prioButtons:hover {
@@ -309,6 +310,7 @@ input:valid + .error-message {
 .clear-button:hover {
   border: 2px solid #29abe2;
   box-shadow: 0px 4px 4px 0px #00000040;
+  cursor: pointer;
 }
 
 .create-button {
@@ -329,6 +331,7 @@ input:valid + .error-message {
 .create-button:hover {
   background: #29abe2;
   box-shadow: 0px 4px 4px 0px #00000040;
+  cursor: pointer;
 }
 
 .closeButton {
