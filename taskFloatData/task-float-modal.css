@@ -185,23 +185,6 @@
   height: 56px;
 }
 
-.prioButtons {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  width: 136px;
-  height: 56px;
-  border-style: none;
-  border-radius: 10px;
-  background: #ffffff;
-  box-shadow: 0px 0px 4px 0px #0000001a;
-  cursor: pointer;
-}
-
-.prioButtons:hover {
-  box-shadow: 0px 4px 4px 0px #00000040;
-}
-
 .prio-icons {
   width: 20px;
   height: 14.51px;
@@ -544,35 +527,6 @@ input:valid + .error-message {
 .close-button-modal:hover .icon {
   cursor: pointer;
   content: url("../assets/icons/close_white.svg");
-}
-
-.prio-buttons-images-modal {
-  width: 20px;
-  height: 14.51px;
-}
-
-/* ----------  Prio-Button Farben ---------- */
-#urgent-task-modal.prioUrgentBtnActive {
-  background: #ff3d00;
-  color: #fff;
-}
-#medium-task-modal.prioMediumBtnActive {
-  background: #ffa800;
-  color: #fff;
-}
-#low-task-modal.prioLowBtnActive {
-  background: #7ae229;
-  color: #fff;
-}
-
-/* ----------  Assigned-Dropdown ---------- */
-.assigned-user-list {
-  display: none;
-}
-.assigned-user-list.visible {
-  display: block;
-  max-height: 230px;
-  overflow-y: auto;
 }
 
 /* Auswahl im Dropdown markieren */

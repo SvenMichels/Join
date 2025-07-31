@@ -45,7 +45,8 @@
   content: url("../assets/icons/close_white.svg");
 }
 
-button {
+.delete-btn,
+.edit-btn {
   border: none;
   background-color: transparent;
   display: flex;

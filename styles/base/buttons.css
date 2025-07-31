@@ -58,6 +58,11 @@
   cursor: pointer;
 }
 
+.prioButtons img {
+  width: 20px;
+  height: 14px;
+}
+
 .prioButtons:hover {
   box-shadow: 0 4px 4px #00000040;
 }
