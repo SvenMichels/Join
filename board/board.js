@@ -259,7 +259,7 @@ async function handleUserChange() {
  * @returns {boolean}
  */
 function isMobile() {
-  return window.innerWidth <= 820;
+  return window.innerWidth <= 1320;
 }
 
 /**

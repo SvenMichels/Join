@@ -14,11 +14,28 @@
   <link rel="stylesheet" href="../styles/standard.css">
   <link href="../media-querie.css" rel="stylesheet" />
   <link href="../styles/shared.css" rel="stylesheet" />
+
+  <script type="module" src="../board/board.js"></script>
   <script type="module" src="../scripts/app.js">
   </script>
 </head>
 
 <body>
+  <div id="rotateWarning" style="
+  display: none;
+  position: fixed;
+  inset: 0;
+  background-color: #000;
+  color: #fff;
+  z-index: 9999;
+  font-size: 1.5rem;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+">
+  Please rotate your device back to portrait mode.
+</div>
   <header class="header-style" id="">
     <img class="header-nav-logo" src="../assets/icons/Capa 3.svg" />
     <div class="header-container">

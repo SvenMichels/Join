@@ -145,7 +145,6 @@ function ensureCurrentUserInContactsList(contactsList, currentUserData) {
   if (!userExistsInContacts) {
     contactsList.unshift(createUserContactObject(currentUserData));
   }
-  console.log("Contacts loaded:", contactsList)
   return contactsList ;
   
 }
