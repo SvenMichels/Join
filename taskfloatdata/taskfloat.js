@@ -5,29 +5,30 @@
 
 import { requestData } from "../scripts/firebase.js";
 import { getInitials } from "../scripts/utils/helpers.js";
-import { 
-  selectPriorityModal, 
-  getCurrentPriority, 
-  initPriorityEventListeners 
+import {
+  selectPriorityModal,
+  getCurrentPriority,
+  initPriorityEventListeners
 } from "./priorityManager.js";
-import { 
-  loadAndRenderUsersModal, 
-  updateSelectedModal, 
-  toggleUserListModal, 
+import {
+  loadAndRenderUsersModal,
+  updateSelectedModal,
+  toggleUserListModal,
   initUserSearchEventListener,
   applyUserPreselection
 } from "./userAssignmentManager.js";
-import { 
-  addSubtaskModal, 
-  addSubtaskOnEnterModal, 
-  renderSubtasksModal, 
-  resetSubtasks, 
-  setSubtaskItems, 
-  setCompletedSubtasks, 
-  getSubtaskItems, 
-  getCompletedSubtasks, 
-  updateSubtasks 
+import {
+  addSubtaskModal,
+  addSubtaskOnEnterModal,
+  renderSubtasksModal,
+  resetSubtasks,
+  setSubtaskItems,
+  setCompletedSubtasks,
+  getSubtaskItems,
+  getCompletedSubtasks,
+  updateSubtasks
 } from "./subtaskManager.js";
+import { setupOutsideClickHandler } from "../board/taskDetails.js";
 
 const $ = {};
 
@@ -37,10 +38,13 @@ const $ = {};
  */
 export function initTaskFloat() {
   cacheDom();
-  if (!$.modal) return Promise.resolve();
+  if (!$.modal) {
+    return Promise.resolve();
+  }
 
   loadUserInitialsModal();
   initUserSearchEventListener();
+  initPriorityEventListeners();
 
   return initFormModal();
 }
@@ -52,7 +56,7 @@ function cacheDom() {
   $.modal = document.querySelector(".form-wrapper-modal");
   if (!$.modal) return;
 
-  $.closeBtn = $.modal?.querySelector(".task-h1-container-modal button");
+  $.closeBtn = $.modal?.querySelector(".close-button-modal");
   $.form = document.getElementById("taskForm-modal");
   $.date = document.getElementById("task-date-modal");
   $.subInput = document.getElementById("subtask-modal");
@@ -70,11 +74,25 @@ function cacheDom() {
  * Bindet Event-Listener an DOM-Elemente
  */
 function attachEventListeners() {
-  $.closeBtn?.addEventListener("click", closeModal);
-  $.form?.addEventListener("submit", handleSubmitModal);
-  $.subAddBtn?.addEventListener("click", addSubtaskModal);
-  $.subInput?.addEventListener("keydown", addSubtaskOnEnterModal);
-  $.assignBtn?.addEventListener("click", toggleUserListModal);
+  if ($.closeBtn) {
+    $.closeBtn.addEventListener("click", closeModal);
+  }
+  
+  if ($.form) {
+    $.form.addEventListener("submit", handleSubmitModal);
+  }
+  
+  if ($.subAddBtn) {
+    $.subAddBtn.addEventListener("click", addSubtaskModal);
+  }
+  
+  if ($.subInput) {
+    $.subInput.addEventListener("keydown", addSubtaskOnEnterModal);
+  }
+  
+  if ($.assignBtn) {
+    $.assignBtn.addEventListener("click", toggleUserListModal);
+  }
 }
 
 /**
@@ -86,7 +104,6 @@ export async function initFormModal() {
   await initializeUsers();
   initializePriority();
   initializeCategoryValidation();
-  initializePriorityEvents();
 }
 
 /**
@@ -118,13 +135,13 @@ function initializePriority() {
 function initializeCategoryValidation() {
   const category = document.getElementById("category-modal");
   const submit = $.form?.querySelector(".create-button");
-  
+
   if (!category || !submit) return;
-  
+
   const updateSubmitState = () => {
     submit.disabled = category.value.trim() === "";
   };
-  
+
   updateSubmitState();
   category.addEventListener("change", updateSubmitState);
 }
@@ -184,7 +201,7 @@ function validateTaskModal(task) {
   const isValidTitle = validateField("titleAlert-modal", task.title);
   const isValidDate = validateField("dateAlert-modal", task.dueDate);
   const isValidCategory = validateField("categoryAlert-modal", task.category);
-  
+
   return isValidTitle && isValidDate && isValidCategory;
 }
 
@@ -197,11 +214,11 @@ function validateTaskModal(task) {
 function validateField(alertId, value) {
   const isValid = !!value;
   const alertElement = document.getElementById(alertId);
-  
+
   if (alertElement) {
     alertElement.style.display = isValid ? "none" : "inline";
   }
-  
+
   return isValid;
 }
 
@@ -220,6 +237,7 @@ function resetFormState(task) {
   clearFormAttributes();
   dispatchTaskEvent(task);
   resetModalState();
+  attachEventListeners();
   closeModal();
 }
 
@@ -227,8 +245,10 @@ function resetFormState(task) {
  * Entfernt Formular-Attribute
  */
 function clearFormAttributes() {
-  $.form.removeAttribute("data-task-id");
-  $.form.removeAttribute("data-task-status");
+  if ($.form) {
+    $.form.removeAttribute("data-task-id");
+    $.form.removeAttribute("data-task-status");
+  }
 }
 
 /**
@@ -248,7 +268,9 @@ function resetModalState() {
   window.isEditMode = false;
   resetSubtasks();
   window.pendingAssignedUsers = null;
-  $.form.reset();
+  if ($.form) {
+    $.form.reset();
+  }
   selectPriorityModal("medium");
 }
 
@@ -262,7 +284,7 @@ async function prefillModalWithTaskData(task) {
   renderSubtasksModal();
 
   window.pendingAssignedUsers = task.assignedUsers;
-  
+
   // Warte kurz auf das Rendering und wende dann die Vorauswahl an
   setTimeout(() => {
     if (window.pendingAssignedUsers && window.pendingAssignedUsers.length > 0) {
@@ -296,13 +318,11 @@ function loadUserInitialsModal() {
 /**
  * Schließt das Modal und räumt auf
  */
-function closeModal() {
-  const modal = document.getElementById("taskDetailModal");
+export function closeModal() {
   const overlay = document.getElementById("modal-overlay");
-  if (modal?.close) modal.close();
   if (overlay) {
     overlay.classList.add("d_none");
-    overlay.innerHTML = "";
+    resetModalFormState();
   }
 }
 
@@ -310,10 +330,17 @@ function closeModal() {
  * Setzt das Modal-Formular komplett zurück (für externe Nutzung)
  */
 function resetModalFormState() {
+  // Stelle sicher, dass das DOM geladen ist
+  if (!$.form) {
+    cacheDom();
+  }
+
   clearFormAttributes();
   resetModalState();
   setSubtaskItems([]);
   setCompletedSubtasks([]);
+  cacheDom();
+  setupOutsideClickHandler($.modal, document.getElementById("modal-overlay"));
 }
 
 // ==================== INITIALIZATION ====================
@@ -323,5 +350,6 @@ document.addEventListener("DOMContentLoaded", initTaskFloat);
 // ==================== REQUIRED GLOBAL FUNCTIONS ====================
 // Nur die wirklich nötigen Funktionen global verfügbar machen
 
+window.initTaskFloat = initTaskFloat;
 window.prefillModalWithTaskData = prefillModalWithTaskData;
 window.resetModalFormState = resetModalFormState;

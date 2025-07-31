@@ -58,7 +58,7 @@ select {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-  background: url("../assets/icons/arrow_drop_down.svg") no-repeat right 0.75rem center;
+  background: url("../../assets/icons/arrow_drop_down.svg") no-repeat right 0.75rem center;
   background-size: 1rem;
   padding-right: 2rem;
   border: 1px solid #ccc;

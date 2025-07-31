@@ -13,7 +13,7 @@
 
     <div class="detail-header">
       <img id="detail-icon" src="../assets/icons/propertyuserstory.svg" alt="" />
-      <button class="taskDetailCloseButton">
+      <button class="taskDetailCloseButton" id="taskDetailCloseButton" aria-label="Close">
         <img class="icon" src="../assets/icons/close.svg" />
       </button>
     </div>
@@ -50,6 +50,17 @@
     </div>
 
   </div>
+<script type="module">
+  import { closeModal } from '../taskFloatData/taskfloat.js';
 
+  document.addEventListener('DOMContentLoaded', () => {
+    const closeBtn = document.getElementById('taskDetailCloseButton');
+    console.log("closeBtn:", closeBtn);
+    
+    if (closeBtn) {
+      closeBtn.addEventListener('click', closeModal);
+    }
+  });
+</script>
 </body>
 </html>

@@ -11,7 +11,8 @@ import { getInitials } from "../scripts/utils/helpers.js";
 let allSystemUsersModal = [];
 
 /**
- * Loads contacts and renders them as checkboxes in the modal.
+ * Loads and renders user checkboxes in the modal.
+ * Always reloads contacts to ensure current user's data is displayed.
  * @returns {Promise<void>}
  */
 export async function loadAndRenderUsersModal() {
@@ -29,7 +30,6 @@ async function loadContactData() {
     const contacts = await loadContactsForTaskAssignment();
     allSystemUsersModal = contacts || [];
   } catch (error) {
-    console.error("Error loading contacts for modal:", error);
     allSystemUsersModal = [];
   }
 }

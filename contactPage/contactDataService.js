@@ -63,24 +63,31 @@ async function ensureCurrentUserAsFirstContact(contacts) {
   } else {
     try {
       await createContact(currentUserContact);
-      console.log("Created current user as contact.");
     } catch (error) {
-      console.error("Error creating current user as contact:", error);
+      // Silently handle error, contact creation is optional for display
     }
     return [currentUserContact, ...contacts];
   }
 }
 
 /**
- * Creates a new contact in Firebase.
+ * Creates a new contact in Firebase for the current user.
  * 
  * @param {Object} contact - Contact data
  * @returns {Promise<Object>} Firebase response
  */
 export async function createContact(contact) {
   try {
-    console.log("Creating contact:", contact);
-    const response = await fetch(`${BASE_URL}/contacts.json`, {
+    // Get current user from localStorage
+    const currentUserString = localStorage.getItem("currentUser");
+    const currentUser = JSON.parse(currentUserString);
+    
+    if (!currentUser?.id) {
+      throw new Error("No current user found");
+    }
+    
+    // Save contact under the specific user's path
+    const response = await fetch(`${BASE_URL}/contacts/${currentUser.id}.json`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(contact)
@@ -91,23 +98,29 @@ export async function createContact(contact) {
     }
 
     const result = await response.json();
-    console.log("Firebase createContact response:", result);
     return result;
   } catch (error) {
-    console.error("Error in createContact:", error);
     throw error;
   }
 }
 
 /**
- * Updates an existing contact in Firebase and refreshes the UI.
+ * Updates an existing contact in Firebase for the current user and refreshes the UI.
  * 
  * @param {Object} contact - Original contact object
  * @param {Object} updated - Updated data
  */
 export async function updateContact(contact, updated) {
   try {
-    const response = await fetch(`${BASE_URL}/contacts/${contact.userId}.json`, {
+    // Get current user from localStorage
+    const currentUserString = localStorage.getItem("currentUser");
+    const currentUser = JSON.parse(currentUserString);
+    
+    if (!currentUser?.id) {
+      throw new Error("No current user found");
+    }
+
+    const response = await fetch(`${BASE_URL}/contacts/${currentUser.id}/${contact.userId}.json`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(updated)
@@ -145,35 +158,47 @@ export async function updateContact(contact, updated) {
       }
 
       closeEditWindow();
-      console.log("Contact updated successfully.");
     } else {
-      console.error("Error updating contact:", response.status);
+      throw new Error(`Error updating contact: ${response.status}`);
     }
   } catch (error) {
-    console.error("Error updating contact:", error);
+    throw error;
   }
 }
 
 /**
- * Deletes a contact from Firebase and updates the UI.
+ * Deletes a contact from Firebase and updates the UI for the current user.
  * 
- * @param {string} userId - User ID of the contact
+ * @param {string} contactId - Contact ID to delete  
  * @param {string} userName - Name of the contact (for task cleanup if needed)
  */
-export async function deleteContactFromDatabase(userId, userName) {
-  const response = await fetch(`${BASE_URL}/contacts/${userId}.json`, {
-    method: 'DELETE'
-  });
-
-  if (response.ok) {
-    if (window.contactList) {
-      window.contactList = window.contactList.filter(c => c.userId !== userId);
+export async function deleteContactFromDatabase(contactId, userName) {
+  try {
+    // Get current user from localStorage
+    const currentUserString = localStorage.getItem("currentUser");
+    const currentUser = JSON.parse(currentUserString);
+    
+    if (!currentUser?.id) {
+      throw new Error("No current user found");
     }
 
-    // TODO: Implement task cleanup if necessary
-    // await removeUserFromAllTasks(userName);
+    const response = await fetch(`${BASE_URL}/contacts/${currentUser.id}/${contactId}.json`, {
+      method: 'DELETE'
+    });
 
-    handlePostDeleteView(window.contactList || []);
+    if (response.ok) {
+      if (window.contactList) {
+        window.contactList = window.contactList.filter(c => c.userId !== contactId);
+      }
+
+      // TODO: Implement task cleanup if necessary
+      // await removeUserFromAllTasks(userName);
+
+      handlePostDeleteView(window.contactList || []);
+    }
+  } catch (error) {
+    console.error("Error deleting contact:", error);
+    throw error;
   }
 }
 

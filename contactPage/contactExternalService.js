@@ -8,14 +8,28 @@ import { FIREBASE_DATABASE_BASE_URL } from '../scripts/firebase.js';
 const BASE_URL = FIREBASE_DATABASE_BASE_URL.replace(/\/+$/, '');
 
 /**
- * Fetches all contacts from the Firebase database.
+ * Fetches all contacts from the Firebase database for the current user.
  * 
  * @returns {Promise<Array>} Array of contact objects with attached userId
  */
 export async function getAllContactsFromDatabase() {
   try {
-    const response = await fetch(`${BASE_URL}/contacts.json`);
+    // Get current user from localStorage
+    const currentUserString = localStorage.getItem("currentUser");
+    const currentUser = JSON.parse(currentUserString);
+    
+    if (!currentUser?.id) {
+      console.warn("No current user found");
+      return [];
+    }
+
+    // Fetch only contacts for the current user
+    const response = await fetch(`${BASE_URL}/contacts/${currentUser.id}.json`);
     if (!response.ok) {
+      if (response.status === 404) {
+        // No contacts exist for this user yet
+        return [];
+      }
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     

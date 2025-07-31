@@ -7,6 +7,7 @@
 import { updateEmptyLists } from "../scripts/utils/emptylisthelper.js";
 import { setupDropdown } from "../scripts/ui/dropdown.js";
 import { setupMobileDeviceListeners } from "../scripts/utils/mobileUtils.js";
+import { highlightActiveNavigationLinks } from "../scripts/utils/navUtils.js";
 import { getInitials } from "../scripts/utils/helpers.js";
 import { renderTasks } from "./taskRenderer.js";
 import { 
@@ -50,6 +51,7 @@ function setupUIComponents() {
   setupDropdown("#openMenu", "#dropDownMenu");
   loadUserProfile();
   setupMobileDeviceListeners();
+  highlightActiveNavigationLinks();
 }
 
 /**
@@ -59,6 +61,7 @@ function setupEventHandlers() {
   setupTaskCreationEvents();
   setupSearchEvents();
   setupOrientationEvents();
+  setupUserChangeEvents();
 }
 
 /**
@@ -105,6 +108,15 @@ function setupOrientationEvents() {
   events.forEach(event => {
     window.addEventListener(event, handleOrientationChange);
   });
+}
+
+/**
+ * Sets up event listeners for user changes (login/logout/page focus).
+ */
+function setupUserChangeEvents() {
+  window.addEventListener("focus", handleUserChange);
+  window.addEventListener("pageshow", handleUserChange);
+  document.addEventListener("visibilitychange", handleUserChange);
 }
 
 /**
@@ -229,6 +241,20 @@ function handleOrientationChange() {
   if (warning) {
     warning.style.display = shouldShow ? "flex" : "none";
   }
+}
+
+/**
+ * Handles user changes by reloading tasks and user data.
+ * This ensures that when a user switches accounts, the correct 
+ * contacts and tasks are displayed.
+ */
+async function handleUserChange() {
+  const currentUser = getUserFromStorage();
+  if (!currentUser) return;
+  
+  // Reload tasks and contacts for the current user
+  await loadTasksAndUsers();
+  loadUserProfile();
 }
 
 /**

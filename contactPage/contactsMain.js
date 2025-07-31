@@ -10,6 +10,7 @@ import { getInitials } from '../scripts/utils/helpers.js';
 import { generateRandomColorClass } from '../scripts/utils/colors.js';
 import { bindButton, loadAndShowContactDetails } from './contactUtils.js';
 import { clearContactListUI, renderAllContacts } from './contactRenderer.js';
+import { highlightActiveNavigationLinks } from '../scripts/utils/navUtils.js';
 
 let contactList = [];
 let editingContact = null;
@@ -250,6 +251,7 @@ async function init() {
   contactList = loadedContacts || [];
   window.contactList = contactList;
   setupEventListeners();
+  highlightActiveNavigationLinks();
 }
 
 /**

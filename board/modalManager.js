@@ -9,6 +9,8 @@
  * @param {Object|null} task - Task data object for editing (null for new tasks)
  */
 export async function initModalContents(overlay, isEdit, task) {
+  await new Promise(resolve => requestAnimationFrame(resolve));
+  
   const init = window.initTaskFloat?.();
   if (init instanceof Promise) await init;
 

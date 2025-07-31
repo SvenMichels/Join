@@ -47,6 +47,10 @@ export function getSubtaskHTML(text, index) {
  * @returns {string} HTML string for user checkbox UI.
  */
 export function getUserCheckboxHTML(user) {
+  if (!user || !user.userFullName) {
+    return '<div class="error">Invalid user data</div>';
+  }
+  
   const checkboxId = `user-checkbox-modal-${user.userId || user.userFullName.replace(/\s+/g, '-').toLowerCase()}`;
   
   return `

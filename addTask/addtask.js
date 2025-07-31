@@ -11,26 +11,26 @@ import { highlightActiveNavigationLinks } from "../scripts/utils/navUtils.js";
 import { getInitials } from "../scripts/utils/helpers.js";
 import { setupMobileDeviceListeners } from "../scripts/utils/mobileUtils.js";
 
-import { 
-  collectTaskData, 
-  validateTask, 
-  resetFormState, 
-  clearValidationAlerts 
+import {
+  collectTaskData,
+  validateTask,
+  resetFormState,
+  clearValidationAlerts
 } from "./formManager.js";
 
 import { selectPriority, initPriorityEventListeners } from "./priorityHandler.js";
 
-import { 
-  loadAndRenderUsers, 
-  toggleUserAssignmentList, 
-  setupUserSearch, 
-  clearSelectedUsers 
+import {
+  loadAndRenderUsers,
+  toggleUserAssignmentList,
+  setupUserSearch,
+  clearSelectedUsers
 } from "./userAssignmentHandler.js";
 
-import { 
-  addNewSubtask, 
-  addSubtaskOnEnterKey, 
-  renderSubtasks 
+import {
+  addNewSubtask,
+  addSubtaskOnEnterKey,
+  renderSubtasks
 } from "./subtaskHandler.js";
 
 /** @type {Object<string, HTMLElement>} */
@@ -86,7 +86,7 @@ function setupEventListeners() {
  */
 function configureForm() {
   loadAndRenderUsers();
-  selectPriority("medium");
+  selectPriority();
   initPriorityEventListeners();
 
   const categorySelect = document.getElementById("category");
@@ -129,7 +129,6 @@ async function saveTask(taskData) {
   const isNewTask = !taskData.id;
   const httpMethod = isNewTask ? "POST" : "PUT";
   const apiEndpoint = isNewTask ? "/tasks" : `/tasks/${taskData.id}`;
-
   return await requestData(httpMethod, apiEndpoint, taskData);
 }
 

@@ -186,10 +186,10 @@ function setupCloseButton(modal, overlay) {
  * @param {HTMLElement} modal - Modal element
  * @param {HTMLElement} overlay - Overlay element
  */
-function setupOutsideClickHandler(modal, overlay) {
+export function setupOutsideClickHandler(modal, overlay) {
   const handler = (event) => {
     const clickedInside = event.composedPath().includes(modal);
-    const clickedOverlay = event.target === overlay;
+    const clickedOverlay = event.target === overlay;    
 
     if (clickedInside || !clickedOverlay) return;
 
@@ -206,7 +206,7 @@ function setupOutsideClickHandler(modal, overlay) {
  */
 function closeOverlay(overlay) {
   overlay.classList.add("d_none");
-  overlay.innerHTML = "";
+  // overlay.innerHTML = "";
 }
 
 // Make function globally available
