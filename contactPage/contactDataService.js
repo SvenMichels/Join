@@ -1,7 +1,7 @@
 /**
  * Contact data service for Firebase operations.
  */
-import {LocalStorageService} from '../scripts/utils/localStorageHelper.js';
+import { LocalStorageService } from '../scripts/utils/localStorageHelper.js';
 import { getAllContactsFromDatabase } from './contactExternalService.js';
 import { clearContactListUI, renderAllContacts } from './contactRenderer.js';
 import { closeEditWindow } from './contactModal.js';
@@ -47,7 +47,7 @@ export async function loadAllContactsFromFirebaseDatabase() {
  */
 async function ensureCurrentUserAsFirstContact(contacts) {
   const currentUserContact = await getCurrentUserAsContact();
-  
+
   if (!currentUserContact) {
     return contacts;
   }
@@ -80,11 +80,11 @@ export async function createContact(contact) {
   try {
     // Get current user from localStorage
     const currentUser = LocalStorageService.getItem("currentUser");
-    
+
     if (!currentUser?.id) {
       throw new Error("No current user found");
     }
-    
+
     // Save contact under the specific user's path
     const response = await fetch(`${FIREBASE_DATABASE_BASE_URL}/contacts/${currentUser.id}.json`, {
       method: 'POST',
@@ -114,7 +114,7 @@ export async function updateContact(contact, updated) {
     // Get current user from localStorage
     const currentUserString = localStorage.getItem("currentUser");
     const currentUser = JSON.parse(currentUserString);
-    
+
     if (!currentUser?.id) {
       throw new Error("No current user found");
     }
@@ -152,7 +152,7 @@ export async function updateContact(contact, updated) {
         const { bindButton } = await import('./contactUtils.js');
         const { deleteContactFromDatabase } = await import('./contactDataService.js');
         const { openEditDialog } = await import('./contactEditor.js');
-        bindButton(bigContact, "#delete", () => deleteContactFromDatabase(contact.userId, contact.userFullName), );
+        bindButton(bigContact, "#delete", () => deleteContactFromDatabase(contact.userId, contact.userFullName));
         bindButton(bigContact, "#edit", () => openEditDialog(contact));
 
         if (window.innerWidth <= 768) {
@@ -185,7 +185,7 @@ export async function deleteContactFromDatabase(contactId, userName) {
     // Get current user from localStorage
     const currentUserString = localStorage.getItem("currentUser");
     const currentUser = JSON.parse(currentUserString);
-    
+
     if (!currentUser?.id) {
       throw new Error("No current user found");
     }
@@ -219,9 +219,9 @@ async function getCurrentUserAsContact() {
   try {
     const currentUserString = localStorage.getItem("currentUser");
     if (!currentUserString) return null;
-    
+
     const userData = JSON.parse(currentUserString);
-    
+
     return {
       userFullName: userData.userFullName || userData.name || "Current User",
       userEmailAddress: userData.userEmailAddress || userData.email || "",

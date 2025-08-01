@@ -147,13 +147,6 @@ function initializeCategoryValidation() {
 }
 
 /**
- * Initialisiert Priority Event-Listener
- */
-function initializePriorityEvents() {
-  initPriorityEventListeners();
-}
-
-/**
  * Behandelt das Absenden des Modal-Formulars
  * @param {Event} event - Submit-Event
  */

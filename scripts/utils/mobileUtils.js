@@ -11,9 +11,7 @@ export function setupMobileDeviceListeners() {
     const warning = document.getElementById("rotateWarning");
     if (!warning) return;
 
-    const isMobile =
-      /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(navigator.userAgent.toLowerCase()) ||
-      ("ontouchstart" in window && window.innerWidth <= 768);
+    const isMobile = ("ontouchstart" in window && window.innerWidth <= 768);
 
     const isLandscape = window.matchMedia("(orientation: landscape)").matches;
 

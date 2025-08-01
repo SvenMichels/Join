@@ -189,9 +189,16 @@ function setupOrientationEvents() {
  * Sets up event listeners for user changes (login/logout/page focus).
  */
 function setupUserChangeEvents() {
-  window.addEventListener("focus", handleUserChange);
-  window.addEventListener("pageshow", handleUserChange);
-  document.addEventListener("visibilitychange", handleUserChange);
+  const userChangeEvents = ["focus", "pageshow"];
+  const documentEvents = ["visibilitychange"];
+  
+  userChangeEvents.forEach(event => {
+    window.addEventListener(event, handleUserChange);
+  });
+  
+  documentEvents.forEach(event => {
+    document.addEventListener(event, handleUserChange);
+  });
 }
 
 /**
@@ -207,15 +214,58 @@ async function loadInitialData() {
  * @returns {Promise<void>}
  */
 async function loadTasksAndUsers() {
+  try {
+    const { tasks, users } = await fetchAndProcessData();
+    await updateBoardWithData(tasks, users);
+  } catch (error) {
+    console.error("[Board] Failed to load tasks and users:", error);
+  }
+}
+
+/**
+ * Fetches raw data from APIs and processes it.
+ * @returns {Promise<{tasks: Object, users: Array}>}
+ */
+async function fetchAndProcessData() {
   const [tasksResponse] = await fetchTasksAndUsers();
   const contactsList = await loadContactsForTaskAssignment();
   
-  currentlyLoadedTasks = normalizeTasks(tasksResponse);
-  allSystemUsers = contactsList || [];
-  
-  await renderTasks(Object.values(currentlyLoadedTasks), allSystemUsers);
-  setupDragAndDrop(currentlyLoadedTasks);
-  setupSearch(currentlyLoadedTasks);
+  return {
+    tasks: normalizeTasks(tasksResponse),
+    users: contactsList || []
+  };
+}
+
+/**
+ * Updates the board state and UI with loaded data.
+ * @param {Object} tasks - Normalized tasks object
+ * @param {Array} users - Array of system users
+ * @returns {Promise<void>}
+ */
+async function updateBoardWithData(tasks, users) {
+  updateApplicationState(tasks, users);
+  await initializeBoardComponents(tasks);
+}
+
+/**
+ * Updates the global application state with new data.
+ * @param {Object} tasks - Normalized tasks object
+ * @param {Array} users - Array of system users
+ */
+function updateApplicationState(tasks, users) {
+  currentlyLoadedTasks = tasks;
+  allSystemUsers = users;
+}
+
+/**
+ * Initializes board components with the loaded data.
+ * @param {Object} tasks - Normalized tasks object
+ * @returns {Promise<void>}
+ */
+async function initializeBoardComponents(tasks) {
+  await renderTasks(Object.values(tasks), allSystemUsers);
+  setupDragAndDrop(tasks);
+  setupSearch(tasks);
   updateEmptyLists();
 }
 
@@ -223,22 +273,51 @@ async function loadTasksAndUsers() {
  * Loads the user profile from localStorage and updates UI.
  */
 function loadUserProfile() {
-  const profileButton = document.getElementById("openMenu");
-  const userData = LocalStorageService.getItem("currentUser");
+  const userData = getUserData();
+  const profileButton = getProfileButton();
+  
+  if (!profileButton) return;
+  
+  updateProfileButton(profileButton, userData);
+}
 
+/**
+ * Retrieves user data from localStorage with validation.
+ * @returns {Object|null} User data object or null if not found
+ */
+function getUserData() {
+  const userData = LocalStorageService.getItem("currentUser");
+  
   if (!userData) {
     console.debug("[Board] No user data found in localStorage.");
-  };
+  }
+  
+  return userData;
+}
+
+/**
+ * Gets the profile button element with error handling.
+ * @returns {HTMLElement|null} Profile button element or null if not found
+ */
+function getProfileButton() {
+  const profileButton = document.getElementById("openMenu");
   
   if (!profileButton) {
     console.error("[Board] Profile button not found in DOM.");
-    return;
+    return null;
   }
-
-  const userName = userData.userFullName || "Guest";
-  profileButton.textContent = getInitials(userName);
   
+  return profileButton;
+}
 
+/**
+ * Updates the profile button with user initials.
+ * @param {HTMLElement} profileButton - The profile button element
+ * @param {Object|null} userData - User data object
+ */
+function updateProfileButton(profileButton, userData) {
+  const userName = userData?.userFullName || "Guest";
+  profileButton.textContent = getInitials(userName);
 }
 
 /**

@@ -27,7 +27,7 @@ window.contactList = contactList;
 function setupEventListeners() {
   setupProfileButton();
   setupDropdown();
-  
+
   const addBtn = document.getElementById("addBtn");
   if (addBtn) addBtn.addEventListener("click", openContactAdditionWindow);
 
@@ -54,7 +54,7 @@ function setupEventListeners() {
 
   const addWindow = document.getElementById("addWindow");
   const editWindow = document.getElementById("editWindow");
-  
+
   if (addWindow) {
     addWindow.addEventListener("click", (e) => {
       if (e.target === addWindow) {
@@ -62,7 +62,7 @@ function setupEventListeners() {
       }
     });
   }
-  
+
   if (editWindow) {
     editWindow.addEventListener("click", (e) => {
       if (e.target === editWindow) {
@@ -92,6 +92,13 @@ function setupEventListeners() {
 function renderSingleContact(name, email, phone, initials, id, color) {
   const contact = contactList.find(c => c.userId === id);
   if (!contact) return;
+    // currentRenderedContact = contact;
+
+  if (window.innerWidth <= 768) {
+    openEditDialog(contact);
+    return;
+  }
+
   currentRenderedContact = contact;
 
   const template = generateBigContactTemplate(name, email, phone, initials, color);
@@ -240,7 +247,7 @@ function updateTaskWithoutUser(task, userName) {
 export async function removeUserFromAllTasks(deletedUserName) {
   const allTasks = await fetchAllTasks();
   console.log(allTasks);
-  
+
   const filteredTasks = filterTasksByUser(allTasks, deletedUserName);
   const updates = filteredTasks.map(task => updateTaskWithoutUser(task, deletedUserName));
 
@@ -265,7 +272,7 @@ function setupProfileButton() {
   const userData = getUserFromStorage();
   const userName = userData.userFullName || userData.name;
   const profileButton = document.getElementById("openMenu");
-  
+
   if (profileButton) {
     const initials = getInitials(userName);
     profileButton.textContent = initials;
@@ -278,13 +285,13 @@ function setupProfileButton() {
 function setupDropdown() {
   const openMenuButton = document.getElementById("openMenu");
   const dropDownMenu = document.getElementById("dropDownMenu");
-  
+
   if (openMenuButton && dropDownMenu) {
     openMenuButton.addEventListener("click", (e) => {
       e.stopPropagation();
       dropDownMenu.classList.toggle("dp-none");
     });
-    
+
     document.addEventListener("click", (e) => {
       if (!dropDownMenu.contains(e.target) && !openMenuButton.contains(e.target)) {
         dropDownMenu.classList.add("dp-none");
@@ -299,8 +306,8 @@ function setupDropdown() {
  * @returns {object|null} User data or null
  */
 function getUserFromStorage() {
-    const currentUserString = LocalStorageService.getItem("currentUser");
-    return currentUserString ? currentUserString : null;
+  const currentUserString = LocalStorageService.getItem("currentUser");
+  return currentUserString ? currentUserString : null;
 }
 
 // Initialize page on DOM load
