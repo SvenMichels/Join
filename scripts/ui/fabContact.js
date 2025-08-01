@@ -1,5 +1,10 @@
 import { isMobileView } from "../utils/mobileUtils.js";
-import { editContact, deleteContact } from "../../contactPage/contacts.js";
+import { openEditDialog } from "../../contactPage/contactEditor.js";
+import { deleteContact } from "../../contactPage/contacts.js";
+import { deleteContactFromDatabase } from "../../contactPage/contactDataService.js";
+
+let outsideClickHandlerBound = false
+
 
 /**
  * Initializes the back button functionality for closing the single contact view on mobile.
@@ -18,8 +23,10 @@ export function initializeBackButton() {
     setTimeout(() => {
       singleContactEl.style.display = 'none';
       if (fabContainer) fabContainer.style.display = 'none';
+      outsideClickHandlerBound = false
     }, 300);
   });
+  console.log("back working")
 }
 
 /**
@@ -27,11 +34,24 @@ export function initializeBackButton() {
  *
  * @param {string} id - The ID of the selected contact.
  */
-export function initializeFabMenu(id) {
+export function initializeFabMenu(contact) {
   const elements = getFabElements();
   if (!elements) return;
+
+  showFabContainer(elements.container);
   setupFabToggle(elements);
-  setupFabActions(elements, id);
+  setupFabActions(elements, contact);
+  bindOutsideClickToClose(elements.container)
+  console.log("fab menu working")
+}
+
+/**
+ * Makes the FAB container visible.
+ *
+ * @param {HTMLElement} container - The FAB container element.
+ */
+function showFabContainer(container) {
+  container.style.display = 'block';
 }
 
 /**
@@ -56,11 +76,18 @@ function getFabElements() {
  *
  * @param {{container: HTMLElement, toggle: HTMLElement}} param0 - The container and toggle button.
  */
+// function setupFabToggle({ container, toggle }) {
+//   container.classList.remove('open');
+//   toggle.addEventListener('click', () =>
+//     container.classList.toggle('open')
+//   );
+// }
+
 function setupFabToggle({ container, toggle }) {
-  container.classList.remove('open');
-  toggle.addEventListener('click', () =>
-    container.classList.toggle('open')
-  );
+  toggle.addEventListener("click", (e) => {
+    e.stopPropagation()
+    container.classList.toggle("open")
+  })
 }
 
 /**
@@ -69,13 +96,25 @@ function setupFabToggle({ container, toggle }) {
  * @param {{container: HTMLElement, editBtn: HTMLElement, delBtn: HTMLElement}} param0 - FAB elements.
  * @param {string} id - ID of the contact to edit or delete.
  */
-function setupFabActions({ container, editBtn, delBtn }, id) {
+function setupFabActions({ container, editBtn, delBtn }, contact) {
   editBtn.addEventListener('click', () => {
-    editContact(id);
+    openEditDialog(contact);
     container.classList.remove('open');
   });
   delBtn.addEventListener('click', async () => {
-    await deleteContact(id);
+    await deleteContactFromDatabase(contact.userId, contact.userFullName);
     container.classList.remove('open');
   });
+}
+
+function bindOutsideClickToClose(container) {
+  if (outsideClickHandlerBound) return
+
+  document.addEventListener("click", function handleClick(e) {
+    if (!container.contains(e.target)) {
+      container.classList.remove("open")
+    }
+  })
+
+  outsideClickHandlerBound = true
 }

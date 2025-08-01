@@ -154,6 +154,15 @@ export async function updateContact(contact, updated) {
         const { openEditDialog } = await import('./contactEditor.js');
         bindButton(bigContact, "#delete", () => deleteContactFromDatabase(contact.userId, contact.userFullName), );
         bindButton(bigContact, "#edit", () => openEditDialog(contact));
+
+        if (window.innerWidth <= 768) {
+          const contact = window.contactList.find(c => c.userID === updated.userId);
+          if(contact){
+            const { initializeFabMenu, initializeBackButton } = await import('../scripts/ui/fabContact.js');
+            initializeFabMenu(contact);
+            initializeBackButton(); 
+          }
+        }
       }
 
       closeEditWindow();
