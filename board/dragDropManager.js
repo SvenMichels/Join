@@ -188,6 +188,8 @@ function moveTaskOneColumn(task, direction) {
   task.status = statusKeys[newIndex];
   updateTaskPositionInDOM(task);
   persistTaskStatus(task);
+  updateEmptyLists();
+  updateTask(task);
 }
 
 function getNewIndex(currentIndex, direction, max) {
