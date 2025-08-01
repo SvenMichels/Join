@@ -329,8 +329,6 @@
   }
 
   .board-container {
-    display: flex;
-    flex-direction: column;
     padding: 16px;
     position: absolute;
     top: 96px;
@@ -520,8 +518,6 @@
   }
 
   .board-container {
-    display: flex;
-    flex-direction: column;
     padding: 16px;
     padding-left: 328px;
     position: absolute;
@@ -628,8 +624,6 @@
   }
 
   .board-container {
-    display: flex;
-    flex-direction: column;
     padding: 16px;
     padding-left: 295px;
     position: absolute;
