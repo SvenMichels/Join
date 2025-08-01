@@ -87,7 +87,7 @@ function setupEventListeners() {
  */
 function configureForm() {
   loadAndRenderUsers();
-  selectPriority();
+  selectPriority("medium");
   initPriorityEventListeners();
 
   const categorySelect = document.getElementById("category");
