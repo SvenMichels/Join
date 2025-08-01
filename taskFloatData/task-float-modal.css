@@ -115,10 +115,12 @@
 
 .required-container-modal {
   margin-top: 140px;
-  display: flex;
-  flex-direction: column;
+  width:100%;
+  position:fixed;
+  background-color: #ffffff;
   margin-bottom: 16px;
   margin-top: 40px;
+  padding-left: 20px;
 }
 
 .task-title {
@@ -272,8 +274,8 @@ input:valid + .error-message {
 
 .create-container-modal {
   display: flex;
-  justify-content: space-between;
   gap: 16px;
+  
 }
 
 .clear-button {
