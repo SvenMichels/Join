@@ -13,9 +13,11 @@ import { bindButton, loadAndShowContactDetails } from './contactUtils.js';
 import { clearContactListUI, renderAllContacts } from './contactRenderer.js';
 import { highlightActiveNavigationLinks } from '../scripts/utils/navUtils.js';
 import { fetchAllTasks } from '../scripts/auth/login.js';
+import { initializeBackButton, initializeFabMenu } from "../scripts/ui/fabContact.js";
 
 let contactList = [];
 let editingContact = null;
+let currentRenderedContact = null;
 
 window.contactList = contactList;
 
@@ -90,19 +92,45 @@ function setupEventListeners() {
 function renderSingleContact(name, email, phone, initials, id, color) {
   const contact = contactList.find(c => c.userId === id);
   if (!contact) return;
-  
-  if (window.innerWidth <= 768) {
-    openEditDialog(contact);
-    return;
-  }
-  
+  currentRenderedContact = contact;
+
   const template = generateBigContactTemplate(name, email, phone, initials, color);
   document.getElementById("bigContact").innerHTML = template;
+
+  prepareResponsiveContactView(contact)
+  
+  
   bindContactActions(id, name, contact);
   loadAndShowContactDetails();
 }
 
 window.renderSingleContact = renderSingleContact;
+
+/**
+ * Prepares the contact view based on screen size (mobile or desktop).
+ *
+ * - On desktop: ensures the contact panel is visible
+ * - On mobile: shows FAB and back button and sets contact panel visible
+ *
+ * @param {Object} contact - Contact object to be rendered
+ */
+function prepareResponsiveContactView(contact) {
+  const singleContact = document.querySelector('.singleContact');
+  if (!singleContact) return;
+
+  if (window.innerWidth > 768) {
+    singleContact.style.display = 'flex';
+  }
+
+  if (window.innerWidth <= 768) {
+    singleContact.style.display = 'flex';
+
+    setTimeout(() => {
+      initializeFabMenu(contact);
+      initializeBackButton();
+    }, 50);
+  }
+}
 
 /**
  * Creates a contact object from input form
@@ -279,3 +307,25 @@ function getUserFromStorage() {
 document.addEventListener('DOMContentLoaded', init);
 
 export { setupEventListeners };
+
+
+window.addEventListener('resize', () => {
+  const singleContact = document.querySelector('.singleContact');
+  const fab = document.getElementById('fabContainer');
+  const isMobile = window.innerWidth <= 768;
+
+  if (!singleContact) return;
+
+  if (isMobile && currentRenderedContact) {
+    singleContact.style.display = 'flex';
+    if (fab) fab.style.display = 'block';
+
+    initializeFabMenu(currentRenderedContact);
+    initializeBackButton();
+  }
+
+  if (!isMobile) {
+    singleContact.style.display = 'flex';
+    if (fab) fab.style.display = 'none';
+  }
+});

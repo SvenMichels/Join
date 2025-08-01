@@ -416,13 +416,37 @@ h2{
   position: absolute;
   top: 0px;
   right: 41px;
-  font-size: 24px;
   cursor: pointer;
   z-index: 20;
+  font-size: 0;
+  width: 32px;
+  aspect-ratio: 1;
+}
+
+.closeSingleMobile:hover{
+    background-color: #81818173;
+    border-radius: 100%;
 }
 
 .fab-container {
   display: none;
+}
+
+.fab-btn:hover{
+    background-color: #29ABE2;
+}
+
+.fab-menu-item:hover{
+    background-color: #2a3647 !important;
+    color: white;
+}
+
+.fab-menu-item img {
+  transition: filter 0s ease;
+}
+
+.fab-menu-item:hover img {
+  filter: brightness(0) invert(1);
 }
 
 .bigContactCard{
@@ -455,9 +479,11 @@ h2{
 @keyframes slideIn {
   from {
     transform: translateX(100%);
+    opacity: 0;
   }
   to {
     transform: translateX(0%);
+    opacity: 1;
   }
 }
 
@@ -536,6 +562,9 @@ h2{
 
 
 @media (max-width: 768px){
+    .btns{
+        display: none;
+    }
     .profileName{
         font-size: 35px;
     }
@@ -545,10 +574,17 @@ h2{
     }
 
     .closeSingleMobile{
-        display: block;
+        display: grid;
+        place-items: center;
     }
     .singleContact{
         display: none;
+        position: absolute;
+        top: 96px;
+        left: 0;
+        right: 0;
+        height: calc(100vh - 96px - 80px); /*96px header + 80px navbar*/
+        background-color: white;
         overflow-x: hidden !important;
     }
 
@@ -609,11 +645,14 @@ h2{
     justify-content: center;
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     cursor: pointer;
+    position: absolute;
+    bottom: 32px;
+    right: 16px;
   }
 
   .fab-menu {
     position: absolute;
-    bottom: 70px;   
+    bottom: 32px;   
     right: 0;
     background: #fff;
     border-radius: 8px;

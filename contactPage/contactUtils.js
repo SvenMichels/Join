@@ -50,4 +50,22 @@ export function handlePostDeleteView(list) {
   clearContactListUI();
   renderAllContacts(list);
   clearBigContactView();
+  hideSingleContactView();
+}
+
+/**
+ * Hides the single contact view by triggering a slide-out animation
+ * and then setting its display to 'none' after the animation completes.
+ * Also hides the floating action button (FAB) container if it exists.
+ */
+export function hideSingleContactView() {
+  const single = document.querySelector('.singleContact');
+  const fab = document.getElementById('fabContainer');
+  if (!single) return;
+  single.classList.remove('slide-in');
+  single.classList.add('slide-out');
+  setTimeout(() => {
+    single.style.display = 'none';
+    if (fab) fab.style.display = 'none';
+  }, 300);
 }
