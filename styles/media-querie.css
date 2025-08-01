@@ -188,7 +188,7 @@
 }
 
   .board-container {
-    display: flex;
+    
     flex-direction: column;
     padding: 16px;
     position: absolute;
@@ -416,7 +416,7 @@
   }
 
   .board-container {
-    display: flex;
+    
     flex-direction: column;
     max-width: 1440px;
     padding: 16px;

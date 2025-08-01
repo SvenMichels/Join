@@ -26,7 +26,7 @@ export function renderAllContacts(contactList) {
   if (!Array.isArray(contacts)) return;
   
   contacts
-   .slice()
+  .slice()
   .sort((a, b) => a.userFullName.localeCompare(b.userFullName))
   .forEach(contact => {
     if (contact && contact.userFullName) {
