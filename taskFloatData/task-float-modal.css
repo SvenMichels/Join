@@ -258,7 +258,7 @@ input:valid + .error-message {
 }
 
 #subtaskList-modal {
-  height: 70px;
+  height: 120px;
   overflow: auto;
   width: 100%;
 }
