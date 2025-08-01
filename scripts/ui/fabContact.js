@@ -1,6 +1,5 @@
 import { isMobileView } from "../utils/mobileUtils.js";
 import { openEditDialog } from "../../contactPage/contactEditor.js";
-import { deleteContact } from "../../contactPage/contacts.js";
 import { deleteContactFromDatabase } from "../../contactPage/contactDataService.js";
 
 let outsideClickHandlerBound = false
