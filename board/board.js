@@ -63,21 +63,98 @@ function setupEventHandlers() {
 }
  
 /**
- * Binds event listeners for task creation buttons and lifecycle.
+ * Initializes all event bindings related to task creation and updates.
+ * This includes the main add-task button, board-specific task buttons,
+ * and global task lifecycle listeners.
+ *
+ * @function setupTaskCreationEvents
  */
 function setupTaskCreationEvents() {
-  const addButton = document.getElementById("add-task-btn");
-  if (addButton) {
-    addButton.addEventListener("click", openTaskModal);
-  }
+  bindTaskAddButton();
+  bindBoardIcons();
+  bindTaskLifecycleEvents();
+}
 
-  const boardIcons = document.querySelectorAll(".board-icon");
-  boardIcons.forEach(icon => {
+/**
+ * Binds a click event to the main "Add Task" button, if it exists.
+ * Searches by ID: 'add-task-btn' or fallback to 'add-task-board-button'.
+ *
+ * @function bindTaskAddButton
+ * @private
+ */
+function bindTaskAddButton() {
+  const addButton = document.getElementById("add-task-btn") || document.getElementById("add-task-board-button");
+  if (!addButton) return;
+
+  addButton.addEventListener("click", openTaskModal);
+}
+
+/**
+ * Binds click events to all elements that allow creating a task from within the board.
+ * Targets elements with the class 'board-icon' and 'add-task-board-button'.
+ *
+ * @function bindBoardIcons
+ * @private
+ */
+function bindBoardIcons() {
+  const icons = document.querySelectorAll(".board-icon, .add-task-board-button");
+  icons.forEach(icon => {
     icon.addEventListener("click", openTaskModal);
   });
+}
 
+/**
+ * Binds global event listeners for task lifecycle events:
+ * - 'taskCreated': triggered after a new task has been successfully created.
+ * - 'taskUpdated': triggered after a task has been edited or updated.
+ * 
+ * Both events call `loadTasksAndUsers` to refresh task data.
+ *
+ * @function bindTaskLifecycleEvents
+ * @private
+ */
+function bindTaskLifecycleEvents() {
   window.addEventListener("taskCreated", loadTasksAndUsers);
   window.addEventListener("taskUpdated", loadTasksAndUsers);
+}
+
+
+/**
+ * Updates the modal title to display "Add Task".
+ *
+ * This function selects the HTML element with the ID "modalTitle"
+ * and sets its `textContent` to "Add Task". If the element is not found,
+ * an error is logged to the console.
+ *
+ * @function changeModalTitle
+ * @returns {void}
+ */
+export function changeModalTitleAdd() {
+  const modalTitle = document.getElementById("modalTitle");
+  if (modalTitle) {
+    modalTitle.textContent = "Add Task";
+  } else {
+    console.warn("[Board] Modal title element not found.");
+  }
+}
+
+/**
+ * Updates the modal title to display "Edit Task".
+ *
+ * This function selects the HTML element with the ID "modalTitle"
+ * and sets its `textContent` to "Edit Task". If the element is not found,
+ * an error is logged to the console.
+ *
+ * @function changeModalTitle
+ * @returns {void}
+ */
+export function changeModalTitleEdit() {
+  const modalTitle = document.getElementById("modalTitle");
+  if (modalTitle) {
+    modalTitle.textContent = "Edit Task";
+  } else {
+    console.warn("[Board] Modal title element not found.");
+  }
 }
 
 /**

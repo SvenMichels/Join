@@ -2,6 +2,8 @@
  * @fileoverview Modal management for task creation and editing
  */
 
+import { changeModalTitleAdd, changeModalTitleEdit } from "./board.js";
+
 /**
  * Initializes modal contents and sets up appropriate mode
  * @param {HTMLElement} overlay - Modal overlay container element
@@ -107,13 +109,16 @@ export function openTaskModal(isEdit = false, task = null) {
   const overlay = document.getElementById("modal-overlay");
   console.log("Opening task modal", { isEdit, task });
   
-  
   fetch("../taskFloatData/taskfloat.html")
     .then((res) => res.text())
     .then((html) => {
       overlay.innerHTML = html;
       overlay.classList.remove("d_none");
       initModalContents(overlay, isEdit, task);
+      if(task==null) {
+        changeModalTitleAdd();
+        } else{
+          changeModalTitleEdit();}
     });
 }
 

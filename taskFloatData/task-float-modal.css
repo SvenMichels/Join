@@ -118,9 +118,10 @@
   width:100%;
   position:fixed;
   background-color: #ffffff;
-  margin-bottom: 16px;
+  
   margin-top: 40px;
-  padding-left: 20px;
+  padding: 16px;
+  bottom: -23%;
 }
 
 .task-title {
@@ -274,7 +275,14 @@ input:valid + .error-message {
 
 .create-container-modal {
   display: flex;
-  gap: 16px;
+  justify-content: center;
+  position: fixed;
+  bottom: -30%;
+  display: flex;
+  gap: 8rem;
+  width: 100%;
+  background-color: #ffffff;
+  left: 0px;
 }
 
 .clear-button {
@@ -588,7 +596,7 @@ select {
 @media (min-width: 768px) and (max-width: 991px) {
   .form-wrapper-modal {
     max-width: 80%;
-    height: 70vh;
+    height: 80vh;
   }
 
   .task-container-modal {
