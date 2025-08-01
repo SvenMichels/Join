@@ -5,6 +5,7 @@
  * @module AddTaskController
  */
 
+import { LocalStorageService } from "../scripts/utils/localStorageHelper.js";
 import { requestData } from "../scripts/firebase.js";
 import { setupDropdown } from "../scripts/ui/dropdown.js";
 import { highlightActiveNavigationLinks } from "../scripts/utils/navUtils.js";
@@ -136,16 +137,18 @@ async function saveTask(taskData) {
  * Loads current user from localStorage and sets initials in profile menu.
  */
 function loadUserInitials() {
-  const userString = localStorage.getItem("currentUser");
-  if (!userString) return;
-
-  const userData = JSON.parse(userString);
+  const userData = LocalStorageService.getItem("currentUser");
   const userName = userData.userFullName || "Guest";
 
   const menuButton = document.getElementById("openMenu");
-  if (menuButton) {
-    menuButton.textContent = getInitials(userName);
+  if (!menuButton) {
+    console.error(`[AddTaskController] Button with id ${openMenu} not found`);
+    return;
   }
+
+  const initials = getInitials(userName);
+  menuButton.textContent = initials;
+
 }
 
 /**

@@ -6,6 +6,7 @@
 // Import functions from other modules
 import { openEditDialog } from './contactEditor.js';
 import { renderContact as renderContactFunction } from './contactRenderer.js';
+import { LocalStorageService } from '../scripts/utils/localStorageHelper.js';
 
 /**
  * Opens the contact editing dialog.
@@ -23,24 +24,52 @@ export function openEditWindow(contact) {
 }
 
 /**
- * Loads the current user from localStorage and opens edit dialog.
+ * Loads the current user's data from localStorage and opens the edit dialog.
+ *
+ * This function tries to get the current user's information from localStorage using the key 'userData'.
+ * If user data is found, it prepares the contact object and opens the edit dialog for that user.
+ * If not found, it uses fallback/default values.
+ *
+ * @async
+ * @function
+ * @returns {Promise<void>} This function does not return anything.
  */
 async function getCurrentUserForEdit() {
-  try {
-    const userData = JSON.parse(localStorage.getItem('userData'));
-    if (userData) {
-      const contact = {
-        userFullName: userData.name || '',
-        userEmailAddress: userData.email || '',
-        userPhoneNumber: userData.phone || '',
-        userColor: userData.color || '#FF7A00',
-        userId: userData.id || 'current-user'
-      };
-      openEditDialog(contact);
+    const userData = LocalStorageService.getItem('userData');
+    if(userData){
+      console.debug("[Contacts.js] No user data found in localStorage. Using fallback values");
     }
-  } catch (error) {
-    console.error('Error loading current user for edit:', error);
-  }
+
+    const contact = getContactData(userData);
+    openEditDialog(contact);
+}
+
+/**
+ * Creates a contact object from user data.
+ *
+ * This function takes the user data (which may be undefined or missing some fields)
+ * and returns a contact object with default values if needed.
+ *
+ * @function
+ * @param {Object} [userData] - The user data object from localStorage. Can be undefined.
+ * @param {string} [userData.name] - The user's full name.
+ * @param {string} [userData.email] - The user's email address.
+ * @param {string} [userData.phone] - The user's phone number.
+ * @param {string} [userData.color] - The user's color (for avatar or UI).
+ * @param {string} [userData.id] - The user's unique ID.
+ * @returns {object} A contact object with properties: userFullName, userEmailAddress, userPhoneNumber, userColor, userId.
+ * @example
+ * const contact = getContactData({ name: 'Alice', email: 'alice@example.com' });
+ * // contact.userFullName === 'Alice'
+ */
+function getContactData(userData){
+  return {
+      userFullName: userData?.name || '',
+      userEmailAddress: userData?.email || '',
+      userPhoneNumber: userData?.phone || '',
+      userColor: userData?.color || '#FF7A00',
+      userId: userData?.id || 'current-user'
+    }
 }
 
 /**

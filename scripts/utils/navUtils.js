@@ -13,7 +13,7 @@ export function highlightActiveNavigationLinks(selectors = [".nav-buttons", ".ta
 
   document.querySelectorAll(selectors.join(",")).forEach(element => {
     const link = element.tagName === "A" ? element : element.closest("a");
-    if (!link?.href) return;
+    if (!link.href) return;
 
     const targetPage = getPageNameFromHref(link.href);
     if (targetPage === currentPage) {

@@ -1,6 +1,8 @@
 import { requestData } from "../scripts/firebase.js";
 import { getInitials } from "../scripts/utils/helpers.js";
 
+
+
 /**
  * Creates a new contact for the currently logged-in user.
  * 
@@ -192,7 +194,7 @@ export async function deleteContactFromFirebase(contactId) {
  * @function loadContactsForTaskAssignment
  * @returns {Promise<Object[]>} Array of contact objects in a unified format.
  */
-export async function loadContactsForTaskAssignment() {
+export async function loadContactsForTaskAssignment() {  
   try {
     const contacts = await loadContacts();
     return contacts || [];

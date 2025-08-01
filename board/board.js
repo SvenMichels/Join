@@ -4,6 +4,7 @@
  * and mobile orientation feedback.
  */
 
+import { LocalStorageService } from "../scripts/utils/localStorageHelper.js";
 import { updateEmptyLists } from "../scripts/utils/emptylisthelper.js";
 import { setupDropdown } from "../scripts/ui/dropdown.js";
 import { setupMobileDeviceListeners } from "../scripts/utils/mobileUtils.js";
@@ -60,7 +61,7 @@ function setupEventHandlers() {
   setupOrientationEvents();
   setupUserChangeEvents();
 }
-
+ 
 /**
  * Binds event listeners for task creation buttons and lifecycle.
  */
@@ -145,24 +146,22 @@ async function loadTasksAndUsers() {
  * Loads the user profile from localStorage and updates UI.
  */
 function loadUserProfile() {
-  const userData = getUserFromStorage();
-  if (!userData) return;
-  
-  const userName = userData.userFullName || "Guest";
   const profileButton = document.getElementById("openMenu");
-  
-  if (profileButton) {
-    profileButton.textContent = getInitials(userName);
-  }
-}
+  const userData = LocalStorageService.getItem("currentUser");
 
-/**
- * Returns current user from localStorage.
- * @returns {Object|null}
- */
-function getUserFromStorage() {
-  const userString = localStorage.getItem("currentUser");
-  return userString ? JSON.parse(userString) : null;
+  if (!userData) {
+    console.debug("[Board] No user data found in localStorage.");
+  };
+  
+  if (!profileButton) {
+    console.error("[Board] Profile button not found in DOM.");
+    return;
+  }
+
+  const userName = userData.userFullName || "Guest";
+  profileButton.textContent = getInitials(userName);
+  
+
 }
 
 /**
@@ -246,7 +245,8 @@ function handleOrientationChange() {
  * contacts and tasks are displayed.
  */
 async function handleUserChange() {
-  const currentUser = getUserFromStorage();
+  const currentUser = LocalStorageService.getItem("currentUser");
+  console.debug("[Board] User change detected, reloading tasks and contacts...");
   if (!currentUser) return;
   
   // Reload tasks and contacts for the current user

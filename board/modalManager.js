@@ -105,6 +105,8 @@ function setupCloseButton(overlay) {
  */
 export function openTaskModal(isEdit = false, task = null) {
   const overlay = document.getElementById("modal-overlay");
+  console.log("Opening task modal", { isEdit, task });
+  
   
   fetch("../taskFloatData/taskfloat.html")
     .then((res) => res.text())

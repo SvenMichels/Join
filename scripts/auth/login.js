@@ -237,8 +237,10 @@ async function updateSummary() {
  * 
  * @returns {Promise<Array>}
  */
-async function fetchAllTasks() {
+export async function fetchAllTasks() {
   const { data: tasks } = await requestData("GET", "/tasks/");
+  console.log("Fetched tasks:", tasks);
+  
   return Object.values(tasks || {});
 }
 

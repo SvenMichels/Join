@@ -5,8 +5,6 @@
 import { singleContact } from './contactTemplate.js';
 import { FIREBASE_DATABASE_BASE_URL } from '../scripts/firebase.js';
 
-const BASE_URL = FIREBASE_DATABASE_BASE_URL.replace(/\/+$/, '');
-
 /**
  * Fetches all contacts from the Firebase database for the current user.
  * 
@@ -24,7 +22,7 @@ export async function getAllContactsFromDatabase() {
     }
 
     // Fetch only contacts for the current user
-    const response = await fetch(`${BASE_URL}/contacts/${currentUser.id}.json`);
+    const response = await fetch(`${FIREBASE_DATABASE_BASE_URL}/contacts/${currentUser.id}.json`);
     if (!response.ok) {
       if (response.status === 404) {
         // No contacts exist for this user yet

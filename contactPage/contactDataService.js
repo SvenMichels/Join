@@ -1,14 +1,14 @@
 /**
  * Contact data service for Firebase operations.
  */
-
+import {LocalStorageService} from '../scripts/utils/localStorageHelper.js';
 import { getAllContactsFromDatabase } from './contactExternalService.js';
 import { clearContactListUI, renderAllContacts } from './contactRenderer.js';
 import { closeEditWindow } from './contactModal.js';
 import { handlePostDeleteView } from './contactUtils.js';
+import { removeUserFromAllTasks } from './contactsMain.js';
 
 import { FIREBASE_DATABASE_BASE_URL } from '../scripts/firebase.js';
-const BASE_URL = FIREBASE_DATABASE_BASE_URL.replace(/\/+$/, ''); // Remove trailing slashes
 
 /**
  * Loads all contacts from Firebase.
@@ -73,21 +73,20 @@ async function ensureCurrentUserAsFirstContact(contacts) {
 /**
  * Creates a new contact in Firebase for the current user.
  * 
- * @param {Object} contact - Contact data
- * @returns {Promise<Object>} Firebase response
+ * @param {object} contact - Contact data
+ * @returns {Promise<object>} Firebase response
  */
 export async function createContact(contact) {
   try {
     // Get current user from localStorage
-    const currentUserString = localStorage.getItem("currentUser");
-    const currentUser = JSON.parse(currentUserString);
+    const currentUser = LocalStorageService.getItem("currentUser");
     
     if (!currentUser?.id) {
       throw new Error("No current user found");
     }
     
     // Save contact under the specific user's path
-    const response = await fetch(`${BASE_URL}/contacts/${currentUser.id}.json`, {
+    const response = await fetch(`${FIREBASE_DATABASE_BASE_URL}/contacts/${currentUser.id}.json`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(contact)
@@ -120,7 +119,7 @@ export async function updateContact(contact, updated) {
       throw new Error("No current user found");
     }
 
-    const response = await fetch(`${BASE_URL}/contacts/${currentUser.id}/${contact.userId}.json`, {
+    const response = await fetch(`${FIREBASE_DATABASE_BASE_URL}/contacts/${currentUser.id}/${contact.userId}.json`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(updated)
@@ -153,7 +152,7 @@ export async function updateContact(contact, updated) {
         const { bindButton } = await import('./contactUtils.js');
         const { deleteContactFromDatabase } = await import('./contactDataService.js');
         const { openEditDialog } = await import('./contactEditor.js');
-        bindButton(bigContact, "#delete", () => deleteContactFromDatabase(contact.userId, contact.userFullName));
+        bindButton(bigContact, "#delete", () => deleteContactFromDatabase(contact.userId, contact.userFullName), );
         bindButton(bigContact, "#edit", () => openEditDialog(contact));
       }
 
@@ -182,7 +181,7 @@ export async function deleteContactFromDatabase(contactId, userName) {
       throw new Error("No current user found");
     }
 
-    const response = await fetch(`${BASE_URL}/contacts/${currentUser.id}/${contactId}.json`, {
+    const response = await fetch(`${FIREBASE_DATABASE_BASE_URL}/contacts/${currentUser.id}/${contactId}.json`, {
       method: 'DELETE'
     });
 
@@ -192,7 +191,7 @@ export async function deleteContactFromDatabase(contactId, userName) {
       }
 
       // TODO: Implement task cleanup if necessary
-      // await removeUserFromAllTasks(userName);
+      await removeUserFromAllTasks(userName);
 
       handlePostDeleteView(window.contactList || []);
     }

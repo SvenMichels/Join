@@ -2,6 +2,7 @@
  * Main file for contact management
  */
 
+import { LocalStorageService } from '../scripts/utils/localStorageHelper.js';
 import { handleContactEditSubmission, openEditDialog, emptyInput } from './contactEditor.js';
 import { getAllContactsFromDatabase, generateBigContactTemplate } from './contactExternalService.js';
 import { openContactAdditionWindow, closeAddWindow, closeEditWindow, showUserFeedback } from './contactModal.js';
@@ -11,6 +12,7 @@ import { generateRandomColorClass } from '../scripts/utils/colors.js';
 import { bindButton, loadAndShowContactDetails } from './contactUtils.js';
 import { clearContactListUI, renderAllContacts } from './contactRenderer.js';
 import { highlightActiveNavigationLinks } from '../scripts/utils/navUtils.js';
+import { fetchAllTasks } from '../scripts/auth/login.js';
 
 let contactList = [];
 let editingContact = null;
@@ -207,40 +209,14 @@ function updateTaskWithoutUser(task, userName) {
  * 
  * @param {string} deletedUserName - Name of the deleted user
  */
-async function removeUserFromAllTasks(deletedUserName) {
-  const allTasks = await getAllTasks();
+export async function removeUserFromAllTasks(deletedUserName) {
+  const allTasks = await fetchAllTasks();
+  console.log(allTasks);
+  
   const filteredTasks = filterTasksByUser(allTasks, deletedUserName);
   const updates = filteredTasks.map(task => updateTaskWithoutUser(task, deletedUserName));
 
   await Promise.all(updates);
-}
-
-/**
- * Checks whether current view is mobile
- * 
- * @returns {boolean}
- */
-function isMobileView() {
-  return window.innerWidth <= 768;
-}
-
-/**
- * Handles UI display logic for mobile contact view
- * 
- * @param {HTMLElement} contactFrame 
- * @param {HTMLElement} allContactsFrame 
- */
-function handleMobileView(contactFrame, allContactsFrame) {
-  if (!contactFrame || !allContactsFrame) {
-    console.warn("Mobile view elements not found:", { contactFrame, allContactsFrame });
-    return;
-  }
-  
-  if (contactFrame.style.display === "flex") {
-    allContactsFrame.style.display = "none";
-  } else {
-    allContactsFrame.style.display = "flex";
-  }
 }
 
 /**
@@ -292,24 +268,11 @@ function setupDropdown() {
 /**
  * Loads user data from localStorage
  * 
- * @returns {Object|null} User data or null
+ * @returns {object|null} User data or null
  */
 function getUserFromStorage() {
-  try {
-    const currentUserString = localStorage.getItem("currentUser");
-    const userDataString = localStorage.getItem("userData");
-    
-    if (currentUserString) {
-      return JSON.parse(currentUserString);
-    } else if (userDataString) {
-      return JSON.parse(userDataString);
-    }
-    
-    return null;
-  } catch (error) {
-    console.error("Error loading user data:", error);
-    return null;
-  }
+    const currentUserString = LocalStorageService.getItem("currentUser");
+    return currentUserString ? currentUserString : null;
 }
 
 // Initialize page on DOM load

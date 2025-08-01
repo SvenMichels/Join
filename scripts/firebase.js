@@ -4,7 +4,7 @@
 
 // Firebase Database Base URL
 export const FIREBASE_DATABASE_BASE_URL =
-  "https://join-da-project-default-rtdb.europe-west1.firebasedatabase.app/";
+  "https://join-da-project-default-rtdb.europe-west1.firebasedatabase.app";
 
 /**
  * Creates HTTP request options for fetch calls.
@@ -34,7 +34,7 @@ function createRequestOptions(method, data) {
  * @returns {string} The full Firebase request URL.
  */
 function createFirebaseUrl(path) {
-  return `${FIREBASE_DATABASE_BASE_URL}${path}.json`;
+  return `${FIREBASE_DATABASE_BASE_URL}/${path}.json`;
 }
 
 /**
