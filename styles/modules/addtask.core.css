@@ -69,6 +69,7 @@ h1 {
   flex-direction: column;
   max-width: 440px;
   gap: 24px;
+  margin-right: 50px;
 }
 
 .prio-content {
@@ -154,30 +155,12 @@ input:valid + .error-message {
   outline: none;
 }
 
-
-/* ---------- Form-Container ---------- */
-/* .form-wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding-top: 50px;
-} */
-
-/* .form-container {
-  max-width: 1440px;
-  width: 90%;
-} */
-
-/* .required-container {
-  padding-top: 20px;
-} */
-
-/* .create-container {
+.create-container {
   display: flex;
   justify-content: space-between;
   gap: 16px;
   max-width: 900px;
-} */
+}
 
 .space-container {
   width: 0px;
