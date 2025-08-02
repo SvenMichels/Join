@@ -6,6 +6,11 @@ p {
   letter-spacing: 0%;
 }
 
+.header-style {
+  position: fixed;
+  top: 0;
+}
+
 .help-section {
   display: flex;
   flex-direction: column;
@@ -13,6 +18,7 @@ p {
   padding-left: 328px;
   max-width: 1016px;
   margin-right: 50px;
+  margin-bottom: 50px;
 }
 
 .help-h1 {
