@@ -89,5 +89,6 @@ a:hover {
     flex-direction: column;
     padding-top: 20px;
     padding-left: 20px;
+    padding-bottom: 80px;
   }
 }
