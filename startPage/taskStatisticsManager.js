@@ -51,7 +51,7 @@ export function setTextUpdateSummary(tasks) {
  * @param {string} status - Task status to filter by.
  * @returns {number} Number of matching tasks.
  */
-function countByStatus(tasks, status) {
+export function countByStatus(tasks, status) {
   return tasks.filter(task => task.status.toLowerCase() === status.toLowerCase()).length;
 }
 
