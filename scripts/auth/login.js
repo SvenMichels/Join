@@ -312,7 +312,6 @@ function setText(selector, text) {
   if (element) element.textContent = text;
 }
 
-
 /**
  * Transforms raw Firebase user data into an array for login usage.
  *

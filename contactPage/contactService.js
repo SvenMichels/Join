@@ -38,7 +38,6 @@ export async function loadContacts() {
   const currentUserData = getCurrentUserData();
   
   if (!currentUserData?.id) return [];
-// TODO: bug
   const contactsRawData = await fetchContactsFromFirebase(currentUserData.id);
   
   if (!contactsRawData) {
@@ -199,7 +198,7 @@ export async function deleteContactFromFirebase(contactId) {
 export async function loadContactsForTaskAssignment() {  
   try {
     const contacts = await loadContacts();
-    console.log("[ContactService] Contacts loaded for task assignment:", contacts);
+    // console.log("[ContactService] Contacts loaded for task assignment:", contacts);
     
     return contacts || [];
   } catch (error) {

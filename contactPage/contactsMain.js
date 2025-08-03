@@ -12,6 +12,7 @@ import { generateRandomColorClass } from '../scripts/utils/colors.js';
 import { bindButton, loadAndShowContactDetails } from './contactUtils.js';
 import { clearContactListUI, renderAllContacts } from './contactRenderer.js';
 import { highlightActiveNavigationLinks } from '../scripts/utils/navUtils.js';
+import { updateTask } from '../board/taskManager.js';
 import { fetchAllTasks } from '../scripts/auth/login.js';
 import { initializeBackButton, initializeFabMenu } from "../scripts/ui/fabContact.js";
 
@@ -224,7 +225,11 @@ function bindContactActions(id, name, contact) {
  * @returns {Array} Filtered tasks
  */
 function filterTasksByUser(tasks, userName) {
-  return tasks.filter(task => task.assignedTo?.includes(userName));
+  const filtered = tasks.filter(task =>
+    Array.isArray(task.assignedUsers) && task.assignedUsers.includes(userName)
+  );
+  console.log("[ContactService] Filtering tasks for user:", userName, filtered);
+  return filtered;
 }
 
 /**
@@ -235,8 +240,9 @@ function filterTasksByUser(tasks, userName) {
  * @returns {Promise}
  */
 export function updateTaskWithoutUser(task, userName) {
-  task.assignedTo = task.assignedTo.filter(user => user !== userName);
-  return putTaskData(task.id, task);
+  task.assignedUsers = task.assignedUsers.filter(user => user !== userName);
+  //TODO:: Bug putTaskData is not  defined.
+  return updateTask(task);
 }
 
 /**
@@ -246,7 +252,7 @@ export function updateTaskWithoutUser(task, userName) {
  */
 export async function removeUserFromAllTasks(deletedUserName) {
   const allTasks = await fetchAllTasks();
-  console.log(allTasks);
+  console.log("[ContactService] Removing user from tasks:", deletedUserName, allTasks);
 
   const filteredTasks = filterTasksByUser(allTasks, deletedUserName);
   const updates = filteredTasks.map(task => updateTaskWithoutUser(task, deletedUserName));
