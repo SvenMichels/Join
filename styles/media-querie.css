@@ -472,6 +472,7 @@
   }
 
   .form-wrapper {
+    padding-top: 100px;
     padding-left: 328px;
   }
 
@@ -496,6 +497,7 @@
 
   .prio-container {
     width: 45%;
+    margin-right: 50px;
   }
 
   .task-wrapper {
@@ -578,6 +580,7 @@
   }
 
   .form-wrapper {
+    padding-top: 100px;
     padding-left: 328px;
   }
 

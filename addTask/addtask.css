@@ -1,3 +1,21 @@
+h1 {
+  padding-left: 15px;
+}
+
+.task-h1-container {
+  width: 278px;
+  height: 73px;
+  display: flex;
+  gap: 1px;
+}
+
+.redSpan {
+  font-family: Inter;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 120%;
+}
+
 .prio-assigned-container {
   display: flex;
   flex-direction: column;
