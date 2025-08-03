@@ -1,5 +1,6 @@
 import { requestData } from "../firebase.js";
 import { fetchUsersFromDatabase } from "../firebase.js";
+import { countByStatus } from "../../startPage/taskStatisticsManager.js";
 
 const loginFormElement = document.getElementById("loginForm");
 
@@ -238,9 +239,7 @@ async function updateSummary() {
  * @returns {Promise<Array>}
  */
 export async function fetchAllTasks() {
-  const { data: tasks } = await requestData("GET", "/tasks/");
-  console.log("Fetched tasks:", tasks);
-  
+  const { data: tasks } = await requestData("GET", "/tasks/");  
   return Object.values(tasks || {});
 }
 
@@ -266,17 +265,6 @@ function displayTaskCounts(allTasks) {
 function displayUrgentTaskInfo(allTasks) {
   const earliestUrgentDate = getEarliestUrgentDueDate(allTasks);
   setText(".urgentTaskDate", earliestUrgentDate || "No deadline");
-}
-
-/**
- * Counts tasks by given status.
- * 
- * @param {Array} tasks 
- * @param {string} status 
- * @returns {number}
- */
-function countByStatus(tasks, status) {
-  return tasks.filter((t) => t.status === status).length;
 }
 
 /**

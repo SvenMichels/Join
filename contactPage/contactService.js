@@ -36,13 +36,15 @@ export async function createContact(contactData) {
  */
 export async function loadContacts() {
   const currentUserData = getCurrentUserData();
+  
   if (!currentUserData?.id) return [];
-
+// TODO: bug
   const contactsRawData = await fetchContactsFromFirebase(currentUserData.id);
   
   if (!contactsRawData) {
     return [createUserContactObject(currentUserData)];
   }
+
 
   const processedContactsList = processContactsData(contactsRawData);
   return ensureCurrentUserInContactsList(processedContactsList, currentUserData);
@@ -75,7 +77,7 @@ function getCurrentUserData() {
 async function fetchContactsFromFirebase(userId) {
   try {
     const contactsData = await requestData("GET", `contacts/${userId}`);
-    return contactsData;
+    return contactsData.data;
   } catch (error) {
     console.error("Error fetching contacts:", error);
     return null;
@@ -197,6 +199,8 @@ export async function deleteContactFromFirebase(contactId) {
 export async function loadContactsForTaskAssignment() {  
   try {
     const contacts = await loadContacts();
+    console.log("[ContactService] Contacts loaded for task assignment:", contacts);
+    
     return contacts || [];
   } catch (error) {
     return [];

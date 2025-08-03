@@ -1,4 +1,5 @@
 import { requestData } from "../firebase.js";
+import { updateTaskWithoutUser } from "../../contactPage/contactsMain.js";
 
 /**
  * Sends a POST request to create a new user in the database.
@@ -40,5 +41,8 @@ export async function updateUserInformation(userIdentifier, updatedUserData) {
  * @returns {Promise<Object>} The response from the database.
  */
 export async function deleteUserAccount(userIdentifier) {
+
+  tasks = await requestData("GET", `/tasks/`);
+  updateTaskWithoutUser(tasks, userIdentifier);
   return await requestData("DELETE", `/users/${userIdentifier}`);
 }

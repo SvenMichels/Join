@@ -18,10 +18,17 @@
   border: 0;
 }
 
-.create-button:hover {
+
+.create-button:not(:disabled):hover {
   background: #29abe2;
   box-shadow: 0 4px 4px 0 #00000040;
   cursor: pointer;
+}
+
+.create-button:disabled{
+  cursor: not-allowed;
+  background: #d1d1d1;
+  color: #7a7a7a;
 }
 
 
