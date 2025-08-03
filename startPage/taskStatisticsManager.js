@@ -12,9 +12,10 @@ import { setText } from "./loadingStateManager.js";
  * @param {Array} tasks - Array of task objects.
  * @returns {boolean} True if the array is valid and contains required fields.
  */
+
 export function validateTaskData(tasks) {
   if (!Array.isArray(tasks) || tasks.length === 0) {
-    return Array.isArray(tasks);
+    return false;
   }
 
   const sample = tasks[0];
@@ -51,7 +52,7 @@ export function setTextUpdateSummary(tasks) {
  * @returns {number} Number of matching tasks.
  */
 function countByStatus(tasks, status) {
-  return tasks.filter(task => task.status === status).length;
+  return tasks.filter(task => task.status.toLowerCase() === status.toLowerCase()).length;
 }
 
 /**
@@ -70,20 +71,26 @@ function countByPriority(tasks, priority) {
 }
 
 /**
- * Determines the earliest due date for urgent tasks.
- * 
- * @param {Array} tasks - Array of task objects.
- * @returns {string|null} Formatted date string or null if not available.
+ * Returns the earliest due date (formatted) among tasks with "urgent" priority.
+ * Only tasks with valid date strings are considered.
+ *
+ * @param {Array<Object>} tasks - Array of task objects to evaluate.
+ * @param {string} tasks[].prio - The priority of the task (e.g., "urgent").
+ * @param {string} tasks[].dueDate - The due date string (parsable by Date).
+ * @returns {string|null} The earliest due date formatted as "Month Day, Year"
+ *                        (e.g., "August 3, 2025"), or null if no valid urgent tasks exist.
  */
 function getEarliestUrgentDate(tasks) {
-  const urgentWithDates = tasks.filter(task => {
+  const urgentWithValidDates = tasks.filter(task => {
     const isUrgent = (task.prio || "").toLowerCase() === "urgent";
-    return isUrgent && task.dueDate;
+    const date = new Date(task.dueDate);
+    const isValidDate = !isNaN(date);
+    return isUrgent && isValidDate;
   });
 
-  if (urgentWithDates.length === 0) return null;
+  if (urgentWithValidDates.length === 0) return null;
 
-  const dates = urgentWithDates.map(task => new Date(task.dueDate));
+  const dates = urgentWithValidDates.map(task => new Date(task.dueDate));
   dates.sort((a, b) => a - b);
 
   const options = { year: "numeric", month: "long", day: "numeric" };

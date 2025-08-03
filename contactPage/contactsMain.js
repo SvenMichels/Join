@@ -234,7 +234,7 @@ function filterTasksByUser(tasks, userName) {
  * @param {string} userName - Username to remove
  * @returns {Promise}
  */
-function updateTaskWithoutUser(task, userName) {
+export function updateTaskWithoutUser(task, userName) {
   task.assignedTo = task.assignedTo.filter(user => user !== userName);
   return putTaskData(task.id, task);
 }

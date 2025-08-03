@@ -191,7 +191,7 @@ function setupOrientationEvents() {
 function setupUserChangeEvents() {
   const userChangeEvents = ["focus", "pageshow"];
   const documentEvents = ["visibilitychange"];
-  
+  // TODO: nachschauen
   userChangeEvents.forEach(event => {
     window.addEventListener(event, handleUserChange);
   });
@@ -216,6 +216,8 @@ async function loadInitialData() {
 async function loadTasksAndUsers() {
   try {
     const { tasks, users } = await fetchAndProcessData();
+    // console.log("[Board] Tasks and users loaded successfully.", tasks, users);
+    
     await updateBoardWithData(tasks, users);
   } catch (error) {
     console.error("[Board] Failed to load tasks and users:", error);
@@ -229,6 +231,7 @@ async function loadTasksAndUsers() {
 async function fetchAndProcessData() {
   const [tasksResponse] = await fetchTasksAndUsers();
   const contactsList = await loadContactsForTaskAssignment();
+  // console.log("[Board] Contacts loaded for task assignment:", contactsList);
   
   return {
     tasks: normalizeTasks(tasksResponse),
@@ -243,6 +246,8 @@ async function fetchAndProcessData() {
  * @returns {Promise<void>}
  */
 async function updateBoardWithData(tasks, users) {
+  // console.log(users);
+  
   updateApplicationState(tasks, users);
   await initializeBoardComponents(tasks);
 }
@@ -255,6 +260,8 @@ async function updateBoardWithData(tasks, users) {
 function updateApplicationState(tasks, users) {
   currentlyLoadedTasks = tasks;
   allSystemUsers = users;
+  // console.log("[Board] Application state updated with tasks and users.", allSystemUsers);
+  
 }
 
 /**
@@ -264,6 +271,8 @@ function updateApplicationState(tasks, users) {
  */
 async function initializeBoardComponents(tasks) {
   await renderTasks(Object.values(tasks), allSystemUsers);
+  // console.log(allSystemUsers);
+  
   setupDragAndDrop(tasks);
   setupSearch(tasks);
   updateEmptyLists();
@@ -303,10 +312,8 @@ function getProfileButton() {
   const profileButton = document.getElementById("openMenu");
   
   if (!profileButton) {
-    console.error("[Board] Profile button not found in DOM.");
     return null;
   }
-  
   return profileButton;
 }
 
