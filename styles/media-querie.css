@@ -183,12 +183,11 @@
     display: none;
   }
 
-    .empty-placeholder {
-  width: 100%;
-}
+  .empty-placeholder {
+    width: 100%;
+  }
 
   .board-container {
-    
     flex-direction: column;
     padding: 16px;
     position: absolute;
@@ -274,9 +273,9 @@
     box-sizing: border-box;
   }
 
-    .empty-placeholder {
-  width: 100%;
-}
+  .empty-placeholder {
+    width: 100%;
+  }
 
   .subtask-display-text::before {
     content: "";
@@ -317,7 +316,7 @@
     overflow-y: hidden;
     padding: 8px;
   }
- 
+
   .task {
     min-width: 200px;
     max-width: 256px;
@@ -358,9 +357,9 @@
     display: none;
   }
 
-    .empty-placeholder {
-  width: 100%;
-}
+  .empty-placeholder {
+    width: 100%;
+  }
 
   .header-container {
     padding-left: 318px;
@@ -414,7 +413,6 @@
   }
 
   .board-container {
-    
     flex-direction: column;
     max-width: 1440px;
     padding: 16px;
@@ -446,9 +444,9 @@
     display: none;
   }
 
-    .empty-placeholder {
-  width: 100%;
-}
+  .empty-placeholder {
+    width: 100%;
+  }
 
   .header-container {
     padding-left: 328px;
@@ -600,6 +598,8 @@
   .task-container {
     display: flex;
     gap: 16px;
+    width: 100%;
+    margin: 0 auto;
   }
 
   .task-wrapper {

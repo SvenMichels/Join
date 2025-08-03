@@ -113,7 +113,7 @@
   transition: transform 0.3s ease;
 }
 
-.required-container-modal {
+/* .required-container-modal {
   margin-top: 140px;
   width:100%;
   position:fixed;
@@ -122,7 +122,7 @@
   margin-top: 40px;
   padding: 16px;
   bottom: -23%;
-}
+} */
 
 .task-title {
   display: flex;
@@ -275,14 +275,11 @@ input:valid + .error-message {
 
 .create-container-modal {
   display: flex;
-  justify-content: center;
-  position: fixed;
-  bottom: -30%;
-  display: flex;
-  gap: 8rem;
   width: 100%;
-  background-color: #ffffff;
-  left: 0px;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 10px;
 }
 
 .clear-button {
@@ -577,119 +574,4 @@ select {
   background: url(../assets/icons/arrow_drop_down.svg) no-repeat right 0.75rem
     center;
   background-size: 1rem;
-}
-
-@media (max-width: 575px) {
-  .form-container-modal {
-    display: flex;
-    width: 100%;
-    align-items: center;
-  }
-  .task-container-modal {
-    width: 100%;
-  }
-}
-
-@media (min-width: 575px) and (max-width: 768px) {
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-  .form-wrapper-modal {
-    max-width: 80%;
-    height: 80vh;
-  }
-
-  .task-container-modal {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    width: 100%;
-    margin: 0 auto;
-  }
-}
-@media (min-width: 992px) and (max-width: 1199px) {
-  .form-wrapper-modal {
-    max-width: 960px;
-    height: 70vh;
-  }
-
-  .form-container-modal {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-  }
-
-  .task-container-modal {
-    display: flex;
-    gap: 16px;
-    width: 100%;
-    margin: 0 auto;
-  }
-
-  .space-container {
-    display: block;
-    width: 0px;
-    border: solid 1px;
-    color: #d1d1d1;
-  }
-
-  .task-wrapper-modal {
-    display: flex;
-    flex-direction: column;
-    max-height: 382px;
-    width: 100%;
-    max-width: 440px;
-    justify-content: space-between;
-    gap: 30px;
-  }
-
-  .required-container-modal {
-    position: absolute;
-    bottom: 0;
-    left: 50px;
-    width: 90%;
-  }
-}
-@media (min-width: 1200px) {
-  .form-wrapper-modal {
-    max-width: 960px;
-    height: 70vh;
-  }
-
-  .form-container-modal {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-  }
-
-  .task-container-modal {
-    display: flex;
-    gap: 16px;
-    width: 100%;
-    margin: 0 auto;
-  }
-
-  .space-container {
-    display: block;
-    width: 0px;
-    border: solid 1px;
-    color: #d1d1d1;
-  }
-
-  .task-wrapper-modal {
-    display: flex;
-    flex-direction: column;
-    max-height: 382px;
-    width: 100%;
-    max-width: 440px;
-    justify-content: space-between;
-    gap: 30px;
-  }
-
-  .required-container-modal {
-    position: absolute;
-    bottom: 0;
-    left: 50px;
-    width: 90%;
-  }
 }
