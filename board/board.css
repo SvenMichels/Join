@@ -184,6 +184,10 @@ h3 {
   scrollbar-width: none;
 }
 
+::-webkit-scrollbar {
+  display: ;
+}
+
 .task-list::-webkit-scrollbar {
   display: none;
 }

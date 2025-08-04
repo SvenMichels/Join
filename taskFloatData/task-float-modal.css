@@ -259,12 +259,30 @@ input:valid + .error-message {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  max-height: 155px;
 }
 
 #subtaskList-modal {
   height: 120px;
-  overflow: auto;
+  overflow-y: auto;
+  padding-right: 4px;
   width: 100%;
+  scrollbar-width: thin;
+  scrollbar-color: #ccc transparent;
+}
+
+#subtaskList-modal::-webkit-scrollbar {
+  display: block;
+  width: 6px;
+}
+
+#subtaskList-modal::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 4px;
+}
+
+#subtaskList-modal::-webkit-scrollbar-track {
+  background-color: transparent;
 }
 
 .prio-subtask-input {
