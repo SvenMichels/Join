@@ -167,6 +167,7 @@
     overflow-x: auto;
     overflow-y: hidden;
     padding: 8px;
+    min-height: 120px;
   }
 
   .task {
@@ -315,6 +316,7 @@
     overflow-x: auto;
     overflow-y: hidden;
     padding: 8px;
+    min-height: 120px;
   }
 
   .task {
@@ -410,6 +412,7 @@
     overflow-x: auto;
     overflow-y: hidden;
     padding: 8px;
+    min-height: 120px;
   }
 
   .board-container {
@@ -538,6 +541,7 @@
     overflow-x: auto;
     overflow-y: hidden;
     padding: 8px;
+    min-height: 120px;
   }
 }
 
@@ -645,6 +649,7 @@
   }
 
   .task-list {
+    min-height: 120px;
     display: flex;
     flex-direction: column;
     gap: 16px;

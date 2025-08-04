@@ -74,6 +74,7 @@ export function updateSubtaskItem(index, newValue) {
 export function resetFormState() {
   currentlySelectedPriority = "medium";
   subtaskItemsList = [];
+  console.log("clcickasdacksd")
 }
 
 /**

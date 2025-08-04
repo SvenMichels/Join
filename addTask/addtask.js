@@ -180,4 +180,5 @@ function clearAllFormData() {
   selectPriority("medium");
   renderSubtasks();
   setupMobileDeviceListeners();
+  configureForm();
 }
