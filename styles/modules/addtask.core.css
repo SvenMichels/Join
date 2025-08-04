@@ -2,14 +2,6 @@
 /*    ADD TASK CORE STYLES      */
 /* ============================= */
 
-/* ---------- Headline ---------- */
-.form-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-}
-
-
 /* ---------- Task input fields ---------- */
 .task-title,
 .task-description,
