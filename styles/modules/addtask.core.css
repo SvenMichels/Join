@@ -13,10 +13,11 @@
 /* ---------- Task input fields ---------- */
 .task-title,
 .task-description,
-.task-date {
+.task-date{
   display: flex;
   flex-direction: column;
   max-width: 440px;
+  width: 100%;
   gap: 8px;
 }
 
