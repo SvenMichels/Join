@@ -12,7 +12,6 @@ import { getInitials } from "../scripts/utils/helpers.js";
 export function updateUserGreetingDisplay() {
   const userString = localStorage.getItem("currentUser");
   if (!userString) {
-    console.log("No current user data found");
     return;
   }
 

@@ -227,9 +227,7 @@ function bindContactActions(id, name, contact) {
 function filterTasksByUser(tasks, userName) {
   const filtered = tasks.filter(task =>
     Array.isArray(task.assignedUsers) && task.assignedUsers.includes(userName)
-  );
-  console.log("[ContactService] Filtering tasks for user:", userName, filtered);
-  return filtered;
+  );return filtered;
 }
 
 /**
@@ -241,7 +239,6 @@ function filterTasksByUser(tasks, userName) {
  */
 export function updateTaskWithoutUser(task, userName) {
   task.assignedUsers = task.assignedUsers.filter(user => user !== userName);
-  //TODO:: Bug putTaskData is not  defined.
   return updateTask(task);
 }
 
@@ -252,7 +249,6 @@ export function updateTaskWithoutUser(task, userName) {
  */
 export async function removeUserFromAllTasks(deletedUserName) {
   const allTasks = await fetchAllTasks();
-  console.log("[ContactService] Removing user from tasks:", deletedUserName, allTasks);
 
   const filteredTasks = filterTasksByUser(allTasks, deletedUserName);
   const updates = filteredTasks.map(task => updateTaskWithoutUser(task, deletedUserName));

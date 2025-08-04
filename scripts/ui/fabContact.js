@@ -25,7 +25,6 @@ export function initializeBackButton() {
       outsideClickHandlerBound = false
     }, 300);
   });
-  console.log("back working")
 }
 
 /**

@@ -59,19 +59,14 @@ function redirectToStartpage() {
  */
 export async function loginUser(emailAddress, userPassword) {
   const allUsers = await loadAllUsersForLogin();
-  console.log("All users:", allUsers);
 
   const authenticatedUser = findMatchingUser(allUsers, emailAddress, userPassword);
 
   if (!authenticatedUser) {
-    console.log("User not found or invalid credentials.");
     throw new Error("Login failed");
   }
 
-  console.log("Authenticated user:", authenticatedUser);
-
   storeCurrentUser(authenticatedUser);
-  console.log("User stored in localStorage");
   return authenticatedUser;
 }
 
@@ -109,10 +104,6 @@ function credentialsMatch(user, emailAddress, userPassword) {
 
   const emailMatches = userEmail?.toLowerCase() === emailAddress.toLowerCase();
   const passwordMatches = password === userPassword;
-
-  console.log("Email match:", userEmail, "===", emailAddress, "->", emailMatches);
-  console.log("Password match:", passwordMatches);
-
   return emailMatches && passwordMatches;
 }
 
@@ -122,7 +113,6 @@ function credentialsMatch(user, emailAddress, userPassword) {
  * @param {Object} user - The authenticated user object.
  */
 function storeCurrentUser(user) {
-  console.log("Storing user in localStorage:", user);
 
   const userToStore = {
     id: user.userId || user.id,
@@ -136,7 +126,6 @@ function storeCurrentUser(user) {
   };
 
   localStorage.setItem("currentUser", JSON.stringify(userToStore));
-  console.log("User saved:", userToStore);
 }
 
 /**
