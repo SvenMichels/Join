@@ -4,35 +4,28 @@
 
 import { singleContact } from './contactTemplate.js';
 import { FIREBASE_DATABASE_BASE_URL } from '../scripts/firebase.js';
+import { LocalStorageService } from '../scripts/utils/localStorageHelper.js';
 
 /**
- * Fetches all contacts from the Firebase database for the current user.
- * 
- * @returns {Promise<Array>} Array of contact objects with attached userId
+ * Retrieves all contact entries from the Firebase database for the currently logged-in user.
+ *
+ * Contacts are stored under the user's unique ID in the database.
+ * Each returned contact object includes its Firebase key as `userId`.
+ *
+ * @async
+ * @function getAllContactsFromDatabase
+ * @returns {Promise<Array<Object>>} A promise that resolves to an array of contact objects.
+ * Each object contains the original contact data plus a `userId` property (the Firebase key).
+ * Returns an empty array if the user is not logged in or if an error occurs.
  */
-
-// TODO: REFACTOR: This function is too large and does too many things. Consider breaking it down into smaller functions.
 export async function getAllContactsFromDatabase() {
   try {
-    // Get current user from localStorage
-    const currentUserString = localStorage.getItem("currentUser");
-    const currentUser = JSON.parse(currentUserString);
-    
+    const currentUser = LocalStorageService.getItem("currentUser");
+
     if (!currentUser?.id) {
-      console.warn("No current user found");
       return [];
     }
-
-    // Fetch only contacts for the current user
     const response = await fetch(`${FIREBASE_DATABASE_BASE_URL}/contacts/${currentUser.id}.json`);
-    if (!response.ok) {
-      if (response.status === 404) {
-        // No contacts exist for this user yet
-        return [];
-      }
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    
     const data = await response.json();
     return data ? Object.entries(data).map(([key, value]) => ({ ...value, userId: key })) : [];
   } catch (error) {
@@ -50,8 +43,8 @@ export async function getAllContactsFromDatabase() {
 export function getInitials(fullName) {
   if (!fullName?.trim()) return "?";
   const names = fullName.trim().split(/\s+/);
-  return names.length === 1 ? 
-    names[0].charAt(0).toUpperCase() : 
+  return names.length === 1 ?
+    names[0].charAt(0).toUpperCase() :
     names[0].charAt(0).toUpperCase() + names[names.length - 1].charAt(0).toUpperCase();
 }
 

@@ -206,7 +206,6 @@ export function setupOutsideClickHandler(modal, overlay) {
  */
 function closeOverlay(overlay) {
   overlay.classList.add("d_none");
-  // overlay.innerHTML = "";
 }
 
 // Make function globally available
