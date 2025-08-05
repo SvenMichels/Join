@@ -1,6 +1,7 @@
 /**
  * Initializes a dropdown menu that toggles on trigger click and closes when clicking outside.
  */
+// TODO: REFACTOR: This function is too large and does too many things. Consider breaking it down into smaller functions.
 export function setupDropdown() {
   const dropdownTriggerElement = document.getElementById("openMenu");
   const dropdownMenuElement = document.getElementById("dropDownMenu");

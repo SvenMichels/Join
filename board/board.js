@@ -191,7 +191,6 @@ function setupOrientationEvents() {
 function setupUserChangeEvents() {
   const userChangeEvents = ["focus", "pageshow"];
   const documentEvents = ["visibilitychange"];
-  // TODO: nachschauen
   userChangeEvents.forEach(event => {
     window.addEventListener(event, handleUserChange);
   });
@@ -357,7 +356,6 @@ function filterTasks(searchTerm) {
     
     if (isVisible) hasVisibleTasks = true;
   });
-
   return hasVisibleTasks;
 }
 

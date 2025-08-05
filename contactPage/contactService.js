@@ -109,6 +109,8 @@ function createUserContactObject(userData) {
  * @param {Object} contactsRawData - Raw contact data (e.g. from Firebase).
  * @returns {Object[]} Array of formatted contact objects.
  */
+
+// TODO: REFACTOR: This function is too large and does too many things. Consider breaking it down into smaller functions.
 function processContactsData(contactsRawData) {
   const contactEntriesArray = Object.entries(contactsRawData);
   

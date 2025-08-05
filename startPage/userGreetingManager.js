@@ -9,6 +9,7 @@ import { getInitials } from "../scripts/utils/helpers.js";
  * Updates the greeting message and user name on the dashboard.
  * Pulls user data from localStorage and displays time-based greeting.
  */
+// TODO: REFACTOR: This function is too large and does too many things. Consider breaking it down into smaller functions.
 export function updateUserGreetingDisplay() {
   const userString = localStorage.getItem("currentUser");
   if (!userString) {

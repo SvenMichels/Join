@@ -6,12 +6,10 @@ import {
 } from "./boardUtils.js";
 import { deleteTask, updateTask } from "./taskManager.js";
 
-// Render task details in modal
 export async function renderTaskDetailData(task, allUsers) {
   renderTaskDetailIcon(task.category);
   renderTaskDetailText(task);
   renderTaskDetailPriority(task.prio);
-  // Nur noch neues Format: assignedUsers
   await renderTaskDetailAssignees(task.assignedUsers, allUsers);
   renderTaskDetailSubtasks(task.subtasks, task.subtaskDone);
 
@@ -100,6 +98,8 @@ function renderTaskDetailSubtasks(subtasks = [], subtaskDone = []) {
  * Sets up edit and delete button functionality
  * @param {Object} task - Task object
  */
+
+// TODO: REFACTOR: This function is too large and does too many things. Consider breaking it down into smaller functions.
 function setupEditAndDelete(task) {
   const editBtn = document.querySelector(".edit-btn");
   const deleteBtn = document.querySelector(".delete-btn");

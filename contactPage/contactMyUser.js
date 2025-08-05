@@ -23,6 +23,8 @@ document.addEventListener("DOMContentLoaded", () => {
  * @example
  * await currentUserCard();
  */
+
+// TODO: REFACTOR: This function is too large and does too many things. Consider breaking it down into smaller functions.
 async function currentUserCard() {
   const currentUserData = JSON.parse(localStorage.getItem("currentUser"));
   if (!currentUserData) return;

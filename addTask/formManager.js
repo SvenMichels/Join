@@ -83,6 +83,8 @@ export function resetFormState() {
  * @param {HTMLFormElement} form - The form element to extract data from.
  * @returns {Object} Task data object.
  */
+
+// TODO:
 export function collectTaskData(form) {
   const existingTaskId = form.getAttribute("data-task-id");
   const taskData = {

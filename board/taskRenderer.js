@@ -96,9 +96,6 @@ async function generateTaskHTML(taskData, allSystemUsers, subtaskProgressInfo) {
   const assignedUsersHTML = await generateAssignedChips(taskData.assignedUsers, allSystemUsers);
   const progressBarHTML = generateSubtaskProgressBar(taskData.id, subtaskProgressInfo);
 
-  const dropdownId = `moveDropdown-${taskData.id}`;
-  const btnId = `moveDropdownBtn-${taskData.id}`;
-
   return buildTaskHTMLTemplate({
     taskData, iconFileName, priorityIconPath, assignedUsersHTML, progressBarHTML
   });

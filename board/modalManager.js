@@ -10,6 +10,7 @@ import { changeModalTitleAdd, changeModalTitleEdit } from "./board.js";
  * @param {boolean} isEdit - Whether modal is in edit mode or create mode
  * @param {Object|null} task - Task data object for editing (null for new tasks)
  */
+// TODO: REFACTOR: This function is too large and does too many things. Consider breaking it down into smaller functions.
 export async function initModalContents(overlay, isEdit, task) {
   await new Promise(resolve => requestAnimationFrame(resolve));
   

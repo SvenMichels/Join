@@ -317,7 +317,7 @@ document.addEventListener('DOMContentLoaded', init);
 
 export { setupEventListeners };
 
-
+// TODO: REFACTOR: This function is too large and does too many things. Consider breaking it down into smaller functions.
 window.addEventListener('resize', () => {
   const singleContact = document.querySelector('.singleContact');
   const fab = document.getElementById('fabContainer');

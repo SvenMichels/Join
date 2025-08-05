@@ -10,6 +10,8 @@ import { FIREBASE_DATABASE_BASE_URL } from '../scripts/firebase.js';
  * 
  * @returns {Promise<Array>} Array of contact objects with attached userId
  */
+
+// TODO: REFACTOR: This function is too large and does too many things. Consider breaking it down into smaller functions.
 export async function getAllContactsFromDatabase() {
   try {
     // Get current user from localStorage

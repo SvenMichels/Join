@@ -55,6 +55,7 @@ export function getPriorityIconPath(priorityLevel) {
  * @param {Array<Object>} [allSystemUsers=[]] - List of all users in the system.
  * @returns {string} HTML string with contact chips.
  */
+// TODO: Refactor to use a more generic user chip generation function
 export function generateAssignedChips(assignedUsersList, allSystemUsers = []) {
   const assignedUsersArray = toArray(assignedUsersList);
   if (assignedUsersArray.length === 0) return "";
@@ -160,6 +161,7 @@ export function calculateSubtaskProgress(completedSubtasks, allSubtasks) {
  * @param {string} deletedUserName - Full name of the user to remove.
  * @returns {Object} New task object with updated user assignments.
  */
+// TODO: Refactor to use a more generic user removal function
 export function removeUserFromTaskAssignments(tasks, deletedUserName) {
   const updatedTasks = {};
 

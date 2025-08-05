@@ -111,6 +111,8 @@ function moveTaskToNewStatusColumn(taskDataObject, newTaskStatus, targetColumnEl
  * @param {HTMLElement} taskElement - The task DOM element.
  * @param {string} taskId - Unique task ID.
  */
+
+// TODO: Refactor to use a more generic dropdown setup function
 export function setupTaskDropdown(taskElement, taskId) {
   const btn = taskElement.querySelector(`#moveDropdownBtn-${taskId}`);
   const dropdown = taskElement.querySelector(`#moveDropdown-${taskId}`);
@@ -190,22 +192,6 @@ function moveTaskOneColumn(task, direction) {
   persistTaskStatus(task);
   updateEmptyLists();
   updateTask(task);
-}
-
-function getNewIndex(currentIndex, direction, max) {
-  return direction === "next"
-    ? Math.min(currentIndex + 1, max - 1)
-    : Math.max(currentIndex - 1, 0);
-}
-
-function moveTaskInDOM(task) {
-  const taskEl = document.getElementById(`task-${task.id}`);
-  const targetCol = document.getElementById(TASK_STATUS_COLUMN_MAPPING[task.status]);
-  if (!taskEl || !targetCol) return;
-
-  targetCol.appendChild(taskEl);
-  window.updateTask?.(task);
-  window.updateEmptyLists?.();
 }
 
 /**

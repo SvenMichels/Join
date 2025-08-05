@@ -77,6 +77,7 @@ async function handleSignupSubmission(event) {
  * @returns {Object|null} Collected user data object or null on failure.
  * @exports
  */
+// TODO: REFACTOR: This function is too large and does too many things. Consider breaking it down into smaller functions.
 export async function collectUserInput() {
   const userFullName = document.getElementById("inputName").value.trim();
   const userEmailAddress = document.getElementById("inputEmail").value.trim();

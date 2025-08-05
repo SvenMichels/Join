@@ -73,6 +73,7 @@ function cacheDom() {
 /**
  * Bindet Event-Listener an DOM-Elemente
  */
+// TODO: REFACTOR: This function is too large and does too many things. Consider breaking it down into smaller functions.
 function attachEventListeners() {
   if ($.closeBtn) {
     $.closeBtn.addEventListener("click", closeModal);
@@ -163,6 +164,7 @@ async function handleSubmitModal(event) {
  * @param {HTMLFormElement} form - Das Formular-Element
  * @returns {Object} Task-Objekt mit allen gesammelten Daten
  */
+// TODO: REFACTOR: This function is too large and does too many things. Consider breaking it down into smaller functions.
 function collectTaskDataModal(form) {
   const id = form.dataset.taskId || crypto.randomUUID();
   const status = form.dataset.taskStatus || "todo";

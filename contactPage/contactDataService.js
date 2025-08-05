@@ -180,6 +180,8 @@ export async function updateContact(contact, updated) {
  * @param {string} contactId - Contact ID to delete  
  * @param {string} userName - Name of the contact (for task cleanup if needed)
  */
+
+// TODO: REFACTOR: This function is too large and does too many things. Consider breaking it down into smaller functions.
 export async function deleteContactFromDatabase(contactId, userName) {
   try {
     // Get current user from localStorage
@@ -199,7 +201,6 @@ export async function deleteContactFromDatabase(contactId, userName) {
         window.contactList = window.contactList.filter(c => c.userId !== contactId);
       }
 
-      // TODO: Implement task cleanup if necessary
       await removeUserFromAllTasks(userName);
 
       handlePostDeleteView(window.contactList || []);
@@ -215,6 +216,8 @@ export async function deleteContactFromDatabase(contactId, userName) {
  * 
  * @returns {Promise<Object|null>} Contact object or null if unavailable
  */
+
+// TODO: REFACTOR: This function is too large and does too many things. Consider breaking it down into smaller functions.
 async function getCurrentUserAsContact() {
   try {
     const currentUserString = localStorage.getItem("currentUser");

@@ -9,6 +9,8 @@ let alphabetLettersUsedSet = new Set();
  *
  * @param {Array} contactList - Array of contact objects.
  */
+
+// TODO: REFACTOR: This function is too large and does too many things. Consider breaking it down into smaller functions.
 export function renderAllContacts(contactList) {
   let contacts = [];
   
