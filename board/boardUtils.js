@@ -51,29 +51,18 @@ export function getPriorityIconPath(priorityLevel) {
 
 /**
  * Generates HTML chips for assigned users.
- * @param {Array<string|Object>} assignedUsersList - List of assigned user names or objects.
- * @param {Array<Object>} [allSystemUsers=[]] - List of all users in the system.
+ * @param {Array<string|Object>} assignedUsersList - Assigned user names or objects.
+ * @param {Array<Object>} [allSystemUsers=[]] - List of all system users.
  * @returns {string} HTML string with contact chips.
  */
-// TODO: Refactor to use a more generic user chip generation function
 export function generateAssignedChips(assignedUsersList, allSystemUsers = []) {
-  const assignedUsersArray = toArray(assignedUsersList);
-  if (assignedUsersArray.length === 0) return "";
-
-  const chipElements = [];
-
-  for (const userEntry of assignedUsersArray) {
-    const userName = extractUserName(userEntry);
-    const userRecord = findUserByName(allSystemUsers, userName);
-    if (!userRecord) continue;
-
-    const chip = createUserChip(userRecord);
-    chipElements.push(chip);
-  }
-
-  return chipElements.join("");
+  return toArray(assignedUsersList)
+    .map(extractUserName)
+    .map(name => findUserByName(allSystemUsers, name))
+    .filter(Boolean)
+    .map(createUserChip)
+    .join("");
 }
-
 /**
  * Extracts the full name from a user entry (string or object).
  * @param {string|Object} userEntry - User name string or object with userFullName.
@@ -161,7 +150,7 @@ export function calculateSubtaskProgress(completedSubtasks, allSubtasks) {
  * @param {string} deletedUserName - Full name of the user to remove.
  * @returns {Object} New task object with updated user assignments.
  */
-// TODO: Refactor to use a more generic user removal function
+// TODO: REFACTOR: This function is too large and does too many things. Consider breaking it down into smaller functions.
 export function removeUserFromTaskAssignments(tasks, deletedUserName) {
   const updatedTasks = {};
 

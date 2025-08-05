@@ -84,26 +84,35 @@ export function resetFormState() {
  * @returns {Object} Task data object.
  */
 
-// TODO:
+/**
+ * Collects and returns all form data in a structured object.
+ * 
+ * @param {HTMLFormElement} form - The form element to extract data from.
+ * @returns {Object} Task data object.
+ */
 export function collectTaskData(form) {
-  const existingTaskId = form.getAttribute("data-task-id");
-  const taskData = {
-    title: form.taskTitle.value.trim(),
-    description: form.taskDescription.value.trim(),
-    dueDate: form.taskDate.value,
-    category: form.category.value,
-    prio: currentlySelectedPriority,
-    assignedUsers: collectAssignedUsers(),
-    subtasks: [...subtaskItemsList],
-    subtaskDone: new Array(subtaskItemsList.length).fill(false),
+  const id = form.getAttribute("data-task-id");
+  const title = form.taskTitle.value.trim();
+  const description = form.taskDescription.value.trim();
+  const dueDate = form.taskDate.value;
+  const category = form.category.value;
+  const prio = currentlySelectedPriority;
+  const assignedUsers = collectAssignedUsers();
+  const subtasks = [...subtaskItemsList];
+  const subtaskDone = Array(subtaskItemsList.length).fill(false);
+
+  return {
+    ...(id && { id }),
+    title,
+    description,
+    dueDate,
+    category,
+    prio,
+    assignedUsers,
+    subtasks,
+    subtaskDone,
     status: "todo",
   };
-
-  if (existingTaskId) {
-    taskData.id = existingTaskId;
-  }
-
-  return taskData;
 }
 
 /**
