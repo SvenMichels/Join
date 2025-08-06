@@ -181,33 +181,47 @@ export async function updateContact(contact, updated) {
  * @param {string} userName - Name of the contact (for task cleanup if needed)
  */
 
-// TODO: REFACTOR: This function is too large and does too many things. Consider breaking it down into smaller functions.
 export async function deleteContactFromDatabase(contactId, userName) {
   try {
-    // Get current user from localStorage
-    const currentUserString = localStorage.getItem("currentUser");
-    const currentUser = JSON.parse(currentUserString);
+    const currentUser = getCurrentUserFromStorage();
+    const wasDeleted = await deleteContactFromFirebase(currentUser.id, contactId);
 
-    if (!currentUser?.id) {
-      throw new Error("No current user found");
-    }
+    if (!wasDeleted) return;
 
-    const response = await fetch(`${FIREBASE_DATABASE_BASE_URL}/contacts/${currentUser.id}/${contactId}.json`, {
-      method: 'DELETE'
-    });
-
-    if (response.ok) {
-      if (window.contactList) {
-        window.contactList = window.contactList.filter(c => c.userId !== contactId);
-      }
-
-      await removeUserFromAllTasks(userName);
-
-      handlePostDeleteView(window.contactList || []);
-    }
+    updateContactList(contactId);
+    await removeUserFromAllTasks(userName);
+    handlePostDeleteView(window.contactList || []);
   } catch (error) {
     console.error("Error deleting contact:", error);
     throw error;
+  }
+}
+
+function getCurrentUserFromStorage() {
+  const currentUserString = localStorage.getItem("currentUser");
+  const currentUser = JSON.parse(currentUserString);
+  if (!currentUser?.id) {
+    throw new Error("No current user found");
+  }
+  return currentUser;
+}
+
+async function deleteContactFromFirebase(userId, contactId) {
+  const response = await fetch(`${FIREBASE_DATABASE_BASE_URL}/contacts/${userId}/${contactId}.json`, {
+    method: 'DELETE'
+  });
+
+  if (!response.ok) {
+    console.warn("Contact deletion failed", response.status);
+    return false;
+  }
+
+  return true;
+}
+
+function updateContactList(contactId) {
+  if (window.contactList) {
+    window.contactList = window.contactList.filter(c => c.userId !== contactId);
   }
 }
 
@@ -216,29 +230,38 @@ export async function deleteContactFromDatabase(contactId, userName) {
  * 
  * @returns {Promise<Object|null>} Contact object or null if unavailable
  */
-
-// TODO: REFACTOR: This function is too large and does too many things. Consider breaking it down into smaller functions.
 async function getCurrentUserAsContact() {
   try {
-    const currentUserString = localStorage.getItem("currentUser");
-    if (!currentUserString) return null;
+    const userData = getCurrentUserFromStorage();
+    if (!userData) return null;
 
-    const userData = JSON.parse(currentUserString);
-
-    return {
-      userFullName: userData.userFullName || userData.name || "Current User",
-      userEmailAddress: userData.userEmailAddress || userData.email || "",
-      userPhoneNumber: userData.userPhoneNumber || userData.phone || "",
-      userInitials: userData.userInitials || getInitialsFromName(userData.userFullName || userData.name || "AB"),
-      firstCharacter: (userData.userFullName || userData.name || "A").charAt(0).toUpperCase(),
-      userId: userData.userId || userData.id || "current-user",
-      userColor: userData.userColor || "color-1"
-    };
+    return buildContactFromUserData(userData);
   } catch (error) {
     console.error("Error loading current user:", error);
     return null;
   }
 }
+
+function getCurrentUserFromStorage() {
+  const currentUserString = localStorage.getItem("currentUser");
+  if (!currentUserString) return null;
+  return JSON.parse(currentUserString);
+}
+
+function buildContactFromUserData(user) {
+  const name = user.userFullName || user.name || "Current User";
+
+  return {
+    userFullName: name,
+    userEmailAddress: user.userEmailAddress || user.email || "",
+    userPhoneNumber: user.userPhoneNumber || user.phone || "",
+    userInitials: user.userInitials || getInitialsFromName(name),
+    firstCharacter: name.charAt(0).toUpperCase(),
+    userId: user.userId || user.id || "current-user",
+    userColor: user.userColor || "color-1"
+  };
+}
+
 
 /**
  * Generates initials from a full name.

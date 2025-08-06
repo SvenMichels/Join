@@ -98,27 +98,30 @@ function renderTaskDetailSubtasks(subtasks = [], subtaskDone = []) {
  * Sets up edit and delete button functionality
  * @param {Object} task - Task object
  */
-
-// TODO: REFACTOR: This function is too large and does too many things. Consider breaking it down into smaller functions.
 function setupEditAndDelete(task) {
   const editBtn = document.querySelector(".edit-btn");
   const deleteBtn = document.querySelector(".delete-btn");
 
-  if (editBtn) {
-    editBtn.addEventListener("click", () => {
-      if (window.openTaskModal) {
-        window.openTaskModal(true, task);
-      }
-    });
-  }
+  setupEditButton(editBtn, task);
+  setupDeleteButton(deleteBtn, task);
+}
 
-  if (deleteBtn) {
-    deleteBtn.addEventListener("click", async () => {
-      await deleteTask(task.id);
-      closeDetailModal();
-      if (window.fetchTasks) window.fetchTasks();
-    });
-  }
+function setupEditButton(button, task) {
+  if (!button || !window.openTaskModal) return;
+
+  button.addEventListener("click", () => {
+    window.openTaskModal(true, task);
+  });
+}
+
+function setupDeleteButton(button, task) {
+  if (!button) return;
+
+  button.addEventListener("click", async () => {
+    await deleteTask(task.id);
+    closeDetailModal();
+    if (window.fetchTasks) window.fetchTasks();
+  });
 }
 
 /**
