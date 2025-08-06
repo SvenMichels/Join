@@ -106,36 +106,6 @@ function moveTaskToNewStatusColumn(taskDataObject, newTaskStatus, targetColumnEl
 }
 
 /**
- * Sets up the dropdown menu toggle for a single task card.
- * 
- * @param {HTMLElement} taskElement - The task DOM element.
- * @param {string} taskId - Unique task ID.
- */
-
-// TODO: Refactor to use a more generic dropdown setup function
-export function setupTaskDropdown(taskElement, taskId) {
-  const btn = taskElement.querySelector(`#moveDropdownBtn-${taskId}`);
-  const dropdown = taskElement.querySelector(`#moveDropdown-${taskId}`);
-  if (!btn || !dropdown) return;
-
-  btn.addEventListener("click", (e) => {
-    e.stopPropagation();
-    closeAllMoveDropdowns();
-    dropdown.classList.toggle("dp-none");
-  });
-
-  dropdown.addEventListener("click", (e) => e.stopPropagation());
-  document.addEventListener("click", closeAllMoveDropdowns);
-}
-
-/**
- * Closes all move dropdowns globally.
- */
-function closeAllMoveDropdowns() {
-  document.querySelectorAll(".MoveDropdown").forEach(d => d.classList.add("dp-none"));
-}
-
-/**
  * Adds event listeners to the dropdown for moving tasks between columns.
  * 
  * @param {HTMLElement} taskElement - The task container element.

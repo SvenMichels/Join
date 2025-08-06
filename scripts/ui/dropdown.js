@@ -1,33 +1,29 @@
 /**
  * Initializes a dropdown menu that toggles on trigger click and closes when clicking outside.
  */
-// TODO: REFACTOR: This function is too large and does too many things. Consider breaking it down into smaller functions.
 export function setupDropdown() {
-  const dropdownTriggerElement = document.getElementById("openMenu");
-  const dropdownMenuElement = document.getElementById("dropDownMenu");
+  const trigger = document.getElementById("openMenu");
+  const menu = document.getElementById("dropDownMenu");
 
-  if (!dropdownTriggerElement || !dropdownMenuElement) return;
+  if (!trigger || !menu) return;
 
-  dropdownTriggerElement.addEventListener("click", onTriggerClick);
-  dropdownMenuElement.addEventListener("click", onMenuClick);
-  document.addEventListener("click", onDocumentClick);
+  trigger.addEventListener("click", (e) => handleTriggerClick(e, menu));
+  menu.addEventListener("click", stopEventPropagation);
+  document.addEventListener("click", (e) => handleDocumentClick(e, trigger, menu));
+}
 
-  function onTriggerClick(event) {
-    event.stopPropagation();
-    dropdownMenuElement.classList.toggle("dp-none");
+function handleTriggerClick(event, menu) {
+  event.stopPropagation();
+  menu.classList.toggle("dp-none");
+}
+
+function handleDocumentClick(event, trigger, menu) {
+  const clickedOutside = !trigger.contains(event.target) && !menu.contains(event.target);
+  if (clickedOutside) {
+    menu.classList.add("dp-none");
   }
+}
 
-  function onMenuClick(event) {
-    event.stopPropagation();
-  }
-
-  function onDocumentClick(event) {
-    const clickedOutside =
-      !dropdownTriggerElement.contains(event.target) &&
-      !dropdownMenuElement.contains(event.target);
-
-    if (clickedOutside) {
-      dropdownMenuElement.classList.add("dp-none");
-    }
-  }
+function stopEventPropagation(event) {
+  event.stopPropagation();
 }

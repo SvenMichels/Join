@@ -10,25 +10,29 @@ import { changeModalTitleAdd, changeModalTitleEdit } from "./board.js";
  * @param {boolean} isEdit - Whether modal is in edit mode or create mode
  * @param {Object|null} task - Task data object for editing (null for new tasks)
  */
-// TODO: REFACTOR: This function is too large and does too many things. Consider breaking it down into smaller functions.
 export async function initModalContents(overlay, isEdit, task) {
-  await new Promise(resolve => requestAnimationFrame(resolve));
-  
-  const init = window.initTaskFloat?.();
-  if (init instanceof Promise) await init;
+  await waitForNextFrame();
+  await maybeInitFloat();
 
   setModalMode(isEdit, task);
+
   const form = overlay.querySelector("#taskForm-modal");
+  if (!form) return;
 
-  if (isEdit && task && form) {
-    prepareEditMode(form, task);
-  } else {
-    prepareCreateMode(form);
-  }
-
+  isEdit && task ? prepareEditMode(form, task) : prepareCreateMode(form);
   setupCloseButton(overlay);
 }
 
+function waitForNextFrame() {
+  return new Promise(resolve => requestAnimationFrame(resolve));
+}
+
+async function maybeInitFloat() {
+  const init = window.initTaskFloat?.();
+  if (init instanceof Promise) {
+    await init;
+  }
+}
 /**
  * Sets global modal state variables
  * @param {boolean} isEdit - Whether in edit mode
