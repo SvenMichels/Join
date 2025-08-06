@@ -150,22 +150,25 @@ export function calculateSubtaskProgress(completedSubtasks, allSubtasks) {
  * @param {string} deletedUserName - Full name of the user to remove.
  * @returns {Object} New task object with updated user assignments.
  */
-// TODO: REFACTOR: This function is too large and does too many things. Consider breaking it down into smaller functions.
 export function removeUserFromTaskAssignments(tasks, deletedUserName) {
   const updatedTasks = {};
 
-  Object.entries(tasks).forEach(([taskId, task]) => {
-    const assignedUsers = toArray(task.assignedUsers || []);
-    const filteredUsers = assignedUsers.filter(user => {
-      const userName = extractUserName(user);
-      return userName !== deletedUserName;
-    });
-
-    updatedTasks[taskId] = {
-      ...task,
-      assignedUsers: filteredUsers
-    };
-  });
+  for (const [taskId, task] of Object.entries(tasks)) {
+    updatedTasks[taskId] = removeUserFromTask(task, deletedUserName);
+  }
 
   return updatedTasks;
+}
+
+function removeUserFromTask(task, deletedUserName) {
+  const users = toArray(task.assignedUsers || []);
+  const filteredUsers = users.filter(user => !isSameUser(user, deletedUserName));
+  return {
+    ...task,
+    assignedUsers: filteredUsers
+  };
+}
+
+function isSameUser(user, nameToCompare) {
+  return extractUserName(user) === nameToCompare;
 }
