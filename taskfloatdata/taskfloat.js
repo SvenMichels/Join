@@ -71,30 +71,36 @@ function cacheDom() {
 }
 
 /**
- * Bindet Event-Listener an DOM-Elemente
+ * Binds event listeners to DOM elements
  */
-// TODO: REFACTOR: This function is too large and does too many things. Consider breaking it down into smaller functions.
 function attachEventListeners() {
-  if ($.closeBtn) {
-    $.closeBtn.addEventListener("click", closeModal);
-  }
-  
-  if ($.form) {
-    $.form.addEventListener("submit", handleSubmitModal);
-  }
-  
-  if ($.subAddBtn) {
-    $.subAddBtn.addEventListener("click", addSubtaskModal);
-  }
-  
-  if ($.subInput) {
-    $.subInput.addEventListener("keydown", addSubtaskOnEnterModal);
-  }
-  
-  if ($.assignBtn) {
-    $.assignBtn.addEventListener("click", toggleUserListModal);
-  }
+  bindCloseButton();
+  bindFormSubmit();
+  bindSubtaskAdd();
+  bindSubtaskEnter();
+  bindAssignToggle();
 }
+
+function bindCloseButton() {
+  $.closeBtn?.addEventListener("click", closeModal);
+}
+
+function bindFormSubmit() {
+  $.form?.addEventListener("submit", handleSubmitModal);
+}
+
+function bindSubtaskAdd() {
+  $.subAddBtn?.addEventListener("click", addSubtaskModal);
+}
+
+function bindSubtaskEnter() {
+  $.subInput?.addEventListener("keydown", addSubtaskOnEnterModal);
+}
+
+function bindAssignToggle() {
+  $.assignBtn?.addEventListener("click", toggleUserListModal);
+}
+
 
 /**
  * Initialisiert das Modal-Formular
