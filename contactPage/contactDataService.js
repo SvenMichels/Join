@@ -242,12 +242,6 @@ async function getCurrentUserAsContact() {
   }
 }
 
-function getCurrentUserFromStorage() {
-  const currentUserString = localStorage.getItem("currentUser");
-  if (!currentUserString) return null;
-  return JSON.parse(currentUserString);
-}
-
 function buildContactFromUserData(user) {
   const name = user.userFullName || user.name || "Current User";
 

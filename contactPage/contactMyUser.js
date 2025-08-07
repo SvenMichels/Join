@@ -1,6 +1,7 @@
 import { getInitials } from "../scripts/utils/helpers.js";
 import { renderContact } from "./contactRenderer.js";
 import { openEditWindow } from "./contacts.js";
+import { LocalStorageService } from "../scripts/utils/localStorageHelper.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   currentUserCard();
@@ -9,45 +10,38 @@ document.addEventListener("DOMContentLoaded", () => {
 /**
  * Renders the contact card of the currently logged-in user
  * and attaches an event listener to the edit button.
- *
- * This function:
- * - Loads the current user data from `localStorage`
- * - Extracts contact info via `extractContactInformation()`
- * - Renders the contact card using `renderContact()`
- * - Adds a click listener to the button with ID `editContact` after rendering
- *
- * @async
- * @function currentUserCard
- * @returns {Promise<void>} No return value. Manipulates the DOM.
- *
- * @example
- * await currentUserCard();
  */
-
-// TODO: REFACTOR: This function is too large and does too many things. Consider breaking it down into smaller functions.
 async function currentUserCard() {
-  const currentUserData = JSON.parse(localStorage.getItem("currentUser"));
-  if (!currentUserData) return;
+  const userData = LocalStorageService.getItem("currentUser");
+  if (!userData) return;
 
-  const contactData = extractContactInformation(currentUserData);
+  const contact = extractContactInformation(userData);
+  renderContactCard(contact);
+  await bindEditButton(() => openEditWindow());
+}
 
+function renderContactCard(contact) {
   renderContact(
-    contactData.userFullName,
-    contactData.userEmailAddress,
-    contactData.userPhoneNumber,
-    contactData.userInitials,
-    contactData.firstCharacter,
-    contactData.userId,
-    contactData.userColor
+    contact.userFullName,
+    contact.userEmailAddress,
+    contact.userPhoneNumber,
+    contact.userInitials,
+    contact.firstCharacter,
+    contact.userId,
+    contact.userColor
   );
+}
 
-  // Add event listener AFTER rendering
-  setTimeout(() => {
-    const editBtn = document.getElementById("editContact");
-    if (editBtn) {
-      editBtn.addEventListener("click", () => openEditWindow());
-    }
-  }, 100);
+function bindEditButton(callback) {
+  return new Promise((resolve) => {
+    requestAnimationFrame(() => {
+      const editBtn = document.getElementById("editContact");
+      if (editBtn) {
+        editBtn.addEventListener("click", callback);
+      }
+      resolve();
+    });
+  });
 }
 
 /**
