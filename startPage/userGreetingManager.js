@@ -10,23 +10,52 @@ import { getInitials } from "../scripts/utils/helpers.js";
  * Pulls user data from localStorage and displays time-based greeting.
  */
 // TODO: REFACTOR: This function is too large and does too many things. Consider breaking it down into smaller functions.
+// export function updateUserGreetingDisplay() {
+//   const userString = localStorage.getItem("currentUser");
+//   if (!userString) {
+//     return;
+//   }
+
+//   const userData = JSON.parse(userString);
+//   const userName = userData.userFullName || "Guest";
+//   const greeting = getTimeBasedGreeting();
+
+//   const greetingEl = document.querySelector(".greetings > p:first-child");
+//   const nameEl = document.querySelector(".greetings .username");
+//   const profileBtn = document.getElementById("openMenu");
+
+//   if (greetingEl) greetingEl.textContent = `${greeting},`;
+//   if (nameEl) nameEl.textContent = userName;
+//   if (profileBtn) profileBtn.textContent = getInitials(userName);
+// }
+
 export function updateUserGreetingDisplay() {
+  const userData = getStoredUserData();
+  if (!userData) return;
+
+  const userName = userData.userFullName || "Guest;"
+  const greeting =getTimeBasedGreeting();
+
+  updateGreetingElements(greeting, userName);
+}
+
+function getStoredUserData() {
   const userString = localStorage.getItem("currentUser");
-  if (!userString) {
-    return;
+  try {
+    return userString ? JSON.parse(userString) : null;
+  } catch {
+    return null;
   }
+}
 
-  const userData = JSON.parse(userString);
-  const userName = userData.userFullName || "Guest";
-  const greeting = getTimeBasedGreeting();
-
-  const greetingEl = document.querySelector(".greetings > p:first-child");
+function updateGreetingElements(greeting, name) {
+  const grretingEl = document.querySelector(".greetings > p:first-child");
   const nameEl = document.querySelector(".greetings .username");
   const profileBtn = document.getElementById("openMenu");
 
   if (greetingEl) greetingEl.textContent = `${greeting},`;
-  if (nameEl) nameEl.textContent = userName;
-  if (profileBtn) profileBtn.textContent = getInitials(userName);
+  if (nameEl) nameEl.textContent = name;
+  if (profileBtn) profileBtn.textContent = getInitials(name);
 }
 
 /**
