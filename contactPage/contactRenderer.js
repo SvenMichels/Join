@@ -11,40 +11,76 @@ let alphabetLettersUsedSet = new Set();
  */
 
 // TODO: REFACTOR: This function is too large and does too many things. Consider breaking it down into smaller functions.
-export function renderAllContacts(contactList) {
-  let contacts = [];
+// export function renderAllContacts(contactList) {
+//   let contacts = [];
   
-  if (Array.isArray(contactList) && contactList.length > 0) {
-    const firstElement = contactList[0];
-    if (typeof firstElement === 'object' && !firstElement.userFullName) {
-      contacts = Object.values(firstElement);
-    } else {
-      contacts = contactList;
-    }
-  } else {
-    contacts = contactList || [];
-  }
+//   if (Array.isArray(contactList) && contactList.length > 0) {
+//     const firstElement = contactList[0];
+//     if (typeof firstElement === 'object' && !firstElement.userFullName) {
+//       contacts = Object.values(firstElement);
+//     } else {
+//       contacts = contactList;
+//     }
+//   } else {
+//     contacts = contactList || [];
+//   }
 
-  if (!Array.isArray(contacts)) return;
+//   if (!Array.isArray(contacts)) return;
   
-  contacts
-  .slice()
-  .sort((a, b) => a.userFullName.localeCompare(b.userFullName))
-  .forEach(contact => {
-    if (contact && contact.userFullName) {
-      renderContact(
-        contact.userFullName,
-        contact.userEmailAddress,
-        contact.userPhoneNumber,
-        contact.userInitials,
-        contact.firstCharacter,
-        contact.userId,
-        contact.userColor
-      );
-    }
-  });
+//   contacts
+//   .slice()
+//   .sort((a, b) => a.userFullName.localeCompare(b.userFullName))
+//   .forEach(contact => {
+//     if (contact && contact.userFullName) {
+//       renderContact(
+//         contact.userFullName,
+//         contact.userEmailAddress,
+//         contact.userPhoneNumber,
+//         contact.userInitials,
+//         contact.firstCharacter,
+//         contact.userId,
+//         contact.userColor
+//       );
+//     }
+//   });
+// }
+
+export function renderAllContacts(contactList) {
+  const contacts = normalizeContactList(contactList);
+  if (!Array.isArray(contacts)) return;
+
+  const sortedContacts = sortContactsByName(contacts);
+  sortedContacts.forEach(renderValidContact);
 }
 
+function normalizeContactList(list) {
+  if (!Array.isArray(list)) return [];
+
+  if (list.lenght === 0) return [];
+
+  const first = list[0];
+  const isWrappedObject = typeof first === 'object' && !first.userFullName;
+
+  return isWrappedObject ? Object.values(first) : list;
+}
+
+function sortContactsByName(contacts) {
+  return contacts.slice().sort((a, b) => a.userFullName.localeCompare(b.userFullName));
+}
+
+function renderValidContact(contact) {
+  if (!contact?.userFullName) return;
+
+  renderContact(
+    contact.userFullName,
+    contact.userEmailAddress,
+    contact.userPhoneNumber,
+    contact.userInitials,
+    contact.firstCharacter,
+    contact.userId,
+    contact.userColor
+  );
+}
 /**
  * Renders a single contact card and its alphabet filter letter.
  *
