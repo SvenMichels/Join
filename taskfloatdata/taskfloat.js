@@ -171,26 +171,53 @@ async function handleSubmitModal(event) {
  * @returns {Object} Task-Objekt mit allen gesammelten Daten
  */
 // TODO: REFACTOR: This function is too large and does too many things. Consider breaking it down into smaller functions.
+// function collectTaskDataModal(form) {
+//   const id = form.dataset.taskId || crypto.randomUUID();
+//   const status = form.dataset.taskStatus || "todo";
+
+//   const assignedUsers = Array.from(
+//     document.querySelectorAll(".user-checkbox-modal:checked")
+//   ).map(checkbox => checkbox.value);
+
+//   return {
+//     id,
+//     title: form.taskTitle.value.trim(),
+//     description: form.taskDescription.value.trim(),
+//     dueDate: form.taskDate.value,
+//     category: form.category.value,
+//     prio: getCurrentPriority(),
+//     assignedUsers,
+//     subtasks: [...getSubtaskItems()],
+//     subtaskDone: [...getCompletedSubtasks()],
+//     status,
+//   };
+// }
+
 function collectTaskDataModal(form) {
-  const id = form.dataset.taskId || crypto.randomUUID();
-  const status = form.dataset.taskStatus || "todo";
-
-  const assignedUsers = Array.from(
-    document.querySelectorAll(".user-checkbox-modal:checked")
-  ).map(checkbox => checkbox.value);
-
   return {
-    id,
-    title: form.taskTitle.value.trim(),
-    description: form.taskDescription.value.trim(),
+    id: getTaskId(form),
+    title: getInputValue(form.taskTitle),
+    description: getInputValue(form.taskDescription),
     dueDate: form.taskDate.value,
     category: form.category.value,
-    prio: getCurrentPriority(),
-    assignedUsers,
-    subtasks: [...getSubtaskItems()],
-    subtaskDone: [...getCompletedSubtasks()],
-    status,
+    prio:getCurrentPriority(),
+    assignedUsers: getCheckedUsers(".user-checkbox-modal"),
+    subtask: [...getSubtaskItems()],
+    subtaskDone: [...getCompletedSubtask()],
+    status: form.dataset.taskStatus || "todo",
   };
+}
+
+function getTaskId(form) {
+  return form.dataset.taskId || crypto.randomUUID();
+}
+
+function getInputValue(input) {
+  return input?.value.trim() || "";
+}
+
+function getCheckedUsers(selector) {
+  return Array.from(document.querySelectorAll(selector + ":checked")).map(cb => cb.value);
 }
 
 /**
