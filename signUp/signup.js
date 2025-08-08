@@ -78,14 +78,31 @@ async function handleSignupSubmission(event) {
  * @exports
  */
 // TODO: REFACTOR: This function is too large and does too many things. Consider breaking it down into smaller functions.
+// export async function collectUserInput() {
+//   const userFullName = document.getElementById("inputName").value.trim();
+//   const userEmailAddress = document.getElementById("inputEmail").value.trim();
+//   const userPassword = userPasswordInputField.value;
+//   const userColor = generateRandomColorClass();
+
+//   const userInitials = getInitials(userFullName);
+//   const firstCharacter = userFullName ? userFullName.charAt(0).toUpperCase() : "?";
+
+//   return {
+//     userFullName,
+//     userEmailAddress,
+//     userPassword,
+//     userPhoneNumber: "",
+//     userColor,
+//     userInitials,
+//     firstCharacter
+//   };
+// }
+
 export async function collectUserInput() {
-  const userFullName = document.getElementById("inputName").value.trim();
-  const userEmailAddress = document.getElementById("inputEmail").value.trim();
+  const userFullName = getTrimmedInputValue("inputName");
+  const userEmailAddress = getTrimmedInputValue("inputEmail");
   const userPassword = userPasswordInputField.value;
   const userColor = generateRandomColorClass();
-
-  const userInitials = getInitials(userFullName);
-  const firstCharacter = userFullName ? userFullName.charAt(0).toUpperCase() : "?";
 
   return {
     userFullName,
@@ -93,9 +110,18 @@ export async function collectUserInput() {
     userPassword,
     userPhoneNumber: "",
     userColor,
-    userInitials,
-    firstCharacter
+    userInitials: getInitials(userFullName),
+    firstCharachter: getFirstCharacter(userFullName)
   };
+}
+
+function getTrimmedInputValue(id) {
+  const input = document.getElementById(id);
+  return input ? input.value.trim() : "";
+}
+
+function getFirstCharacter(name) {
+  return name ? name.charAt(0).toUpperCase() : "?";
 }
 
 /**
