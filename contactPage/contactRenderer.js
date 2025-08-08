@@ -45,6 +45,7 @@ let alphabetLettersUsedSet = new Set();
 //   });
 // }
 
+
 export function renderAllContacts(contactList) {
   const contacts = normalizeContactList(contactList);
   if (!Array.isArray(contacts)) return;

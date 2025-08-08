@@ -111,24 +111,39 @@ function createUserContactObject(userData) {
  */
 
 // TODO: REFACTOR: This function is too large and does too many things. Consider breaking it down into smaller functions.
-function processContactsData(contactsRawData) {
-  const contactEntriesArray = Object.entries(contactsRawData);
+// function processContactsData(contactsRawData) {
+//   const contactEntriesArray = Object.entries(contactsRawData);
   
-  const formattedContacts = contactEntriesArray
-    .filter(([contactKey, contactValue]) => {
-      // Filter out Firebase metadata like 'status', 'data', etc.
-      // Only process entries that look like contact objects
-      return contactValue && 
-             typeof contactValue === 'object' && 
-             contactValue.userFullName && 
-             !['status', 'data', 'error'].includes(contactKey);
-    })
-    .map(([contactKey, contactValue]) => ({
-      id: contactKey,
-      ...contactValue
-    }));
+//   const formattedContacts = contactEntriesArray
+//     .filter(([contactKey, contactValue]) => {
+//       // Filter out Firebase metadata like 'status', 'data', etc.
+//       // Only process entries that look like contact objects
+//       return contactValue && 
+//              typeof contactValue === 'object' && 
+//              contactValue.userFullName && 
+//              !['status', 'data', 'error'].includes(contactKey);
+//     })
+//     .map(([contactKey, contactValue]) => ({
+//       id: contactKey,
+//       ...contactValue
+//     }));
 
-  return formattedContacts;
+//   return formattedContacts;
+// }
+
+function processContactsData(contactsRawData) {
+  return Object.entries(contactsRawData)
+    .filter(isValidContactEntry)
+    .map(formatContactEntry);
+}
+
+function isValidContactEntry([key, value]) {
+  const isFireBaseMeta = ['status', 'data', 'error'].includes(key);
+  return value && typeof value === 'object' && value.userFullName && !isFireBaseMeta;
+}
+
+function formatContactEntry([key, value]) {
+  return { id: key, ...value };
 }
 
 /**
