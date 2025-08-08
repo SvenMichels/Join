@@ -203,7 +203,7 @@ function collectTaskDataModal(form) {
     prio:getCurrentPriority(),
     assignedUsers: getCheckedUsers(".user-checkbox-modal"),
     subtask: [...getSubtaskItems()],
-    subtaskDone: [...getCompletedSubtask()],
+    subtaskDone: [...getCompletedSubtasks()],
     status: form.dataset.taskStatus || "todo",
   };
 }
