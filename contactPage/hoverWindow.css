@@ -165,6 +165,7 @@ textarea::placeholder, input::placeholder{
     display: flex;
     align-items: center;
     justify-content: end;
+    color: #007CEE;
 }
 
 .call{

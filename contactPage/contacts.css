@@ -46,9 +46,9 @@ body{
     flex-direction: column;
     width: 456px;
     margin-left: 232px;
-    /* margin-top: 96px; */
     height: 100%;
     box-shadow: 0px 4px 4px #000000;
+    border-top: 1px solid #D1D1D1;
 }
 
 .allContacts{
@@ -56,6 +56,7 @@ body{
     height: 100%;
     width: 100%;
     padding-bottom: 50px;
+    scrollbar-width: thin;
 }
 
 .content{
@@ -237,7 +238,6 @@ h2{
     font-weight: 400;
     font-size: 20px;
     display: flex;
-    /* justify-content: center; */
     align-items: center;
     margin: 0;
 }
@@ -305,16 +305,16 @@ h2{
     display: flex;
     align-items: center;
     width: 90%;
+    margin-bottom: 5px;
     margin: auto;
     height: 58px;
-    /* padding: 17px 36px 17px 36px; */
+    border-bottom: 1px solid #D1D1D1
 }
 
 .stripe{
     width: 90%;
     border: 1px solid #D1D1D1;
     border-radius: 3px;
-    /* margin: 8px 36px 8px 36px; */
     margin: auto;
     gap: 10px;
 }
@@ -327,7 +327,6 @@ h2{
     height: 78px;
     gap: 35px;
     border-radius: 10px;
-    /* margin: 15px 35px 15px 36px; */
     margin: auto;
     padding-left: 5px;
     transition: transform 0.2s ease;
@@ -342,14 +341,13 @@ h2{
 .pic{
     width: 42px;
     height: 42px;
-    /* border: 2px solid #FFFFFF; */
-    /* color: #FFFFFF; */
     border-radius: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #FF7A00;
     flex-shrink: 0;
+    color: white;
+    border: 2px solid #ffffff;
 }
 
 .contactName{
