@@ -300,10 +300,10 @@ h2 {
   display: flex;
   align-items: center;
   width: 90%;
-  margin-bottom: 5px;
   margin: auto;
   height: 58px;
   border-bottom: 1px solid #d1d1d1;
+  margin-bottom: 5px;
 }
 
 .stripe {
