@@ -293,7 +293,8 @@
   }
 
   .board-container {
-    padding: 16px;
+    padding-top: 84px;
+    padding-right: 16px;
     padding-left: 295px;
     position: absolute;
     top: 96px;

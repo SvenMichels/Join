@@ -2,6 +2,22 @@ body {
   max-width: 1440px;
 }
 
+h1 {
+  font-family: "Inter";
+  font-weight: 700;
+  font-size: clamp(2.5rem, 5vw, 3.8rem);
+  line-height: 120%;
+  display: inline-block;
+  white-space: nowrap;
+  margin: 0;
+}
+
+.board-h1-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .search-add-container {
   display: flex;
   gap: 32px;
@@ -65,7 +81,7 @@ body {
 .input-wrapper {
   position: relative;
   align-items: center;
-  width: 100%;
+  width: 312px;
   text-align: center;
   justify-content: center;
   display: flex;
@@ -118,17 +134,17 @@ body {
   }
 }
 
-.task-icon{
+.task-icon {
   display: flex;
   justify-content: space-between;
 }
 
-.switchPositionBtn{
+.switchPositionBtn {
   width: 20px;
   height: 20px;
 }
 
-.switchPositionBtn:hover{
+.switchPositionBtn:hover {
   cursor: pointer;
 }
 
@@ -291,7 +307,7 @@ h3 {
   height: 20px;
 }
 
-.MoveDropdown{
+.MoveDropdown {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -305,16 +321,16 @@ h3 {
   gap: 16px;
   z-index: 200;
   left: 110px;
-  top : 40px;
+  top: 40px;
 }
 
-.moveHeader{
+.moveHeader {
   color: #ffffff;
   font-size: 16px;
   font-weight: 700;
 }
 
-.moveList{
+.moveList {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -322,7 +338,7 @@ h3 {
   gap: 8px;
 }
 
-.moveText{ 
+.moveText {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -335,14 +351,14 @@ h3 {
   color: #ffffff;
 }
 
-.moveText:hover{
+.moveText:hover {
   cursor: pointer;
   background-color: #091931;
   border-radius: 10px;
   border-radius: 8px;
 }
 
-.moveImg{
+.moveImg {
   pointer-events: all;
   width: 15px;
   height: 15px;
