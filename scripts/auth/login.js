@@ -1,6 +1,6 @@
 import { requestData } from "../firebase.js";
 import { fetchUsersFromDatabase } from "../firebase.js";
-import { countByStatus } from "../../startPage/taskStatisticsManager.js";
+import { countByStatus } from "../../startpage/taskStatisticsManager.js";
 
 const loginFormElement = document.getElementById("loginForm");
 

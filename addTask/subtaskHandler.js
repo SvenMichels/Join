@@ -15,6 +15,8 @@ import { getSubtaskItems, addSubtaskItem, removeSubtaskItem, updateSubtaskItem }
  */
 export function addNewSubtask(element) {
   element.preventDefault();
+  console.log("Adding new subtask...");
+  
   const subtaskInput = document.getElementById("subtask");
   const subtaskInputValue = subtaskInput?.value.trim();
   if (!subtaskInputValue) return;
@@ -29,7 +31,7 @@ export function addNewSubtask(element) {
  *
  * @param {KeyboardEvent} element - Keydown event.
  */
-export function addSubtaskOnEnterKey(element) {
+export function addSubtaskOnEnterKey(element) {  
   if (element.key === "Enter") {
     element.preventDefault();
     addNewSubtask(element);

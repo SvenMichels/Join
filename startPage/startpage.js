@@ -1,7 +1,7 @@
 /**
  * @fileoverview Start Page Main Controller
  * Manages the initialization and update logic for the dashboard/start page.
- * @module startPageController
+ * @module startpageController
  */
 
 import { setupDropdown } from "../scripts/ui/dropdown.js";

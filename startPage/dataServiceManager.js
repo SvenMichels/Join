@@ -6,7 +6,7 @@
 
 import { requestData } from "../scripts/firebase.js";
 import { displayDataLoadingState, displayErrorState } from "./loadingStateManager.js";
-import { validateTaskData, setTextUpdateSummary } from "./taskStatisticsManager.js";
+import { validateTaskData, setTextUpdateSummary } from "../../startpage/taskStatisticsManager.js";
 
 /**
  * Updates the task summary with retry logic on failure.
@@ -37,21 +37,37 @@ export async function updateTaskSummaryWithRetryLogic(config = { maxRetries: 3, 
  * @returns {Promise<boolean>} Returns true if successful, false otherwise.
  */
 // TODO: REFACTOR: This function is too large and does too many things. Consider breaking it down into smaller functions.
+// async function loadAndUpdateSummary() {
+//   try {
+//     const response = await requestData("GET", "/tasks/");
+//     if (!response || typeof response !== "object") return false;
+
+//     const tasks = response.data;
+//     if (!tasks) {
+//       if (response.hasOwnProperty("data")) {
+//         setTextUpdateSummary([]);
+//         return true;
+//       }
+//       return false;
+//     }
+
+//     const tasksArray = Object.values(tasks);
+//     if (!validateTaskData(tasksArray)) return false;
+
+//     setTextUpdateSummary(tasksArray);
+//     return true;
+//   } catch {
+//     return false;
+//   }
+// }
+
+
 async function loadAndUpdateSummary() {
   try {
-    const response = await requestData("GET", "/tasks/");
-    if (!response || typeof response !== "object") return false;
+    const { data } = await requestData("GET", "/tasks/") || {};
+    if (!data) return handleEmptyData();
 
-    const tasks = response.data;
-    if (!tasks) {
-      if (response.hasOwnProperty("data")) {
-        setTextUpdateSummary([]);
-        return true;
-      }
-      return false;
-    }
-
-    const tasksArray = Object.values(tasks);
+    const tasksArray = Object.values(data);
     if (!validateTaskData(tasksArray)) return false;
 
     setTextUpdateSummary(tasksArray);
@@ -59,4 +75,9 @@ async function loadAndUpdateSummary() {
   } catch {
     return false;
   }
+}
+
+function handleEmptyData() {
+  setTextUpdateSummary([]);
+  return true;
 }

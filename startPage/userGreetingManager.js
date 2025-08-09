@@ -49,7 +49,7 @@ function getStoredUserData() {
 }
 
 function updateGreetingElements(greeting, name) {
-  const grretingEl = document.querySelector(".greetings > p:first-child");
+  const greetingEl = document.querySelector(".greetings > p:first-child");
   const nameEl = document.querySelector(".greetings .username");
   const profileBtn = document.getElementById("openMenu");
 
