@@ -46,6 +46,7 @@
 
   .task-h1-container {
     padding-left: 328px;
+    margin: 0;
   }
 
   .form-wrapper {
@@ -246,7 +247,6 @@
   }
 
   .form-wrapper {
-    padding-top: 100px;
     padding-left: 328px;
   }
 

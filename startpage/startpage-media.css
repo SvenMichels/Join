@@ -11,10 +11,8 @@
   :root {
     --sidebar-width: 248px;
   }
-  .frontPage{
-    padding-top: 40px;
-  }
 }
+
 @media (max-width: 767px) {
   :root {
     --sidebar-width: 0;

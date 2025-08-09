@@ -5,6 +5,10 @@
     position: relative;
   }
 
+  h1 {
+    padding-left: 16px;
+  }
+
   .header-style {
     width: 100vw;
     height: 80px;
@@ -260,6 +264,7 @@
   h1 {
     padding-left: 16px;
     margin: 0;
+    padding-top: 0;
   }
 
   .form-wrapper {
