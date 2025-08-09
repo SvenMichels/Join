@@ -1,5 +1,12 @@
 h1 {
   padding-left: 15px;
+  font-family: "Inter";
+  font-weight: 700;
+  font-size: clamp(2.5rem, 5vw, 3.8rem);
+  line-height: 120%;
+  letter-spacing: 0%;
+  display: inline-block;
+  white-space: nowrap;
 }
 
 .task-h1-container {

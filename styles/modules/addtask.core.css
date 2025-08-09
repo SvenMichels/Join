@@ -140,6 +140,7 @@ input:valid + .error-message {
   justify-content: space-between;
   gap: 16px;
   max-width: 900px;
+  padding-top: 100px;
 }
 
 .space-container {

@@ -21,6 +21,7 @@
   }
 
   .frontPage {
+    position: absolute;
     top: 96px;
     bottom: 80px;
     left: 0;

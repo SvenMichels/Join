@@ -61,24 +61,14 @@ main {
 }
 
 .frontPage {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
   gap: 50px;
   max-width: 100vw;
-  box-sizing: border-box;
   overflow-x: hidden;
-  position: absolute;
-  top: 96px;
-  left: 0;
-  right: 0;
-  bottom: 0;
   padding: 0 24px 0 var(--sidebar-width);
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   overflow-y: auto;       
-  box-sizing: border-box;
   padding-top: 110px;
 }
 

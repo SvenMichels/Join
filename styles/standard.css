@@ -92,8 +92,9 @@ p {
 
 /* Navigation */
 .nav-logo {
-  width: 64px;
-  height: 78px;
+  padding-top: 50px;
+  width: 100px;
+  height: 122px;
   display: flex;
   justify-content: space-between;
 }

@@ -157,7 +157,12 @@
 
   .prio-container {
     width: 45%;
-    margin-right: 50px;
+  }
+
+  .create-container {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
   }
 
   .task-wrapper {
