@@ -118,7 +118,7 @@ function buildTaskHTMLTemplate({ taskData, iconFileName, priorityIconPath, assig
   return `
     <div class="task-icon">
       <img src="../assets/icons/${iconFileName}" alt="${taskData.category}">
-      <img class="switchPositionBtn" id="${btnId}" src="../assets/icons/Frame 380.svg" alt="">
+      <img class="switchPositionBtn dp-none" id="${btnId}" src="../assets/icons/Frame 380.svg" alt="">
     </div>
     <div class="MoveDropdown dp-none" id="${dropdownId}">
       <p class="moveHeader">Move to</p>
