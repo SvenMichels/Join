@@ -52,7 +52,6 @@
 .windowH1{
     margin: 0;
     width: 366px;
-    /* height: 73px; */
     font-family: 'Inter';
     font-size: 61px;
     font-weight: 700;
@@ -96,9 +95,6 @@
     position: absolute;
     top: 50px;
     right: 50px;
-    /* margin-top: 48px;
-    margin-right: 48px;
-    margin-left: 652px; */
     font-family: 'Inter';
     font-size: 32px;
 }
@@ -244,23 +240,6 @@ textarea::placeholder, input::placeholder{
     color: #2a3647;
 }
 
-/* @media (max-width: 768px) {
-    .hoverWindow {
-      flex-direction: column;
-      width: 95vw;
-      max-width: none;
-      max-height: 95vh;
-    }
-    .leftSide {
-      border-radius: 30px 30px 0 0;
-      width: 100%;
-    }
-    .rightSide {
-      border-radius:   0 0 30px 30px;
-      width: 100%;
-    }
-  } */
-
   @media (max-width: 1240px){
     .windowH1{
         font-size: 51px;
@@ -289,7 +268,6 @@ textarea::placeholder, input::placeholder{
       position: relative;
     }
   
-    /* 2) Obere (dark) und untere (white) Hälfte je 50% Höhe */
     .leftSide,
     .rightSide {
       flex: none;
@@ -297,7 +275,6 @@ textarea::placeholder, input::placeholder{
       height: 50%;
     }
   
-    /* 3) Rundungen nur oben bzw. unten */
     .leftSide {
       border-radius: 0;
       border: none;
