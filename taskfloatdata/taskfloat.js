@@ -170,33 +170,54 @@ async function handleSubmitModal(event) {
  * @param {HTMLFormElement} form - Das Formular-Element
  * @returns {Object} Task-Objekt mit allen gesammelten Daten
  */
-
 function collectTaskDataModal(form) {
+  const id = form.dataset.taskId || crypto.randomUUID();
+  const status = form.dataset.taskStatus || "todo";
+
+  const assignedUsers = Array.from(
+    document.querySelectorAll(".user-checkbox-modal:checked")
+  ).map(checkbox => checkbox.value);
+
   return {
-    id: getTaskId(form),
-    title: getInputValue(form.taskTitle),
-    description: getInputValue(form.taskDescription),
+    id,
+    title: form.taskTitle.value.trim(),
+    description: form.taskDescription.value.trim(),
     dueDate: form.taskDate.value,
     category: form.category.value,
-    prio:getCurrentPriority(),
-    assignedUsers: getCheckedUsers(".user-checkbox-modal"),
-    subtask: [...getSubtaskItems()],
+    prio: getCurrentPriority(),
+    assignedUsers,
+    subtasks: [...getSubtaskItems()],
     subtaskDone: [...getCompletedSubtasks()],
-    status: form.dataset.taskStatus || "todo",
+    status,
   };
 }
 
-function getTaskId(form) {
-  return form.dataset.taskId || crypto.randomUUID();
-}
+// function collectTaskDataModal(form) {
+//   return {
+//     id: getTaskId(form),
+//     title: getInputValue(form.taskTitle),
+//     description: getInputValue(form.taskDescription),
+//     dueDate: form.taskDate.value,
+//     category: form.category.value,
+//     prio:getCurrentPriority(),
+//     assignedUsers: getCheckedUsers(".user-checkbox-modal"),
+//     subtask: [...getSubtaskItems()],
+//     subtaskDone: [...getCompletedSubtasks()],
+//     status: form.dataset.taskStatus || "todo",
+//   };
+// }
 
-function getInputValue(input) {
-  return input?.value.trim() || "";
-}
+// function getTaskId(form) {
+//   return form.dataset.taskId || crypto.randomUUID();
+// }
 
-function getCheckedUsers(selector) {
-  return Array.from(document.querySelectorAll(selector + ":checked")).map(cb => cb.value);
-}
+// function getInputValue(input) {
+//   return input.value.trim() || "";
+// }
+
+// function getCheckedUsers(selector) {
+//   return Array.from(document.querySelectorAll(selector + ":checked")).map(cb => cb.value);
+// }
 
 /**
  * Validiert Task-Daten
