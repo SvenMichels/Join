@@ -2,22 +2,6 @@
 /*            MODALS            */
 /* ============================= */
 
-/* ---------- Overlay ---------- */
-/* .modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.4);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-} */
-
-/* .modal-overlay.hidden {
-  display: none;
-} */
-
-
 /* ---------- Feedback Box ---------- */
 .userFeedback {
   display: flex;
@@ -53,18 +37,3 @@
     opacity: 1;
   }
 }
-
-
-/* ---------- Empty placeholder element ---------- */
-/* .empty-placeholder {
-  padding: 1rem;
-  text-align: center;
-  font-style: italic;
-  color: #a8a8a8;
-  background-color: #f5f5f5;
-  border-radius: 8px;
-  min-height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-} */
