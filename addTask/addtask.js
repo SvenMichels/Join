@@ -85,21 +85,49 @@ function setupEventListeners() {
 /**
  * Configures the form: sets up priorities, loads users, etc.
  */
-function configureForm() {
+export function configureForm() {
   loadAndRenderUsers();
   selectPriority("medium");
   initPriorityEventListeners();
 
-  const categorySelect = document.getElementById("category");
-  const submitButton = document.querySelector(".create-button");
+  const els = getFormEls();
+  if (!els.submitButton) return;
 
-  if (submitButton && categorySelect) {
-    submitButton.disabled = true;
-    categorySelect.addEventListener("change", () => {
-      submitButton.disabled = categorySelect.value.trim() === "";
-    });
-  }
+  primeForm(els);
+  attachListeners(els, () => updateSubmitState(els));
+  updateSubmitState(els);
 }
+
+function getFormEls(doc = document) {
+  return {
+    categorySelect: doc.getElementById("category"),
+    submitButton: doc.querySelector(".create-button"),
+    taskDateInput: doc.getElementById("task-date"),
+  };
+}
+
+function primeForm({ taskDateInput, submitButton }) {
+  setMinDate(taskDateInput);
+  submitButton.disabled = true;
+}
+
+function setMinDate(input) {
+  if (input) input.min = new Date().toISOString().split("T")[0];
+}
+
+function attachListeners({ categorySelect, taskDateInput }, handler) {
+  categorySelect?.addEventListener("change", handler);
+  taskDateInput?.addEventListener("change", handler);
+  taskDateInput?.addEventListener("input", handler);
+}
+
+function updateSubmitState({ categorySelect, taskDateInput, submitButton }) {
+  const categoryOk = !!categorySelect?.value?.trim();
+  const dateOk = !!taskDateInput?.value;
+  submitButton.disabled = !(categoryOk && dateOk);
+}
+
+
 
 /**
  * Handles the task form submission event.
