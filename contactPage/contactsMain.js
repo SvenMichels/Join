@@ -317,28 +317,6 @@ document.addEventListener('DOMContentLoaded', init);
 
 export { setupEventListeners };
 
-// TODO: REFACTOR: This function is too large and does too many things. Consider breaking it down into smaller functions.
-// window.addEventListener('resize', () => {
-//   const singleContact = document.querySelector('.singleContact');
-//   const fab = document.getElementById('fabContainer');
-//   const isMobile = window.innerWidth <= 768;
-
-//   if (!singleContact) return;
-
-//   if (isMobile && currentRenderedContact) {
-//     singleContact.style.display = 'flex';
-//     if (fab) fab.style.display = 'block';
-
-//     initializeFabMenu(currentRenderedContact);
-//     initializeBackButton();
-//   }
-
-//   if (!isMobile) {
-//     singleContact.style.display = 'flex';
-//     if (fab) fab.style.display = 'none';
-//   }
-// });
-
 window.addEventListener('resize', handleResize);
 
 function handleResize() {

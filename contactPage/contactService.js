@@ -109,28 +109,6 @@ function createUserContactObject(userData) {
  * @param {Object} contactsRawData - Raw contact data (e.g. from Firebase).
  * @returns {Object[]} Array of formatted contact objects.
  */
-
-// TODO: REFACTOR: This function is too large and does too many things. Consider breaking it down into smaller functions.
-// function processContactsData(contactsRawData) {
-//   const contactEntriesArray = Object.entries(contactsRawData);
-  
-//   const formattedContacts = contactEntriesArray
-//     .filter(([contactKey, contactValue]) => {
-//       // Filter out Firebase metadata like 'status', 'data', etc.
-//       // Only process entries that look like contact objects
-//       return contactValue && 
-//              typeof contactValue === 'object' && 
-//              contactValue.userFullName && 
-//              !['status', 'data', 'error'].includes(contactKey);
-//     })
-//     .map(([contactKey, contactValue]) => ({
-//       id: contactKey,
-//       ...contactValue
-//     }));
-
-//   return formattedContacts;
-// }
-
 function processContactsData(contactsRawData) {
   return Object.entries(contactsRawData)
     .filter(isValidContactEntry)

@@ -36,32 +36,6 @@ export async function updateTaskSummaryWithRetryLogic(config = { maxRetries: 3, 
  *
  * @returns {Promise<boolean>} Returns true if successful, false otherwise.
  */
-// TODO: REFACTOR: This function is too large and does too many things. Consider breaking it down into smaller functions.
-// async function loadAndUpdateSummary() {
-//   try {
-//     const response = await requestData("GET", "/tasks/");
-//     if (!response || typeof response !== "object") return false;
-
-//     const tasks = response.data;
-//     if (!tasks) {
-//       if (response.hasOwnProperty("data")) {
-//         setTextUpdateSummary([]);
-//         return true;
-//       }
-//       return false;
-//     }
-
-//     const tasksArray = Object.values(tasks);
-//     if (!validateTaskData(tasksArray)) return false;
-
-//     setTextUpdateSummary(tasksArray);
-//     return true;
-//   } catch {
-//     return false;
-//   }
-// }
-
-
 async function loadAndUpdateSummary() {
   try {
     const { data } = await requestData("GET", "/tasks/") || {};

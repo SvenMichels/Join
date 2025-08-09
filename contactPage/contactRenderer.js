@@ -9,43 +9,6 @@ let alphabetLettersUsedSet = new Set();
  *
  * @param {Array} contactList - Array of contact objects.
  */
-
-// TODO: REFACTOR: This function is too large and does too many things. Consider breaking it down into smaller functions.
-// export function renderAllContacts(contactList) {
-//   let contacts = [];
-  
-//   if (Array.isArray(contactList) && contactList.length > 0) {
-//     const firstElement = contactList[0];
-//     if (typeof firstElement === 'object' && !firstElement.userFullName) {
-//       contacts = Object.values(firstElement);
-//     } else {
-//       contacts = contactList;
-//     }
-//   } else {
-//     contacts = contactList || [];
-//   }
-
-//   if (!Array.isArray(contacts)) return;
-  
-//   contacts
-//   .slice()
-//   .sort((a, b) => a.userFullName.localeCompare(b.userFullName))
-//   .forEach(contact => {
-//     if (contact && contact.userFullName) {
-//       renderContact(
-//         contact.userFullName,
-//         contact.userEmailAddress,
-//         contact.userPhoneNumber,
-//         contact.userInitials,
-//         contact.firstCharacter,
-//         contact.userId,
-//         contact.userColor
-//       );
-//     }
-//   });
-// }
-
-
 export function renderAllContacts(contactList) {
   const contacts = normalizeContactList(contactList);
   if (!Array.isArray(contacts)) return;
