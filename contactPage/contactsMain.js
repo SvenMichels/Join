@@ -93,21 +93,12 @@ function setupEventListeners() {
 function renderSingleContact(name, email, phone, initials, id, color) {
   const contact = contactList.find(c => c.userId === id);
   if (!contact) return;
-    // currentRenderedContact = contact;
-
-  if (window.innerWidth <= 768) {
-    openEditDialog(contact);
-    return;
-  }
-
   currentRenderedContact = contact;
 
   const template = generateBigContactTemplate(name, email, phone, initials, color);
   document.getElementById("bigContact").innerHTML = template;
 
   prepareResponsiveContactView(contact)
-  
-  
   bindContactActions(id, name, contact);
   loadAndShowContactDetails();
 }
@@ -123,20 +114,15 @@ window.renderSingleContact = renderSingleContact;
  * @param {Object} contact - Contact object to be rendered
  */
 function prepareResponsiveContactView(contact) {
-  const singleContact = document.querySelector('.singleContact');
-  if (!singleContact) return;
-
-  if (window.innerWidth > 768) {
-    singleContact.style.display = 'flex';
-  }
-
-  if (window.innerWidth <= 768) {
-    singleContact.style.display = 'flex';
-
-    setTimeout(() => {
-      initializeFabMenu(contact);
-      initializeBackButton();
-    }, 50);
+  const panel = document.querySelector('.singleContact');
+  if (!panel) return;
+  currentRenderedContact = contact;
+  const fab = document.getElementById('fabContainer');
+  const isMobile = window.innerWidth <= 768;
+  if (isMobile) {
+    updateMobileView(fab, panel, true);
+  } else {
+    updateDesktopView(fab, panel, true);
   }
 }
 
@@ -319,30 +305,58 @@ export { setupEventListeners };
 
 window.addEventListener('resize', handleResize);
 
+/**
+ * Handles responsive adjustments when window size changes.
+ * - Mobile: shows FAB and contact panel only if a contact is open
+ * - Desktop: hides FAB, removes slide animations, and shows panel if contact is open
+ */
 function handleResize() {
   const singleContact = document.querySelector('.singleContact');
   const fab = document.getElementById('fabContainer');
-
   if (!singleContact) return;
 
   const isMobile = window.innerWidth <= 768;
-  singleContact.style.display = 'flex';
+  const hasOpenContact = Boolean(currentRenderedContact);
 
   if (isMobile) {
-    handleMobileView(fab);
+    updateMobileView(fab, singleContact, hasOpenContact);
   } else {
-    handleDesktopView(fab);
+    updateDesktopView(fab, singleContact, hasOpenContact);
   }
 }
 
-function handleMobileView(fab) {
-  if (fab) fab.style.display = 'block';
-  if (currentRenderedContact) {
+/**
+ * Updates contact panel and FAB visibility for mobile view.
+ * Adds slide-in animation if a contact is open, otherwise resets panel state.
+ *
+ * @param {HTMLElement} fab - Floating action button container
+ * @param {HTMLElement} panel - Contact detail panel
+ * @param {boolean} hasOpenContact - Whether a contact is currently open
+ */
+function updateMobileView(fab, panel, hasOpenContact) {
+  if (fab) fab.style.display = hasOpenContact ? 'block' : 'none';
+  if (hasOpenContact) {
+    panel.classList.remove('slide-out');
+    panel.classList.add('slide-in');
+    panel.style.display = 'flex';
     initializeFabMenu(currentRenderedContact);
     initializeBackButton();
+  } else {
+    panel.classList.remove('slide-in', 'slide-out');
+    panel.style.display = '';
   }
 }
 
-function handleDesktopView(fab) {
+/**
+ * Updates contact panel and FAB visibility for desktop view.
+ * Removes any slide animation classes and shows panel if a contact is open.
+ *
+ * @param {HTMLElement} fab - Floating action button container
+ * @param {HTMLElement} panel - Contact detail panel
+ * @param {boolean} hasOpenContact - Whether a contact is currently open
+ */
+function updateDesktopView(fab, panel, hasOpenContact) {
   if (fab) fab.style.display = 'none';
+  panel.classList.remove('slide-in', 'slide-out');
+  panel.style.display = hasOpenContact ? 'flex' : '';
 }

@@ -33,14 +33,13 @@ export function initializeBackButton() {
  * @param {string} id - The ID of the selected contact.
  */
 export function initializeFabMenu(contact) {
-  const elements = getFabElements();
+  let elements = getFabElements();
   if (!elements) return;
-
+  elements = resetFabBindings(elements);
   showFabContainer(elements.container);
   setupFabToggle(elements);
   setupFabActions(elements, contact);
   bindOutsideClickToClose(elements.container)
-  console.log("fab menu working")
 }
 
 /**
@@ -60,13 +59,11 @@ function showFabContainer(container) {
  */
 function getFabElements() {
   const container = document.getElementById('fabContainer');
-  if (!container || !isMobileView()) return null;
-  return {
-    container,
-    toggle:  document.getElementById('fabToggle'),
-    editBtn:  document.getElementById('fabEdit'),
-    delBtn:   document.getElementById('fabDelete'),
-  };
+  const toggle = document.getElementById('fabToggle');
+  const editBtn = document.getElementById('fabEdit');
+  const delBtn = document.getElementById('fabDelete');
+  if (!container || !toggle || !editBtn || !delBtn) return null;
+  return { container, toggle, editBtn, delBtn };
 }
 
 /**
@@ -115,4 +112,26 @@ function bindOutsideClickToClose(container) {
   })
 
   outsideClickHandlerBound = true
+}
+
+/**
+ * Resets all event listeners on FAB elements by cloning and replacing them.
+ * Ensures old or duplicated bindings are removed before reinitializing the FAB menu.
+ *
+ * @param {Object} elements - The FAB elements object containing container, toggle, editBtn, and delBtn
+ * @param {HTMLElement} elements.container - FAB container element
+ * @param {HTMLElement} elements.toggle - FAB toggle button
+ * @param {HTMLElement} elements.editBtn - FAB edit action button
+ * @param {HTMLElement} elements.delBtn - FAB delete action button
+ * @returns {Object} New FAB elements object with fresh, unbound elements
+ */
+function resetFabBindings({ container, toggle, editBtn, delBtn }) {
+  container.classList.remove('open');
+  const newToggle = toggle.cloneNode(true);
+  const newEdit = editBtn.cloneNode(true);
+  const newDel = delBtn.cloneNode(true);
+  toggle.replaceWith(newToggle);
+  editBtn.replaceWith(newEdit);
+  delBtn.replaceWith(newDel);
+  return { container, toggle: newToggle, editBtn: newEdit, delBtn: newDel };
 }

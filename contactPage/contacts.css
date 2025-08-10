@@ -503,7 +503,7 @@ h2 {
   top: 96px;
   left: 0;
   width: 100%;
-  height: calc(100% - 96px);
+  height: calc(100% - 96px - 80px);
   background-color: white;
   z-index: 10;
   animation: slideOut 0.3s ease-in forwards;
