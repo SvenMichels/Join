@@ -6,6 +6,7 @@
 input,
 textarea {
   padding-left: 12px;
+  padding-right: 12px;
   font-size: 16px;
   font-family: 'Inter', sans-serif;
   box-sizing: border-box;

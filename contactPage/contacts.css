@@ -366,6 +366,7 @@ h2 {
 .txt:hover {
   color: #29abe2;
 }
+
 .active {
   background-color: #2a3647;
   border: 1px solid #2a3647;
@@ -448,6 +449,12 @@ h2 {
   min-width: 0;
 }
 
+/* .contact-text {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+} */
+
 .nameAdressContainer .email {
   overflow: hidden;
   white-space: nowrap;
@@ -459,6 +466,7 @@ h2 {
     bottom: -100px;
     opacity: 0;
   }
+
   to {
     bottom: 40%;
     opacity: 1;
@@ -470,6 +478,7 @@ h2 {
     transform: translateX(100%);
     opacity: 0;
   }
+
   to {
     transform: translateX(0%);
     opacity: 1;
@@ -480,6 +489,7 @@ h2 {
   from {
     transform: translateX(0%);
   }
+
   to {
     transform: translateX(100%);
   }

@@ -6,7 +6,6 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background-color: #f6f7f8 !important;
 }
 
 .landscape {
@@ -37,9 +36,11 @@ body {
   position: absolute;
   top: 0;
 }
+
 .content-holder > div:nth-child(1) {
   left: 0;
 }
+
 .content-holder > div:nth-child(3) {
   right: 0;
 }

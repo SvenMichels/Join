@@ -1,6 +1,7 @@
 .hoverPosition {
     position: fixed;
-    top: 0; left: 0;
+    top: 0;
+    left: 0;
     width: 100vw;
     height: 100vh;
     display: flex;
@@ -11,20 +12,20 @@
 }
 
 .hoverWindow {
-    position: relative;   
-    margin: 0;             
-    width: 90vw;           
-    max-width: 1200px;     
+    position: relative;
+    margin: 0;
+    width: 90vw;
+    max-width: 1200px;
     height: auto;
-    max-height: 90vh;      
+    max-height: 90vh;
     display: flex;
     flex-direction: row;
     border-radius: 30px;
-    box-shadow: 2px 2px 8px rgba(0,0,0,0.3);
-    overflow: auto;       
-  }
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+    overflow: auto;
+}
 
-.leftSide{
+.leftSide {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -34,22 +35,22 @@
     background-color: #2a3647;
     border: 1px solid transparent;
     border-radius: 30px 0px 0px 30px;
-    flex: 1;              
-    min-width: 250px;    
+    flex: 1;
+    min-width: 250px;
 }
 
-.leftContent{
+.leftContent {
     width: 100%;
     padding-left: 20px;
     gap: 12px;
 }
 
-.leftnav-logo{
+.leftnav-logo {
     width: 55px;
     height: 66px;
 }
 
-.windowH1{
+.windowH1 {
     margin: 0;
     width: 366px;
     font-family: 'Inter';
@@ -58,7 +59,7 @@
     color: #ffffff;
 }
 
-.windowSlogan{
+.windowSlogan {
     width: 371px;
     height: 32px;
     margin: 0;
@@ -68,13 +69,13 @@
     color: #ffffff;
 }
 
-.underline{
+.underline {
     width: 90px;
     border: 3px solid #29abe2;
     background-color: #29abe2;
 }
 
-.rightSide{
+.rightSide {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -84,11 +85,11 @@
     background-color: #ffffff;
     border: 1px solid transparent;
     border-radius: 0px 30px 30px 0px;
-    flex: 2;               
+    flex: 2;
     min-width: 300px;
 }
 
-.closeBtn{
+.closeBtn {
     width: 32px;
     height: 32px;
     margin: 0;
@@ -99,18 +100,19 @@
     font-size: 32px;
 }
 
-.closeBtn:hover{
+.closeBtn:hover {
     cursor: pointer;
 }
-.rightContent{
+
+.rightContent {
     display: flex;
     justify-content: space-evenly;
     flex-direction: row;
     align-items: center;
-    
+
 }
 
-.profileIcon{
+.profileIcon {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -121,19 +123,21 @@
     background-color: #D1D1D1;
 }
 
-.addContactIcon{
+.addContactIcon {
     width: 64px;
     height: 64px;
 }
 
-.addContactForm, .editContactForm{
+.addContactForm,
+.editContactForm {
     display: flex;
     flex-direction: column;
     align-items: end;
     gap: 32px;
 }
 
-textarea, input{
+textarea,
+input {
     display: flex;
     font-family: 'Inter';
     font-size: 20px;
@@ -143,61 +147,62 @@ textarea, input{
     height: 50px;
     border: 1px solid #d1d1d1;
     border-radius: 10px;
-    
+
 }
 
-textarea::placeholder, input::placeholder{
+textarea::placeholder,
+input::placeholder {
     color: #D1D1D1;
     padding: 11px;
 }
 
-.pers{
+.pers {
     display: flex;
     align-items: center;
     justify-content: end;
 }
 
-.mail{
+.mail {
     display: flex;
     align-items: center;
     justify-content: end;
     color: #007CEE;
 }
 
-.call{
+.call {
     display: flex;
     align-items: center;
     justify-content: end;
 }
 
-.inputIconPers{
+.inputIconPers {
     position: absolute;
     width: 24px;
     height: 24px;
     margin: 20px;
 }
 
-.inputIconMail{
+.inputIconMail {
     position: absolute;
-     width: 24px;
+    width: 24px;
     height: 24px;
     margin: 20px;
 }
 
-.inputIconCall{
+.inputIconCall {
     position: absolute;
-     width: 24px;
+    width: 24px;
     height: 24px;
     margin: 20px;
 }
 
-.formBtns{
+.formBtns {
     width: 364px;
     height: 57px;
 }
 
 
-.cancelBtn{
+.cancelBtn {
     width: 126px;
     height: 57px;
     border: 1px solid #2a3647;
@@ -209,14 +214,14 @@ textarea::placeholder, input::placeholder{
     color: #2a3647;
 }
 
-.cancelBtn:hover{
+.cancelBtn:hover {
     cursor: pointer;
     color: #29abe2;
     border-color: #29abe2;
 }
 
-.submitBtn{
-     width: 214px;
+.submitBtn {
+    width: 214px;
     height: 57px;
     border: 1px solid #2a3647;
     border-radius: 10px;
@@ -227,117 +232,122 @@ textarea::placeholder, input::placeholder{
     color: #ffffff;
 }
 
-.submitBtn:hover{
+.submitBtn:hover {
     cursor: pointer;
     background-color: #29abe2;
     border-color: #29abe2;
     color: #ffffff;
 }
 
-.checkIcon{
+.checkIcon {
     width: 15px;
     height: 11px;
     color: #2a3647;
 }
 
-  @media (max-width: 1240px){
-    .windowH1{
+@media (max-width: 1240px) {
+    .windowH1 {
         font-size: 51px;
     }
-    .underline{
+
+    .underline {
         width: 75px;
         border: 2px solid #29abe2;
     }
-  }
-@media (max-width: 1050px){
-    .windowH1{
+}
+
+@media (max-width: 1050px) {
+    .windowH1 {
         font-size: 41px;
     }
-    .underline{
+
+    .underline {
         width: 60px;
     }
 }
 
 @media (max-width: 900px) {
     .hoverWindow {
-      flex-direction: column;
-      height: 100vh;     
-      max-height: 100vh;
-      width: 100vw;        
-      border-radius: 0;
-      position: relative;
+        flex-direction: column;
+        height: 100vh;
+        max-height: 100vh;
+        width: 100vw;
+        border-radius: 0;
+        position: relative;
     }
-  
+
     .leftSide,
     .rightSide {
-      flex: none;
-      width: 100%;
-      height: 50%;
+        flex: none;
+        width: 100%;
+        height: 50%;
     }
-  
+
     .leftSide {
-      border-radius: 0;
-      border: none;
+        border-radius: 0;
+        border: none;
     }
+
     .rightSide {
-      border-radius: 0;
-      border: none;
-      position: relative;
+        border-radius: 0;
+        border: none;
+        position: relative;
     }
-  
+
     .profileIcon {
         position: absolute;
-        top: 0;                    
+        top: 0;
         left: 50%;
-        transform: translate(-50%, -50%); 
-        z-index: 10; 
+        transform: translate(-50%, -50%);
+        z-index: 10;
         width: 120px !important;
         height: unset !important;
-        aspect-ratio: 1 !important;            
+        aspect-ratio: 1 !important;
     }
-  
-    .leftnav-logo{
+
+    .leftnav-logo {
         display: none;
     }
 
-    .leftContent{
+    .leftContent {
         width: unset;
     }
 
-    .windowH1{
+    .windowH1 {
         font-size: 47px;
         width: unset;
     }
 
-    .rightContent{
+    .rightContent {
         width: 100%;
     }
 
-    .addContactIcon{
+    .addContactIcon {
         width: 80px;
         aspect-ratio: 1;
     }
 
-    .hoverWindow form{
+    .hoverWindow form {
         width: 95%;
     }
 
-    .hoverWindow form > div, input{
+    .hoverWindow form>div,
+    input {
         width: 100%;
     }
 
-    .formBtns{
+    .formBtns {
         display: flex;
         justify-content: space-evenly;
     }
 
-    .rightSide > .closeBtn{
+    .rightSide>.closeBtn {
         display: none;
     }
 
-    .leftSide > .closeBtn{
+    .leftSide>.closeBtn {
         display: block !important;
         color: #D9D9D9;
     }
 
-  }
+}
