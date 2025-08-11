@@ -1,353 +1,357 @@
 .hoverPosition {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: rgba(128, 128, 128, 0.527);
-    z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(128, 128, 128, 0.527);
+  z-index: 1000;
 }
 
 .hoverWindow {
-    position: relative;
-    margin: 0;
-    width: 90vw;
-    max-width: 1200px;
-    height: auto;
-    max-height: 90vh;
-    display: flex;
-    flex-direction: row;
-    border-radius: 30px;
-    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
-    overflow: auto;
+  position: relative;
+  margin: 0;
+  width: 90vw;
+  max-width: 1200px;
+  height: auto;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: row;
+  border-radius: 30px;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+  overflow: auto;
 }
 
 .leftSide {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    width: 467px;
-    height: 594px;
-    background-color: #2a3647;
-    border: 1px solid transparent;
-    border-radius: 30px 0px 0px 30px;
-    flex: 1;
-    min-width: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 467px;
+  height: 594px;
+  background-color: #2a3647;
+  border: 1px solid transparent;
+  border-radius: 30px 0px 0px 30px;
+  flex: 1;
+  min-width: 250px;
 }
 
 .leftContent {
-    width: 100%;
-    padding-left: 20px;
-    gap: 12px;
+  width: 100%;
+  padding-left: 20px;
+  gap: 12px;
 }
 
 .leftnav-logo {
-    width: 55px;
-    height: 66px;
+  width: 55px;
+  height: 66px;
 }
 
 .windowH1 {
-    margin: 0;
-    width: 366px;
-    font-family: 'Inter';
-    font-size: 61px;
-    font-weight: 700;
-    color: #ffffff;
+  margin: 0;
+  width: 366px;
+  font-family: "Inter";
+  font-size: 61px;
+  font-weight: 700;
+  color: #ffffff;
 }
 
 .windowSlogan {
-    width: 371px;
-    height: 32px;
-    margin: 0;
-    font-family: 'Inter';
-    font-size: 27px;
-    font-weight: 400;
-    color: #ffffff;
+  width: 371px;
+  height: 32px;
+  margin: 0;
+  font-family: "Inter";
+  font-size: 27px;
+  font-weight: 400;
+  color: #ffffff;
 }
 
 .underline {
-    width: 90px;
-    border: 3px solid #29abe2;
-    background-color: #29abe2;
+  width: 90px;
+  border: 3px solid #29abe2;
+  background-color: #29abe2;
 }
 
 .rightSide {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    height: 594px;
-    width: 745px;
-    background-color: #ffffff;
-    border: 1px solid transparent;
-    border-radius: 0px 30px 30px 0px;
-    flex: 2;
-    min-width: 300px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 594px;
+  width: 745px;
+  background-color: #ffffff;
+  border: 1px solid transparent;
+  border-radius: 0px 30px 30px 0px;
+  flex: 2;
+  min-width: 300px;
 }
 
 .closeBtn {
-    width: 32px;
-    height: 32px;
-    margin: 0;
-    position: absolute;
-    top: 50px;
-    right: 50px;
-    font-family: 'Inter';
-    font-size: 32px;
+  width: 32px;
+  height: 32px;
+  margin: 0;
+  position: absolute;
+  top: 50px;
+  right: 50px;
+  font-family: "Inter";
+  font-size: 32px;
 }
 
 .closeBtn:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .rightContent {
-    display: flex;
-    justify-content: space-evenly;
-    flex-direction: row;
-    align-items: center;
-
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: row;
+  align-items: center;
 }
 
 .profileIcon {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 120px;
-    height: 120px;
-    border: 3px solid transparent;
-    border-radius: 70px;
-    background-color: #D1D1D1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 120px;
+  height: 120px;
+  border: 3px solid transparent;
+  border-radius: 70px;
+  background-color: #d1d1d1;
 }
 
 .addContactIcon {
-    width: 64px;
-    height: 64px;
+  width: 64px;
+  height: 64px;
 }
 
 .addContactForm,
 .editContactForm {
-    display: flex;
-    flex-direction: column;
-    align-items: end;
-    gap: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  gap: 32px;
 }
 
 textarea,
 input {
-    display: flex;
-    font-family: 'Inter';
-    font-size: 20px;
-    font-weight: 400;
-    resize: none;
-    width: 422px;
-    height: 50px;
-    border: 1px solid #d1d1d1;
-    border-radius: 10px;
-
+  display: flex;
+  font-family: "Inter";
+  font-size: 20px;
+  font-weight: 400;
+  resize: none;
+  width: 422px;
+  height: 50px;
+  border: 1px solid #d1d1d1;
+  border-radius: 10px;
 }
 
 textarea::placeholder,
 input::placeholder {
-    color: #D1D1D1;
-    padding: 11px;
+  color: #d1d1d1;
+  padding: 11px;
 }
 
 .pers {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+}
+
+.mail-edit {
     display: flex;
     align-items: center;
     justify-content: end;
 }
 
 .mail {
-    display: flex;
-    align-items: center;
-    justify-content: end;
-    color: #007CEE;
+  display: inline-block;
+  align-items: center;
+  color: #007cee;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .call {
-    display: flex;
-    align-items: center;
-    justify-content: end;
+  display: flex;
+  align-items: center;
+  justify-content: end;
 }
 
 .inputIconPers {
-    position: absolute;
-    width: 24px;
-    height: 24px;
-    margin: 20px;
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  margin: 20px;
 }
 
 .inputIconMail {
-    position: absolute;
-    width: 24px;
-    height: 24px;
-    margin: 20px;
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  margin: 20px;
 }
 
 .inputIconCall {
-    position: absolute;
-    width: 24px;
-    height: 24px;
-    margin: 20px;
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  margin: 20px;
 }
 
 .formBtns {
-    width: 364px;
-    height: 57px;
+  width: 364px;
+  height: 57px;
 }
 
-
 .cancelBtn {
-    width: 126px;
-    height: 57px;
-    border: 1px solid #2a3647;
-    border-radius: 10px;
-    font-family: 'Inter';
-    font-size: 20px;
-    font-weight: 400;
-    background-color: #ffffff;
-    color: #2a3647;
+  width: 126px;
+  height: 57px;
+  border: 1px solid #2a3647;
+  border-radius: 10px;
+  font-family: "Inter";
+  font-size: 20px;
+  font-weight: 400;
+  background-color: #ffffff;
+  color: #2a3647;
 }
 
 .cancelBtn:hover {
-    cursor: pointer;
-    color: #29abe2;
-    border-color: #29abe2;
+  cursor: pointer;
+  color: #29abe2;
+  border-color: #29abe2;
 }
 
 .submitBtn {
-    width: 214px;
-    height: 57px;
-    border: 1px solid #2a3647;
-    border-radius: 10px;
-    font-family: 'Inter';
-    font-size: 20px;
-    font-weight: 400;
-    background-color: #2a3647;
-    color: #ffffff;
+  width: 214px;
+  height: 57px;
+  border: 1px solid #2a3647;
+  border-radius: 10px;
+  font-family: "Inter";
+  font-size: 20px;
+  font-weight: 400;
+  background-color: #2a3647;
+  color: #ffffff;
 }
 
 .submitBtn:hover {
-    cursor: pointer;
-    background-color: #29abe2;
-    border-color: #29abe2;
-    color: #ffffff;
+  cursor: pointer;
+  background-color: #29abe2;
+  border-color: #29abe2;
+  color: #ffffff;
 }
 
 .checkIcon {
-    width: 15px;
-    height: 11px;
-    color: #2a3647;
+  width: 15px;
+  height: 11px;
+  color: #2a3647;
 }
 
 @media (max-width: 1240px) {
-    .windowH1 {
-        font-size: 51px;
-    }
+  .windowH1 {
+    font-size: 51px;
+  }
 
-    .underline {
-        width: 75px;
-        border: 2px solid #29abe2;
-    }
+  .underline {
+    width: 75px;
+    border: 2px solid #29abe2;
+  }
 }
 
 @media (max-width: 1050px) {
-    .windowH1 {
-        font-size: 41px;
-    }
+  .windowH1 {
+    font-size: 41px;
+  }
 
-    .underline {
-        width: 60px;
-    }
+  .underline {
+    width: 60px;
+  }
 }
 
 @media (max-width: 900px) {
-    .hoverWindow {
-        flex-direction: column;
-        height: 100vh;
-        max-height: 100vh;
-        width: 100vw;
-        border-radius: 0;
-        position: relative;
-    }
+  .hoverWindow {
+    flex-direction: column;
+    height: 100vh;
+    max-height: 100vh;
+    width: 100vw;
+    border-radius: 0;
+    position: relative;
+  }
 
-    .leftSide,
-    .rightSide {
-        flex: none;
-        width: 100%;
-        height: 50%;
-    }
+  .leftSide,
+  .rightSide {
+    flex: none;
+    width: 100%;
+    height: 50%;
+  }
 
-    .leftSide {
-        border-radius: 0;
-        border: none;
-    }
+  .leftSide {
+    border-radius: 0;
+    border: none;
+  }
 
-    .rightSide {
-        border-radius: 0;
-        border: none;
-        position: relative;
-    }
+  .rightSide {
+    border-radius: 0;
+    border: none;
+    position: relative;
+  }
 
-    .profileIcon {
-        position: absolute;
-        top: 0;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        z-index: 10;
-        width: 120px !important;
-        height: unset !important;
-        aspect-ratio: 1 !important;
-    }
+  .profileIcon {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    width: 120px !important;
+    height: unset !important;
+    aspect-ratio: 1 !important;
+  }
 
-    .leftnav-logo {
-        display: none;
-    }
+  .leftnav-logo {
+    display: none;
+  }
 
-    .leftContent {
-        width: unset;
-    }
+  .leftContent {
+    width: unset;
+  }
 
-    .windowH1 {
-        font-size: 47px;
-        width: unset;
-    }
+  .windowH1 {
+    font-size: 47px;
+    width: unset;
+  }
 
-    .rightContent {
-        width: 100%;
-    }
+  .rightContent {
+    width: 100%;
+  }
 
-    .addContactIcon {
-        width: 80px;
-        aspect-ratio: 1;
-    }
+  .addContactIcon {
+    width: 80px;
+    aspect-ratio: 1;
+  }
 
-    .hoverWindow form {
-        width: 95%;
-    }
+  .hoverWindow form {
+    width: 95%;
+  }
 
-    .hoverWindow form>div,
-    input {
-        width: 100%;
-    }
+  .hoverWindow form > div,
+  input {
+    width: 100%;
+  }
 
-    .formBtns {
-        display: flex;
-        justify-content: space-evenly;
-    }
+  .formBtns {
+    display: flex;
+    justify-content: space-evenly;
+  }
 
-    .rightSide>.closeBtn {
-        display: none;
-    }
+  .rightSide > .closeBtn {
+    display: none;
+  }
 
-    .leftSide>.closeBtn {
-        display: block !important;
-        color: #D9D9D9;
-    }
-
+  .leftSide > .closeBtn {
+    display: block !important;
+    color: #d9d9d9;
+  }
 }

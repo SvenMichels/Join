@@ -171,11 +171,17 @@ h2 {
   margin: 0;
 }
 
+.mailPhone {
+  width: 140px;
+  height: 128px;
+  gap: 22px;
+}
+
 .profileHeader {
   display: flex;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
-  gap: 54px;
+  gap: 21px;
   margin-top: 25px;
   margin-bottom: 25px;
 }
@@ -253,7 +259,6 @@ h2 {
 }
 
 .emailAdress {
-  width: 140px;
   height: 19px;
   font-family: "Inter";
   font-weight: 400;
@@ -284,12 +289,6 @@ h2 {
   font-family: "Inter";
   font-weight: 400;
   font-size: 16px;
-}
-
-.mailPhone {
-  width: 140px;
-  height: 128px;
-  gap: 22px;
 }
 
 .startLetter {
@@ -449,11 +448,13 @@ h2 {
   min-width: 0;
 }
 
-/* .contact-text {
+.contact-text {
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-} */
+}
 
 .nameAdressContainer .email {
   overflow: hidden;

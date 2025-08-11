@@ -15,9 +15,6 @@
     font-size: 32px;
     width: 75px;
   }
-  .profileHeader {
-    gap: 20px;
-  }
   h1 {
     font-size: 51px;
   }
@@ -30,9 +27,6 @@
 }
 
 @media (max-width: 840px) {
-  .profileHeader {
-    gap: 8px;
-  }
 }
 
 @media (max-width: 768px) {
