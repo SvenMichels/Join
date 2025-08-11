@@ -20,6 +20,7 @@ h1 {
 
 .search-add-container {
   display: flex;
+  justify-content: space-between;
   gap: 32px;
   padding: 10px 0;
 }
@@ -202,7 +203,6 @@ h3 {
   transition: border-color 0.2s ease;
   -ms-overflow-style: none;
   scrollbar-width: none;
-
 }
 
 .overflow-ellipsis {
@@ -308,7 +308,6 @@ h3 {
 .progress-bar-fill {
   height: 100%;
   width: 0%;
-  /* Fallback, wird dynamisch durch style überschrieben */
   background-color: #005eff;
   transition: width 0.3s ease-in-out;
   transform-origin: left;

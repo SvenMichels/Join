@@ -80,6 +80,7 @@
   .board-container {
     flex-direction: column;
     max-width: 1440px;
+    padding-top: 50px;
     padding: 16px;
     padding-left: 328px;
     position: absolute;
@@ -189,7 +190,8 @@
   }
 
   .board-container {
-    padding: 16px;
+    padding-top: 100px;
+    padding-right: 16px;
     padding-left: 328px;
     position: absolute;
     top: 96px;
@@ -299,7 +301,7 @@
   }
 
   .board-container {
-    padding-top: 84px;
+    padding-top: 100px;
     padding-right: 16px;
     padding-left: 295px;
     position: absolute;
