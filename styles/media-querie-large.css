@@ -44,6 +44,10 @@
     height: 56px;
   }
 
+  .create-container {
+    padding-top: 50px;
+  }
+
   .task-h1-container {
     padding-left: 328px;
     margin: 0;
@@ -164,6 +168,7 @@
     display: flex;
     justify-content: flex-end;
     gap: 16px;
+    padding-top: 50px;
   }
 
   .task-wrapper {
@@ -258,6 +263,7 @@
     display: flex;
     justify-content: flex-end;
     gap: 16px;
+    padding-top: 50px;
   }
 
   .space-container {
