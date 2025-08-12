@@ -5,10 +5,6 @@
     position: relative;
   }
 
-  h1 {
-    padding-left: 16px;
-  }
-
   .header-style {
     width: 100vw;
     height: 80px;
@@ -213,10 +209,6 @@
     padding-left: 16px;
   }
 
-  .help-container {
-    padding-right: 16px;
-  }
-
   .nav-bar {
     display: flex;
     position: fixed;
@@ -263,7 +255,6 @@
   }
 
   h1 {
-    padding-left: 16px;
     margin: 0;
     padding-top: 0;
   }
