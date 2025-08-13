@@ -54,7 +54,16 @@ function updateGreetingElements(greeting, name) {
   const profileBtn = document.getElementById("openMenu");
 
   if (greetingEl) greetingEl.textContent = `${greeting},`;
-  if (nameEl) nameEl.textContent = name;
+  if (nameEl) {
+    const parts = name.trim().split(" ");
+    if (parts.length > 1) {
+      const lastName = parts.pop();
+      const firstName = parts.join(" ");
+      nameEl.innerHTML = `${firstName} <span class="last-name">${lastName}</span>`;
+    } else {
+      nameEl.textContent = name;
+    }
+  }
   if (profileBtn) profileBtn.textContent = getInitials(name);
 }
 

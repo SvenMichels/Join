@@ -1,15 +1,36 @@
 @media (max-width: 1200px) {
   :root {
-    --sidebar-width: 280px; 
+    --sidebar-width: 280px;
   }
-  .frontPage{
+  .frontPage {
     padding-top: 70px;
+  }
+
+  .mainContent {
+    gap: 40px;
+  }
+
+  .last-name {
+    font-size: clamp(12px, 2vw, 20px);
+    white-space: nowrap;
   }
 }
 
 @media (max-width: 1100px) {
   :root {
     --sidebar-width: 248px;
+  }
+
+  .last-name {
+    font-size: clamp(12px, 1vw, 15px);
+    white-space: nowrap;
+  }
+
+  .greetings .username {
+    font-size: clamp(1.5rem, 4vw, 3rem);
+    white-space: normal;
+    word-break: break-word;
+    text-align: center;
   }
 }
 
@@ -34,7 +55,7 @@
     gap: 20px;
   }
 
-   .greetings {
+  .greetings {
     position: fixed;
     inset: 0 0 60px;
     padding: 24px;
@@ -62,26 +83,62 @@
     pointer-events: none;
   }
 
-  .urgent{
+  .urgent {
     justify-content: space-evenly;
+  }
+
+    .last-name {
+    font-size: clamp(1.5rem, 4vw, 3rem);
+    white-space: nowrap;
+  }
+
+  .greetings .username {
+    font-size: clamp(1.5rem, 4vw, 3rem);
+    white-space: normal;
+    word-break: break-word;
+    text-align: center;
   }
 }
 
-@media (max-width: 600px){
-  .frontPage{
+@media (max-width: 600px) {
+  .frontPage {
     margin: 0 16px;
   }
-  h1{
+  h1 {
     padding-left: 0 !important;
     font-size: 2rem !important;
   }
+
+  .last-name {
+    font-size: clamp(1.5rem, 4vw, 3rem);
+    white-space: nowrap;
+  }
+
+  .greetings .username {
+    font-size: clamp(1.5rem, 4vw, 3rem);
+    white-space: normal;
+    word-break: break-word;
+    text-align: center;
+  }
 }
 
-@media (max-width: 425px){
-  .headline p{
+@media (max-width: 425px) {
+  .headline p {
     font-size: 0.8rem;
   }
-  .divider{
+  .divider {
     height: 40px !important;
+  }
+
+  .last-name {
+    font-size: clamp(1.5rem, 4vw, 3rem);
+    white-space: nowrap;
+  }
+
+  .greetings .username {
+    font-size: clamp(1.5rem, 4vw, 3rem);
+    white-space: normal;
+    word-break: break-word;
+    text-align: center;
   }
 }
