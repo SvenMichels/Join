@@ -25,59 +25,106 @@ window.contactList = contactList;
 /**
  * Sets up all contact-related event listeners
  */
+/**
+ * Sets up all contact-related event listeners
+ */
 function setupEventListeners() {
   setupProfileButton();
   setupDropdown();
+  setupContactFormListeners();
+  setupModalListeners();
+  setupKeyboardListeners();
+}
 
+/**
+ * Sets up contact form event listeners (add/edit forms)
+ */
+function setupContactFormListeners() {
   const addBtn = document.getElementById("addBtn");
-  if (addBtn) addBtn.addEventListener("click", openContactAdditionWindow);
-
   const addForm = document.getElementById("addContactForm");
-  if (addForm) addForm.addEventListener("submit", addNewContactToDatabase);
-
   const editForm = document.getElementById("editContactForm");
+
+  if (addBtn) addBtn.addEventListener("click", openContactAdditionWindow);
+  if (addForm) addForm.addEventListener("submit", addNewContactToDatabase);
   if (editForm) editForm.addEventListener("submit", handleContactEditSubmission);
+}
 
+/**
+ * Sets up modal-related event listeners (close buttons, outside clicks)
+ */
+function setupModalListeners() {
+  setupCloseButtons();
+  setupCancelButtons();
+  setupOutsideClickHandlers();
+}
+
+/**
+ * Sets up close button event listeners
+ */
+function setupCloseButtons() {
   document.querySelectorAll(".closeBtn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      closeAddWindow();
-      closeEditWindow();
-    });
+    btn.addEventListener("click", closeAllModals);
   });
+}
 
-  const cancelBtns = document.querySelectorAll(".cancelBtn");
-  cancelBtns.forEach(btn => {
-    btn.addEventListener("click", () => {
-      closeAddWindow();
-      closeEditWindow();
-    });
+/**
+ * Sets up cancel button event listeners
+ */
+function setupCancelButtons() {
+  document.querySelectorAll(".cancelBtn").forEach(btn => {
+    btn.addEventListener("click", closeAllModals);
   });
+}
 
+/**
+ * Sets up outside click handlers for modals
+ */
+function setupOutsideClickHandlers() {
   const addWindow = document.getElementById("addWindow");
   const editWindow = document.getElementById("editWindow");
 
   if (addWindow) {
-    addWindow.addEventListener("click", (e) => {
-      if (e.target === addWindow) {
-        closeAddWindow();
-      }
-    });
+    addWindow.addEventListener("click", handleOutsideClick);
   }
 
   if (editWindow) {
-    editWindow.addEventListener("click", (e) => {
-      if (e.target === editWindow) {
-        closeEditWindow();
-      }
-    });
+    editWindow.addEventListener("click", handleOutsideClick);
   }
+}
 
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") {
-      closeAddWindow();
-      closeEditWindow();
-    }
-  });
+/**
+ * Sets up keyboard event listeners (ESC key)
+ */
+function setupKeyboardListeners() {
+  document.addEventListener("keydown", handleKeyPress);
+}
+
+/**
+ * Handles outside click events on modals
+ * @param {Event} e - Click event
+ */
+function handleOutsideClick(e) {
+  if (e.target === e.currentTarget) {
+    closeAllModals();
+  }
+}
+
+/**
+ * Handles keyboard events (ESC key)
+ * @param {Event} e - Keyboard event
+ */
+function handleKeyPress(e) {
+  if (e.key === "Escape") {
+    closeAllModals();
+  }
+}
+
+/**
+ * Closes all open modals
+ */
+function closeAllModals() {
+  closeAddWindow();
+  closeEditWindow();
 }
 
 /**

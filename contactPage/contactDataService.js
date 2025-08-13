@@ -109,68 +109,112 @@ export async function createContact(contact) {
  * @param {Object} contact - Original contact object
  * @param {Object} updated - Updated data
  */
+/**
+ * Updates an existing contact in Firebase for the current user.
+ * 
+ * @param {Object} contact - Original contact object
+ * @param {Object} updated - Updated data
+ */
 export async function updateContact(contact, updated) {
   try {
-    // Get current user from localStorage
-    const currentUserString = localStorage.getItem("currentUser");
-    const currentUser = JSON.parse(currentUserString);
-
-    if (!currentUser?.id) {
-      throw new Error("No current user found");
-    }
-
-    const response = await fetch(`${FIREBASE_DATABASE_BASE_URL}/contacts/${currentUser.id}/${contact.userId}.json`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(updated)
-    });
-
-    if (response.ok) {
-      Object.assign(contact, updated);
-
-      if (window.contactList) {
-        const index = window.contactList.findIndex(c => c.userId === contact.userId);
-        if (index !== -1) {
-          window.contactList[index] = contact;
-        }
-      }
-
-      clearContactListUI();
-      renderAllContacts(window.contactList || []);
-
-      const bigContact = document.getElementById("bigContact");
-      if (bigContact && !bigContact.classList.contains("dp-none")) {
-        const { generateBigContactTemplate } = await import('./contactExternalService.js');
-        bigContact.innerHTML = generateBigContactTemplate(
-          contact.userFullName,
-          contact.userEmailAddress,
-          contact.userPhoneNumber,
-          contact.userInitials,
-          contact.userColor
-        );
-
-        const { bindButton } = await import('./contactUtils.js');
-        const { deleteContactFromDatabase } = await import('./contactDataService.js');
-        const { openEditDialog } = await import('./contactEditor.js');
-        bindButton(bigContact, "#delete", () => deleteContactFromDatabase(contact.userId, contact.userFullName));
-        bindButton(bigContact, "#edit", () => openEditDialog(contact));
-
-        if (window.innerWidth <= 768) {
-          const contact = window.contactList.find(c => c.userID === updated.userId);
-          if(contact){
-            const { initializeFabMenu, initializeBackButton } = await import('../scripts/ui/fabContact.js');
-            initializeFabMenu(contact);
-            initializeBackButton(); 
-          }
-        }
-      }
-
-      closeEditWindow();
-    } else {
-      throw new Error(`Error updating contact: ${response.status}`);
-    }
+    const currentUser = getCurrentUserFromStorage();
+    await updateContactInFirebase(currentUser.id, contact.userId, updated);
+    updateLocalContactData(contact, updated);
+    await refreshUI();
+    await updateBigContactIfVisible(contact);
+    closeEditWindow();
   } catch (error) {
+    console.error("Error updating contact:", error);
     throw error;
+  }
+}
+
+/**
+ * Updates contact data in Firebase database.
+ */
+async function updateContactInFirebase(userId, contactId, contactData) {
+  const response = await fetch(`${FIREBASE_DATABASE_BASE_URL}/contacts/${userId}/${contactId}.json`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(contactData)
+  });
+
+  if (!response.ok) {
+    throw new Error(`Error updating contact: ${response.status}`);
+  }
+}
+
+/**
+ * Updates contact data in local memory.
+ */
+function updateLocalContactData(contact, updated) {
+  Object.assign(contact, updated);
+
+  if (window.contactList) {
+    const index = window.contactList.findIndex(c => c.userId === contact.userId);
+    if (index !== -1) {
+      window.contactList[index] = contact;
+    }
+  }
+}
+
+/**
+ * Refreshes the contact list UI.
+ */
+async function refreshUI() {
+  clearContactListUI();
+  renderAllContacts(window.contactList || []);
+}
+
+/**
+ * Updates the big contact modal if currently visible.
+ */
+async function updateBigContactIfVisible(contact) {
+  const bigContact = document.getElementById("bigContact");
+  if (!bigContact || bigContact.classList.contains("dp-none")) return;
+
+  await renderBigContactModal(bigContact, contact);
+  bindBigContactButtons(bigContact, contact);
+  
+  if (window.innerWidth <= 768) {
+    await initializeMobileFab(contact);
+  }
+}
+
+/**
+ * Renders the big contact modal content.
+ */
+async function renderBigContactModal(bigContact, contact) {
+  const { generateBigContactTemplate } = await import('./contactExternalService.js');
+  bigContact.innerHTML = generateBigContactTemplate(
+    contact.userFullName,
+    contact.userEmailAddress,
+    contact.userPhoneNumber,
+    contact.userInitials,
+    contact.userColor
+  );
+}
+
+/**
+ * Binds action buttons in the big contact modal.
+ */
+async function bindBigContactButtons(bigContact, contact) {
+  const { bindButton } = await import('./contactUtils.js');
+  const { openEditDialog } = await import('./contactEditor.js');
+  
+  bindButton(bigContact, "#delete", () => deleteContactFromDatabase(contact.userId, contact.userFullName));
+  bindButton(bigContact, "#edit", () => openEditDialog(contact));
+}
+
+/**
+ * Initializes mobile FAB menu if needed.
+ */
+async function initializeMobileFab(contact) {
+  const foundContact = window.contactList.find(c => c.userID === contact.userId);
+  if (foundContact) {
+    const { initializeFabMenu, initializeBackButton } = await import('../scripts/ui/fabContact.js');
+    initializeFabMenu(foundContact);
+    initializeBackButton();
   }
 }
 

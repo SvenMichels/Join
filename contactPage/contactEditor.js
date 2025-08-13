@@ -13,12 +13,12 @@ let editingContact = null;
  * @param {Object} contact - Contact object to populate the form with
  */
 export function fillEditForm(contact) {
-  setTimeout(() => {
     document.getElementById("editContactName").value = contact.userFullName || "";
     document.getElementById("editContactEmail").value = contact.userEmailAddress || "";
     document.getElementById("editContactPhone").value = contact.userPhoneNumber || "";
-  }, 100);
 }
+
+
 
 /**
  * Retrieves edited values from the form.
@@ -42,7 +42,7 @@ export function handleContactEditSubmission(e) {
   e.preventDefault();
   const contact = editingContact;
   const updated = getEditContactInput();
-  
+
   updated.userInitials = getInitials(updated.userFullName);
   updated.firstCharacter = updated.userFullName.charAt(0).toUpperCase();
   updated.userColor = contact.userColor;
@@ -68,9 +68,17 @@ export function emptyInput() {
  */
 export function openEditDialog(contact) {
   editingContact = contact;
+
   const editWindow = document.getElementById("editWindow");
   if (editWindow) {
     editWindow.classList.remove("dp-none");
     fillEditForm(contact);
+    setUserInitials(contact);
   }
+}
+
+function setUserInitials(contact) {
+  const contactInitials = document.getElementById("editInitials");
+  contactInitials.textContent = contact.userInitials || getInitials(contact.userFullName);
+  contactInitials.classList.add("editInitials", `${contact.userColor}`);
 }
