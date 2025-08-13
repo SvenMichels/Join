@@ -32,6 +32,17 @@
   .submitBtn {
     width: 202px;
   }
+
+  .editInitials {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    width: 120px;
+    height: unset;
+    aspect-ratio: 1;
+  }
 }
 
 @media (max-width: 768px) {
@@ -191,6 +202,17 @@
   .allContacts {
     padding-bottom: 90px;
   }
+
+  .editInitials {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    width: 120px;
+    height: unset;
+    aspect-ratio: 1;
+  }
 }
 
 @media (max-width: 575px) {
@@ -208,5 +230,16 @@
 
   .submitBtn {
     width: 202px;
+  }
+
+  .editInitials {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    width: 120px;
+    height: unset;
+    aspect-ratio: 1;
   }
 }
