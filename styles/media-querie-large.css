@@ -12,6 +12,7 @@
     background-color: #2a3647;
     z-index: 1;
   }
+
   .header-nav-logo {
     display: none;
   }
@@ -39,7 +40,7 @@
     align-items: center;
     justify-content: center;
     gap: 16px;
-    padding-right: 40px;
+    padding-right: 32px;
     width: 104px;
     height: 56px;
   }
@@ -49,12 +50,12 @@
   }
 
   .task-h1-container {
-    padding-left: 328px;
+    padding-left: 300px;
     margin: 0;
   }
 
   .form-wrapper {
-    padding-left: 328px;
+    padding-left: 300px;
   }
 
   .profile-button {
@@ -106,6 +107,7 @@
     background-color: #2a3647;
     z-index: 1;
   }
+
   .header-nav-logo {
     display: none;
   }
@@ -162,7 +164,7 @@
   }
 
   .prio-container {
-    width: 45%;
+    width: 52%;
   }
 
   .create-container {

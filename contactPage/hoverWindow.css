@@ -53,7 +53,7 @@
   margin: 0;
   width: 366px;
   font-family: "Inter";
-font-size: clamp(2.5rem, 3.5vw, 3rem);
+  font-size: clamp(2.5rem, 3.5vw, 3rem);
   font-weight: 700;
   color: #ffffff;
 }
@@ -61,7 +61,7 @@ font-size: clamp(2.5rem, 3.5vw, 3rem);
 .windowSlogan {
   margin: 0;
   font-family: "Inter";
-  font-size: clamp(1.1rem, 1.5vw, 2rem);
+  font-size: clamp(1.1rem, 1.5vw, 1.2rem);
   font-weight: 400;
   color: #ffffff;
 }
@@ -390,7 +390,7 @@ input::placeholder {
   }
 
   .windowH1 {
-font-size: clamp(3rem, 9.5vw, 6rem);
+    font-size: clamp(3rem, 9.5vw, 6rem);
     width: unset;
   }
 

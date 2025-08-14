@@ -28,7 +28,6 @@
 
   .profileHeader {
     gap: 12px;
-    min-height: 180px;
   }
 
   .contactHeader {
@@ -48,6 +47,10 @@
     width: 120px;
     height: unset;
     aspect-ratio: 1;
+  }
+
+  .newContact {
+    gap: 10px;
   }
 }
 
@@ -255,4 +258,5 @@
     height: unset;
     aspect-ratio: 1;
   }
+
 }

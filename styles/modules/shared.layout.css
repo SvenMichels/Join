@@ -12,7 +12,7 @@
 
 .form-container {
   max-width: 1440px;
-  width: 90%;
+  width: 98%;
 }
 
 
@@ -40,4 +40,11 @@
 
 .subtask-spacer-second {
   height: 12px;
+}
+
+@media (max-width: 768px) {
+.form-container {
+
+  width: 100%;
+}
 }
