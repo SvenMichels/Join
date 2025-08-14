@@ -14,8 +14,8 @@
 .hoverWindow {
   position: relative;
   margin: 0;
-  width: 90vw;
-  max-width: 1200px;
+  width: 90%;
+  max-width: 1260px;
   height: auto;
   max-height: 90vh;
   display: flex;
@@ -40,7 +40,7 @@
 }
 
 .leftContent {
-  width: 100%;
+  width: 95%;
   padding-left: 20px;
 }
 
@@ -53,17 +53,15 @@
   margin: 0;
   width: 366px;
   font-family: "Inter";
-  font-size: 61px;
+font-size: clamp(2.5rem, 3.5vw, 3rem);
   font-weight: 700;
   color: #ffffff;
 }
 
 .windowSlogan {
-  width: 371px;
-  height: 32px;
   margin: 0;
   font-family: "Inter";
-  font-size: 27px;
+  font-size: clamp(1.1rem, 1.5vw, 2rem);
   font-weight: 400;
   color: #ffffff;
 }
@@ -122,16 +120,23 @@
 }
 
 .addContactIcon {
-  width: 64px;
-  height: 64px;
+  max-width: 128px;
+  max-height: 128px;
+  width: 85%;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 }
 
 .addContactForm,
 .editContactForm {
   display: flex;
   flex-direction: column;
-  align-items: end;
   gap: 32px;
+  width: 63%;
 }
 
 textarea,
@@ -141,10 +146,17 @@ input {
   font-size: 20px;
   font-weight: 400;
   resize: none;
-  width: 422px;
+  /* width: 422px; */
   height: 50px;
   border: 1px solid #d1d1d1;
   border-radius: 10px;
+}
+
+#editContactName,
+#editContactEmail,
+#editContactPhone {
+  width: 100%;
+  min-width: 330px;
 }
 
 input[type="text"]:focus,
@@ -161,21 +173,40 @@ input::placeholder {
 }
 
 .pers {
-  display: flex;
-  align-items: center;
-  justify-content: end;
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.pers input {
+  width: 100%;
+  padding-right: 2.5rem;
+  /* Platz für Icon schaffen */
+  box-sizing: border-box;
 }
 
 .mail-edit {
-  display: flex;
-  align-items: center;
-  justify-content: end;
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.mail-edit input {
+  width: 100%;
+  padding-right: 2.5rem;
+  box-sizing: border-box;
 }
 
 .mail-add {
-  display: flex;
-  align-items: center;
-  justify-content: end;
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.mail-add input {
+  width: 100%;
+  padding-right: 2.5rem;
+  box-sizing: border-box;
 }
 
 .mail {
@@ -188,37 +219,52 @@ input::placeholder {
 }
 
 .call {
-  display: flex;
-  align-items: center;
-  justify-content: end;
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.call input {
+  width: 100%;
+  padding-right: 2.5rem;
+  box-sizing: border-box;
 }
 
 .inputIconPers {
   position: absolute;
-  width: 24px;
-  height: 24px;
-  margin: 20px;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: auto;
+  pointer-events: none;
 }
 
 .inputIconMail {
   position: absolute;
-  width: 24px;
-  height: 24px;
-  margin: 20px;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: auto;
+  pointer-events: none;
 }
 
 .inputIconCall {
   position: absolute;
-  width: 24px;
-  height: 24px;
-  margin: 20px;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: auto;
+  pointer-events: none;
 }
 
 .formBtns {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
+  max-width: 364px;
   height: 57px;
 }
 
@@ -244,7 +290,7 @@ input::placeholder {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 50%;
+  width: 200px;
   height: 57px;
   border: 1px solid #2a3647;
   border-radius: 10px;
@@ -265,13 +311,10 @@ input::placeholder {
 .checkIcon {
   width: 15px;
   height: 11px;
-  color: #2a3647;
 }
 
 @media (max-width: 1240px) {
-  .windowH1 {
-    font-size: 51px;
-  }
+
 
   .underline {
     width: 75px;
@@ -280,10 +323,6 @@ input::placeholder {
 }
 
 @media (max-width: 1050px) {
-  .windowH1 {
-    font-size: 41px;
-  }
-
   .underline {
     width: 60px;
   }
@@ -297,6 +336,22 @@ input::placeholder {
     width: 100vw;
     border-radius: 0;
     position: relative;
+    overflow-x: hidden;
+  }
+
+  .editContactForm {
+    padding-top: 24px;
+  }
+
+  .rightContent {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .windowSlogan {
+    font-size: clamp(1.2rem, 4.1vw, 9rem);
+    width: auto;
   }
 
   .leftSide,
@@ -324,6 +379,7 @@ input::placeholder {
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 10;
+    border: 2px solid white;
     width: 120px !important;
     height: unset !important;
     aspect-ratio: 1 !important;
@@ -334,7 +390,7 @@ input::placeholder {
   }
 
   .windowH1 {
-    font-size: 47px;
+font-size: clamp(3rem, 9.5vw, 6rem);
     width: unset;
   }
 
@@ -351,22 +407,35 @@ input::placeholder {
     width: 95%;
   }
 
-  .hoverWindow form > div,
+  .hoverWindow form>div,
   input {
     width: 100%;
   }
 
   .formBtns {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-around;
+    gap: 12px;
+    max-width: 100%;
   }
 
-  .rightSide > .closeBtn {
+  .rightSide>.closeBtn {
     display: none;
   }
 
-  .leftSide > .closeBtn {
+  .leftSide>.closeBtn {
     display: block !important;
     color: #d9d9d9;
+  }
+
+  #editContactName,
+  #editContactEmail,
+  #editContactPhone {
+    width: 100%;
+    min-width: 280px;
+  }
+
+  #editInitials {
+    margin: 0px;
   }
 }

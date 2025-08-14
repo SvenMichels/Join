@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-  <link rel="stylesheet" href="./contacts.css"/>
+  <link rel="stylesheet" href="./contacts.css" />
   <link rel="stylesheet" href="hoverWindow.css" />
   <link rel="stylesheet" href="../styles/standard.css" />
   <link rel="stylesheet" href="../styles/shared.css" />
@@ -66,19 +66,20 @@
       </div>
       <div class="rightSide">
         <p class="closeBtn" id="closeBtn">
-          X
+          x
         </p>
         <div class="rightContent">
           <div class="profileIcon">
             <img alt="Bild" class="addContactIcon" src="../assets/icons/person_add.svg" />
           </div>
-          <form class="addContactForm" id="addContactForm">
+          <form class="editContactForm" id="addContactForm">
             <div class="pers">
               <input id="contactName" placeholder="Name" required type="text"></input>
               <img alt="Bild" class="inputIconPers" src="../assets/icons/person.svg" />
             </div>
             <div class="mail-add">
-              <input id="contactEmail" placeholder="Email" required src="../assets/icons/" type="email" maxlength="30"></input>
+              <input id="contactEmail" placeholder="Email" required src="../assets/icons/" type="email"
+                maxlength="30"></input>
               <img alt="Bild" class="inputIconMail" src="../assets/icons/mail.svg" />
             </div>
             <div class="call">
@@ -90,8 +91,8 @@
                 Cancel x
               </button>
               <button class="submitBtn" id="submitBtn" type="submit">
-                Create Contact
-                <img alt="Bild" class="checkIcon" src="../assets/icons/check.svg" />
+                Create&nbsp;contact&nbsp;
+                <img alt="Bild" class="checkIcon" src="../assets/icons/create_check.svg" />
               </button>
             </div>
           </form>
@@ -121,7 +122,7 @@
       </div>
       <div class="rightSide">
         <p class="closeBtn" id="closeEditBtn">
-          X
+          x
         </p>
         <div class="rightContent">
           <div class="editInitials" id="editInitials">
@@ -133,11 +134,13 @@
               <img alt="Bild" class="inputIconPers" src="../assets/icons/person.svg" />
             </div>
             <div class="mail-edit">
-              <input id="editContactEmail" placeholder="Email" required src="../assets/icons/" type="email" maxlength="30"></input>
+              <input id="editContactEmail" placeholder="Email" required src="../assets/icons/" type="email"
+                maxlength="64"></input>
               <img alt="Bild" class="inputIconMail" src="../assets/icons/mail.svg" />
             </div>
             <div class="call">
-              <input id="editContactPhone" placeholder="Phone" required src="../assets/icons/" type="tel"></input>
+              <input id="editContactPhone" placeholder="Phone" required src="../assets/icons/" type="tel"
+                inputmode="numeric" pattern="(\+49)?[0-9]{0,}"></input>
               <img alt="Bild" class="inputIconCall" src="../assets/icons/call.svg" />
             </div>
             <div class="formBtns">

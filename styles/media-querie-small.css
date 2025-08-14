@@ -7,12 +7,13 @@
 
   .header-style {
     width: 100vw;
-    height: 80px;
+    height: 96px;
     position: fixed;
     top: 0;
     left: 0;
     z-index: 2;
   }
+
   .header-container {
     width: 40px;
     height: 40px;
@@ -177,7 +178,7 @@
     flex-shrink: 0;
   }
 
-  .nav-menu > *:has(.nav-buttons) {
+  .nav-menu>*:has(.nav-buttons) {
     width: 80px;
   }
 
@@ -214,6 +215,10 @@
     position: fixed;
     left: 0;
     bottom: 0;
+  }
+
+  .media-d-none {
+    display: none;
   }
 
   .nav-menu {
@@ -294,6 +299,9 @@
     width: 100%;
   }
 
+    .help-icon {
+    display: none;
+  }
   .subtask-display-text {
     flex: 1;
   }
@@ -323,7 +331,7 @@
     flex-shrink: 0;
   }
 
-  .nav-menu > *:has(.nav-buttons) {
+  .nav-menu>*:has(.nav-buttons) {
     width: 80px;
   }
 

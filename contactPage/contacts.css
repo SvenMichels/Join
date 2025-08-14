@@ -123,6 +123,7 @@ body {
   align-items: center;
   justify-content: flex-start;
   margin-top: 110px;
+  margin-right: 24px;
   gap: 16px;
   max-width: 100%;
 }
@@ -135,13 +136,13 @@ h2 {
 
 h1 {
   font-weight: 700;
-  font-size: 61px;
+  font-size: clamp(3rem, 4.1vw, 6rem);
   color: #000000;
 }
 
 h2 {
   font-weight: 400;
-  font-size: 27px;
+  font-size: clamp(1.5rem, 2vw, 2rem);
   color: #2a3647;
   white-space: nowrap;
 }
@@ -156,9 +157,9 @@ h2 {
   align-items: center;
   font-family: "Inter";
   font-weight: 500;
-  font-size: 47px;
+  font-size: 40px;
   color: #ffffff;
-  width: 120px;
+  width: 90px;
   aspect-ratio: 1;
   border-radius: 70px;
   border: 2px solid #ffffff;
@@ -166,16 +167,15 @@ h2 {
 
 #profileName {
   font-family: "Inter";
-  font-size: 47px;
+  font-size: clamp(1rem, 3.5vw, 3.5rem);
   font-weight: 500;
-  margin: 0;
+  margin: 0px 24px 0 0;
   height: fit-content;
 }
 
 .mailPhone {
   width: 140px;
   height: 128px;
-  gap: 22px;
 }
 
 .profileHeader {
@@ -190,7 +190,6 @@ h2 {
 .nameBtns {
   display: flex;
   flex-direction: column;
-  height: 56px;
 }
 
 .btns {
@@ -247,7 +246,7 @@ h2 {
 .emailContainer {
   display: flex;
   flex-direction: column;
-  width: 140px;
+  /* width: 140px; */
   height: 53px;
   margin-bottom: 40px;
 }
@@ -409,7 +408,7 @@ h2 {
 .closeSingleMobile {
   display: none;
   position: absolute;
-  top: 0px;
+  top: 36px;
   right: 41px;
   cursor: pointer;
   z-index: 20;
@@ -528,6 +527,8 @@ h2 {
 
 .editInitials {
   display: flex;
+  box-sizing: border-box;
+  object-fit: cover;
   align-items: center;
   justify-content: center;
   width: 120px;
@@ -536,10 +537,6 @@ h2 {
   border-radius: 60px;
   border: 2px solid #ffffff;
   color: white;
-  font-family: Inter;
-  font-weight: 500;
+  font-family: "Inter";
   font-size: 47px;
-  line-height: 120%;
-  text-align: center;
-  vertical-align: middle;
 }

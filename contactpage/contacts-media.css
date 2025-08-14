@@ -1,10 +1,9 @@
 @media (max-width: 1100px) {
   .profilePic {
-    width: 100px;
+    min-width: 90px;
   }
-  .profileName {
-    font-size: 32px;
-  }
+
+
   .profileHeader {
     justify-content: space-evenly;
   }
@@ -12,25 +11,32 @@
 
 @media (max-width: 900px) {
   .profilePic {
-    font-size: 32px;
-    width: 75px;
+    font-size: 38px;
+    width: 80px;
+
   }
-  h1 {
-    font-size: 51px;
+
+  .btns {
+    gap: 12px;
+    font-size: 8px;
   }
-  h2 {
-    font-size: 22px;
+
+  #edit,
+  #delete {
+    font-size: 13px;
   }
+
+  .profileHeader {
+    gap: 12px;
+    min-height: 180px;
+  }
+
   .contactHeader {
     gap: 8px;
   }
 
-  .cancelBtn {
-    display: none;
-  }
-
   .submitBtn {
-    width: 202px;
+    width: 200px;
   }
 
   .editInitials {
@@ -49,8 +55,9 @@
   .btns {
     display: none;
   }
-  .profileName {
-    font-size: 35px;
+
+  #profileName {
+    font-size: clamp(2rem, 4.1vw, 3.5rem);
     padding-right: 12px;
   }
 
@@ -63,6 +70,7 @@
     display: grid;
     place-items: center;
   }
+
   .singleContact {
     display: none;
     position: absolute;
@@ -78,6 +86,7 @@
     height: calc(100% - 96px - 80px);
     border-top: 1px solid #d1d1d1;
   }
+
   .newContact {
     position: fixed;
     bottom: 100px;
@@ -111,6 +120,7 @@
     width: 100%;
     position: static;
   }
+
   .singleContact.slide-in .fab-container {
     display: block;
     position: fixed;
@@ -133,13 +143,13 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     cursor: pointer;
     position: absolute;
-    bottom: 32px;
-    right: 16px;
+    bottom: 16px;
+    right: 8px;
   }
 
   .fab-menu {
     position: absolute;
-    bottom: 32px;
+    bottom: 16px;
     right: 0;
     background: #fff;
     border-radius: 8px;
@@ -160,6 +170,7 @@
     gap: 8px;
     cursor: pointer;
   }
+
   .fab-menu-item:hover {
     background-color: #f2f2f2;
   }
@@ -169,16 +180,18 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 4px;
-    margin-top: 0px;
-    margin-left: 16px;
+    margin: 0;
+    padding-top: 36px
   }
 
   .contactHeader h1 {
     order: 1;
   }
+
   .contactHeader h2 {
     order: 2;
   }
+
   .contactHeader .bar {
     order: 3;
   }
@@ -194,11 +207,14 @@
   .contactHeader h1 {
     font-size: 47px;
     padding: 0;
+
   }
+
   .contactHeader h2 {
     font-size: 20px;
     font-weight: 400;
   }
+
   .allContacts {
     padding-bottom: 90px;
   }
@@ -220,16 +236,13 @@
     height: calc(100% - 80px - 80px);
     top: 80px;
   }
+
   .allContacts {
     padding-top: 90px;
   }
 
-  .cancelBtn {
-    display: none;
-  }
-
   .submitBtn {
-    width: 202px;
+    width: 200px;
   }
 
   .editInitials {
