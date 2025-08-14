@@ -304,7 +304,7 @@ main {
 }
 
 .greetings .username {
-    font-size: clamp(12px, 2vw, 24px);
+    font-size: clamp(12px, 2vw, 32px);
     white-space: normal;
     word-break: break-word;
     text-align: center;
