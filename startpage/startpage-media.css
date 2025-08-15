@@ -1,10 +1,13 @@
 @media (max-width: 1200px) {
   :root {
-    --sidebar-width: 280px;
+    --sidebar-width: clamp(15.5rem, 27.5vw, 20.5rem);
   }
+
   .frontPage {
-    padding-top: 70px;
+    padding-top: clamp(4.4rem, 9.5vw, 7rem);
   }
+
+
 
   .mainContent {
     gap: 40px;
@@ -12,24 +15,19 @@
 
   .last-name {
     font-size: clamp(12px, 2vw, 20px);
-    white-space: nowrap;
   }
 }
 
 @media (max-width: 1100px) {
-  :root {
-    --sidebar-width: 248px;
-  }
 
   .last-name {
     font-size: clamp(12px, 1vw, 15px);
-    white-space: nowrap;
   }
 
   .greetings .username {
     font-size: clamp(1.5rem, 4vw, 3rem);
     white-space: normal;
-    word-break: break-word;
+
     text-align: center;
   }
 }
@@ -48,6 +46,7 @@
     padding-inline: 0;
     margin-left: 20px;
     margin-right: 20px;
+    align-items: center;
   }
 
   .mainContent {
@@ -87,26 +86,21 @@
     justify-content: space-evenly;
   }
 
-    .last-name {
+  .last-name {
     font-size: clamp(1.5rem, 4vw, 3rem);
-    white-space: nowrap;
   }
 
   .greetings .username {
     font-size: clamp(1.5rem, 4vw, 3rem);
     white-space: normal;
-    word-break: break-word;
     text-align: center;
   }
 }
 
 @media (max-width: 600px) {
   .frontPage {
+    align-items: initial;
     margin: 0 16px;
-  }
-  h1 {
-    padding-left: 0 !important;
-    font-size: 2rem !important;
   }
 
   .last-name {
@@ -123,16 +117,10 @@
 }
 
 @media (max-width: 425px) {
-  .headline p {
-    font-size: 0.8rem;
-  }
-  .divider {
-    height: 40px !important;
-  }
 
   .last-name {
     font-size: clamp(1.5rem, 4vw, 3rem);
-    white-space: nowrap;
+
   }
 
   .greetings .username {

@@ -25,7 +25,7 @@
     height: 39px;
     padding-left: 16px;
   }
-  
+
   .help-icon {
     display: none;
   }
@@ -183,6 +183,82 @@
     overflow-y: auto;
     box-sizing: border-box;
   }
+
+  .help-container {
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    gap: 16px;
+    padding-right: 12px;
+    width: 104px;
+    height: 56px;
+  }
+
+  .dropDownMenu {
+    top: 72px;
+    right: 8px;
+  }
+
+  .headline {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: left;
+    gap: 12px;
+    max-width: 575px;
+    width: 100%;
+  }
+
+  #divider_none {
+    display: none;
+  }
+
+  #divider {
+    display: flex;
+    width: 90px;
+    height: 4px;
+    background-color: #29abe2;
+    border-radius: 999px;
+    max-width: 560px;
+    /* padding: 0px clamp(0.75rem, 2vh, 1.5rem) 0px clamp(1rem, 3vw, 2.5rem); */
+    margin: 0px clamp(0.75rem, 2vh, 1.5rem) 0px clamp(1rem, 3vw, 2.5rem);
+  }
+
+  .stats>div .counter {
+    font-size: clamp(2rem, 5vw, 4rem);
+  }
+
+  .counter {
+    width: clamp(3rem, 5vw, 3.5rem);
+    height: clamp(3rem, 5vw, 3.5rem);
+    font-size: clamp(2rem, 5vw, 4rem);
+  }
+
+  #urgentIcon {
+    width: clamp(2rem, 5vw, 3.5rem);
+    height: clamp(2rem, 5vw, 3.5rem);
+
+
+  }
+
+  .headline h1 {
+    font-size: 47px;
+  }
+
+  .headline p {
+    font-size: 20px;
+  }
+
+  .headline h1,
+  .headline p {
+    display: flex;
+    max-width: 768px;
+    margin: 0;
+    width: 100%;
+    text-indent: 0;
+    padding: 0px clamp(0.75rem, 2vh, 1.5rem) 0px clamp(1rem, 3vw, 2.5rem);
+  }
+
 }
 
 @media (min-width: 575px) and (max-width: 768px) {
@@ -337,4 +413,81 @@
     overflow-y: auto;
     box-sizing: border-box;
   }
+
+  .help-container {
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    gap: 16px;
+    padding-right: 12px;
+    width: 104px;
+    height: 56px;
+  }
+
+  .dropDownMenu {
+    top: 72px;
+    right: 8px;
+  }
+
+  .headline {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: left;
+    gap: 12px;
+    max-width: 560px;
+    width: 100%;
+  }
+
+  .headline h1,
+  .headline p {
+    display: flex;
+    max-width: 768px;
+    margin: 0;
+    width: 100%;
+    text-indent: 0;
+    padding: 0px clamp(0.75rem, 2vh, 1.5rem) 0px clamp(1rem, 3vw, 2.5rem);
+  }
+
+  #divider_none {
+    display: none;
+  }
+
+  #divider {
+    display: flex;
+    width: 90px;
+    height: 4px;
+    background-color: #29abe2;
+    border-radius: 999px;
+    max-width: 768px;
+    padding: 0px clamp(0.75rem, 2vh, 1.5rem) 0px clamp(1rem, 3vw, 2.5rem);
+    margin: 0px clamp(0.75rem, 2vh, 1.5rem) 0px clamp(1rem, 3vw, 2.5rem);
+
+  }
+
+  .headline h1 {
+    font-size: 47px;
+  }
+
+  .headline p {
+    font-size: 20px;
+  }
+
+  #urgentIcon {
+    width: clamp(2rem, 5vw, 3.5rem);
+    height: clamp(2rem, 5vw, 3.5rem);
+
+
+  }
+
+  .stats>div .counter {
+    font-size: clamp(2rem, 5vw, 4rem);
+  }
+
+  .counter {
+    width: clamp(3rem, 5vw, 3.5rem);
+    height: clamp(3rem, 5vw, 3.5rem);
+    font-size: clamp(2rem, 5vw, 4rem);
+  }
+
 }

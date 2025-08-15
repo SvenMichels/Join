@@ -59,7 +59,7 @@ function updateGreetingElements(greeting, name) {
     if (parts.length > 1) {
       const lastName = parts.pop();
       const firstName = parts.join(" ");
-      nameEl.innerHTML = `${firstName} <span class="last-name">${lastName}</span>`;
+      nameEl.innerHTML = `<span class="last-name" id="username">${firstName} ${lastName}</span>`;
     } else {
       nameEl.textContent = name;
     }

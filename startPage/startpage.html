@@ -36,8 +36,8 @@
   text-align: center;
   padding: 2rem;
 ">
-  Please rotate your device back to portrait mode.
-</div>
+    Please rotate your device back to portrait mode.
+  </div>
   <header class="header-style" id="">
     <img class="header-nav-logo" src="../assets/icons/Capa 3.svg" />
     <div class="header-container">
@@ -104,11 +104,12 @@
       <h1>
         Join 360
       </h1>
-      <div class="divider">
+      <div class="divider" id="divider_none">
       </div>
       <p>
         Key Metrics at a Glance
       </p>
+      <div id="divider"></div>
     </div>
     <div class="mainContent">
       <div class="info">
@@ -137,13 +138,14 @@
         <div class="row">
           <div class="urgent btn" onclick="window.location.href='../board/board.html'">
             <div class="urgentAmount">
-              <img alt="Bild" class="icon" src="/assets/icons/prio_alta_big.svg" />
-              <div class="taskInfo">
-                <p class="counter urgentTaskAmount">0</p>
-                <p class="taskText">
-                  Urgent
-                </p>
-              </div>
+              <img alt="Bild" class="icon" id="urgentIcon" src="/assets/icons/prio_alta_big.svg" />
+
+            </div>
+            <div class="taskInfo">
+              <p class="counter urgentTaskAmount">0</p>
+              <p class="taskText">
+                Urgent
+              </p>
             </div>
             <p class="divider">
             </p>
@@ -188,7 +190,7 @@
       </div>
       <section class="greetings">
         <p></p>
-        <p class="username"></p>
+        <p class="username" id="username"></p>
       </section>
     </div>
   </div>
