@@ -147,7 +147,7 @@ form {
 }
 
 button[type="submit"] {
-  background-color: rgba(42, 54, 71, 1);
+  background-color: #c7c7c7ff;
   color: white;
   border: none;
   border-radius: 8px;

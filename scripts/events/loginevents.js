@@ -10,6 +10,13 @@ export async function loginListeners() {
   const loginFormElement = document.getElementById("loginForm");
   if (!loginFormElement) return;
 
+  loginFormElement.addEventListener("submit", (event) => {
+    event.preventDefault();
+    handleUserLogin();
+  });
+
+  // Initialize validation and bindings
+  bindLoginInputValidation();
   bindUserLoginButton();
   bindGuestLoginButton();
   bindPolicyLinks();
@@ -19,7 +26,8 @@ export async function loginListeners() {
  * Binds the standard user login button click event.
  */
 function bindUserLoginButton() {
-  const loginButton = document.querySelector(".logIn");
+  const loginButton = getLoginButton();
+  if (!loginButton) return;
   loginButton.addEventListener("click", handleUserLogin);
 }
 
@@ -38,27 +46,50 @@ async function handleUserLogin() {
   const loginFormElement = document.getElementById("loginForm");
 
   if (!loginFormElement) {
-    console.warn("Login form not found!");
+    console.warn("Login form or button not found!");
     return;
   }
 
   const credentials = collectLoginCredentials();
+  handleUser(credentials);
+}
+
+async function handleUser(credentials) {
+  const loginBtn = document.querySelector(".btn");
+
   if (!credentials.email || !credentials.password) {
     console.warn("Please enter both email and password!");
+    disableButton(loginBtn);
     return;
   }
 
   if (!isValidEmail(credentials.email)) {
     console.warn("Please enter a valid email address!");
+    disableButton(loginBtn);
     return;
   }
+
+  enableButton(loginBtn);
 
   await attemptUserLogin(credentials);
 }
 
-/**
- * Handles guest login flow.
- */
+function enableButton(btn) {
+  if (!btn) return;
+  btn.disabled = false;
+  btn.classList.remove("disabled");
+  btn.classList.add("background-color");
+  btn.style.backgroundColor = "";
+}
+
+function disableButton(btn) {
+  if (!btn) return;
+  btn.disabled = true;
+  btn.classList.add("disabled");
+  btn.classList.remove("background-color");
+  btn.style.backgroundColor = "#ccc";
+}
+
 async function handleGuestLogin() {
   await loginAsGuest();
   redirectToStartpage();
@@ -70,10 +101,48 @@ async function handleGuestLogin() {
  * @returns {{ email: string, password: string }}
  */
 function collectLoginCredentials() {
+  const emailEl = document.querySelector("#loginEmail");
+  const pwEl = document.querySelector("#loginPassword");
   return {
-    email: document.querySelector("#loginEmail").value.trim(),
-    password: document.querySelector("#loginPassword").value.trim(),
+    email: emailEl ? emailEl.value.trim() : "",
+    password: pwEl ? pwEl.value.trim() : "",
   };
+}
+
+/**
+ * Returns the login button element used for enabling/disabling.
+ */
+function getLoginButton() {
+  return document.querySelector(".logIn") || document.querySelector(".btn") || null;
+}
+
+/**
+ * Binds input listeners for login email/password and updates the login button state.
+ */
+function bindLoginInputValidation() {
+  const emailInput = document.querySelector("#loginEmail");
+  const passwordInput = document.querySelector("#loginPassword");
+  const loginButton = getLoginButton();
+
+  function updateState() {
+    const emailOk = emailInput && emailInput.value.trim() !== "";
+    const pwOk = passwordInput && passwordInput.value.trim() !== "";
+    if (emailOk && pwOk && isValidEmail(emailInput.value.trim())) {
+      enableButton(loginButton);
+    } else {
+      disableButton(loginButton);
+    }
+  }
+
+  if (emailInput) {
+    emailInput.addEventListener("input", updateState);
+  }
+  if (passwordInput) {
+    passwordInput.addEventListener("input", updateState);
+  }
+
+  // Set initial state
+  updateState();
 }
 
 /**
@@ -217,6 +286,13 @@ function bindPrivacyCheckbox() {
  */
 function toggleSubmitButton(checkbox, submitButton) {
   submitButton.disabled = !checkbox.checked;
+  if (checkbox.checked) {
+    submitButton.classList.remove("disabled");
+    submitButton.style.backgroundColor = "#2a3647";
+  } else {
+    submitButton.classList.add("disabled");
+    submitButton.style.backgroundColor = "#c7c7c7ff";
+  }
 }
 
 /**
@@ -228,4 +304,19 @@ async function handleSignupSubmission(event) {
   event.preventDefault();
   const userRegistrationData = await collectUserInput();
   requestData("POST", "/users/", userRegistrationData);
+}
+
+export async function loginFailFeedback() {
+  const LoginFeedback = document.getElementById("failLoginFeedback");
+  if (!LoginFeedback) return;
+
+  LoginFeedback.classList.remove("dp-none");
+  LoginFeedback.classList.add("centerFeedback");
+
+  LoginFeedback.addEventListener("animationend", () => {
+    setTimeout(() => {
+      LoginFeedback.classList.add("dp-none");
+      LoginFeedback.classList.remove("centerFeedback");
+    }, 1500);
+  });
 }

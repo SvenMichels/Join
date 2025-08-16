@@ -15,7 +15,6 @@ body {
 p {
   margin: 0;
   font-weight: 400;
-  /* font-size: 20px; */
   line-height: 120%;
 }
 
@@ -194,7 +193,6 @@ p {
   justify-content: center;
   background-color: #2a3647;
   width: 150px;
-  /* height: 158px; */
   border-radius: 20px 0px 20px 20px;
   padding: 10px;
   z-index: 999999;
@@ -264,9 +262,3 @@ p {
   color: #ffffff;
   cursor: pointer;
 }
-
-/* @media screen and (orientation: landscape) and (max-width: 1390px) and (max-height: 950px) {
-  body {
-    display: none !important;
-  }
-} */
