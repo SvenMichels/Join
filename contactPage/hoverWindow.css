@@ -146,7 +146,6 @@ input {
   font-size: 20px;
   font-weight: 400;
   resize: none;
-  /* width: 422px; */
   height: 50px;
   border: 1px solid #d1d1d1;
   border-radius: 10px;
@@ -181,7 +180,6 @@ input::placeholder {
 .pers input {
   width: 100%;
   padding-right: 2.5rem;
-  /* Platz für Icon schaffen */
   box-sizing: border-box;
 }
 
