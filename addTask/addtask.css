@@ -6,7 +6,7 @@ h1 {
   display: inline-block;
   white-space: nowrap;
   margin: 0;
-  padding-top: 100px;
+  padding-top: 24px;
 }
 
 .redSpan {
@@ -54,7 +54,7 @@ h1 {
   transform: rotate(180deg);
 }
 
-.assigned-user-list.visible ~ .assigned-container .dropdown-arrow {
+.assigned-user-list.visible~.assigned-container .dropdown-arrow {
   transform: rotate(180deg);
 }
 
@@ -221,8 +221,7 @@ select {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-  background: url("../assets/icons/arrow_drop_down.svg") no-repeat right 0.75rem
-    center;
+  background: url("../assets/icons/arrow_drop_down.svg") no-repeat right 0.75rem center;
   background-size: 1rem;
   padding-right: 2rem;
   border: 1px solid #ccc;
@@ -288,7 +287,8 @@ select {
 .subtask-save-buttonImg,
 .subtask-delete-buttonImg {
   width: 15.49px;
-  height: 11.23; /* TODO: WTF? */
+  height: 11.23;
+  /* TODO: WTF? */
 }
 
 .subtask-button-wrapper {
@@ -327,10 +327,10 @@ select {
 @media (max-width: 575px) {
   h1 {
     margin: 0;
-    padding-top: 0;
+    /* padding-top: 0; */
     width: 100%;
     max-width: 500px;
-    text-indent: 16px;
+    /* text-indent: 16px; */
   }
 
   .task-h1-container {

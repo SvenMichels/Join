@@ -308,10 +308,10 @@ input:focus::placeholder {
     height: 100%;
     gap: 24px;
   }
-  .login-container {
+  /* .login-container {
     width: 90%;
     padding: 32px;
-  }
+  } */
 
   input.email,
   input.password {
