@@ -14,7 +14,6 @@
   }
 
   .column {
-    /* max-width: 272px; */
     width: 100%;
     max-width: 100%;
     display: flex;
@@ -94,7 +93,6 @@
   }
 
   .task-h1-container {
-    /* padding-left: 328px; */
     margin: 0;
   }
 
@@ -162,10 +160,6 @@
 
   .header-container {
     padding-left: 328px;
-  }
-
-  .task-h1-container {
-    /* padding-left: 328px; */
   }
 
   .help-container {
@@ -260,7 +254,6 @@
   }
 
   .column {
-    /* max-width: 272px; */
     width: 100%;
     max-width: 100%;
     display: flex;
@@ -309,10 +302,6 @@
 
   .form-wrapper {
     padding-left: 328px;
-  }
-
-  .task-h1-container {
-    /* padding-left: 328px; */
   }
 
   .create-container {
@@ -376,7 +365,6 @@
   .task-list {
     min-height: 120px;
     display: flex;
-    /* flex-direction: column; */
     gap: 16px;
     overflow-x: auto;
     overflow-y: hidden;
@@ -393,7 +381,6 @@
   }
 
   .column {
-    /* max-width: 272px; */
     width: 100%;
     display: flex;
     flex-direction: column;
