@@ -212,6 +212,7 @@ h3 {
   transition: border-color 0.2s ease;
   -ms-overflow-style: none;
   scrollbar-width: none;
+  flex-direction: column;
 }
 
 .overflow-ellipsis {
