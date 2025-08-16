@@ -33,30 +33,33 @@
   text-align: center;
   padding: 2rem;
 ">
-  Please rotate your device back to portrait mode.
-</div>
+    Please rotate your device back to portrait mode.
+  </div>
   <header class="header-style" id="">
     <img class="header-nav-logo" src="../assets/icons/Capa 3.svg" />
     <div class="header-container">
       <p class="media-d-none">Kanban Project Management Tool</p>
     </div>
-      <div class="help-container">
-        <a href="../help/help.html">
-          <img alt="Bild" class="help-icon" src="../assets/icons/help.svg" />
-        </a>
-        <button id="openMenu" class="profile-button"></button>
-      </div>
-      <div id="dropDownMenu" class="dropDownMenu dp-none">
-        <a class="txtDeco-none" href="../legalnotice/legalnotice.html">
-          <p class="dropDownTxt">Legal Notice</p>
-        </a>
-        <a class="txtDeco-none" href="../privatePolicy/privatpolicy.html">
-          <p class="dropDownTxt">Privacy Policy</p>
-        </a>
-<a class="txtDeco-none" onclick="logoutUser()" href="../index.html">
+    <div class="help-container">
+      <a href="../help/help.html">
+        <img alt="Bild" class="help-icon" src="../assets/icons/help.svg" />
+      </a>
+      <button id="openMenu" class="profile-button"></button>
+    </div>
+    <div id="dropDownMenu" class="dropDownMenu dp-none">
+      <a class="txtDeco-none" id="help-none" href="../help/help.html">
+        <p class="dropDownTxt">Help</p>
+      </a>
+      <a class="txtDeco-none" href="../legalnotice/legalnotice.html">
+        <p class="dropDownTxt">Legal Notice</p>
+      </a>
+      <a class="txtDeco-none" href="../privatePolicy/privatpolicy.html">
+        <p class="dropDownTxt">Privacy Policy</p>
+      </a>
+      <a class="txtDeco-none" onclick="logoutUser()" href="../index.html">
         <p class="dropDownTxt">Log out</p>
-        </a>
-      </div>
+      </a>
+    </div>
   </header>
 
 
@@ -105,59 +108,61 @@
   </div>
 
   <div class="board-container">
-  <div class="board-h1-container">
-    <div class="board-add-wrapper">
-    <h1>Board</h1>
-    <button id="add-task-board-button" class="add-task-board-button"><img src="../assets/icons/plus_white.svg" alt="add-task-img"></button>
-    </div>
-    <div class="search-add-container">
-      <div class="input-wrapper">
-        <input class="searchField" placeholder="Find Task" type="text" id="searchFieldInput"/>
-        <img alt="Bild" id="inputIcon" class="input-icon" src="../assets/icons/search.svg" />
+    <div class="board-h1-container">
+      <div class="board-add-wrapper">
+        <h1 id="board-title">Board</h1>
+        <button id="add-task-board-button" class="add-task-board-button"><img src="../assets/icons/plus_white.svg"
+            alt="add-task-img"></button>
       </div>
-      <button id="add-task-btn" class="add-task-board-button-second">Add task<img src="../assets/icons/plus_white.svg"></button>
+      <div class="search-add-container">
+        <div class="input-wrapper">
+          <input class="searchField" placeholder="Find Task" type="text" id="searchFieldInput" />
+          <img alt="Bild" id="inputIcon" class="input-icon" src="../assets/icons/search.svg" />
+        </div>
+        <button id="add-task-btn" class="add-task-board-button-second">Add task<img
+            src="../assets/icons/plus_white.svg"></button>
+      </div>
     </div>
-  </div>
 
-  <main class="board">
-    <section class="column" data-status="todo">
+    <main class="board">
+      <section class="column" data-status="todo">
 
-      <header class="board-wrapper">
-        <h2>To Do</h2>
-        <img alt="Bild" class="board-icon" id="add-task-btn-to-do" src="../assets/icons/add_task_btn.svg" />
-      </header> 
-      <p id="noTasksFoundNotice" style="display: none; color: #888; text-align: center; margin-top: 1rem;">
+        <header class="board-wrapper">
+          <h2>To Do</h2>
+          <img alt="Bild" class="board-icon" id="add-task-btn-to-do" src="../assets/icons/add_task_btn.svg" />
+        </header>
+        <p id="noTasksFoundNotice" style="display: none; color: #888; text-align: center; margin-top: 1rem;">
           couldnt find any tasks matching your search criteria.
-      </p>
-      <div class="task-list overflow-ellipsis-ellipsis" id="todoList">
-      </div>
-    </section>
+        </p>
+        <div class="task-list overflow-ellipsis-ellipsis" id="todoList">
+        </div>
+      </section>
 
-    <section class="column" data-status="in-progress">
-      <header class="board-wrapper">
-        <h2>In Progress</h2>
-        <img alt="Bild" class="board-icon" id="add-task-btn-progress" src="../assets/icons/add_task_btn.svg" />
-      </header>
-      <div class="task-list" id="inProgressList"></div>
-    </section>
+      <section class="column" data-status="in-progress">
+        <header class="board-wrapper">
+          <h2>In Progress</h2>
+          <img alt="Bild" class="board-icon" id="add-task-btn-progress" src="../assets/icons/add_task_btn.svg" />
+        </header>
+        <div class="task-list" id="inProgressList"></div>
+      </section>
 
-    <section class="column" data-status="await">
-      <header class="board-wrapper">
-        <h2>Await Feedback</h2>
-        <img alt="Bild" class="board-icon" id="add-task-btn-await" src="../assets/icons/add_task_btn.svg" />
-      </header>
-      <div class="task-list" id="awaitList"></div>
-    </section>
+      <section class="column" data-status="await">
+        <header class="board-wrapper">
+          <h2>Await Feedback</h2>
+          <img alt="Bild" class="board-icon" id="add-task-btn-await" src="../assets/icons/add_task_btn.svg" />
+        </header>
+        <div class="task-list" id="awaitList"></div>
+      </section>
 
-    <section class="column" data-status="done">
-      <header class="board-wrapper">
-        <h2>Done</h2>
-        <img alt="Bild" class="board-icon" id="add-task-btn-done" src="../assets/icons/add_task_btn.svg" />
-      </header>
-      <div class="task-list" id="doneList"></div>
-    </section>
+      <section class="column" data-status="done">
+        <header class="board-wrapper">
+          <h2>Done</h2>
+          <img alt="Bild" class="board-icon" id="add-task-btn-done" src="../assets/icons/add_task_btn.svg" />
+        </header>
+        <div class="task-list" id="doneList"></div>
+      </section>
 
-  </main>
+    </main>
   </div>
   <div id="modal-overlay" class="d_none"></div>
   <script type="module" src="../scripts/events/logoutevent.js"></script>

@@ -14,7 +14,7 @@ main {
   align-items: center;
   width: 100vw;
   height: 100%;
-  padding-top: 120px;
+  padding-top: 160px;
 }
 
 .form-container {
@@ -25,7 +25,10 @@ main {
   box-shadow: 0px 0px 14px 3px rgba(0, 0, 0, 0.08);
   border-radius: 30px;
   background-color: white;
-  padding: 48px 88px;
+  padding: clamp(2.5rem, 10vw, 5rem);
+  /*88px;*/
+  padding-top: 48px;
+  padding-bottom: 48px;
   gap: 32px;
   box-sizing: border-box;
 }
@@ -92,7 +95,7 @@ form {
   color: #2a2a2a;
   width: 100%;
   height: 48px;
-  padding: 0 32px 0 12px;
+  padding: 0 36px 0 12px;
   border: 1px solid lightgrey;
   border-radius: 10px;
   font-size: 16px;
@@ -246,16 +249,20 @@ input:focus::placeholder {
     bottom: -100px;
     opacity: 0;
   }
+
   to {
     bottom: 40%;
     opacity: 1;
   }
 }
 
-@media (max-width: 410px) {
-  .form-container {
-    padding: 48px;
+@media (max-width: 575px) {
+  .form-title h1 {
+    font-size: clamp(2.8rem, 10.5vw, 4rem);
   }
+}
+
+@media (max-width: 410px) {
 
   .input-wrapper input {
     padding: 0 24px 0 6px;
