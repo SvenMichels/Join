@@ -15,7 +15,6 @@ import { getSubtaskItems, addSubtaskItem, removeSubtaskItem, updateSubtaskItem }
  */
 export function addNewSubtask(element) {
   element.preventDefault();
-  console.log("Adding new subtask...");
   
   const subtaskInput = document.getElementById("subtask");
   const subtaskInputValue = subtaskInput?.value.trim();

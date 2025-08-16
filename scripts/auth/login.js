@@ -1,6 +1,7 @@
 import { requestData } from "../firebase.js";
 import { fetchUsersFromDatabase } from "../firebase.js";
 import { countByStatus } from "../../startpage/taskStatisticsManager.js";
+import { loginFailFeedback } from "../events/loginevents.js"
 
 const loginFormElement = document.getElementById("loginForm");
 
@@ -63,7 +64,8 @@ export async function loginUser(emailAddress, userPassword) {
   const authenticatedUser = findMatchingUser(allUsers, emailAddress, userPassword);
 
   if (!authenticatedUser) {
-    throw new Error("Login failed");
+    await loginFailFeedback();
+    throw new Error("Invalid email or password");
   }
 
   storeCurrentUser(authenticatedUser);
@@ -228,7 +230,7 @@ async function updateSummary() {
  * @returns {Promise<Array>}
  */
 export async function fetchAllTasks() {
-  const { data: tasks } = await requestData("GET", "/tasks/");  
+  const { data: tasks } = await requestData("GET", "/tasks/");
   return Object.values(tasks || {});
 }
 
@@ -310,7 +312,7 @@ function setText(selector, text) {
  */
 function transformUsersForLogin(usersData) {
   const userEntries = Object.entries(usersData);
-  
+
   return userEntries.map(([id, user]) => ({
     userId: id,
     userFullName: user.userFullName,
