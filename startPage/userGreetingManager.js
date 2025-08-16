@@ -6,29 +6,13 @@
 import { getInitials } from "../scripts/utils/helpers.js";
 
 /**
- * Updates the greeting message and user name on the dashboard.
- * Pulls user data from localStorage and displays time-based greeting.
+ * Retrieves stored user data from localStorage.
+ *
+ * Attempts to parse the `currentUser` JSON string from localStorage.
+ * If no data exists or parsing fails, it returns `null`.
+ *
+ * @returns {Object|null} The parsed user data object or `null` if not available/invalid.
  */
-// TODO: REFACTOR: This function is too large and does too many things. Consider breaking it down into smaller functions.
-// export function updateUserGreetingDisplay() {
-//   const userString = localStorage.getItem("currentUser");
-//   if (!userString) {
-//     return;
-//   }
-
-//   const userData = JSON.parse(userString);
-//   const userName = userData.userFullName || "Guest";
-//   const greeting = getTimeBasedGreeting();
-
-//   const greetingEl = document.querySelector(".greetings > p:first-child");
-//   const nameEl = document.querySelector(".greetings .username");
-//   const profileBtn = document.getElementById("openMenu");
-
-//   if (greetingEl) greetingEl.textContent = `${greeting},`;
-//   if (nameEl) nameEl.textContent = userName;
-//   if (profileBtn) profileBtn.textContent = getInitials(userName);
-// }
-
 export function updateUserGreetingDisplay() {
   const userData = getStoredUserData();
   if (!userData) return;
@@ -39,6 +23,16 @@ export function updateUserGreetingDisplay() {
   updateGreetingElements(greeting, userName);
 }
 
+/**
+ * Updates the greeting display with the current user's information.
+ *
+ * - Retrieves the stored user data.
+ * - Falls back to "Guest" if no user data is available.
+ * - Generates a time-based greeting (e.g., "Good morning").
+ * - Passes the data to `updateGreetingElements` for rendering.
+ *
+ * @returns {void}
+ */
 function getStoredUserData() {
   const userString = localStorage.getItem("currentUser");
   try {
@@ -48,6 +42,17 @@ function getStoredUserData() {
   }
 }
 
+/**
+ * Updates the greeting elements in the header with personalized text.
+ *
+ * - Sets the greeting message (e.g., "Good morning,").
+ * - Renders the user's full name in the designated element.
+ * - Displays the user's initials inside the profile button.
+ *
+ * @param {string} greeting - The greeting message (e.g., "Hello", "Welcome").
+ * @param {string} name - The full name of the user to be displayed.
+ * @returns {void}
+ */
 function updateGreetingElements(greeting, name) {
   const greetingEl = document.querySelector(".greetings > p:first-child");
   const nameEl = document.querySelector(".greetings .username");

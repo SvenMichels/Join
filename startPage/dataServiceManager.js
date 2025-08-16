@@ -51,6 +51,14 @@ async function loadAndUpdateSummary() {
   }
 }
 
+/**
+ * Handles the case when no data is available.
+ *
+ * - Resets the text update summary to an empty state.
+ * - Returns `true` as a confirmation flag.
+ *
+ * @returns {boolean} Always returns `true` after handling.
+ */
 function handleEmptyData() {
   setTextUpdateSummary([]);
   return true;
