@@ -26,7 +26,6 @@ main {
   border-radius: 30px;
   background-color: white;
   padding: clamp(2.5rem, 10vw, 5rem);
-  /*88px;*/
   padding-top: 48px;
   padding-bottom: 48px;
   gap: 32px;

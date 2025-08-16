@@ -246,7 +246,6 @@ h2 {
 .emailContainer {
   display: flex;
   flex-direction: column;
-  /* width: 140px; */
   height: 53px;
   margin-bottom: 40px;
 }

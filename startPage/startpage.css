@@ -2,7 +2,6 @@
   --sidebar-width: 326px;
 }
 
-/* Loading Animation */
 .loading-dots {
   display: inline-block;
   position: relative;
@@ -246,11 +245,6 @@ main {
   font-size: clamp(0.8rem, 1.5vw, 1rem);
   color: #2a3647;
 }
-
-/* 
-#urgentIcon {
-  margin-right: 16px;
-} */
 
 .taskText {
   font-size: clamp(1rem, 2vw, 1.25rem);

@@ -53,7 +53,6 @@ h1 {
   position: relative;
   display: flex;
   padding: 0 8px;
-  /* max-width: 252px; */
   width: 100%;
   align-items: center;
   justify-content: space-between;
@@ -137,7 +136,6 @@ h1 {
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
   border-radius: 24px;
   padding: 16px;
-  /* margin: 15px 0 5px 0; */
   background-color: rgba(255, 255, 255, 1);
   cursor: pointer;
   opacity: 1;
@@ -208,7 +206,6 @@ h3 {
 .task-list {
   min-height: 100vh;
   border-radius: 8px;
-  /* margin: 15px 0 5px 0; */
   padding: 0px;
   background-color: #f5f5f5;
   border: 2px dashed transparent;

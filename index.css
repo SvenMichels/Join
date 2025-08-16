@@ -193,7 +193,6 @@ input.password:focus {
   width: 110px;
 }
 
-
 .logIn:hover {
   background: #29abe2;
   border-color: #29abe2;
@@ -282,6 +281,19 @@ input:focus::placeholder {
   color: transparent;
 }
 
+#loginTitle {
+  margin: 0;
+  font-size: 61px;
+  font-weight: 700;
+}
+
+.login-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
 @media (max-width: 575px) {
   h1 {
     margin: 0;
@@ -363,11 +375,6 @@ input:focus::placeholder {
     gap: 24px;
   }
 
-  /* .login-container {
-    width: 90%;
-    padding: 32px;
-  } */
-
   input.email,
   input.password {
     width: 100%;
@@ -383,17 +390,4 @@ input:focus::placeholder {
     width: 84px;
     height: 94px;
   }
-}
-
-#loginTitle {
-  margin: 0;
-  font-size: 61px;
-  font-weight: 700;
-}
-
-.login-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
 }

@@ -288,7 +288,6 @@ select {
 .subtask-delete-buttonImg {
   width: 15.49px;
   height: 11.23;
-  /* TODO: WTF? */
 }
 
 .subtask-button-wrapper {
@@ -327,10 +326,8 @@ select {
 @media (max-width: 575px) {
   h1 {
     margin: 0;
-    /* padding-top: 0; */
     width: 100%;
     max-width: 500px;
-    /* text-indent: 16px; */
   }
 
   .task-h1-container {

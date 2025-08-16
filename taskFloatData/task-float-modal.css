@@ -117,17 +117,6 @@
   transition: transform 0.3s ease;
 }
 
-/* .required-container-modal {
-  margin-top: 140px;
-  width:100%;
-  position:fixed;
-  background-color: #ffffff;
-  
-  margin-top: 40px;
-  padding: 16px;
-  bottom: -23%;
-} */
-
 .task-title {
   display: flex;
   flex-direction: column;
@@ -557,7 +546,6 @@ input:valid + .error-message {
   content: url("../assets/icons/close_white.svg");
 }
 
-/* Auswahl im Dropdown markieren */
 .user-checkbox-wrapper-modal {
   display: flex;
   justify-content: space-between;
