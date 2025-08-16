@@ -1,0 +1,102 @@
+.fab-container {
+  display: none;
+}
+
+.fab-btn:hover {
+  background-color: #29abe2;
+}
+
+.fab-menu-item:hover {
+  background-color: #2a3647 !important;
+  color: white;
+}
+
+.fab-menu-item img {
+  transition: filter 0s ease;
+}
+
+.fab-menu-item:hover img {
+  filter: brightness(0) invert(1);
+}
+
+@keyframes slideUpFadeIn {
+  from {
+    bottom: -100px;
+    opacity: 0;
+  }
+
+  to {
+    bottom: 40%;
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0%);
+  }
+
+  to {
+    transform: translateX(100%);
+  }
+}
+
+.singleContact.slide-in {
+  position: fixed;
+  top: 96px;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 96px);
+  background-color: white;
+  z-index: 10;
+  animation: slideIn 0.3s ease-out forwards;
+  display: block !important;
+}
+
+.singleContact.slide-out {
+  display: block !important;
+  position: fixed;
+  top: 96px;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 96px - 80px);
+  background-color: white;
+  z-index: 10;
+  animation: slideOut 0.3s ease-in forwards;
+}
+
+.userFeedback {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #2a3647;
+  color: #ffffff;
+  font-weight: 400;
+  font-size: 20px;
+  width: 312px;
+  height: 74px;
+  border: 1px solid #2a3647;
+  border-radius: 20px;
+  position: fixed;
+  bottom: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+  opacity: 0;
+}
+
+.centerFeedback {
+  animation: slideUpFadeIn 0.6s ease-out forwards;
+}

@@ -16,22 +16,10 @@ body {
   overflow-y: hidden;
 }
 
-.helpBtn:hover {
-  width: 24px;
-  height: 24px;
-}
-
 .headerTxt {
   font-family: "Inter";
   font-weight: 400;
   font-size: 20px;
-}
-
-.headerBtns {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
 }
 
 .sidebar {
@@ -185,45 +173,6 @@ h2 {
   gap: 21px;
   margin-top: 25px;
   margin-bottom: 25px;
-}
-
-.nameBtns {
-  display: flex;
-  flex-direction: column;
-}
-
-.btns {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  width: 159px;
-  height: 24px;
-  gap: 20px;
-  font-family: "Inter";
-  font-weight: 400;
-  font-size: 16px;
-}
-
-.editBtn {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.editBtn:hover {
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-.deleteBtn {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.deleteBtn:hover {
-  text-decoration: underline;
-  cursor: pointer;
 }
 
 .infoContainer {
@@ -380,30 +329,6 @@ h2 {
   margin-top: 20px !important;
 }
 
-.userFeedback {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #2a3647;
-  color: #ffffff;
-  font-weight: 400;
-  font-size: 20px;
-  width: 312px;
-  height: 74px;
-  border: 1px solid #2a3647;
-  border-radius: 20px;
-  position: fixed;
-  bottom: -100px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 999;
-  opacity: 0;
-}
-
-.centerFeedback {
-  animation: slideUpFadeIn 0.6s ease-out forwards;
-}
-
 .closeSingleMobile {
   display: none;
   position: absolute;
@@ -419,27 +344,6 @@ h2 {
 .closeSingleMobile:hover {
   background-color: #81818173;
   border-radius: 100%;
-}
-
-.fab-container {
-  display: none;
-}
-
-.fab-btn:hover {
-  background-color: #29abe2;
-}
-
-.fab-menu-item:hover {
-  background-color: #2a3647 !important;
-  color: white;
-}
-
-.fab-menu-item img {
-  transition: filter 0s ease;
-}
-
-.fab-menu-item:hover img {
-  filter: brightness(0) invert(1);
 }
 
 .bigContactCard {
@@ -464,64 +368,6 @@ h2 {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-}
-
-@keyframes slideUpFadeIn {
-  from {
-    bottom: -100px;
-    opacity: 0;
-  }
-
-  to {
-    bottom: 40%;
-    opacity: 1;
-  }
-}
-
-@keyframes slideIn {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-
-  to {
-    transform: translateX(0%);
-    opacity: 1;
-  }
-}
-
-@keyframes slideOut {
-  from {
-    transform: translateX(0%);
-  }
-
-  to {
-    transform: translateX(100%);
-  }
-}
-
-.singleContact.slide-in {
-  position: fixed;
-  top: 96px;
-  left: 0;
-  width: 100%;
-  height: calc(100% - 96px);
-  background-color: white;
-  z-index: 10;
-  animation: slideIn 0.3s ease-out forwards;
-  display: block !important;
-}
-
-.singleContact.slide-out {
-  display: block !important;
-  position: fixed;
-  top: 96px;
-  left: 0;
-  width: 100%;
-  height: calc(100% - 96px - 80px);
-  background-color: white;
-  z-index: 10;
-  animation: slideOut 0.3s ease-in forwards;
 }
 
 .editInitials {

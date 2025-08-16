@@ -1,0 +1,50 @@
+.helpBtn:hover {
+  width: 24px;
+  height: 24px;
+}
+
+.headerBtns {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.nameBtns {
+  display: flex;
+  flex-direction: column;
+}
+
+.btns {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 159px;
+  height: 24px;
+  gap: 20px;
+  font-family: "Inter";
+  font-weight: 400;
+  font-size: 16px;
+}
+
+.editBtn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.editBtn:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.deleteBtn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.deleteBtn:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
