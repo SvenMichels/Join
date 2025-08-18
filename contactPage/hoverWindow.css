@@ -92,12 +92,11 @@
   justify-content: center;
   width: 24px;
   height: 24px;
-  margin: 0;
   position: absolute;
   top: 24px;
   right: 24px;
-  font-family: "Inter";
-  font-size: 32px;
+  border-radius: 56px;
+  background-color: #d1d1d1;;
 }
 
 .closeBtn:hover {

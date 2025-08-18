@@ -90,8 +90,11 @@ function extractUserName(userEntry) {
 function createUserChip(userRecord) {
   const userInitials = getInitials(userRecord.userFullName);
   const userColorClass = userRecord.userColor || "color-1";
-
-  return `<div class="contact-chip ${userColorClass}">${userInitials}</div>  <p>${userRecord.userFullName}</p>`;
+  const modalID = document.getElementById("taskDetailModal");
+  if (modalID) {
+    return `<div class="contact-chip ${userColorClass}">${userInitials}</div>  <p>${userRecord.userFullName}</p>`;
+  }
+  return `<div class="contact-chip ${userColorClass}">${userInitials}</div>`;
 }
 
 /**

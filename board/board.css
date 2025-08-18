@@ -41,6 +41,11 @@ h1 {
   border-width: 1px;
 }
 
+.searchField:focus {
+  border: 1px solid #29abe2;
+  outline: 1px solid #29abe2;
+}
+
 .board-add-wrapper {
   display: flex;
   align-items: center;
