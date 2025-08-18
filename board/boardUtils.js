@@ -56,12 +56,22 @@ export function getPriorityIconPath(priorityLevel) {
  * @returns {string} HTML string with contact chips.
  */
 export function generateAssignedChips(assignedUsersList, allSystemUsers = []) {
-  return toArray(assignedUsersList)
+  const allUsers = toArray(assignedUsersList)
     .map(extractUserName)
     .map(name => findUserByName(allSystemUsers, name))
-    .filter(Boolean)
-    .map(createUserChip)
-    .join("");
+    .filter(Boolean);
+
+  // Show first 5 users as chips
+  const visibleUsers = allUsers.slice(0, 5);
+  let chipsHTML = visibleUsers.map(createUserChip).join("");
+
+  // Add "+X" chip if more than 5 users
+  if (allUsers.length > 5) {
+    const remainingCount = allUsers.length - 5;
+    chipsHTML += createRemainingChip(remainingCount);
+  }
+
+  return chipsHTML;
 }
 /**
  * Extracts the full name from a user entry (string or object).
@@ -81,7 +91,16 @@ function createUserChip(userRecord) {
   const userInitials = getInitials(userRecord.userFullName);
   const userColorClass = userRecord.userColor || "color-1";
 
-  return `<div class="contact-chip ${userColorClass}">${userInitials}</div>`;
+  return `<div class="contact-chip ${userColorClass}">${userInitials}</div>  <p>${userRecord.userFullName}</p>`;
+}
+
+/**
+ * Creates a chip showing the remaining user count.
+ * @param {number} count - Number of remaining users.
+ * @returns {string} HTML chip element string.
+ */
+function createRemainingChip(count) {
+  return `<div class="contact-chip remaining-count" style="background-color: #a8a8a8; color: #ffffff;">+${count}</div>`;
 }
 
 /**

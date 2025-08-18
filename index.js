@@ -5,6 +5,7 @@
  */
 
 import { setupMobileDeviceListeners } from "./scripts/utils/mobileUtils.js";
+import { LocalStorageService } from "./scripts/utils/localStorageHelper.js";
 
 /**
  * Handles the animation for the fullscreen startup logo.
@@ -21,6 +22,13 @@ function handleStartupLogoAnimation() {
   });
 }
 
+function clearCurrentUser() {
+  const currentUser = LocalStorageService.getItem("currentUser");
+  if (currentUser) {
+    LocalStorageService.clearItem("currentUser");
+  }
+}
+
 /**
  * Initializes the page by triggering startup animations
  * and setting up mobile-related event listeners.
@@ -28,4 +36,5 @@ function handleStartupLogoAnimation() {
 window.addEventListener("DOMContentLoaded", () => {
   handleStartupLogoAnimation();
   setupMobileDeviceListeners();
+  clearCurrentUser();
 });

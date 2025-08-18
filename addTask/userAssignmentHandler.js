@@ -124,7 +124,10 @@ export function updateSelectedUserDisplay() {
   if (!selectedContainer) return;
 
   selectedContainer.innerHTML = "";
-  collectAssignedUsers().forEach(name => {
+  const assignedUsers = collectAssignedUsers();
+  
+  // Show all users in add task form (no limit)
+  assignedUsers.forEach(name => {
     const user = allSystemUsers.find(u => u.userFullName === name);
     const chip = createUserChip(user, name);
     selectedContainer.appendChild(chip);

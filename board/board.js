@@ -401,7 +401,6 @@ function handleOrientationChange() {
  */
 async function handleUserChange() {
   const currentUser = LocalStorageService.getItem("currentUser");
-  console.debug("[Board] User change detected, reloading tasks and contacts...");
   if (!currentUser) return;
   
   // Reload tasks and contacts for the current user

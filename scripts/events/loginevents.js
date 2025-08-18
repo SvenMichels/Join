@@ -162,8 +162,13 @@ function isValidEmail(email) {
  * @param {{ email: string, password: string }} credentials
  */
 async function attemptUserLogin(credentials) {
-  await loginUser(credentials.email, credentials.password);
-  redirectToStartpage();
+  try {
+    await loginUser(credentials.email, credentials.password);
+    redirectToStartpage();
+  } catch (error) {
+    // Login failed - feedback already shown by loginUser()
+    console.warn("Login attempt failed:", error.message);
+  }
 }
 
 /**
@@ -306,17 +311,24 @@ async function handleSignupSubmission(event) {
   requestData("POST", "/users/", userRegistrationData);
 }
 
-export async function loginFailFeedback() {
-  const LoginFeedback = document.getElementById("failLoginFeedback");
-  if (!LoginFeedback) return;
+export function loginFailFeedback() {
+  return new Promise((resolve) => {
+    const LoginFeedback = document.getElementById("failLoginFeedback");
+    if (!LoginFeedback) return resolve();
 
-  LoginFeedback.classList.remove("dp-none");
-  LoginFeedback.classList.add("centerFeedback");
+    LoginFeedback.classList.remove("dp-none");
+    LoginFeedback.classList.add("centerFeedback");
 
-  LoginFeedback.addEventListener("animationend", () => {
-    setTimeout(() => {
-      LoginFeedback.classList.add("dp-none");
-      LoginFeedback.classList.remove("centerFeedback");
-    }, 1500);
+    LoginFeedback.addEventListener(
+      "animationend",
+      () => {
+        setTimeout(() => {
+          LoginFeedback.classList.add("dp-none");
+          LoginFeedback.classList.remove("centerFeedback");
+          resolve();
+        }, 1500);
+      },
+      { once: true }
+    );
   });
 }

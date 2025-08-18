@@ -18,7 +18,7 @@ export function updateUserGreetingDisplay() {
   if (!userData) return;
 
   const userName = userData.userFullName || "Guest;"
-  const greeting =getTimeBasedGreeting();
+  const greeting = getTimeBasedGreeting();
 
   updateGreetingElements(greeting, userName);
 }
@@ -89,11 +89,4 @@ function getTimeBasedGreeting() {
  * Fades out the greeting message automatically on mobile view.
  * Applies a CSS class to hide the greeting after a short delay.
  */
-export function handleMobileGreetingFadeEffect() {
-  if (window.innerWidth < 767) {
-    const greetings = document.querySelector(".greetings");
-    if (greetings) {
-      setTimeout(() => greetings.classList.add("hidden"), 500);
-    }
-  }
-}
+

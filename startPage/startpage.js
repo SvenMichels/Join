@@ -6,7 +6,7 @@
 
 import { setupDropdown } from "../scripts/ui/dropdown.js";
 import { highlightActiveNavigationLinks } from "../scripts/utils/navUtils.js";
-import { updateUserGreetingDisplay, handleMobileGreetingFadeEffect } from "./userGreetingManager.js";
+import { updateUserGreetingDisplay} from "./userGreetingManager.js";
 import { updateTaskSummaryWithRetryLogic } from "./dataServiceManager.js";
 
 /**
@@ -15,7 +15,6 @@ import { updateTaskSummaryWithRetryLogic } from "./dataServiceManager.js";
 document.addEventListener("DOMContentLoaded", async () => {
   updateUserGreetingDisplay();
   await updateTaskSummaryWithRetryLogic();
-  handleMobileGreetingFadeEffect();
   setupDropdown("#openMenu", "#dropDownMenu");
   highlightActiveNavigationLinks();
 

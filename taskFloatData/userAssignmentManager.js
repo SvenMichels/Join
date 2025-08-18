@@ -184,16 +184,9 @@ export function updateSelectedModal() {
   if (!container) return;
 
   container.innerHTML = "";
-  renderSelectedChips(container);
-}
-
-/**
- * Renders selected user chips in the container.
- * @param {HTMLElement} container - Target container for chips.
- * @private
- */
-function renderSelectedChips(container) {
   const checkedBoxes = document.querySelectorAll(".user-checkbox-modal:checked");
+  
+  // Show all selected users in edit modal (no limit)
   checkedBoxes.forEach(checkbox => {
     const chip = createUserChip(checkbox.value);
     container.appendChild(chip);

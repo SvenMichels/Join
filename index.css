@@ -215,6 +215,17 @@ input.password:focus {
   animation: slideUpFadeIn 0.6s ease-out forwards;
 }
 
+@keyframes slideUpFadeIn {
+  from {
+    bottom: -100px;
+    opacity: 0;
+  }
+  to {
+    bottom: 40%;
+    opacity: 1;
+  }
+}
+
 .failLoginFeedback {
   display: flex;
   justify-content: center;

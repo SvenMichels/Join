@@ -60,17 +60,17 @@ function redirectToStartpage() {
  */
 export async function loginUser(emailAddress, userPassword) {
   const allUsers = await loadAllUsersForLogin();
+  const user = findMatchingUser(allUsers, emailAddress, userPassword);
 
-  const authenticatedUser = findMatchingUser(allUsers, emailAddress, userPassword);
-
-  if (!authenticatedUser) {
+  if (!user) {
     await loginFailFeedback();
-    throw new Error("Invalid email or password");
+    throw new Error("Invalid credentials");
   }
 
-  storeCurrentUser(authenticatedUser);
-  return authenticatedUser;
+  storeCurrentUser(user);
+  return user;
 }
+
 
 /**
  * Finds a user in the list that matches the provided credentials.
@@ -106,6 +106,7 @@ function credentialsMatch(user, emailAddress, userPassword) {
 
   const emailMatches = userEmail?.toLowerCase() === emailAddress.toLowerCase();
   const passwordMatches = password === userPassword;
+  
   return emailMatches && passwordMatches;
 }
 
@@ -120,7 +121,7 @@ function storeCurrentUser(user) {
     id: user.userId || user.id,
     userFullName: user.userFullName,
     userEmailAddress: user.userEmailAddress,
-    userPassword: user.userPassword,
+    userPassword: "",
     userPhoneNumber: user.userPhoneNumber,
     userColor: user.userColor,
     userInitials: user.userInitials,
