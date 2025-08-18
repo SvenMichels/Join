@@ -87,8 +87,11 @@
 }
 
 .closeBtn {
-  width: 32px;
-  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
   margin: 0;
   position: absolute;
   top: 24px;
@@ -98,7 +101,13 @@
 }
 
 .closeBtn:hover {
+  border-radius: 56px;
   cursor: pointer;
+  background: #29abe2;
+}
+
+.closeBtn:hover .icon {
+  content: url("../assets/icons/close_white.svg");
 }
 
 .rightContent {
@@ -312,8 +321,6 @@ input::placeholder {
 }
 
 @media (max-width: 1240px) {
-
-
   .underline {
     width: 75px;
     border: 2px solid #29abe2;
@@ -405,7 +412,7 @@ input::placeholder {
     width: 95%;
   }
 
-  .hoverWindow form>div,
+  .hoverWindow form > div,
   input {
     width: 100%;
   }
@@ -417,11 +424,11 @@ input::placeholder {
     max-width: 100%;
   }
 
-  .rightSide>.closeBtn {
+  .rightSide > .closeBtn {
     display: none;
   }
 
-  .leftSide>.closeBtn {
+  .leftSide > .closeBtn {
     display: block !important;
     color: #d9d9d9;
   }
