@@ -140,7 +140,6 @@
 }
 
 .empty-placeholder {
-  width: 100%;
   padding: 1rem;
   text-align: center;
   font-style: italic;
@@ -151,6 +150,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  box-sizing: content-box;
 }
 
 .modal-overlay {
