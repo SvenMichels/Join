@@ -92,7 +92,7 @@ function createUserChip(userRecord) {
   const userColorClass = userRecord.userColor || "color-1";
   const modalID = document.getElementById("taskDetailModal");
   if (modalID) {
-    return `<div class="contact-chip ${userColorClass}">${userInitials}</div>  <p>${userRecord.userFullName}</p>`;
+    return `<div class="detail-style"><div class="contact-chip ${userColorClass}">${userInitials}</div>  <p>${userRecord.userFullName}</p></div>`;
   }
   return `<div class="contact-chip ${userColorClass}">${userInitials}</div>`;
 }

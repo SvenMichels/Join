@@ -1,0 +1,124 @@
+@media (max-width: 1240px) {
+  .underline {
+    width: 75px;
+    border: 2px solid #29abe2;
+  }
+}
+
+@media (max-width: 1050px) {
+  .underline {
+    width: 60px;
+  }
+}
+
+@media (max-width: 900px) {
+  .hoverWindow {
+    flex-direction: column;
+    height: 100vh;
+    max-height: 100vh;
+    width: 100vw;
+    border-radius: 0;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  .editContactForm {
+    padding-top: 24px;
+  }
+
+  .rightContent {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .windowSlogan {
+    font-size: clamp(1.2rem, 4.1vw, 9rem);
+    width: auto;
+  }
+
+  .leftSide,
+  .rightSide {
+    flex: none;
+    width: 100%;
+    height: 60%;
+  }
+
+  .leftSide {
+    border-radius: 0;
+    border: none;
+    height: 40%;
+  }
+
+  .rightSide {
+    border-radius: 0;
+    border: none;
+    position: relative;
+  }
+
+  .profileIcon {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    border: 2px solid white;
+    width: 120px !important;
+    height: unset !important;
+    aspect-ratio: 1 !important;
+  }
+
+  .leftnav-logo {
+    display: none;
+  }
+
+  .windowH1 {
+    font-size: clamp(3rem, 9.5vw, 6rem);
+    width: unset;
+  }
+
+  .rightContent {
+    width: 100%;
+  }
+
+  .addContactIcon {
+    width: 80px;
+    aspect-ratio: 1;
+  }
+
+  .hoverWindow form {
+    width: 95%;
+  }
+
+  .hoverWindow form > div,
+  input {
+    width: 100%;
+  }
+
+  .formBtns {
+    display: flex;
+    justify-content: space-around;
+    gap: 12px;
+    max-width: 100%;
+  }
+
+  .rightSide > .closeBtn {
+    display: none;
+  }
+
+  .leftSide > .closeBtn {
+    display: block !important;
+    color: #d9d9d9;
+  }
+
+  #editContactName,
+  #editContactEmail,
+  #editContactPhone {
+    width: 100%;
+    min-width: 280px;
+  }
+
+  #editInitials {
+    margin: 0px;
+  }
+}

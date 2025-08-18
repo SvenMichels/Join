@@ -53,6 +53,12 @@
   gap: 12px;
 }
 
+.detail-style {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
 #task-detail-title {
   font-family: Inter;
   font-weight: 700;
@@ -65,23 +71,17 @@
 
 #task-detail-assigned {
   display: flex;
-  flex-direction: row;
-  font-family: Inter;
+  flex-direction: column;
   font-weight: 400;
-  font-style: Regular;
   font-size: 20px;
   line-height: 120%;
-  letter-spacing: 0%;
-  gap: 16px;
+  gap: 4px;
 }
 
 ul {
-  font-family: Inter;
   font-weight: 400;
-  font-style: Regular;
   font-size: 16px;
   line-height: 120%;
-  letter-spacing: 0%;
 }
 
 .detail-header {
