@@ -326,10 +326,12 @@
   align-items: center;
   padding: 0 8px;
   height: 56px;
+  cursor: pointer;
 }
 
 .user-checkbox-wrapper-modal.active {
   background: #2a3647;
   color: #fff;
   border-radius: 10px;
+  cursor: pointer;
 }

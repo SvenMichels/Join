@@ -10,7 +10,7 @@
     top: 0;
     left: 0;
     background-color: #2a3647;
-    z-index: 1;
+    z-index: 2;
   }
 
   .column {
@@ -147,7 +147,7 @@
     top: 0;
     left: 0;
     background-color: #2a3647;
-    z-index: 1;
+    z-index: 2;
   }
 
   .header-nav-logo {
@@ -295,7 +295,7 @@
     top: 0;
     left: 0;
     background-color: #2a3647;
-    z-index: 1;
+    z-index: 2;
   }
 
   .form-wrapper {
@@ -345,15 +345,10 @@
     padding-top: 100px;
     padding-right: 16px;
     padding-left: 295px;
-    position: absolute;
-    top: 96px;
-    bottom: 10px;
-    left: 0;
-    right: 0;
     overflow-y: auto;
     scrollbar-width: none;
     box-sizing: border-box;
-    max-width: 1440px;
+    width: 100%;
   }
 
   .board-container::-webkit-scrollbar {
