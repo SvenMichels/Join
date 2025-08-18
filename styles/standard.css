@@ -1,4 +1,3 @@
-/* Global */
 ::-webkit-scrollbar {
   display: none;
 }
@@ -84,7 +83,6 @@ p {
   cursor: pointer;
 }
 
-/* Navigation */
 .nav-logo {
   padding-top: 50px;
   width: 80px;
@@ -184,7 +182,6 @@ p {
   font-weight: 700;
 }
 
-/* dropdown*/
 .dropDownMenu,
 .subMenuContainer {
   position: absolute;
