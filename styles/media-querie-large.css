@@ -136,7 +136,7 @@
   }
 }
 
-@media (min-width: 991px) and (max-width: 1200px) {
+@media (min-width: 991px) and (max-width: 1199px) {
   .nav-bar {
     height: 100vh;
     display: flex;
@@ -361,7 +361,7 @@
   }
 
   .task-list {
-    min-height: 120px;
+    min-height: 100vh;
     display: flex;
     gap: 16px;
     overflow-x: auto;
