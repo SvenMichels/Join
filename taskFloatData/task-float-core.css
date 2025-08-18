@@ -230,6 +230,10 @@ input:valid + .error-message {
   gap: 10px;
 }
 
+.user-info-wrapper label {
+  cursor: pointer;
+}
+
 input[type="text"]:focus {
   border: 1px solid #29abe2;
   outline: 1px solid #29abe2;
