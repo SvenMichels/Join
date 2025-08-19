@@ -16,7 +16,9 @@ function handleStartupLogoAnimation() {
   const mainLogoElement = document.querySelector(".logo-fullscreen");
   if (!mainLogoElement) return;
 
+  setTimeout(() => { 
   mainLogoElement.classList.add("shrink");
+  },1000);
   mainLogoElement.addEventListener("animationend", () => {
     mainLogoElement.remove();
   });
