@@ -280,7 +280,7 @@ h2 {
   color: white;
 }
 
-.contact:active {
+.contact::highlight {
   background-color: #2a3647;
   color: white;
 }
