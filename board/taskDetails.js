@@ -68,7 +68,8 @@ async function renderTaskDetailAssignees(assigned, allUsers) {
   if (assignedEl) {
     assignedEl.innerHTML = await generateAssignedChips(
       toArray(assigned),
-      allUsers
+      allUsers,
+      true
     );
   }
 }

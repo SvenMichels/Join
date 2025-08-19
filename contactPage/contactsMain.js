@@ -9,9 +9,9 @@ import { openContactAdditionWindow, closeAddWindow, closeEditWindow, showUserFee
 import { loadAllContactsFromFirebaseDatabase, createContact, deleteContactFromDatabase } from './contactDataService.js';
 import { getInitials } from '../scripts/utils/helpers.js';
 import { generateRandomColorClass } from '../scripts/utils/colors.js';
-import { bindButton, loadAndShowContactDetails } from './contactUtils.js';
+import { bindButton, loadAndShowContactDetails, contactFeedback } from './contactUtils.js';
 import { clearContactListUI, renderAllContacts } from './contactRenderer.js';
-import { highlightActiveNavigationLinks } from '../scripts/utils/navUtils.js';
+import { highlightActiveNavigationLinks, setupOpenMenuListener } from '../scripts/utils/navUtils.js';
 import { updateTask } from '../board/taskManager.js';
 import { fetchAllTasks } from '../scripts/auth/login.js';
 import { initializeBackButton, initializeFabMenu } from "../scripts/ui/fabContact.js";
@@ -30,7 +30,7 @@ window.contactList = contactList;
  */
 function setupEventListeners() {
   setupProfileButton();
-  setupDropdown();
+  setupOpenMenuListener();
   setupContactFormListeners();
   setupModalListeners();
   setupKeyboardListeners();
@@ -223,7 +223,8 @@ function updateUIAfterContactCreation() {
   clearContactListUI();
   renderAllContacts(contactList);
   emptyInput();
-  showUserFeedback();
+  // showUserFeedback();
+  contactFeedback();
   setTimeout(closeAddWindow, 800);
 }
 
@@ -317,23 +318,23 @@ function setupProfileButton() {
 /**
  * Sets up dropdown menu for profile
  */
-function setupDropdown() {
-  const openMenuButton = document.getElementById("openMenu");
-  const dropDownMenu = document.getElementById("dropDownMenu");
+// function setupDropdown() {
+//   const openMenuButton = document.getElementById("openMenu");
+//   const dropDownMenu = document.getElementById("dropDownMenu");
 
-  if (openMenuButton && dropDownMenu) {
-    openMenuButton.addEventListener("click", (e) => {
-      e.stopPropagation();
-      dropDownMenu.classList.toggle("dp-none");
-    });
+//   if (openMenuButton && dropDownMenu) {
+//     openMenuButton.addEventListener("click", (e) => {
+//       e.stopPropagation();
+//       dropDownMenu.classList.toggle("dp-none");
+//     });
 
-    document.addEventListener("click", (e) => {
-      if (!dropDownMenu.contains(e.target) && !openMenuButton.contains(e.target)) {
-        dropDownMenu.classList.add("dp-none");
-      }
-    });
-  }
-}
+//     document.addEventListener("click", (e) => {
+//       if (!dropDownMenu.contains(e.target) && !openMenuButton.contains(e.target)) {
+//         dropDownMenu.classList.add("dp-none");
+//       }
+//     });
+//   }
+// }
 
 /**
  * Loads user data from localStorage

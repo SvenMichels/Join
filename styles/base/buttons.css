@@ -52,7 +52,7 @@
   border: none;
   border-radius: 10px;
   background: #fff;
-  box-shadow: 0 0 4px #0000001a;
+  box-shadow: 0 0 4px #0000004f;
   cursor: pointer;
 }
 
@@ -135,7 +135,7 @@
   height: 48px;
   border: 3px solid #2a3647;
   background-color: #ffffff;
-  font-weight: 400;
+  font-weight: bold;
   font-size: 20px;
   color: #29abe2;
 }

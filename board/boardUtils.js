@@ -53,9 +53,10 @@ export function getPriorityIconPath(priorityLevel) {
  * Generates HTML chips for assigned users.
  * @param {Array<string|Object>} assignedUsersList - Assigned user names or objects.
  * @param {Array<Object>} [allSystemUsers=[]] - List of all system users.
+ * @param {boolean} [showNames=false] - Whether to show user names in detail view.
  * @returns {string} HTML string with contact chips.
  */
-export function generateAssignedChips(assignedUsersList, allSystemUsers = []) {
+export function generateAssignedChips(assignedUsersList, allSystemUsers = [], showNames = false) {
   const allUsers = toArray(assignedUsersList)
     .map(extractUserName)
     .map(name => findUserByName(allSystemUsers, name))
@@ -63,7 +64,7 @@ export function generateAssignedChips(assignedUsersList, allSystemUsers = []) {
 
   // Show first 5 users as chips
   const visibleUsers = allUsers.slice(0, 5);
-  let chipsHTML = visibleUsers.map(createUserChip).join("");
+  let chipsHTML = visibleUsers.map(user => createUserChip(user, showNames)).join("");
 
   // Add "+X" chip if more than 5 users
   if (allUsers.length > 5) {
@@ -87,13 +88,20 @@ function extractUserName(userEntry) {
  * @param {Object} userRecord - The user object.
  * @returns {string} HTML chip element string.
  */
-function createUserChip(userRecord) {
+/**
+ * Creates a single contact chip HTML string.
+ * @param {Object} userRecord - The user object.
+ * @param {boolean} [showNames=false] - Whether to show user names alongside chips.
+ * @returns {string} HTML chip element string.
+ */
+function createUserChip(userRecord, showNames = false) {
   const userInitials = getInitials(userRecord.userFullName);
   const userColorClass = userRecord.userColor || "color-1";
-  const modalID = document.getElementById("taskDetailModal");
-  if (modalID) {
+  
+  if (showNames) {
     return `<div class="detail-style"><div class="contact-chip ${userColorClass}">${userInitials}</div>  <p>${userRecord.userFullName}</p></div>`;
   }
+  
   return `<div class="contact-chip ${userColorClass}">${userInitials}</div>`;
 }
 

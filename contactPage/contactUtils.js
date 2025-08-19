@@ -69,3 +69,43 @@ export function hideSingleContactView() {
     if (fab) fab.style.display = 'none';
   }, 300);
 }
+
+/**
+ * Displays a temporary feedback message in the contact form.
+ *
+ * This function reveals an element with the ID `contactFeedback`,
+ * plays its animation, and then hides it again after the animation ends
+ * and a short delay. It returns a Promise that resolves once the feedback
+ * has been hidden again.
+ *
+ * Usage example:
+ * ```js
+ * await contactFeedback();
+ * console.log("Feedback animation finished");
+ * ```
+ *
+ * @function contactFeedback
+ * @returns {Promise<void>} Resolves once the feedback element is hidden.
+ */
+
+export function contactFeedback() {
+  return new Promise((resolve) => {
+    const LoginFeedback = document.getElementById("contactFeedback");
+    if (!LoginFeedback) return resolve();
+
+    LoginFeedback.classList.remove("dp-none");
+    LoginFeedback.classList.add("centerFeedback");
+
+    LoginFeedback.addEventListener(
+      "animationend",
+      () => {
+        setTimeout(() => {
+          LoginFeedback.classList.add("dp-none");
+          LoginFeedback.classList.remove("centerFeedback");
+          resolve();
+        }, 1500);
+      },
+      { once: true }
+    );
+  });
+}

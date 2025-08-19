@@ -87,7 +87,7 @@
               <img alt="Bild" class="inputIconMail" src="../assets/icons/mail.svg" />
             </div>
             <div class="call">
-              <input id="contactPhone" placeholder="Phone" required src="../assets/icons/" type="tel"></input>
+              <input id="contactPhone" placeholder="Phone" required src="../assets/icons/" type="tel" inputmode="numeric" pattern="(\+49)?[0-9]{0,}"></input>
               <img alt="Bild" class="inputIconCall" src="../assets/icons/call.svg" />
             </div>
             <div class="formBtns">
@@ -101,9 +101,6 @@
             </div>
           </form>
         </div>
-        <Article id="userFeedback" class="userFeedback dp-none">
-          <p>added Contact successfully</p>
-        </Article>
       </div>
     </div>
   </div>
@@ -255,6 +252,10 @@
       <div class="bigContact" id="bigContact">
       </div>
     </div>
+
+    <article id="contactFeedback" class="userFeedback dp-none">
+      <p>Contact created successfully</p>
+    </article>
   </section>
 </body>
 

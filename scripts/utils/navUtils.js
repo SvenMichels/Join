@@ -40,3 +40,26 @@ function getCurrentPageName() {
 function getPageNameFromHref(href) {
   return href.split("/").pop().replace(/[#?].*$/, "");
 }
+
+
+export function setupOpenMenuListener() {
+  const openMenuButton = document.getElementById("openMenu");
+  const dropDownMenu = document.getElementById("dropDownMenu");
+
+  if (openMenuButton && dropDownMenu) {
+    // Entferne alle bestehenden Event-Listener
+    openMenuButton.replaceWith(openMenuButton.cloneNode(true));
+    const newOpenMenuButton = document.getElementById("openMenu");
+
+    newOpenMenuButton.addEventListener("click", (e) => {
+      e.stopPropagation();
+
+      // Prüfe ob mobile oder desktop
+      if (window.innerWidth <= 768) {
+        toggleMobileMenu(); // Mobile Funktionalität
+      } else {
+        dropDownMenu.classList.toggle("dp-none"); // Desktop Dropdown
+      }
+    });
+  }
+}

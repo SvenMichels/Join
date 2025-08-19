@@ -6,9 +6,9 @@
 
 import { LocalStorageService } from "../scripts/utils/localStorageHelper.js";
 import { updateEmptyLists } from "../scripts/utils/emptylisthelper.js";
-import { setupDropdown } from "../scripts/ui/dropdown.js";
+
 import { setupMobileDeviceListeners } from "../scripts/utils/mobileUtils.js";
-import { highlightActiveNavigationLinks } from "../scripts/utils/navUtils.js";
+import { highlightActiveNavigationLinks, setupOpenMenuListener } from "../scripts/utils/navUtils.js";
 import { getInitials } from "../scripts/utils/helpers.js";
 import { renderTasks } from "./taskRenderer.js";
 import { fetchTasksAndUsers, normalizeTasks,} from "./taskManager.js";
@@ -32,7 +32,7 @@ window.allUsers = () => allSystemUsers;
 window.fetchTasks = loadTasksAndUsers;
 
 window.addEventListener("DOMContentLoaded", initializeBoard);
-window.addEventListener("click", setupDropdown);
+window.addEventListener("click", setupOpenMenuListener);
 
 /**
  * Initializes the board when DOM is fully loaded.

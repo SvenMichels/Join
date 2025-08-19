@@ -28,7 +28,7 @@ h1 {
 
 .column {
   max-width: 272px;
-  width: 100%;
+  width: clamp(210px, 24%, 272px);
   display: flex;
   flex-direction: column;
 }
@@ -134,7 +134,8 @@ h1 {
   flex-direction: column;
   justify-content: space-between;
   word-wrap: break-word;
-  max-width: 220px;
+  box-sizing: border-box;
+  max-width: 250px;
   width: 100%;
   height: auto;
   min-height: 231px;
