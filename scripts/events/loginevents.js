@@ -36,13 +36,14 @@ function bindUserLoginButton() {
  */
 function bindGuestLoginButton() {
   const guestButton = document.querySelector(".button-guest-login");
-  guestButton.addEventListener("click", handleGuestLogin);
+  let isGuest = false;
+  guestButton.addEventListener("click", () => handleUserLogin(isGuest = true));
 }
 
 /**
  * Handles user login submission including validation.
  */
-async function handleUserLogin() {
+async function handleUserLogin(isGuest = false) {
   const loginFormElement = document.getElementById("loginForm");
 
   if (!loginFormElement) {
@@ -50,8 +51,19 @@ async function handleUserLogin() {
     return;
   }
 
-  const credentials = collectLoginCredentials();
-  handleUser(credentials);
+  if (isGuest == true) {
+    const emailEl = "developer@akademie.de";
+    const pwEl = "123";
+    const credentials = {
+      email: emailEl,
+      password: pwEl
+    }
+    handleUser(credentials);
+    return
+  } else {
+    const credentials = collectLoginCredentials();
+    handleUser(credentials);
+  }
 }
 
 async function handleUser(credentials) {
@@ -91,7 +103,7 @@ function disableButton(btn) {
 }
 
 async function handleGuestLogin() {
-  await loginAsGuest();
+  await loginUser();
   redirectToStartpage();
 }
 
@@ -244,7 +256,7 @@ function userNeedsAuthentication() {
  * @param {string} targetUrl
  */
 async function authenticateAndRedirect(targetUrl) {
-  await loginAsGuest();
+  await loginUser();
   window.location.href = targetUrl;
 }
 

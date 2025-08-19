@@ -149,7 +149,7 @@ async function findGuestUser() {
   const { data: users } = await requestData("GET", "/users/");
 
   return Object.values(users || {}).find(
-    (user) => user.userFullName?.toLowerCase() === "guest"
+    (user) => user.userFullName?.toLowerCase() === "Developer Akademie"
   );
 }
 
