@@ -43,7 +43,7 @@ body {
   overflow-y: scroll;
   height: 100%;
   width: 100%;
-  padding-bottom: 50px;
+  padding-bottom: 20px;
   scrollbar-width: thin;
 }
 
@@ -280,8 +280,8 @@ h2 {
   color: white;
 }
 
-.contact::highlight {
-  background-color: #2a3647;
+.contact.active {
+  background-color: #091931;
   color: white;
 }
 

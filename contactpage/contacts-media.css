@@ -64,8 +64,7 @@
     padding-right: 12px;
   }
 
-  .contactList,
-  .allContacts {
+  .contactList {
     width: 100%;
   }
 
@@ -184,7 +183,7 @@
     align-items: flex-start;
     gap: 4px;
     margin: 0;
-    padding-top: 36px
+    padding-top: 10px;
   }
 
   .contactHeader h1 {
@@ -219,7 +218,7 @@
   }
 
   .allContacts {
-    padding-bottom: 90px;
+    padding-bottom: 80px;
   }
 
   .editInitials {
@@ -238,10 +237,6 @@
   .singleContact.slide-in {
     height: calc(100% - 80px - 80px);
     top: 80px;
-  }
-
-  .allContacts {
-    padding-top: 90px;
   }
 
   .submitBtn {
