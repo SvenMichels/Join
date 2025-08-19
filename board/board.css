@@ -124,6 +124,10 @@ h1 {
   opacity: 0.6;
 }
 
+.no-scroll {
+  overflow: hidden;
+}
+
 .txtDeco-none {
   text-decoration: none;
 }

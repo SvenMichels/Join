@@ -149,8 +149,16 @@ export async function openTaskDetails(task) {
   await renderTaskDetailData(task, allUsers);
   
   const modal = overlay.querySelector("#taskDetailModal");
+  noScrollTaskDetails(modal);
   setupCloseButton(modal, overlay);
   setupOutsideClickHandler(modal, overlay);
+}
+
+function noScrollTaskDetails(modal) {
+  if (modal) {
+    document.body.classList.add("no-scroll");
+  }
+  
 }
 
 /**
