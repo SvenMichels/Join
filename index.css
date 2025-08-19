@@ -46,13 +46,14 @@ body {
 }
 
 .logo-fullscreen {
-  position: fixed;
+  height: 100vh;
   inset: 0;
   background: #fff;
   z-index: 10;
   display: block;
   transition: background 0.3s ease;
 }
+
 .logo-fullscreen.shrink {
   background: transparent;
   pointer-events: none;
@@ -60,8 +61,6 @@ body {
 
 #bigLogo {
   position: fixed;
-  top: 0;
-  left: 0;
   width: 274px;
   height: 334px;
   transform-origin: top left;
@@ -71,12 +70,7 @@ body {
 }
 
 .logo-fullscreen.shrink #bigLogo {
-  transform: translate(77px, 80px) scale(0.3649635, 0.36227545);
-}
-
-.big-logo {
-  width: 274px;
-  height: 334px;
+  transform: translate(77px, 80px) scale(0.36496);
 }
 
 .sign-up-container {
@@ -85,7 +79,7 @@ body {
   gap: 20px;
   width: 279px;
   height: 49px;
-  padding-top: 50px;
+  padding-top: 67px;
 }
 
 form {
