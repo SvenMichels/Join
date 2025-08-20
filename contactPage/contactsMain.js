@@ -170,7 +170,6 @@ function clearActiveContactState() {
  * @param {string} contactId
  */
 function setActiveContactState(contactId) {
-  // Ein Element finden…
   const candidate =
     document.querySelector(`.contact-item[data-id="${contactId}"]`) ||
     document.querySelector(`[data-contact-id="${contactId}"]`) ||

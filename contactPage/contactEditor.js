@@ -68,9 +68,7 @@ export function emptyInput() {
  * @param {Object} contact - Contact to be edited
  */
 export function openEditDialog(contact) {
-  editingContact = contact;
-  console.log(contact);
-  
+  editingContact = contact;  
 
   const editWindow = document.getElementById("editWindow");
   if (editWindow) {
@@ -80,7 +78,7 @@ export function openEditDialog(contact) {
     setUserInitials(contact);
   }
 }
-// TODO:
+
 function setUserInitials(contact) {
   const contactInitials = document.getElementById("editInitials");
   contactInitials.textContent = contact.userInitials || getInitials(contact.userFullName);
