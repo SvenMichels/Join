@@ -328,7 +328,7 @@ main {
 }
 
 #username {
-  font-size: clamp(34px, 7vw, 61px);
+  font-size: clamp(34px, 6vw, 61px);
   text-align: left;
 
 }
