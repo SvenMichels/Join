@@ -18,6 +18,9 @@ import { FIREBASE_DATABASE_BASE_URL } from '../scripts/firebase.js';
  */
 export async function loadAllContactsFromFirebaseDatabase() {
   try {
+    // Clear any existing cached data
+    window.contactList = null;
+
     const allContacts = await getAllContactsFromDatabase();
 
     let contactsArray = Array.isArray(allContacts) ? allContacts : [];
@@ -40,67 +43,47 @@ export async function loadAllContactsFromFirebaseDatabase() {
 }
 
 /**
- * Ensures the current user is the first entry in the contact list.
- * 
- * @param {Array} contacts - Existing contact list
- * @returns {Array} Contact list with current user first
+ * Moves the current user contact to the first position of the list.
+ * If the user is not present, a fresh current-user contact is prepended.
+ * Never mutates the input array. No duplicates.
+ *
+ * @async
+ * @param {Contact[]} contacts - Existing contact list.
+ * @returns {Promise<Contact[]>} A new array with the current user first.
  */
-async function ensureCurrentUserAsFirstContact(contacts) {
-  const currentUserContact = await getCurrentUserAsContact();
+export async function ensureCurrentUserAsFirstContact(contacts) {
+  const currentUser = await getCurrentUserAsContact();
+  if (!currentUser) return contacts;
 
-  if (!currentUserContact) {
-    return contacts;
-  }
+  const ensureCurrentUser = c =>
+    c.userEmailAddress === currentUser.userEmailAddress || c.userId === currentUser.userId;
 
-  const userIndex = contacts.findIndex(contact =>
-    contact.userEmailAddress === currentUserContact.userEmailAddress ||
-    contact.userId === currentUserContact.userId
-  );
+  const existing = contacts.find(ensureCurrentUser);
+  const contactList = contacts.filter(c => !ensureCurrentUser(c));
 
-  if (userIndex !== -1) {
-    const [user] = contacts.splice(userIndex, 1);
-    return [user, ...contacts];
-  } else {
-    try {
-      await createContact(currentUserContact);
-    } catch (error) {
-      // Silently handle error, contact creation is optional for display
-    }
-    return [currentUserContact, ...contacts];
-  }
+  return existing ? [existing, ...contactList] : [currentUser, ...contactList];
 }
 
 /**
- * Creates a new contact in Firebase for the current user.
- * 
- * @param {object} contact - Contact data
- * @returns {Promise<object>} Firebase response
+ * Creates a contact for the current user in Firebase.
+ * Refreshes local cache afterwards.
+ * @param {Object} contact
+ * @returns {Promise<Object>} Firebase POST result
+ * @throws {Error} If no current user or HTTP error
  */
 export async function createContact(contact) {
-  try {
-    // Get current user from localStorage
-    const currentUser = LocalStorageService.getItem("currentUser");
-
-    if (!currentUser?.id) {
-      throw new Error("No current user found");
-    }
-
-    // Save contact under the specific user's path
-    const response = await fetch(`${FIREBASE_DATABASE_BASE_URL}/contacts/${currentUser.id}.json`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(contact)
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const result = await response.json();
-    return result;
-  } catch (error) {
-    throw error;
-  }
+  const user = LocalStorageService.getItem("currentUser");
+  if (!user?.id) throw new Error("No current user found");
+  const res = await fetch(`${FIREBASE_DATABASE_BASE_URL}/contacts/${user.id}.json`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(contact)
+  });
+  if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+  const result = await res.json();
+  window.contactList = null;
+  await loadAllContactsFromFirebaseDatabase();
+  return result;
 }
 
 /**
@@ -162,7 +145,15 @@ function updateLocalContactData(contact, updated) {
  * Refreshes the contact list UI.
  */
 async function refreshUI() {
+  const contactList = document.querySelector('.contact-list');
+  if (contactList) {
+    contactList.innerHTML = '';
+  }
+
   clearContactListUI();
+
+  await new Promise(resolve => setTimeout(resolve, 10));
+
   renderAllContacts(window.contactList || []);
 }
 
@@ -175,7 +166,7 @@ async function updateBigContactIfVisible(contact) {
 
   await renderBigContactModal(bigContact, contact);
   bindBigContactButtons(bigContact, contact);
-  
+
   if (window.innerWidth <= 768) {
     await initializeMobileFab(contact);
   }
@@ -201,7 +192,7 @@ async function renderBigContactModal(bigContact, contact) {
 async function bindBigContactButtons(bigContact, contact) {
   const { bindButton } = await import('./contactUtils.js');
   const { openEditDialog } = await import('./contactEditor.js');
-  
+
   bindButton(bigContact, "#delete", () => deleteContactFromDatabase(contact.userId, contact.userFullName));
   bindButton(bigContact, "#edit", () => openEditDialog(contact));
 }
