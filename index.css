@@ -21,7 +21,7 @@ body {
   text-align: center;
 }
 
-.content-holder {
+/* .content-holder {
   position: relative;
   display: flex;
   justify-content: center;
@@ -29,23 +29,23 @@ body {
   width: 100vw;
   height: 100%;
   padding-top: 170px;
-}
+} */
 
-.content-holder > div:nth-child(1),
+/* .content-holder > div:nth-child(1),
 .content-holder > div:nth-child(3) {
   position: absolute;
   top: 0;
-}
+} */
 
-.content-holder > div:nth-child(1) {
+/* .content-holder > div:nth-child(1) {
   left: 0;
-}
+} */
 
-.content-holder > div:nth-child(3) {
+/* .content-holder > div:nth-child(3) {
   right: 0;
-}
+} */
 
-.logo-fullscreen {
+/* .logo-fullscreen {
   height: 100vh;
   inset: 0;
   background: #fff;
@@ -57,9 +57,9 @@ body {
 .logo-fullscreen.shrink {
   background: transparent;
   pointer-events: none;
-}
+} */
 
-#bigLogo {
+/* #bigLogo {
   position: fixed;
   width: 274px;
   height: 334px;
@@ -67,11 +67,11 @@ body {
   transform: translate(calc(50vw - 137px), calc(50vh - 167px)) scale(1);
   transition: transform 1s ease-in-out;
   will-change: transform;
-}
+} */
 
-.logo-fullscreen.shrink #bigLogo {
+/* .logo-fullscreen.shrink #bigLogo {
   transform: translate(77px, 80px) scale(0.36496);
-}
+} */
 
 .sign-up-container {
   display: flex;

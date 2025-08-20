@@ -6,26 +6,51 @@
   .content-holder {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 24px;
-    padding-top: 110px;
   }
 
   .logo-fullscreen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #2a3647;
     width: 100vw;
     height: 100vh;
-    padding-top: 0;
+    inset: 0;
+    transition: background 0.3s ease;
   }
+
+  .logo-fullscreen #bigLogo {
+    content: url("./assets/icons/join_white.svg");
+    transition: transform 0.5s;
+  }
+
+  @keyframes fade-bg {
+  0%   { background-color: #2a3647; }
+  100% { background-color: transparent; }
+}
 
   .logo-fullscreen.shrink {
-    width: 64px;
-    height: 74px;
+    width: 100%;
+    height: 150px;
+    content: url("./assets/icons/join_logo_2.svg");
+    background-color: transparent;
+    transition: background 0.3s ease;
   }
 
-  .content-holder > div:nth-child(1),
+  .logo-fullscreen.shrink #bigLogo {
+  transform-origin: top left;
+  transform: translate(calc(0vw - 25vw), calc(0vh - 40vh)) scale(1);
+  transition: transform 1s ease-in-out;
+  will-change: transform;
+}
+
+  /* .content-holder > div:nth-child(1),
   .content-holder > div:nth-child(3) {
     position: static;
     width: 100%;
-  }
+  } */
 
   .login-container {
     width: 90vw;
@@ -70,7 +95,7 @@
 }
 
 @media (min-width: 575px) and (max-width: 768px) {
-  .content-holder {
+  /* .content-holder {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -86,12 +111,12 @@
 
   .footer {
     padding-bottom: 32px;
-  }
+  } */
 }
 
 @media (min-width: 769px) and (max-width: 991px) {
-  .logo-fullscreen.shrink {
+  /* .logo-fullscreen.shrink {
     width: 84px;
     height: 94px;
-  }
+  } */
 }
