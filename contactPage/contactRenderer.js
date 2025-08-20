@@ -86,6 +86,8 @@ export function renderAlphabetFilter(letter) {
  * @param {string} phone - Phone number.
  * @returns {string} HTML markup for the contact card.
  */
+
+// TODO: Consider using a template literal for better readability.
 export function renderContactCard(name, email, initials, id, color, phone) {
   return `
     <div class="contact" onclick="window.renderSingleContact('${name}', '${email}', '${phone}', '${initials}', '${id}', '${color}')">

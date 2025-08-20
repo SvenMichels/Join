@@ -54,7 +54,7 @@ function setupContactFormListeners() {
  */
 function setupModalListeners() {
   setupCloseButtons();
-  setupCancelButtons();
+  setupDeleteButton();
   setupOutsideClickHandlers();
 }
 
@@ -70,11 +70,17 @@ function setupCloseButtons() {
 /**
  * Sets up cancel button event listeners
  */
-function setupCancelButtons() {
+export function setupDeleteButton() {
   document.querySelectorAll(".cancelBtn").forEach(btn => {
-    btn.addEventListener("click", closeAllModals);
+    btn.addEventListener("click", deleteContactFromDatabase);
   });
 }
+
+// function bindContactActions(id, name, contact) {
+//   const container = document.getElementById("bigContact");
+//   bindButton(container, "#delete", () => deleteContactFromDatabase(id, name));
+//   bindButton(container, "#edit", () => openEditDialog(contact));
+// }
 
 /**
  * Sets up outside click handlers for modals
@@ -142,12 +148,38 @@ function renderSingleContact(name, email, phone, initials, id, color) {
   if (!contact) return;
   currentRenderedContact = contact;
 
+  clearActiveContactState();
+  setActiveContactState(id);
+
   const template = generateBigContactTemplate(name, email, phone, initials, color);
   document.getElementById("bigContact").innerHTML = template;
 
-  prepareResponsiveContactView(contact)
+  prepareResponsiveContactView(contact);
   bindContactActions(id, name, contact);
   loadAndShowContactDetails();
+}
+
+function clearActiveContactState() {
+  document.querySelectorAll(
+    '.contact-item.active, [data-contact-id].active, [onclick*="renderSingleContact"].active'
+  ).forEach(el => el.classList.remove('active'));
+}
+
+/**
+ * Sets the active class for the specified contact
+ * @param {string} contactId
+ */
+function setActiveContactState(contactId) {
+  // Ein Element finden…
+  const candidate =
+    document.querySelector(`.contact-item[data-id="${contactId}"]`) ||
+    document.querySelector(`[data-contact-id="${contactId}"]`) ||
+    document.querySelector(`[onclick*="${contactId}"]`);
+
+  if (!candidate) return;
+
+  const target = candidate.closest('.contact-item') || candidate;
+  target.classList.add('active');
 }
 
 window.renderSingleContact = renderSingleContact;
@@ -261,7 +293,7 @@ function bindContactActions(id, name, contact) {
 function filterTasksByUser(tasks, userName) {
   const filtered = tasks.filter(task =>
     Array.isArray(task.assignedUsers) && task.assignedUsers.includes(userName)
-  );return filtered;
+  ); return filtered;
 }
 
 /**
@@ -314,27 +346,6 @@ function setupProfileButton() {
     profileButton.textContent = initials;
   }
 }
-
-/**
- * Sets up dropdown menu for profile
- */
-// function setupDropdown() {
-//   const openMenuButton = document.getElementById("openMenu");
-//   const dropDownMenu = document.getElementById("dropDownMenu");
-
-//   if (openMenuButton && dropDownMenu) {
-//     openMenuButton.addEventListener("click", (e) => {
-//       e.stopPropagation();
-//       dropDownMenu.classList.toggle("dp-none");
-//     });
-
-//     document.addEventListener("click", (e) => {
-//       if (!dropDownMenu.contains(e.target) && !openMenuButton.contains(e.target)) {
-//         dropDownMenu.classList.add("dp-none");
-//       }
-//     });
-//   }
-// }
 
 /**
  * Loads user data from localStorage

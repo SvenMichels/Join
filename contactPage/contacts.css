@@ -269,6 +269,7 @@ h2 {
   height: 78px;
   gap: 35px;
   border-radius: 10px;
+  /* border: none; */
   margin: auto;
   padding-left: 5px;
   transition: transform 0.2s ease;
@@ -321,7 +322,7 @@ h2 {
 
 .active {
   background-color: #2a3647;
-  border: 1px solid #2a3647;
+  /* border: 1px solid #2a3647; */
   color: #ffffff;
 }
 

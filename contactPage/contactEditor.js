@@ -4,6 +4,7 @@
 
 import { getInitials } from '../scripts/utils/helpers.js';
 import { updateContact } from './contactDataService.js';
+import { setupDeleteButton } from '../contactPage/contactsMain.js';
 
 let editingContact = null;
 
@@ -68,15 +69,18 @@ export function emptyInput() {
  */
 export function openEditDialog(contact) {
   editingContact = contact;
+  console.log(contact);
+  
 
   const editWindow = document.getElementById("editWindow");
   if (editWindow) {
     editWindow.classList.remove("dp-none");
     fillEditForm(contact);
+    setupDeleteButton();
     setUserInitials(contact);
   }
 }
-
+// TODO:
 function setUserInitials(contact) {
   const contactInitials = document.getElementById("editInitials");
   contactInitials.textContent = contact.userInitials || getInitials(contact.userFullName);
