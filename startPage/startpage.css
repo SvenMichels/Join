@@ -336,3 +336,15 @@ main {
 #openMenu {
   font-weight: bold;
 }
+
+.greeting-visible {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.75s ease, visibility 0.75s ease;
+}
+
+.greeting-hidden {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.75s ease, visibility 0.75s ease;
+}

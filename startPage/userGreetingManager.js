@@ -89,4 +89,18 @@ function getTimeBasedGreeting() {
  * Fades out the greeting message automatically on mobile view.
  * Applies a CSS class to hide the greeting after a short delay.
  */
+let hasFadedGreeting = false;
 
+export function handleMobileGreetingFadeEffect() {
+  if (hasFadedGreeting) return;
+
+  if (window.innerWidth < 767) {
+    const greetings = document.querySelector(".greetings");
+    if (greetings) {
+      setTimeout(() => {
+        greetings.classList.add("hidden");
+        hasFadedGreeting = true;
+      }, 1000);
+    }
+  }
+}
