@@ -5,7 +5,7 @@
  * @author Join Team
  */
 
-import { signupListeners } from "../scripts/events/loginevents.js";
+import { signupListeners, isValidEmail } from "../scripts/events/loginevents.js";
 import { generateRandomColorClass } from "../scripts/utils/colors.js";
 import { getInitials } from "../scripts/utils/helpers.js";
 
@@ -22,11 +22,9 @@ const confirmToggleIcon = document.querySelector("#inputConfirmPassword + .toggl
 if (window.location.pathname.endsWith("signup.html")) {
   signupListeners();
 
-  // Setup password validation
   userPasswordInputField.addEventListener("input", validatePasswords);
   confirmPasswordInputField.addEventListener("input", validatePasswords);
 
-  // Setup password visibility toggles
   passwordToggleIcon.addEventListener("click", () =>
     togglePassword(userPasswordInputField, passwordToggleIcon)
   );
@@ -43,6 +41,7 @@ if (window.location.pathname.endsWith("signup.html")) {
 function validatePasswords() {
   const match = userPasswordInputField.value === confirmPasswordInputField.value;
   confirmPasswordInputField.setCustomValidity(match ? "" : "Passwords do not match");
+  isValidEmail(match)
 }
 
 /**

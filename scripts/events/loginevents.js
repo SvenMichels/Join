@@ -44,20 +44,10 @@ function bindGuestLoginButton() {
  * Handles user login submission including validation.
  */
 async function handleUserLogin(isGuest = false) {
-  const loginFormElement = document.getElementById("loginForm");
-
-  if (!loginFormElement) {
-    console.warn("Login form or button not found!");
-    return;
-  }
-
   if (isGuest == true) {
     const emailEl = "developer@akademie.de";
     const pwEl = "123";
-    const credentials = {
-      email: emailEl,
-      password: pwEl
-    }
+    const credentials = { email: emailEl, password: pwEl }
     handleUser(credentials);
     return
   } else {
@@ -68,21 +58,15 @@ async function handleUserLogin(isGuest = false) {
 
 async function handleUser(credentials) {
   const loginBtn = document.querySelector(".btn");
-
   if (!credentials.email || !credentials.password) {
-    console.warn("Please enter both email and password!");
     disableButton(loginBtn);
     return;
   }
-
   if (!isValidEmail(credentials.email)) {
-    console.warn("Please enter a valid email address!");
     disableButton(loginBtn);
     return;
   }
-
   enableButton(loginBtn);
-
   await attemptUserLogin(credentials);
 }
 
@@ -100,11 +84,6 @@ function disableButton(btn) {
   btn.classList.add("disabled");
   btn.classList.remove("background-color");
   btn.style.backgroundColor = "#ccc";
-}
-
-async function handleGuestLogin() {
-  await loginUser();
-  redirectToStartpage();
 }
 
 /**
@@ -132,29 +111,15 @@ function getLoginButton() {
  * Binds input listeners for login email/password and updates the login button state.
  */
 function bindLoginInputValidation() {
-  const emailInput = document.querySelector("#loginEmail");
-  const passwordInput = document.querySelector("#loginPassword");
-  const loginButton = getLoginButton();
-
-  function updateState() {
-    const emailOk = emailInput && emailInput.value.trim() !== "";
-    const pwOk = passwordInput && passwordInput.value.trim() !== "";
-    if (emailOk && pwOk && isValidEmail(emailInput.value.trim())) {
-      enableButton(loginButton);
-    } else {
-      disableButton(loginButton);
-    }
-  }
-
-  if (emailInput) {
-    emailInput.addEventListener("input", updateState);
-  }
-  if (passwordInput) {
-    passwordInput.addEventListener("input", updateState);
-  }
-
-  // Set initial state
-  updateState();
+  const [email, password] = ["#loginEmail", "#loginPassword"].map(s => document.querySelector(s));
+  const btn = getLoginButton();
+  const update = () => {
+    const clearEmail = email?.value.trim() || "";
+    const clearPwd = password?.value.trim() || "";
+    (clearEmail && clearPwd && isValidEmail(clearEmail)) ? enableButton(btn) : disableButton(btn);
+  };
+  [email, password].forEach(i => i && i.addEventListener("input", update));
+  update();
 }
 
 /**
@@ -163,7 +128,7 @@ function bindLoginInputValidation() {
  * @param {string} email
  * @returns {boolean}
  */
-function isValidEmail(email) {
+export function isValidEmail(email) {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 }
@@ -178,7 +143,6 @@ async function attemptUserLogin(credentials) {
     await loginUser(credentials.email, credentials.password);
     redirectToStartpage();
   } catch (error) {
-    // Login failed - feedback already shown by loginUser()
     console.warn("Login attempt failed:", error.message);
   }
 }
