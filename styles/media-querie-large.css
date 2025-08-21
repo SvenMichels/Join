@@ -320,7 +320,6 @@
 
   .task-container {
     display: flex;
-    justify-content: center;
     padding-left: 0;
     gap: 16px;
   }
@@ -379,7 +378,6 @@
     }
 
     .column {
-      /* width: 100%; */
       display: flex;
       flex-direction: column;
     }
