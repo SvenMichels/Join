@@ -20,7 +20,6 @@ function handleStartupLogoAnimation() {
   mainLogoElement.classList.add("shrink");
   },1000);
   mainLogoElement.addEventListener("animationend", () => {
-    mainLogoElement.remove();
   });
 }
 

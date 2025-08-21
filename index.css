@@ -45,34 +45,6 @@ body {
   right: 0;
 }
 
-.logo-fullscreen {
-  height: 100vh;
-  inset: 0;
-  background: #fff;
-  z-index: 10;
-  display: block;
-  transition: background 0.3s ease;
-}
-
-.logo-fullscreen.shrink {
-  background: transparent;
-  pointer-events: none;
-}
-
-#bigLogo {
-  position: fixed;
-  width: 274px;
-  height: 334px;
-  transform-origin: top left;
-  transform: translate(calc(50vw - 137px), calc(50vh - 167px)) scale(1);
-  transition: transform 1s ease-in-out;
-  will-change: transform;
-}
-
-.logo-fullscreen.shrink #bigLogo {
-  transform: translate(77px, 80px) scale(0.36496);
-}
-
 .sign-up-container {
   display: flex;
   align-items: center;
@@ -276,6 +248,7 @@ input.password:focus {
   padding: 48px 88px;
   gap: 32px;
   box-sizing: border-box;
+  margin-top: 20px;
 }
 
 .bar {
@@ -306,4 +279,57 @@ input:focus::placeholder {
   flex-direction: column;
   align-items: center;
   gap: 16px;
+}
+
+.logo-fullscreen {
+  width: 100vw;
+  height: 100vh;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  animation: shrink-container 2s ease forwards;
+  animation-delay: 1.2s;
+  z-index: 10;
+}
+
+.logo-new {
+  position: relative;
+  width: 274px;
+  height: 334px;
+  animation: shrink-logo 2s ease forwards;
+  animation-delay: 1.2s;
+}
+
+.logo-old {
+  display: none;
+}
+
+@keyframes shrink-container {
+  0% {
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background-color: white;
+  }
+  100% {
+    width: 100px;
+    height: 130px;
+    top: 67px;
+    left: 37px;
+    background-color: transparent;
+  }
+}
+
+@keyframes shrink-logo {
+  0% {
+    width: 274px;
+    height: 334px;
+  }
+  100% {
+    width: 100px;
+    height: 130px;
+  }
 }
