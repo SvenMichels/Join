@@ -257,3 +257,7 @@ p {
   color: #ffffff;
   cursor: pointer;
 }
+
+.nav-media-container {
+  display: none;
+}
