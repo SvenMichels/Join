@@ -289,11 +289,13 @@
   }
 
   .nav-media-links {
-    color: white;
+    color: #cdcdcd;
     text-decoration: none;
   }
 
   .nav-media-links:hover {
-    color: white;
+    cursor: pointer;
+    color: #00bee8;
+    font-weight: 700;
   }
 }

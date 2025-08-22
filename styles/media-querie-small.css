@@ -313,22 +313,28 @@
     width: 104px;
     height: 76px;
     border-radius: 8px;
-    background: #2A3647;
+    background: #2a3647;
     border-style: none;
   }
 
   .nav-media-buttons:hover {
     cursor: pointer;
     background: #091931;
-
   }
 
   .nav-media-links {
-    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    color: #cdcdcd;
     text-decoration: none;
   }
 
   .nav-media-links:hover {
-    color: white;
+    cursor: pointer;
+    color: #00bee8;
+    font-weight: 700;
   }
 }
