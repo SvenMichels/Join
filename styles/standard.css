@@ -57,10 +57,6 @@ p {
   gap: 16px;
 }
 
-.profileIcon:hover {
-  cursor: pointer;
-}
-
 .profile-button {
   display: flex;
   align-items: center;
