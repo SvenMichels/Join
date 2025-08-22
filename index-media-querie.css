@@ -16,9 +16,8 @@
   }
 
   .logo-fullscreen {
-    position: fixed;
-    top: 0;
-    left: 0;
+    padding-top: 10px;
+    padding-left: 10px;
     width: 100vw;
     height: 100vh;
     background-color: #2a3647;
@@ -27,7 +26,7 @@
     align-items: center;
     overflow: hidden;
     animation: shrink-container 2s ease forwards;
-    animation-delay: 1.5s;
+    animation-delay: 1.2s;
     z-index: 10;
   }
 
@@ -39,22 +38,24 @@
     transform: scale(1);
     transform-origin: center center;
     animation: shrink-logo 2s ease forwards;
-    animation-delay: 1.5s;
+    animation-delay: 1.2s;
   }
 
   /* Startzustand: altes Logo sichtbar */
   .logo-old {
     display: block;
+    transform: scale(1);
     opacity: 1;
     animation: shrink-logo 2s ease forwards, fade-out 2s ease forwards;
-    animation-delay: 1.5s;
+    animation-delay: 1.2s;
   }
 
   /* Neues Logo: gleichzeitig eingeblendet */
   .logo-new {
     opacity: 0;
+    transform: scale(1);
     animation: shrink-logo 2s ease forwards, fade-in 2s ease forwards;
-    animation-delay: 1.5s;
+    animation-delay: 1.2s;
   }
 
   /* Container-Animation */
@@ -69,8 +70,8 @@
     100% {
       width: 64px;
       height: 78px;
-      top: 10px;
-      left: 10px;
+      top: 0px;
+      left: 0px;
       background-color: transparent;
     }
   }
@@ -82,8 +83,8 @@
       height: auto;
     }
     100% {
-      width: auto;
-      height: 78px;
+      width: 100px;
+      height: 80%;
     }
   }
 
