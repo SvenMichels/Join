@@ -30,7 +30,6 @@
     z-index: 10;
   }
 
-  /* Logos übereinander */
   .logo {
     position: absolute;
     width: 200px;
@@ -41,7 +40,6 @@
     animation-delay: 1.2s;
   }
 
-  /* Startzustand: altes Logo sichtbar */
   .logo-old {
     display: block;
     transform: scale(1);
@@ -50,7 +48,6 @@
     animation-delay: 1.2s;
   }
 
-  /* Neues Logo: gleichzeitig eingeblendet */
   .logo-new {
     opacity: 0;
     transform: scale(1);
@@ -58,7 +55,6 @@
     animation-delay: 1.2s;
   }
 
-  /* Container-Animation */
   @keyframes shrink-container {
     0% {
       width: 100vw;
@@ -76,7 +72,7 @@
     }
   }
 
-  /* Logo-Skalierung */
+
   @keyframes shrink-logo {
     0% {
       width: 200px;
@@ -88,7 +84,6 @@
     }
   }
 
-  /* Logo-Fade */
   @keyframes fade-out {
     from {
       opacity: 1;
