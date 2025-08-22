@@ -14,7 +14,7 @@ p {
 .help-section {
   display: flex;
   flex-direction: column;
-  padding-top: 115px;
+  padding-top: 60px;
   padding-left: 328px;
   max-width: 1016px;
   margin-right: 50px;
@@ -71,14 +71,14 @@ a:hover {
 @media (max-width: 575px) {
   .help-section {
     position: absolute;
-    top: 90px;
-    bottom: 90px;
+    top: 70px;
+    bottom: 30px;
     left: 50%;
     transform: translateX(-50%);
     width: 100%;
     max-width: 440px;
     overflow-y: auto;
-    padding: 0 30px;
+    padding: 10px 30px;
     box-sizing: border-box;
   }
 }
@@ -87,6 +87,7 @@ a:hover {
   .help-section {
     display: flex;
     flex-direction: column;
+    padding-top: 0px;
     padding-left: 20px;
     padding-bottom: 80px;
   }
