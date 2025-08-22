@@ -11,10 +11,21 @@ import { removeUserFromAllTasks } from './contactsMain.js';
 import { FIREBASE_DATABASE_BASE_URL } from '../scripts/firebase.js';
 
 /**
- * Loads all contacts from Firebase.
- * Ensures the current user is listed first.
- * 
- * @returns {Promise<Array>} List of all contacts
+ * @typedef {Object} Contact
+ * @property {string} [userId]         - Firebase key for the contact.
+ * @property {string} userFullName     - Full name.
+ * @property {string} userEmailAddress - Email address.
+ * @property {string} userPhoneNumber  - Phone number.
+ * @property {string} userInitials     - Initials (e.g., "AB").
+ * @property {string} firstCharacter   - First uppercase character of the name.
+ * @property {string} userColor        - Color class/code for the avatar.
+ */
+
+/**
+ * Loads all contacts for the current user from Firebase and renders the list.
+ * Ensures the current user appears as the first entry.
+ *
+ * @returns {Promise<Contact[]>} List of contacts.
  */
 export async function loadAllContactsFromFirebaseDatabase() {
   try {
@@ -43,13 +54,11 @@ export async function loadAllContactsFromFirebaseDatabase() {
 }
 
 /**
- * Moves the current user contact to the first position of the list.
- * If the user is not present, a fresh current-user contact is prepended.
- * Never mutates the input array. No duplicates.
+ * Moves the current user to the first position.
+ * Does not mutate the input array and avoids duplicates.
  *
- * @async
  * @param {Contact[]} contacts - Existing contact list.
- * @returns {Promise<Contact[]>} A new array with the current user first.
+ * @returns {Promise<Contact[]>} New list with the current user first.
  */
 export async function ensureCurrentUserAsFirstContact(contacts) {
   const currentUser = await getCurrentUserAsContact();
@@ -65,11 +74,12 @@ export async function ensureCurrentUserAsFirstContact(contacts) {
 }
 
 /**
- * Creates a contact for the current user in Firebase.
- * Refreshes local cache afterwards.
- * @param {Object} contact
- * @returns {Promise<Object>} Firebase POST result
- * @throws {Error} If no current user or HTTP error
+ * Creates a new contact in Firebase for the current user.
+ * Side effects: refreshes cache/UI by reloading contacts.
+ *
+ * @param {Contact} contact - Contact to store (without userId).
+ * @returns {Promise<{name: string}>} Firebase POST result containing the new key in "name".
+ * @throws {Error} If no current user is found or an HTTP error occurs.
  */
 export async function createContact(contact) {
   const user = LocalStorageService.getItem("currentUser");
@@ -87,16 +97,14 @@ export async function createContact(contact) {
 }
 
 /**
- * Updates an existing contact in Firebase for the current user and refreshes the UI.
- * 
- * @param {Object} contact - Original contact object
- * @param {Object} updated - Updated data
- */
-/**
- * Updates an existing contact in Firebase for the current user.
- * 
- * @param {Object} contact - Original contact object
- * @param {Object} updated - Updated data
+ * Updates an existing contact in Firebase.
+ * Updates local data, re-renders the list, updates the detail view if visible,
+ * and closes the edit modal.
+ *
+ * @param {Contact} contact - Original contact (with userId).
+ * @param {Partial<Contact>} updated - Fields to update.
+ * @returns {Promise<void>}
+ * @throws {Error} On missing user or HTTP errors.
  */
 export async function updateContact(contact, updated) {
   try {
@@ -113,7 +121,13 @@ export async function updateContact(contact, updated) {
 }
 
 /**
- * Updates contact data in Firebase database.
+ * Updates contact data in Firebase.
+ *
+ * @param {string} userId - Current user ID.
+ * @param {string} contactId - Contact ID (Firebase key).
+ * @param {Contact} contactData - Complete contact data to store.
+ * @returns {Promise<void>}
+ * @throws {Error} On HTTP errors.
  */
 async function updateContactInFirebase(userId, contactId, contactData) {
   const response = await fetch(`${FIREBASE_DATABASE_BASE_URL}/contacts/${userId}/${contactId}.json`, {
@@ -128,7 +142,11 @@ async function updateContactInFirebase(userId, contactId, contactData) {
 }
 
 /**
- * Updates contact data in local memory.
+ * Updates contact data in the local cache (window.contactList).
+ *
+ * @param {Contact} contact - Target contact (merged with updated).
+ * @param {Partial<Contact>} updated - Fields to apply.
+ * @returns {void}
  */
 function updateLocalContactData(contact, updated) {
   Object.assign(contact, updated);
@@ -142,7 +160,9 @@ function updateLocalContactData(contact, updated) {
 }
 
 /**
- * Refreshes the contact list UI.
+ * Re-renders the contact list UI.
+ *
+ * @returns {Promise<void>}
  */
 async function refreshUI() {
   const contactList = document.querySelector('.contact-list');
@@ -158,7 +178,10 @@ async function refreshUI() {
 }
 
 /**
- * Updates the big contact modal if currently visible.
+ * Updates the big contact view if it is currently visible.
+ *
+ * @param {Contact} contact - Contact to show.
+ * @returns {Promise<void>}
  */
 async function updateBigContactIfVisible(contact) {
   const bigContact = document.getElementById("bigContact");
@@ -173,7 +196,11 @@ async function updateBigContactIfVisible(contact) {
 }
 
 /**
- * Renders the big contact modal content.
+ * Renders the content of the big contact view.
+ *
+ * @param {HTMLElement} bigContact - Container element.
+ * @param {Contact} contact - Contact to render.
+ * @returns {Promise<void>}
  */
 async function renderBigContactModal(bigContact, contact) {
   const { generateBigContactTemplate } = await import('./contactExternalService.js');
@@ -187,7 +214,11 @@ async function renderBigContactModal(bigContact, contact) {
 }
 
 /**
- * Binds action buttons in the big contact modal.
+ * Binds action buttons (Delete/Edit) in the big contact view.
+ *
+ * @param {HTMLElement} bigContact - Container element.
+ * @param {Contact} contact - Contact context for actions.
+ * @returns {Promise<void>}
  */
 async function bindBigContactButtons(bigContact, contact) {
   const { bindButton } = await import('./contactUtils.js');
@@ -198,7 +229,10 @@ async function bindBigContactButtons(bigContact, contact) {
 }
 
 /**
- * Initializes mobile FAB menu if needed.
+ * Initializes the mobile FAB menu if the contact is found.
+ *
+ * @param {Contact} contact - Contact context.
+ * @returns {Promise<void>}
  */
 async function initializeMobileFab(contact) {
   const foundContact = window.contactList.find(c => c.userID === contact.userId);
@@ -210,12 +244,15 @@ async function initializeMobileFab(contact) {
 }
 
 /**
- * Deletes a contact from Firebase and updates the UI for the current user.
- * 
- * @param {string} contactId - Contact ID to delete  
- * @param {string} userName - Name of the contact (for task cleanup if needed)
+ * Deletes a contact for the current user in Firebase.
+ * Updates the global list, removes the user from tasks,
+ * updates the view, and clears/closes the edit modal.
+ *
+ * @param {string} contactId - Contact ID (Firebase key) to delete.
+ * @param {string} userName - Contact display name (used for task cleanup).
+ * @returns {Promise<void>}
+ * @throws {Error} On deletion errors.
  */
-
 export async function deleteContactFromDatabase(contactId, userName) {
   try {
     const currentUser = getCurrentUserFromStorage();
@@ -226,12 +263,19 @@ export async function deleteContactFromDatabase(contactId, userName) {
     updateContactList(contactId);
     await removeUserFromAllTasks(userName);
     handlePostDeleteView(window.contactList || []);
+    clearAndCloseEditModal();
   } catch (error) {
     console.error("Error deleting contact:", error);
     throw error;
   }
 }
 
+/**
+ * Reads the current user from localStorage.
+ *
+ * @returns {{ id: string } & Record<string, any>} The current user.
+ * @throws {Error} If no current user is found.
+ */
 function getCurrentUserFromStorage() {
   const currentUserString = localStorage.getItem("currentUser");
   const currentUser = JSON.parse(currentUserString);
@@ -241,6 +285,13 @@ function getCurrentUserFromStorage() {
   return currentUser;
 }
 
+/**
+ * Deletes a contact in Firebase.
+ *
+ * @param {string} userId - Current user ID.
+ * @param {string} contactId - Contact ID (Firebase key).
+ * @returns {Promise<boolean>} true on success, false otherwise.
+ */
 async function deleteContactFromFirebase(userId, contactId) {
   const response = await fetch(`${FIREBASE_DATABASE_BASE_URL}/contacts/${userId}/${contactId}.json`, {
     method: 'DELETE'
@@ -254,6 +305,12 @@ async function deleteContactFromFirebase(userId, contactId) {
   return true;
 }
 
+/**
+ * Removes the contact from the global list (window.contactList).
+ *
+ * @param {string} contactId - Contact ID (Firebase key).
+ * @returns {void}
+ */
 function updateContactList(contactId) {
   if (window.contactList) {
     window.contactList = window.contactList.filter(c => c.userId !== contactId);
@@ -261,9 +318,27 @@ function updateContactList(contactId) {
 }
 
 /**
- * Loads the current user from localStorage as a contact object.
- * 
- * @returns {Promise<Object|null>} Contact object or null if unavailable
+ * Resets the edit modal (form reset, initials reset) and closes it.
+ *
+ * @returns {void}
+ */
+function clearAndCloseEditModal() {
+  const form = document.getElementById("editContactForm");
+  if (form) form.reset();
+
+  const initials = document.getElementById("editInitials");
+  if (initials) {
+    initials.textContent = "";
+    initials.className = "editInitials";
+  }
+
+  closeEditWindow();
+}
+
+/**
+ * Loads the current user as a contact object.
+ *
+ * @returns {Promise<Contact|null>} Contact object or null.
  */
 async function getCurrentUserAsContact() {
   try {
@@ -277,6 +352,12 @@ async function getCurrentUserAsContact() {
   }
 }
 
+/**
+ * Builds a contact object from user data.
+ *
+ * @param {Record<string, any>} user - User data (e.g., from localStorage).
+ * @returns {Contact} Contact object.
+ */
 function buildContactFromUserData(user) {
   const name = user.userFullName || user.name || "Current User";
 
@@ -291,12 +372,11 @@ function buildContactFromUserData(user) {
   };
 }
 
-
 /**
- * Generates initials from a full name.
- * 
- * @param {string} fullName - Full name string
- * @returns {string} Initials (e.g. "JD" from "John Doe")
+ * Creates initials from a full name.
+ *
+ * @param {string} fullName - Full name.
+ * @returns {string} Initials (e.g., "JD" for "John Doe").
  */
 function getInitialsFromName(fullName) {
   if (!fullName?.trim()) return "AB";

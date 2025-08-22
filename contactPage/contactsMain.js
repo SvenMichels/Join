@@ -54,7 +54,7 @@ function setupContactFormListeners() {
  */
 function setupModalListeners() {
   setupCloseButtons();
-  setupDeleteButton();
+  // Entfernt: setupDeleteButton(); -> keine Bindung ohne Kontakt
   setupOutsideClickHandlers();
 }
 
@@ -70,9 +70,25 @@ function setupCloseButtons() {
 /**
  * Sets up cancel button event listeners
  */
-export function setupDeleteButton() {
-  document.querySelectorAll(".cancelBtn").forEach(btn => {
-    btn.addEventListener("click", deleteContactFromDatabase);
+export function setupDeleteButton(contact) {
+  if (!contact || !contact.userId) return;
+
+  const contactId = contact.userId;
+  const contactName = contact.userFullName;
+
+  document.querySelectorAll(".deleteModalBtn").forEach((btn) => {
+    // alte Listener entfernen durch Clonen
+    const clone = btn.cloneNode(true);
+    btn.replaceWith(clone);
+
+    clone.addEventListener(
+      "click",
+      async (event) => {
+        event.preventDefault();
+        await deleteContactFromDatabase(contactId, contactName);
+      },
+      { once: true }
+    );
   });
 }
 
@@ -407,7 +423,7 @@ function updateMobileView(fab, panel, hasOpenContact) {
 
 /**
  * Updates contact panel and FAB visibility for desktop view.
- * Removes any slide animation classes and shows panel if a contact is open.
+ * Removes any slide animation classes and shows panel if a contact is currently open.
  *
  * @param {HTMLElement} fab - Floating action button container
  * @param {HTMLElement} panel - Contact detail panel

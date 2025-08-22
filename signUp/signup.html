@@ -51,10 +51,12 @@
                     <label class="visually-hidden" for="inputName">
                         Name
                     </label>
-                    <input autocomplete="name" id="inputName" name="name" placeholder="Name" required="" type="text"
+                    <input autocomplete="name" id="inputName" name="name" placeholder="Name" required=""
                         maxlength="40" />
                     <img alt="Name icon" class="input-icon" src="../assets/icons/person.svg" />
+
                 </div>
+                <div id="nameValidationError"></div>
                 <div class="input-wrapper">
                     <label class="visually-hidden" for="inputEmail" maxlength="40">
                         Email
@@ -62,7 +64,9 @@
                     <input autocomplete="email" id="inputEmail" name="email" placeholder="Email" required=""
                         type="email" maxlength="40" />
                     <img alt="Email icon" class="input-icon" src="../assets/icons/mail.svg" />
+
                 </div>
+                <div id="emailValidationError"></div>
                 <div class="input-wrapper">
                     <label class="visually-hidden" for="inputPassword">
                         Passwort
@@ -72,6 +76,7 @@
                     <img alt="Toggle password visibility" class="input-icon toggle-password"
                         src="../assets/icons/visibility.svg" />
                 </div>
+                <div id="passwordValidationConfirmError"></div>
                 <div class="input-wrapper">
                     <label class="visually-hidden" for="inputConfirmPassword">
                         Passwort bestätigen
@@ -81,6 +86,7 @@
                     <img alt="Toggle password visibility" class="input-icon toggle-password"
                         src="../assets/icons/visibility.svg" />
                 </div>
+                <div id="passwordValidationError"></div>
                 <div class="checkbox-wrapper">
                     <label>
                         <input id="checkBox" required="" type="checkbox" />

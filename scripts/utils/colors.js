@@ -5,6 +5,6 @@
  * @returns {string} A string representing the randomly selected color class.
  */
 export function generateRandomColorClass() {
-  const randomColorNumber = Math.floor(Math.random() * 20) + 1;
+  const randomColorNumber = Math.floor(Math.random() * 40) + 1;
   return `color-${randomColorNumber}`;
 }

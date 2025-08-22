@@ -2,7 +2,8 @@
  * @fileoverview Initializes the login and signup event listeners on application start.
  */
 
-import { loginListeners, signupListeners } from "./events/loginevents.js";
+import { loginListeners } from "./events/loginevents.js";
+import { signupListeners } from "../signup/signup.js";
 
 /**
  * Initializes the application by binding login and signup event handlers.

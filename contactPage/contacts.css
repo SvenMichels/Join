@@ -269,7 +269,6 @@ h2 {
   height: 78px;
   gap: 35px;
   border-radius: 10px;
-  /* border: none; */
   margin: auto;
   padding-left: 5px;
   transition: transform 0.2s ease;
@@ -277,7 +276,7 @@ h2 {
 }
 
 .contact:hover {
-  background-color: #2a3647;
+  background-color: #2a36476e;
   color: white;
 }
 

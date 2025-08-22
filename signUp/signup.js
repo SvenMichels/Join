@@ -5,23 +5,45 @@
  * @author Join Team
  */
 
-import { signupListeners, isValidEmail } from "../scripts/events/loginevents.js";
+import { isValidEmail, bindPrivacyCheckbox, bindPolicyLinks, bindSignupForm } from "../scripts/events/loginevents.js";
 import { generateRandomColorClass } from "../scripts/utils/colors.js";
 import { getInitials } from "../scripts/utils/helpers.js";
+import { validatePasswordInput, validatePasswords, validateEmailInput, validateNameInput } from "./signupvalidate.js";
 
-const userPasswordInputField = document.getElementById("inputPassword");
-const confirmPasswordInputField = document.getElementById("inputConfirmPassword");
-const privacyPolicyCheckbox = document.getElementById("checkBox");
-const signUpSubmitButton = document.getElementById("signUpBtn");
-const passwordToggleIcon = document.querySelector("#inputPassword + .toggle-password");
-const confirmToggleIcon = document.querySelector("#inputConfirmPassword + .toggle-password");
+export const userPasswordInputField = document.getElementById("inputPassword");
+export const confirmPasswordInputField = document.getElementById("inputConfirmPassword");
+export const privacyPolicyCheckbox = document.getElementById("checkBox");
+export const signUpSubmitButton = document.getElementById("signUpBtn");
+export const passwordToggleIcon = document.querySelector("#inputPassword + .toggle-password");
+export const confirmToggleIcon = document.querySelector("#inputConfirmPassword + .toggle-password");
+
+/**
+ * Initializes all signup event listeners and bindings.
+ */
+export async function signupListeners() {
+  const signupFormElement = document.getElementById("signUpForm");
+  if (!signupFormElement) return;
+
+  bindSignupForm(signupFormElement);
+  bindPrivacyCheckbox();
+  bindPolicyLinks();
+  setupInputValidation();
+  checkFormValidity();
+}
 
 /**
  * Initializes signup page when loaded.
  */
 if (window.location.pathname.endsWith("signup.html")) {
   signupListeners();
+  setupPasswordEvents();
+  signUpSubmitButton.addEventListener("click", handleSignupSubmission);
+}
 
+/**
+ * Sets up password field event listeners for validation and toggle functionality.
+ */
+export function setupPasswordEvents() {
   userPasswordInputField.addEventListener("input", validatePasswords);
   confirmPasswordInputField.addEventListener("input", validatePasswords);
 
@@ -31,26 +53,144 @@ if (window.location.pathname.endsWith("signup.html")) {
   confirmToggleIcon.addEventListener("click", () =>
     togglePassword(confirmPasswordInputField, confirmToggleIcon)
   );
-
-  signUpSubmitButton.addEventListener("click", handleSignupSubmission);
 }
 
 /**
- * Validates whether both password fields match.
+ * Initializes validation for all input fields.
  */
-function validatePasswords() {
-  const match = userPasswordInputField.value === confirmPasswordInputField.value;
-  confirmPasswordInputField.setCustomValidity(match ? "" : "Passwords do not match");
-  isValidEmail(match)
+export function setupInputValidation() {
+  setupNameValidation();
+  setupEmailValidation();
+  setupPasswordValidation();
+  setupPrivacyCheckboxValidation();
 }
 
 /**
- * Toggles visibility of the password input.
- *
- * @param {HTMLInputElement} field - Password input field.
- * @param {HTMLElement} icon - Icon used to toggle visibility.
+ * Sets up name input validation and keypress prevention.
  */
-function togglePassword(field, icon) {
+export function setupNameValidation() {
+  const nameInput = document.querySelector("#inputName");
+  if (!nameInput) return;
+
+  nameInput.addEventListener("input", (event) => validateNameInput(event.target));
+  nameInput.addEventListener("keypress", (event) => preventInvalidNameInput(event));
+}
+
+/**
+ * Sets up email input validation and keypress prevention.
+ */
+export function setupEmailValidation() {
+  const emailInput = document.querySelector("#inputEmail");
+  if (!emailInput) return;
+
+  emailInput.addEventListener("input", (event) => validateEmailInput(event.target));
+  emailInput.addEventListener("keypress", (event) => preventInvalidEmailInput(event));
+}
+
+/**
+ * Sets up password input validation and keypress prevention.
+ */
+export function setupPasswordValidation() {
+  const passwordInput = document.querySelector("#inputPassword");
+  if (!passwordInput) return;
+
+  passwordInput.addEventListener("input", (event) => validatePasswordInput(event.target));
+  passwordInput.addEventListener("keypress", (event) => preventInvalidPasswordInput(event));
+}
+
+/**
+ * Sets up privacy checkbox change event listener.
+ */
+export function setupPrivacyCheckboxValidation() {
+  if (privacyPolicyCheckbox) {
+    privacyPolicyCheckbox.addEventListener("change", checkFormValidity);
+  }
+}
+
+/**
+ * Prevents invalid characters from being entered in name field.
+ * @param {KeyboardEvent} event - The keypress event
+ */
+export function preventInvalidNameInput(event) {
+  const char = event.key;
+  const currentValue = event.target.value;
+
+  if (char === " " && currentValue.length === 0) {
+    event.preventDefault();
+    return;
+  }
+
+  const allowedKeys = ["Backspace", "Delete", "ArrowLeft", "ArrowRight", "Tab"];
+  const isLetter = /[a-zA-ZäöüÄÖÜß]/.test(char);
+  const isSpace = char === " ";
+
+  if (!isLetter && !isSpace && !allowedKeys.includes(char)) {
+    event.preventDefault();
+  }
+}
+
+/**
+ * Prevents invalid characters from being entered in email field.
+ * @param {KeyboardEvent} event - The keypress event
+ */
+export function preventInvalidEmailInput(event) {
+  const char = event.key;
+  const currentValue = event.target.value;
+
+  if (char === " ") {
+    event.preventDefault();
+    return;
+  }
+
+  if (currentValue.length === 0 && !/[a-zA-Z0-9]/.test(char)) {
+    const allowedKeys = ["Backspace", "Delete", "ArrowLeft", "ArrowRight", "Tab"];
+    if (!allowedKeys.includes(char)) {
+      event.preventDefault();
+    }
+  }
+}
+
+/**
+ * Prevents invalid characters from being entered in password field.
+ * @param {KeyboardEvent} event - The keypress event
+ */
+export function preventInvalidPasswordInput(event) {
+  const char = event.key;
+  const currentValue = event.target.value;
+
+  if (char === " " && currentValue.length === 0) {
+    event.preventDefault();
+  }
+}
+
+/**
+ * Displays validation error message for a field.
+ * @param {HTMLElement} errorDiv - The error display element
+ * @param {string} message - The error message to display
+ */
+export function showValidationError(errorDiv, message) {
+  if (!errorDiv) return;
+
+  errorDiv.textContent = message;
+  errorDiv.style.color = "red";
+}
+
+/**
+ * Hides validation error message for a field.
+ * @param {HTMLElement} errorDiv - The error display element
+ */
+export function hideValidationError(errorDiv) {
+  if (!errorDiv) return;
+
+  errorDiv.style.color = "white";
+}
+
+/**
+ * Toggles password visibility for a field.
+ * @param {HTMLInputElement} field - The password input field
+ * @param {HTMLElement} icon - The toggle icon element
+ */
+export function togglePassword(field, icon) {
   const isHidden = field.type === "password";
   field.type = isHidden ? "text" : "password";
   icon.src = isHidden ? "../assets/icons/visibility_off.svg" : "../assets/icons/visibility.svg";
@@ -58,10 +198,12 @@ function togglePassword(field, icon) {
 
 /**
  * Handles signup form submission.
- *
- * @param {Event} event - Click event.
+ * @param {Event} event - The click event
  */
-async function handleSignupSubmission(event) {
+export async function handleSignupSubmission(event) {
+  event?.preventDefault();
+  // Harte Absicherung: bei deaktiviertem Button oder ungecheckter Checkbox abbrechen
+  if (signUpSubmitButton?.disabled) return;
   if (!privacyPolicyCheckbox.checked) return;
 
   const userData = await collectUserInput();
@@ -72,9 +214,7 @@ async function handleSignupSubmission(event) {
 
 /**
  * Collects and validates user input from the signup form.
- *
- * @returns {Object|null} Collected user data object or null on failure.
- * @exports
+ * @returns {Object|null} User data object or null if validation fails
  */
 export async function collectUserInput() {
   const userFullName = getTrimmedInputValue("inputName");
@@ -93,19 +233,29 @@ export async function collectUserInput() {
   };
 }
 
-function getTrimmedInputValue(id) {
+/**
+ * Gets trimmed value from input field by ID.
+ * @param {string} id - The input element ID
+ * @returns {string} Trimmed input value
+ */
+export function getTrimmedInputValue(id) {
   const input = document.getElementById(id);
   return input ? input.value.trim() : "";
 }
 
-function getFirstCharacter(name) {
+/**
+ * Gets first character of name in uppercase.
+ * @param {string} name - The user's name
+ * @returns {string} First character or "?" if empty
+ */
+export function getFirstCharacter(name) {
   return name ? name.charAt(0).toUpperCase() : "?";
 }
 
 /**
- * Submits the user registration and displays feedback animation.
+ * Submits user registration and displays feedback animation.
  */
-async function submitUser() {
+export async function submitUser() {
   const feedback = document.getElementById("userFeedback");
   if (!feedback) return;
 
@@ -119,4 +269,56 @@ async function submitUser() {
       window.location.href = "../index.html";
     }, 1500);
   });
+}
+
+/**
+ * Checks overall form validity and enables/disables submit button.
+ */
+export function checkFormValidity() {
+  const isNameValid = isFieldValid("inputName", "nameValidationError");
+  const isEmailValid = isFieldValid("inputEmail", "emailValidationError");
+  const isPasswordValid = isPasswordFieldValid();
+  const isPrivacyChecked = privacyPolicyCheckbox?.checked || false;
+
+  const isFormValid = isNameValid && isEmailValid && isPasswordValid && isPrivacyChecked;
+
+  if (signUpSubmitButton) {
+    signUpSubmitButton.disabled = !isFormValid;
+    signUpSubmitButton.style.backgroundColor = isFormValid ? "#ffffffff" : "#2a3647";
+    signUpSubmitButton.style.opacity = isFormValid ? "0.6" : "1";
+    signUpSubmitButton.style.cursor = isFormValid ? "pointer" : "not-allowed";
+  }
+}
+
+/**
+ * Checks if a specific input field is valid.
+ * @param {string} inputId - The input element ID
+ * @param {string} errorId - The error element ID
+ * @returns {boolean} True if field is valid
+ */
+export function isFieldValid(inputId, errorId) {
+  const input = document.getElementById(inputId);
+  const errorEl = document.getElementById(errorId);
+
+  if (!input || !input.value.trim()) return false;
+  if (errorEl && errorEl.style.display !== "none") return false;
+
+  return true;
+}
+
+/**
+ * Checks if password fields are valid and match.
+ * @returns {boolean} True if password fields are valid
+ */
+export function isPasswordFieldValid() {
+  const password = userPasswordInputField?.value;
+  const confirmPassword = confirmPasswordInputField?.value;
+  const errorEl = document.getElementById("passwordValidationError");
+
+  if (!password || !confirmPassword) return false;
+  if (password.length < 6) return false;
+  if (password !== confirmPassword) return false;
+  if (errorEl && errorEl.style.display !== "none") return false;
+
+  return true;
 }

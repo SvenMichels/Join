@@ -14,7 +14,14 @@ main {
   align-items: center;
   width: 100vw;
   height: 100%;
-  padding-top: 160px;
+  padding-top: 215px;
+}
+
+.errorDiv {
+  width: 100%;
+  color: #ff0000;
+  font-size: 13px;
+  margin-top: 5px;
 }
 
 .form-container {
@@ -38,7 +45,11 @@ form {
   flex-direction: column;
   align-items: center;
   width: 100%;
-  gap: 24px;
+  /* gap: 12px; */
+}
+
+.checkbox-wrapper label {
+  margin-bottom: 16px;
 }
 
 .form-header {
@@ -175,7 +186,7 @@ footer {
   width: 246px;
   height: 35px;
   flex-direction: row;
-  padding-top: 80px;
+  padding-top: 40px;
   padding-bottom: 50px;
 }
 
@@ -266,4 +277,14 @@ input:focus::placeholder {
   .input-wrapper input {
     padding: 0 24px 0 6px;
   }
+}
+
+#nameValidationError,
+#emailValidationError,
+#passwordValidationError,
+#passwordValidationConfirmError {
+  width: 100%;
+  color: #ff0000;
+  font-size: 13px;
+  margin: 6px 0px 6px 8px;
 }

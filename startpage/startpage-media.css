@@ -4,7 +4,7 @@
   }
 
   .frontPage {
-    padding-top: clamp(4.4rem, 9.5vw, 7rem);
+    padding-top: clamp(2.5rem, 9.5vw, 7rem);
   }
 
   .mainContent {

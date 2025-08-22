@@ -74,7 +74,7 @@ export function openEditDialog(contact) {
   if (editWindow) {
     editWindow.classList.remove("dp-none");
     fillEditForm(contact);
-    setupDeleteButton();
+    setupDeleteButton(contact);
     setUserInitials(contact);
   }
 }

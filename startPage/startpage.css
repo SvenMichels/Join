@@ -80,7 +80,7 @@ main {
   flex-direction: column;
   justify-content: flex-start;
   overflow-y: auto;
-  padding-top: 110px;
+  padding-top: 90px;
 }
 
 .headline {
@@ -191,7 +191,7 @@ main {
 }
 
 .stats>div .taskText {
-  font-size: clamp(0.8rem, 1.5vw, 1.1rem);
+  font-size: clamp(1rem, 1.5vw, 1.1rem);
   text-align: center;
 }
 
@@ -237,13 +237,13 @@ main {
 }
 
 .urgentTaskDate {
-  font-size: clamp(1rem, 2vw, 1.3rem);
+  font-size: clamp(1.2rem, 2vw, 1.3rem);
   font-weight: 700;
   color: #2a3647;
 }
 
 .urgentTaskDateText {
-  font-size: clamp(0.8rem, 1.5vw, 1rem);
+  font-size: clamp(1rem, 1.5vw, 1rem);
   color: #2a3647;
 }
 

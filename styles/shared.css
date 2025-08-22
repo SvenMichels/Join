@@ -246,25 +246,43 @@
   }
 }
 
-.color-1 { background-color: #FF7A00; }
-.color-2 { background-color: #FF5EB3; }
-.color-3 { background-color: #6E52FF; }
-.color-4 { background-color: #9327FF; }
-.color-5 { background-color: #00BEE8; }
-.color-6 { background-color: #1FD7C1; }
-.color-7 { background-color: #FF745E; }
-.color-8 { background-color: #FFA35E; }
-.color-9 { background-color: #FC71FF; }
-.color-10 { background-color: #FFC701; }
+.color-1  { background-color: #FF6B6B; }
+.color-2  { background-color: #FF5EB3; }
+.color-3  { background-color: #6E52FF; }
+.color-4  { background-color: #3A0CA3; }
+.color-5  { background-color: #00BEE8; }
+.color-6  { background-color: #1FD7C1; }
+.color-7  { background-color: #FF745E; }
+.color-8  { background-color: #0096C7; }
+.color-9  { background-color: #FC71FF; }
+.color-10 { background-color: #48CAE4; }
 .color-11 { background-color: #0038FF; }
-.color-12 { background-color: #C3FF2B; }
-.color-13 { background-color: #FFE62B; }
+.color-12 { background-color: #80ED99; }
+.color-13 { background-color: #FFD6A5; }
 .color-14 { background-color: #FF4646; }
-.color-15 { background-color: #FFBB2B; }
+.color-15 { background-color: #06D6A0; }
 .color-16 { background-color: #1ABC9C; }
 .color-17 { background-color: #2ECC71; }
-.color-18 { background-color: #3498DB; }
+.color-18 { background-color: #4895EF; }
 .color-19 { background-color: #9B59B6; }
-.color-20 { background-color: #E67E22; }
-
-
+.color-20 { background-color: #E63946; }
+.color-21 { background-color: #F72585; }
+.color-22 { background-color: #7209B7; }
+.color-23 { background-color: #4361EE; }
+.color-24 { background-color: #4CC9F0; }
+.color-25 { background-color: #2A9D8F; }
+.color-26 { background-color: #264653; }
+.color-27 { background-color: #E9C46A; }
+.color-28 { background-color: #F4A261; }
+.color-29 { background-color: #D62828; }
+.color-30 { background-color: #003049; }
+.color-31 { background-color: #9D4EDD; }
+.color-32 { background-color: #FF99C8; }
+.color-33 { background-color: #FCBF49; }
+.color-34 { background-color: #90BE6D; }
+.color-35 { background-color: #577590; }
+.color-36 { background-color: #8ECAE6; }
+.color-37 { background-color: #219EBC; }
+.color-38 { background-color: #023047; }
+.color-39 { background-color: #FFB703; }
+.color-40 { background-color: #FB8500; }

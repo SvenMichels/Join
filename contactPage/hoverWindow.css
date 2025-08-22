@@ -274,7 +274,7 @@ input::placeholder {
   height: 57px;
 }
 
-.cancelBtn {
+.deleteModalBtn {
   width: 126px;
   height: 57px;
   border: 1px solid #2a3647;
@@ -286,7 +286,7 @@ input::placeholder {
   color: #2a3647;
 }
 
-.cancelBtn:hover {
+.deleteModalBtn:hover {
   cursor: pointer;
   color: #29abe2;
   border-color: #29abe2;

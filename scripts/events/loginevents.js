@@ -129,8 +129,13 @@ function bindLoginInputValidation() {
  * @returns {boolean}
  */
 export function isValidEmail(email) {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(de|com|net|nl|org|uk|cn|au|dk|pl|cz|at|lu|ru)$/;
   return emailRegex.test(email);
+}
+
+export function isValidPhoneNumber(phone) {
+  const phoneRegex = /^(?:\+49)?[0-9]{0,}$/;
+  return phoneRegex.test(phone);
 }
 
 /**
@@ -157,7 +162,7 @@ function redirectToStartpage() {
 /**
  * Binds listeners for policy and legal notice links.
  */
-function bindPolicyLinks() {
+export function bindPolicyLinks() {
   const policyLinks = getAllPolicyLinks();
   attachPolicyListeners(policyLinks);
 }
@@ -167,7 +172,7 @@ function bindPolicyLinks() {
  * 
  * @returns {NodeListOf<HTMLAnchorElement>}
  */
-function getAllPolicyLinks() {
+export function getAllPolicyLinks() {
   const linkSelectors = [
     'a[href$="privatpolicy.html"]',
     'a[href$="legalnotice.html"]',
@@ -241,16 +246,24 @@ export async function signupListeners() {
  * 
  * @param {HTMLFormElement} formElement
  */
-function bindSignupForm(formElement) {
+export function bindSignupForm(formElement) {
   formElement.addEventListener("submit", handleSignupSubmission);
 }
 
 /**
  * Binds change event to privacy checkbox to enable/disable signup button.
  */
-function bindPrivacyCheckbox() {
+export function bindPrivacyCheckbox() {
   const checkbox = document.getElementById("checkBox");
   const submitButton = document.getElementById("signUpBtn");
+  const userName = document.getElementById("inputName").value;
+  const userEmail = document.getElementById("inputEmail").value;
+  if (userName.length < 3 || userEmail.length < 5) {
+    disableButton(submitButton);
+    return
+  } else {
+    enableButton(submitButton);
+  }
 
   if (checkbox && submitButton) {
     checkbox.addEventListener("change", () =>
