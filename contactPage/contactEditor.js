@@ -5,6 +5,7 @@
 import { getInitials } from '../scripts/utils/helpers.js';
 import { updateContact } from './contactDataService.js';
 import { setupDeleteButton } from '../contactPage/contactsMain.js';
+import { initContactEditValidation } from './contactEditValidation.js';
 
 let editingContact = null;
 
@@ -69,13 +70,14 @@ export function emptyInput() {
  */
 export function openEditDialog(contact) {
   editingContact = contact;  
-
   const editWindow = document.getElementById("editWindow");
   if (editWindow) {
     editWindow.classList.remove("dp-none");
     fillEditForm(contact);
     setupDeleteButton(contact);
     setUserInitials(contact);
+    // Neu: Validierung initialisieren (Listener + Submit-Guard)
+    initContactEditValidation();
   }
 }
 

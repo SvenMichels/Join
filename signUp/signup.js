@@ -181,7 +181,7 @@ export function showValidationError(errorDiv, message) {
  */
 export function hideValidationError(errorDiv) {
   if (!errorDiv) return;
-  errorDiv.textContent = "";         // Fehlertext leeren
+  errorDiv.textContent = "";
   errorDiv.style.color = "white";
 }
 
@@ -281,9 +281,7 @@ export function checkFormValidity() {
 
   const isFormValid = isNameValid && isEmailValid && isPasswordValid && isPrivacyChecked;
 
-  if (signUpSubmitButton) {
-    console.log(signUpSubmitButton);
-    
+  if (signUpSubmitButton) {    
     signUpSubmitButton.disabled = !isFormValid;
     signUpSubmitButton.style.backgroundColor = isFormValid ? "#2a3647" : "#2a3647";
     signUpSubmitButton.style.opacity = isFormValid ? "1" : "0.5";

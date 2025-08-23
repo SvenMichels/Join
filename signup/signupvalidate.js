@@ -1,8 +1,18 @@
+/**
+ * @fileoverview Validation helpers for the signup form.
+ * Provides per-field validation and a small dispatcher to show/hide errors.
+ */
+
 import { hideValidationError, showValidationError, checkFormValidity, userPasswordInputField, confirmPasswordInputField } from "./signup.js";
 import { isValidEmail } from "../scripts/events/loginevents.js"
 
 /**
- * Helper to handle validation result.
+ * Applies validation result by showing or hiding the error and re-checking form validity.
+ *
+ * @param {boolean} isValid - Whether the field is valid.
+ * @param {HTMLElement|null} errorEl - The element to show/hide the error text.
+ * @param {string} [message=""] - Error message to display when invalid.
+ * @returns {void}
  */
 function setValidation(isValid, errorEl, message = "") {
     if (isValid) {
@@ -14,7 +24,12 @@ function setValidation(isValid, errorEl, message = "") {
 }
 
 /**
- * Validates name input field for correct format and characters.
+ * Validates the name input.
+ * - Must not start with a space.
+ * - Letters and spaces only (supports umlauts).
+ *
+ * @param {HTMLInputElement} input - Name input element.
+ * @returns {void}
  */
 export function validateNameInput(input) {
     const value = input.value.trimEnd();
@@ -29,7 +44,13 @@ export function validateNameInput(input) {
 }
 
 /**
- * Validates email input field for correct format.
+ * Validates the email input.
+ * - Must not start with a space.
+ * - Must not contain spaces.
+ * - Must match isValidEmail.
+ *
+ * @param {HTMLInputElement} input - Email input element.
+ * @returns {void}
  */
 export function validateEmailInput(input) {
     const email = input.value;
@@ -45,7 +66,10 @@ export function validateEmailInput(input) {
 }
 
 /**
- * Validates that password and confirm password fields match.
+ * Validates that password and confirm password match.
+ * Sets a custom validity message on the confirm field.
+ *
+ * @returns {void}
  */
 export function validatePasswords() {
     const password = userPasswordInputField.value;
@@ -64,7 +88,13 @@ export function validatePasswords() {
 }
 
 /**
- * Validates password input for minimum length and format.
+ * Validates password format.
+ * - Must not start with a space.
+ * - Must be at least 6 characters long.
+ * Triggers cross-field validation with a short delay.
+ *
+ * @param {HTMLInputElement} input - Password input element.
+ * @returns {void}
  */
 export function validatePasswordInput(input) {
     const password = input.value;

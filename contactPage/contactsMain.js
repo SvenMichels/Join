@@ -15,6 +15,7 @@ import { highlightActiveNavigationLinks, setupOpenMenuListener } from '../script
 import { updateTask } from '../board/taskManager.js';
 import { fetchAllTasks } from '../scripts/auth/login.js';
 import { initializeBackButton, initializeFabMenu } from "../scripts/ui/fabContact.js";
+import { initAddContactValidation } from "./addContactValidation.js";
 
 let contactList = [];
 let editingContact = null;
@@ -45,7 +46,11 @@ function setupContactFormListeners() {
   const editForm = document.getElementById("editContactForm");
 
   if (addBtn) addBtn.addEventListener("click", openContactAdditionWindow);
-  if (addForm) addForm.addEventListener("submit", addNewContactToDatabase);
+  if (addForm) {
+    // Validierung für Add-Modal initialisieren (einmalig, Submit-Guard inklusive)
+    initAddContactValidation();
+    addForm.addEventListener("submit", addNewContactToDatabase);
+  }
   if (editForm) editForm.addEventListener("submit", handleContactEditSubmission);
 }
 
@@ -54,7 +59,6 @@ function setupContactFormListeners() {
  */
 function setupModalListeners() {
   setupCloseButtons();
-  // Entfernt: setupDeleteButton(); -> keine Bindung ohne Kontakt
   setupOutsideClickHandlers();
 }
 
