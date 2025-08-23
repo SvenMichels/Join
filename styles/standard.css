@@ -9,7 +9,6 @@ body {
   overflow-x: hidden;
   font-family: "Inter", sans-serif;
   color: #000000;
-  max-width: 1440px;
 }
 
 p {
@@ -22,7 +21,7 @@ p {
   text-decoration: none;
 }
 
-.header-style {
+.header-wrapper {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -33,6 +32,18 @@ p {
   position: sticky;
   top: 0;
   z-index: 1;
+}
+
+.header-style {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100vw;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  max-width: calc(1440px - 325px);
+  padding-left: 325px;
 }
 
 .help-container {
@@ -191,7 +202,7 @@ p {
 }
 
 .dropDownMenu {
-  top: 96px;
+  top: 52px;
   right: 25px;
 }
 

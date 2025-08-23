@@ -10,8 +10,8 @@
       type="image/x-icon"
     />
     <link href="./legalnotice.css" rel="stylesheet" />
-    <link href="../styles/standard.css" rel="stylesheet">
-    <link href="../styles/shared.css" rel="stylesheet">
+    <link href="../styles/standard.css" rel="stylesheet" />
+    <link href="../styles/shared.css" rel="stylesheet" />
     <link rel="stylesheet" href="../styles/media-querie-small.css" />
     <link rel="stylesheet" href="../styles/media-querie-medium.css" />
     <link rel="stylesheet" href="../styles/media-querie-large.css" />
@@ -19,82 +19,103 @@
 
     <script type="module" src="../board/board.js"></script>
     <script type="module">
-      import { highlightActiveNavigationLinks } from '../scripts/utils/navUtils.js';
-      import { setupMobileDeviceListeners } from '../scripts/utils/mobileUtils.js';
-      
-      document.addEventListener('DOMContentLoaded', () => {
+      import { highlightActiveNavigationLinks } from "../scripts/utils/navUtils.js";
+      import { setupMobileDeviceListeners } from "../scripts/utils/mobileUtils.js";
+
+      document.addEventListener("DOMContentLoaded", () => {
         highlightActiveNavigationLinks();
         setupMobileDeviceListeners();
       });
     </script>
   </head>
   <body>
-    <div id="rotateWarning" style="
-  display: none;
-  position: fixed;
-  inset: 0;
-  background-color: #000;
-  color: #fff;
-  z-index: 9999;
-  font-size: 1.5rem;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 2rem;
-">
- Please rotate your device back to portrait mode.
-</div>
-    <header class="header-style" id="">
-    <img class="header-nav-logo" src="../assets/icons/Capa 3.svg" />
-    <div class="header-container">
-      <p class="media-d-none">Kanban Project Management Tool</p>
+    <div
+      id="rotateWarning"
+      style="
+        display: none;
+        position: fixed;
+        inset: 0;
+        background-color: #000;
+        color: #fff;
+        z-index: 9999;
+        font-size: 1.5rem;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 2rem;
+      "
+    >
+      Please rotate your device back to portrait mode.
     </div>
-  </header>
-    <nav class="nav-bar">
-    <img alt="nav-logo" class="nav-logo" src="/assets/icons/join_white.svg" />
-    <div class="nav-menu">
-      <button class="nav-button-login d_none">
-        <img alt="Bild" class="nav-icons" src="/assets/icons/login.svg" /> Log
-        In
-      </button>
-      <a class="txtDeco-none" href="../startpage/startpage.html">
-        <div class="taskSummary">
-          <button class="nav-buttons">
-            <img alt="Bild" class="nav-icons" src="/assets/icons/summary_2.svg" />
-            Summary
-          </button>
+    <div class="header-wrapper">
+      <header class="header-style" id="">
+        <img class="header-nav-logo" src="../assets/icons/Capa 3.svg" />
+        <div class="header-container">
+          <p class="media-d-none">Kanban Project Management Tool</p>
         </div>
-      </a>
-      <div class="taskFrame9">
-        <a class="txtDeco-none" href="../addTask/addtask.html">
-          <button class="nav-buttons">
-            <img alt="Bild" class="nav-icons" src="/assets/icons/add_task.svg" />
-            Add Task
-          </button>
+      </header>
+    </div>
+    <nav class="nav-bar">
+      <img alt="nav-logo" class="nav-logo" src="/assets/icons/join_white.svg" />
+      <div class="nav-menu">
+        <button class="nav-button-login d_none">
+          <img alt="Bild" class="nav-icons" src="/assets/icons/login.svg" /> Log
+          In
+        </button>
+        <a class="txtDeco-none" href="../startpage/startpage.html">
+          <div class="taskSummary">
+            <button class="nav-buttons">
+              <img
+                alt="Bild"
+                class="nav-icons"
+                src="/assets/icons/summary_2.svg"
+              />
+              Summary
+            </button>
+          </div>
+        </a>
+        <div class="taskFrame9">
+          <a class="txtDeco-none" href="../addTask/addtask.html">
+            <button class="nav-buttons">
+              <img
+                alt="Bild"
+                class="nav-icons"
+                src="/assets/icons/add_task.svg"
+              />
+              Add Task
+            </button>
+          </a>
+        </div>
+        <a class="txtDeco-none" href="../board/board.html">
+          <div class="taskBoard">
+            <button class="nav-buttons">
+              <img alt="Bild" class="nav-icons" src="/assets/icons/board.svg" />
+              Board
+            </button>
+          </div>
+        </a>
+        <a class="txtDeco-none" href="../contactPage/contacts.html">
+          <div class="taskContacts">
+            <button class="nav-buttons">
+              <img
+                alt="Bild"
+                class="nav-icons"
+                src="/assets/icons/contacts.svg"
+              />
+              Contacts
+            </button>
+          </div>
         </a>
       </div>
-      <a class="txtDeco-none" href="../board/board.html">
-        <div class="taskBoard">
-          <button class="nav-buttons">
-            <img alt="Bild" class="nav-icons" src="/assets/icons/board.svg" />
-            Board
-          </button>
-        </div>
-      </a>
-      <a class="txtDeco-none" href="../contactPage/contacts.html">
-        <div class="taskContacts">
-          <button class="nav-buttons">
-            <img alt="Bild" class="nav-icons" src="/assets/icons/contacts.svg" />
-            Contacts
-          </button>
-        </div>
-      </a>
-    </div>
-    <div class="legal-privat-container">
-      <a class="taskFrameLink" href="../privatePolicy/privatpolicy.html">Privacy Policy</a>
-      <a class="taskFrameLink" href="../legalnotice/legalnotice.html">Legal notice</a>
-    </div>
-  </nav>
+      <div class="legal-privat-container">
+        <a class="taskFrameLink" href="../privatePolicy/privatpolicy.html"
+          >Privacy Policy</a
+        >
+        <a class="taskFrameLink" href="../legalnotice/legalnotice.html"
+          >Legal notice</a
+        >
+      </div>
+    </nav>
     <div class="legal-container">
       <h1>Legal Notice</h1>
       <h2>Imprint</h2>

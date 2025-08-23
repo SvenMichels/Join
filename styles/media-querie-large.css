@@ -29,7 +29,7 @@
   }
 
   .header-container {
-    padding-left: 318px;
+    /* padding-left: 318px; */
   }
 
   .required-container {
@@ -152,6 +152,10 @@
     z-index: 2;
   }
 
+  .header-stylte {
+    padding-left: 0;
+  }
+
   .header-nav-logo {
     display: none;
   }
@@ -160,8 +164,8 @@
     width: 100%;
   }
 
-  .header-container {
-    padding-left: 328px;
+  .header-stylte {
+    padding-left: 0;
   }
 
   .help-container {
@@ -256,8 +260,6 @@
     min-height: 120px;
   }
 
-
-
   .column {
     width: 100%;
     max-width: 100%;
@@ -271,8 +273,8 @@
     display: none;
   }
 
-  .header-container {
-    padding-left: 328px;
+  .header-stylte {
+    padding-left: 0;
   }
 
   .help-container {
@@ -324,61 +326,61 @@
     gap: 16px;
   }
 
-    .task-wrapper {
-      display: flex;
-      flex-direction: column;
-      max-height: 382px;
-      width: 100%;
-      max-width: 440px;
-      justify-content: space-between;
-      gap: 30px;
-    }
-
-    .required-container {
-      padding-bottom: 64px;
-      position: absolute;
-      bottom: 0;
-      width: 70%;
-    }
-
-    .add-task-board-button {
-      display: none;
-    }
-
-    .board-container {
-      padding-top: 100px;
-      padding-right: 16px;
-      padding-left: 295px;
-      overflow-y: auto;
-      scrollbar-width: none;
-      box-sizing: border-box;
-      width: 100%;
-    }
-
-    .board-container::-webkit-scrollbar {
-      display: none;
-    }
-
-    .task-list {
-      min-height: 100vh;
-      display: flex;
-      gap: 16px;
-      overflow-x: auto;
-      overflow-y: hidden;
-      padding: 8px;
-    }
-
-    .board {
-      display: flex;
-      gap: 16px;
-    }
-
-    .task {
-      width: 100%;
-    }
-
-    .column {
-      display: flex;
-      flex-direction: column;
-    }
+  .task-wrapper {
+    display: flex;
+    flex-direction: column;
+    max-height: 382px;
+    width: 100%;
+    max-width: 440px;
+    justify-content: space-between;
+    gap: 30px;
   }
+
+  .required-container {
+    padding-bottom: 64px;
+    position: absolute;
+    bottom: 0;
+    width: 70%;
+  }
+
+  .add-task-board-button {
+    display: none;
+  }
+
+  .board-container {
+    padding-top: 100px;
+    padding-right: 16px;
+    padding-left: 295px;
+    overflow-y: auto;
+    scrollbar-width: none;
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  .board-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .task-list {
+    min-height: 100vh;
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 8px;
+  }
+
+  .board {
+    display: flex;
+    gap: 16px;
+  }
+
+  .task {
+    width: 100%;
+  }
+
+  .column {
+    display: flex;
+    flex-direction: column;
+  }
+}

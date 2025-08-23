@@ -5,6 +5,10 @@
     padding-left: 16px;
   }
 
+  .header-style {
+    padding-left: 0;
+  }
+
   .nav-bar {
     display: flex;
     position: fixed;
@@ -161,7 +165,7 @@
   }
 
   .dropDownMenu {
-    top: 72px;
+    top: 52px;
     right: 8px;
   }
 
