@@ -57,20 +57,16 @@ function showError(feedbackElement, message) {
  */
 function validateAddName(inputElement, feedbackElement) {
     if (!inputElement || !feedbackElement) return false;
-
     const rawValue = inputElement.value ?? "";
     if (!rawValue.trim()) { hideError(feedbackElement); return false; }
     if (/^\s/.test(rawValue)) {
         showError(feedbackElement, "Name must not begin with a space.");
-        return false;
-    }
+        return false;    }
     const normalizedValue = rawValue.normalize("NFC");
     const namePattern = /^\p{L}+(?:[ '\-]\p{L}+)*$/u;
     if (!namePattern.test(normalizedValue)) {
         showError(feedbackElement, "Name may contain letters, spaces, ' and - only.");
-        return false;
-    }
-
+        return false;    }
     hideError(feedbackElement);
     return true;
 }
@@ -87,19 +83,14 @@ function validateAddName(inputElement, feedbackElement) {
  */
 function validateAddEmail(inputElement, feedbackElement) {
     if (!inputElement || !feedbackElement) return false;
-
     const rawValue = inputElement.value ?? "";
     if (!rawValue.trim()) { hideError(feedbackElement); return false; }
     if (/^\s/.test(rawValue)) {
-        showError(feedbackElement, "Email must not begin with a space."); return false;
-    }
+        showError(feedbackElement, "Email must not begin with a space."); return false;    }
     if (/\s/.test(rawValue)) {
-        showError(feedbackElement, "Email must not contain spaces."); return false;
-    }
+        showError(feedbackElement, "Email must not contain spaces."); return false;    }
     if (!isValidEmail(rawValue)) {
-        showError(feedbackElement, "Please enter a valid email address."); return false;
-    }
-
+        showError(feedbackElement, "Please enter a valid email address."); return false;    }
     hideError(feedbackElement);
     return true;
 }
@@ -114,25 +105,18 @@ function validateAddEmail(inputElement, feedbackElement) {
  */
 function validateAddPhone(inputElement, feedbackElement) {
     if (!inputElement || !feedbackElement) return false;
-
     const rawValue = (inputElement.value ?? "").trim();
     if (!rawValue) { hideError(feedbackElement); return false; }
-
     const cleanedValue = rawValue.replace(/[()\s.-]/g, "").replace(/^\+/, "");
     if (!/^\d+$/.test(cleanedValue)) {
         showError(feedbackElement, "Phone may contain digits, +, spaces, (), - and .");
-        return false;
-    }
-
+        return false;    }
     const digitCount = cleanedValue.length;
     if (digitCount < 7 || digitCount > 15) {
         showError(feedbackElement, "Phone should have 7–15 digits.");
-        return false;
-    }
-
+        return false;    }
     hideError(feedbackElement);
-    return true;
-}
+    return true;}
 
 /**
  * Runs validation for all fields and updates feedback elements.
@@ -159,18 +143,13 @@ let isValidationBound = false;
 export function initAddContactValidation() {
     if (!formElement || !nameInput || !emailInput || !phoneInput) return;
     if (isValidationBound) { validateAllAddFields(); return; }
-
     nameInput.addEventListener("input", () => validateAddName(nameInput, nameFeedbackElement));
     emailInput.addEventListener("input", () => validateAddEmail(emailInput, emailFeedbackElement));
     phoneInput.addEventListener("input", () => validateAddPhone(phoneInput, phoneFeedbackElement));
-
     formElement.addEventListener("submit", (event) => {
         if (!validateAllAddFields()) {
             event.preventDefault();
-            event.stopImmediatePropagation();
-        }
-    }, true);
-
+            event.stopImmediatePropagation();}}, true);
     isValidationBound = true;
     validateAllAddFields();
 }

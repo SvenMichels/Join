@@ -48,10 +48,8 @@ function showError(feedbackElement, message) {
 function validateName(inputElement, feedbackElement) {
     if (!inputElement || !feedbackElement) return false;
     const rawValue = inputElement.value ?? "";
-
     if (!rawValue.trim()) { hideError(feedbackElement); return false; }
     if (/^\s/.test(rawValue)) { showError(feedbackElement, "Name must not begin with a space."); return false; }
-
     const normalizedValue = rawValue.normalize("NFC");
     const namePattern = /^\p{L}+(?:[ '\-]\p{L}+)*$/u;
     if (!namePattern.test(normalizedValue)) {
@@ -75,7 +73,6 @@ function validateName(inputElement, feedbackElement) {
 function validateEmail(inputElement, feedbackElement) {
     if (!inputElement || !feedbackElement) return false;
     const rawValue = inputElement.value ?? "";
-
     if (!rawValue.trim()) { hideError(feedbackElement); return false; }
     if (/^\s/.test(rawValue)) { showError(feedbackElement, "Email must not begin with a space."); return false; }
     if (/\s/.test(rawValue)) { showError(feedbackElement, "Email must not contain spaces."); return false; }
@@ -99,19 +96,15 @@ function validateEmail(inputElement, feedbackElement) {
 function validatePhone(inputElement, feedbackElement) {
     if (!inputElement || !feedbackElement) return false;
     const rawValue = (inputElement.value ?? "").trim();
-
     if (!rawValue) { hideError(feedbackElement); return false; }
-
     const cleanedValue = rawValue.replace(/[()\s.-]/g, "").replace(/^\+/, "");
     if (!/^\d+$/.test(cleanedValue)) {
         showError(feedbackElement, "Phone may contain digits, +, spaces, (), - and .");
-        return false;
-    }
+        return false;    }
     const digitCount = cleanedValue.length;
     if (digitCount < 7 || digitCount > 15) {
         showError(feedbackElement, "Phone should have 7–15 digits.");
-        return false;
-    }
+        return false;    }
     hideError(feedbackElement);
     return true;
 }
@@ -141,18 +134,15 @@ let isValidationBound = false;
 export function initContactEditValidation() {
     if (!formElement || !nameInput || !emailInput || !phoneInput) return;
     if (isValidationBound) { validateAllFields(); return; }
-
     nameInput.addEventListener("input", () => validateName(nameInput, nameFeedbackElement));
     emailInput.addEventListener("input", () => validateEmail(emailInput, emailFeedbackElement));
     phoneInput.addEventListener("input", () => validatePhone(phoneInput, phoneFeedbackElement));
-
     formElement.addEventListener("submit", (event) => {
         if (!validateAllFields()) {
             event.preventDefault();
             event.stopImmediatePropagation();
         }
     }, true);
-
     isValidationBound = true;
     validateAllFields();
 }

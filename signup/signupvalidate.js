@@ -77,12 +77,10 @@ export function validatePasswords() {
     const errorEl = document.getElementById("passwordValidationError");
     if (!password || !confirmPassword) {
         confirmPasswordInputField.setCustomValidity("");
-        return setValidation(true, errorEl);
-    }
+        return setValidation(true, errorEl);    }
     if (password === confirmPassword) {
         confirmPasswordInputField.setCustomValidity("");
-        return setValidation(true, errorEl);
-    }
+        return setValidation(true, errorEl);    }
     confirmPasswordInputField.setCustomValidity("Passwords do not match");
     setValidation(false, errorEl, "Passwords do not match");
 }

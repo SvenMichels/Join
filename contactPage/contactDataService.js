@@ -235,12 +235,9 @@ async function bindBigContactButtons(bigContact, contact) {
  * @returns {Promise<void>}
  */
 async function initializeMobileFab(contact) {
-  const foundContact = window.contactList.find(c => c.userID === contact.userId);
-  if (foundContact) {
-    const { initializeFabMenu, initializeBackButton } = await import('../scripts/ui/fabContact.js');
-    initializeFabMenu(foundContact);
-    initializeBackButton();
-  }
+  const { initializeFabMenu, initializeBackButton } = await import('../scripts/ui/fabContact.js');
+  initializeFabMenu(contact);
+  initializeBackButton();
 }
 
 /**
