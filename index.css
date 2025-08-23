@@ -24,9 +24,10 @@ body {
 .content-holder {
   position: relative;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   width: 100vw;
+  max-width: 1440px;
   height: 100%;
   padding-top: 170px;
 }
@@ -180,6 +181,7 @@ input.password:focus {
   justify-content: center;
   gap: 64px;
   padding-bottom: 50px;
+  max-width: 1440px;
 }
 
 .background-color {
@@ -317,8 +319,8 @@ input:focus::placeholder {
   100% {
     width: 100px;
     height: 130px;
-    top: 67px;
-    left: 37px;
+    top: calc(100% - 98%);
+    left: calc(100% - 98%);
     background-color: transparent;
   }
 }

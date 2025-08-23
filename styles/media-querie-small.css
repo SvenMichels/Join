@@ -321,7 +321,6 @@
 
   .nav-media-buttons:hover {
     cursor: pointer;
-    /* background: #091931; */
   }
 
   .nav-media-links {
@@ -339,5 +338,9 @@
   .nav-media-links.active {
     background-color: #091931;
     color: #ffffff;
+  }
+
+  .nav-logo {
+    
   }
 }

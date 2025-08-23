@@ -9,6 +9,7 @@ body {
   overflow-x: hidden;
   font-family: "Inter", sans-serif;
   color: #000000;
+  max-width: 1440px;
 }
 
 p {
