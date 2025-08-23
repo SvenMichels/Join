@@ -8,7 +8,7 @@
  * @param {Array<string>} [selectors=[".nav-buttons", ".taskFrameLink"]] - 
  * An array of CSS selectors for navigation elements to check.
  */
-export function highlightActiveNavigationLinks(selectors = [".nav-buttons", ".taskFrameLink"]) {
+export function highlightActiveNavigationLinks(selectors = [".nav-buttons", ".taskFrameLink", ".nav-media-links"]) {
   const currentPage = getCurrentPageName();
 
   document.querySelectorAll(selectors.join(",")).forEach(element => {

@@ -161,7 +161,7 @@
     flex-shrink: 0;
   }
 
-  .nav-menu > *:has(.nav-buttons) {
+  .nav-menu>*:has(.nav-buttons) {
     width: 80px;
   }
 
@@ -240,7 +240,7 @@
     max-width: 600px;
   }
 
-  .stats > div .counter {
+  .stats>div .counter {
     font-size: clamp(3rem, 5vw, 4rem);
   }
 
@@ -315,11 +315,13 @@
     border-radius: 8px;
     background: #2a3647;
     border-style: none;
+    text-decoration: none;
+    color: #cdcdcd;
   }
 
   .nav-media-buttons:hover {
     cursor: pointer;
-    background: #091931;
+    /* background: #091931; */
   }
 
   .nav-media-links {
@@ -329,12 +331,13 @@
     width: 100%;
     height: 100%;
     color: #cdcdcd;
+    border-radius: 8px;
     text-decoration: none;
   }
 
-  .nav-media-links:hover {
-    cursor: pointer;
-    color: #00bee8;
-    font-weight: 700;
+
+  .nav-media-links.active {
+    background-color: #091931;
+    color: #ffffff;
   }
 }
