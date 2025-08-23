@@ -13,13 +13,13 @@
   max-width: 525px;
   width: 74%;
   height: 80%;
-   overflow: auto;
+  overflow: auto;
   -ms-overflow-style: none;
-  scrollbar-width: none;    
+  scrollbar-width: none;
 }
 
 .task-detail-modal::-webkit-scrollbar {
-  display: none;          
+  display: none;
 }
 
 
@@ -63,7 +63,7 @@
   font-family: Inter;
   font-weight: 700;
   font-style: Bold;
-  font-size: 61px;
+  font-size: clamp(2.35rem, 4vw, 3.8rem);
   line-height: 120%;
   letter-spacing: 0%;
   margin: 0px;
@@ -95,6 +95,7 @@ ul {
   justify-content: flex-end;
   gap: 2px;
   text-align: center;
+
   img {
     width: 16px;
     height: 16px;

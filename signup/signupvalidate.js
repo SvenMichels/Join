@@ -21,10 +21,10 @@ export function validateNameInput(input) {
     const errorEl = document.getElementById("nameValidationError");
     if (!value) return setValidation(true, errorEl);
     if (input.value.startsWith(" "))
-        return setValidation(false, errorEl, "Name darf nicht mit einem Leerzeichen beginnen");
+        return setValidation(false, errorEl, "Name must not begin with a space.");
     const onlyLettersAndSpaces = /^[a-zA-ZäöüÄÖÜß\s]+$/;
     if (!onlyLettersAndSpaces.test(value))
-        return setValidation(false, errorEl, "Name darf nur Buchstaben und Leerzeichen enthalten");
+        return setValidation(false, errorEl, "Name may only contain letters and spaces");
     setValidation(true, errorEl);
 }
 
@@ -36,9 +36,9 @@ export function validateEmailInput(input) {
     const errorEl = document.getElementById("emailValidationError");
     if (!email) return setValidation(true, errorEl);
     if (email.startsWith(" "))
-        return setValidation(false, errorEl, "E-Mail darf nicht mit einem Leerzeichen beginnen");
+        return setValidation(false, errorEl, "Email must not begin with a space.");
     if (email.includes(" "))
-        return setValidation(false, errorEl, "E-Mail darf keine Leerzeichen enthalten");
+        return setValidation(false, errorEl, "Email must not contain spaces");
     if (!isValidEmail(email))
         return setValidation(false, errorEl, "Ungültige E-Mail-Adresse");
     setValidation(true, errorEl);
@@ -60,7 +60,7 @@ export function validatePasswords() {
         return setValidation(true, errorEl);
     }
     confirmPasswordInputField.setCustomValidity("Passwords do not match");
-    setValidation(false, errorEl, "Passwörter stimmen nicht überein");
+    setValidation(false, errorEl, "Passwords do not match");
 }
 
 /**
@@ -71,9 +71,9 @@ export function validatePasswordInput(input) {
     const errorEl = document.getElementById("passwordValidationError");
     if (!password) return setValidation(true, errorEl);
     if (password.startsWith(" "))
-        return setValidation(false, errorEl, "Passwort darf nicht mit einem Leerzeichen beginnen");
+        return setValidation(false, errorEl, "Password must not begin with a space.");
     if (password.length < 6)
-        return setValidation(false, errorEl, "Passwort muss mindestens 6 Zeichen lang sein");
+        return setValidation(false, errorEl, "Password must be at least 6 characters long");
     setValidation(true, errorEl);
     setTimeout(validatePasswords, 250);
 }

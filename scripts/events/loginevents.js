@@ -1,5 +1,5 @@
 import { loginAsGuest, loginUser } from "../auth/login.js";
-import { collectUserInput } from "../../signup/signup.js";
+import { collectUserInput, checkFormValidity } from "../../signup/signup.js";
 import { requestData } from "../firebase.js";
 
 /**
@@ -256,36 +256,10 @@ export function bindSignupForm(formElement) {
 export function bindPrivacyCheckbox() {
   const checkbox = document.getElementById("checkBox");
   const submitButton = document.getElementById("signUpBtn");
-  const userName = document.getElementById("inputName").value;
-  const userEmail = document.getElementById("inputEmail").value;
-  if (userName.length < 3 || userEmail.length < 5) {
-    disableButton(submitButton);
-    return
-  } else {
-    enableButton(submitButton);
-  }
-
-  if (checkbox && submitButton) {
-    checkbox.addEventListener("change", () =>
-      toggleSubmitButton(checkbox, submitButton)
-    );
-  }
-}
-
-/**
- * Enables or disables the signup button based on checkbox state.
- * 
- * @param {HTMLInputElement} checkbox
- * @param {HTMLButtonElement} submitButton
- */
-function toggleSubmitButton(checkbox, submitButton) {
-  submitButton.disabled = !checkbox.checked;
-  if (checkbox.checked) {
-    submitButton.classList.remove("disabled");
-    submitButton.style.backgroundColor = "#2a3647";
-  } else {
-    submitButton.classList.add("disabled");
-    submitButton.style.backgroundColor = "#c7c7c7ff";
+  if (checkbox) {
+    checkbox.addEventListener("change", () => {
+      checkFormValidity();
+    });
   }
 }
 
@@ -316,8 +290,6 @@ export function loginFailFeedback() {
           LoginFeedback.classList.remove("centerFeedback");
           resolve();
         }, 1500);
-      },
-      { once: true }
-    );
+      }, { once: true });
   });
 }

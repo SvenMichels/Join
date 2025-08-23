@@ -5,7 +5,7 @@
  * @author Join Team
  */
 
-import { isValidEmail, bindPrivacyCheckbox, bindPolicyLinks, bindSignupForm } from "../scripts/events/loginevents.js";
+import { bindPrivacyCheckbox, bindPolicyLinks, bindSignupForm } from "../scripts/events/loginevents.js";
 import { generateRandomColorClass } from "../scripts/utils/colors.js";
 import { getInitials } from "../scripts/utils/helpers.js";
 import { validatePasswordInput, validatePasswords, validateEmailInput, validateNameInput } from "./signupvalidate.js";
@@ -181,7 +181,7 @@ export function showValidationError(errorDiv, message) {
  */
 export function hideValidationError(errorDiv) {
   if (!errorDiv) return;
-
+  errorDiv.textContent = "";         // Fehlertext leeren
   errorDiv.style.color = "white";
 }
 
@@ -202,7 +202,6 @@ export function togglePassword(field, icon) {
  */
 export async function handleSignupSubmission(event) {
   event?.preventDefault();
-  // Harte Absicherung: bei deaktiviertem Button oder ungecheckter Checkbox abbrechen
   if (signUpSubmitButton?.disabled) return;
   if (!privacyPolicyCheckbox.checked) return;
 
@@ -283,9 +282,11 @@ export function checkFormValidity() {
   const isFormValid = isNameValid && isEmailValid && isPasswordValid && isPrivacyChecked;
 
   if (signUpSubmitButton) {
+    console.log(signUpSubmitButton);
+    
     signUpSubmitButton.disabled = !isFormValid;
-    signUpSubmitButton.style.backgroundColor = isFormValid ? "#ffffffff" : "#2a3647";
-    signUpSubmitButton.style.opacity = isFormValid ? "0.6" : "1";
+    signUpSubmitButton.style.backgroundColor = isFormValid ? "#2a3647" : "#2a3647";
+    signUpSubmitButton.style.opacity = isFormValid ? "1" : "0.5";
     signUpSubmitButton.style.cursor = isFormValid ? "pointer" : "not-allowed";
   }
 }
@@ -301,7 +302,8 @@ export function isFieldValid(inputId, errorId) {
   const errorEl = document.getElementById(errorId);
 
   if (!input || !input.value.trim()) return false;
-  if (errorEl && errorEl.style.display !== "none") return false;
+  // Prüfe auf vorhandenen Fehlertext statt display
+  if (errorEl && errorEl.textContent && errorEl.textContent.trim().length > 0) return false;
 
   return true;
 }
@@ -318,7 +320,8 @@ export function isPasswordFieldValid() {
   if (!password || !confirmPassword) return false;
   if (password.length < 6) return false;
   if (password !== confirmPassword) return false;
-  if (errorEl && errorEl.style.display !== "none") return false;
+  // Prüfe auf Fehlermeldungstext
+  if (errorEl && errorEl.textContent && errorEl.textContent.trim().length > 0) return false;
 
   return true;
 }

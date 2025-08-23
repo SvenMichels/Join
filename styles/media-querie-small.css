@@ -241,13 +241,13 @@
   }
 
   .stats > div .counter {
-    font-size: clamp(2rem, 5vw, 4rem);
+    font-size: clamp(3rem, 5vw, 4rem);
   }
 
   .counter {
     width: clamp(3rem, 5vw, 3.5rem);
     height: clamp(3rem, 5vw, 3.5rem);
-    font-size: clamp(2rem, 5vw, 4rem);
+    font-size: clamp(3rem, 5vw, 4rem);
   }
 
   #urgentIcon {

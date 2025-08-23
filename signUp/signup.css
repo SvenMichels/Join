@@ -274,9 +274,6 @@ input:focus::placeholder {
 
 @media (max-width: 410px) {
 
-  .input-wrapper input {
-    padding: 0 24px 0 6px;
-  }
 }
 
 #nameValidationError,
@@ -286,5 +283,6 @@ input:focus::placeholder {
   width: 100%;
   color: #ff0000;
   font-size: 13px;
-  margin: 6px 0px 6px 8px;
+  margin: 4px 0px 4px 6px;
+  min-height: 22px;
 }
