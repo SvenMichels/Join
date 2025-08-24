@@ -44,13 +44,11 @@ function getPageNameFromHref(href) {
 export function setupOpenMenuListener() {
   const openMenuButton = document.getElementById("openMenu");
   const dropDownMenu = document.getElementById("dropDownMenu");
-
   if (openMenuButton && dropDownMenu) {
     openMenuButton.replaceWith(openMenuButton.cloneNode(true));
     const newOpenMenuButton = document.getElementById("openMenu");
     newOpenMenuButton.addEventListener("click", (e) => {
       e.stopPropagation();
-
       if (window.innerWidth <= 768) {
         toggleMobileMenu();
       } else {

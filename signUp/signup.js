@@ -37,7 +37,6 @@ export async function signupListeners() {
 if (window.location.pathname.endsWith("signup.html")) {
   signupListeners();
   setupPasswordEvents();
-  signUpSubmitButton.addEventListener("click", handleSignupSubmission);
 }
 
 /**
@@ -220,7 +219,7 @@ export async function collectUserInput() {
   const userEmailAddress = getTrimmedInputValue("inputEmail");
   const userPassword = userPasswordInputField.value;
   const userColor = generateRandomColorClass();
-
+  
   return {
     userFullName,
     userEmailAddress,
@@ -323,3 +322,4 @@ export function isPasswordFieldValid() {
 
   return true;
 }
+

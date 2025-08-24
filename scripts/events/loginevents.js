@@ -256,10 +256,10 @@ export function bindSignupForm(formElement) {
 export function bindPrivacyCheckbox() {
   const checkbox = document.getElementById("checkBox");
   const submitButton = document.getElementById("signUpBtn");
-  if (checkbox) {
+  if (checkbox && submitButton) {
     checkbox.addEventListener("change", () => {
       checkFormValidity();
-    });
+    });                                                                                      
   }
 }
 
