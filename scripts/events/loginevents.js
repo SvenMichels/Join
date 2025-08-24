@@ -1,6 +1,7 @@
 import { loginAsGuest, loginUser } from "../auth/login.js";
 import { collectUserInput, checkFormValidity } from "../../signup/signup.js";
 import { requestData } from "../firebase.js";
+import { validateLoginEmailInput, validateLoginPasswordInput } from "../auth/loginValidation.js";
 
 /**
  * Initializes login event listeners.
@@ -58,14 +59,19 @@ async function handleUserLogin(isGuest = false) {
 
 async function handleUser(credentials) {
   const loginBtn = document.querySelector(".btn");
-  if (!credentials.email || !credentials.password) {
+
+  // Vor Login: Validierung anstoßen (Fehlertext anzeigen)
+  validateLoginEmailInput(document.querySelector("#loginEmail"));
+  validateLoginPasswordInput(document.querySelector("#loginPassword"));
+
+  const emailOk = !!credentials.email && isValidEmail(credentials.email);
+  const pwdOk = !!credentials.password && credentials.password.length >= 3 && !credentials.password.startsWith(" ");
+
+  if (!emailOk || !pwdOk) {
     disableButton(loginBtn);
     return;
   }
-  if (!isValidEmail(credentials.email)) {
-    disableButton(loginBtn);
-    return;
-  }
+
   enableButton(loginBtn);
   await attemptUserLogin(credentials);
 }
@@ -113,11 +119,21 @@ function getLoginButton() {
 function bindLoginInputValidation() {
   const [email, password] = ["#loginEmail", "#loginPassword"].map(s => document.querySelector(s));
   const btn = getLoginButton();
+
   const update = () => {
+    // Zeige Fehlermeldungen live an
+    validateLoginEmailInput(email);
+    validateLoginPasswordInput(password);
+
     const clearEmail = email?.value.trim() || "";
     const clearPwd = password?.value.trim() || "";
-    (clearEmail && clearPwd && isValidEmail(clearEmail)) ? enableButton(btn) : disableButton(btn);
+    const isPwdOk = clearPwd.length >= 3 && !clearPwd.startsWith(" ");
+
+    (clearEmail && clearPwd && isValidEmail(clearEmail) && isPwdOk)
+      ? enableButton(btn)
+      : disableButton(btn);
   };
+
   [email, password].forEach(i => i && i.addEventListener("input", update));
   update();
 }
