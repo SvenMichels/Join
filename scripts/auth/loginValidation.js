@@ -34,7 +34,6 @@ function setLoginValidation(isValid, errorEl, message = "") {
  */
 export function validateLoginEmailInput(input) {
   if (!input) return;
-  console.log("click");
   
   const errorEl = document.getElementById("loginEmailValidationError");
   const email = input.value || "";

@@ -69,13 +69,13 @@ function prepareEditMode(form, task) {
  */
 function prepareCreateMode(form) {
   if (!form) return;
-  
+
   if (window.resetModalFormState) {
     window.resetModalFormState();
   }
-  
+
   resetSubtasks();
-  
+
   if (window.renderSubtasksModal) {
     window.renderSubtasksModal();
   }
@@ -112,17 +112,18 @@ function setupCloseButton(overlay) {
  */
 export function openTaskModal(isEdit = false, task = null) {
   const overlay = document.getElementById("modal-overlay");
-  
+
   fetch("../taskFloatData/taskfloat.html")
     .then((res) => res.text())
     .then((html) => {
       overlay.innerHTML = html;
       overlay.classList.remove("d_none");
       initModalContents(overlay, isEdit, task);
-      if(task==null) {
+      if (task == null) {
         changeModalTitleAdd();
-        } else{
-          changeModalTitleEdit();}
+      } else {
+        changeModalTitleEdit();
+      }
     });
 }
 

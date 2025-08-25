@@ -110,7 +110,7 @@ function createUserChip(userRecord, showNames = false) {
  * @param {number} count - Number of remaining users.
  * @returns {string} HTML chip element string.
  */
-function createRemainingChip(count) {
+export function createRemainingChip(count) {
   return `<div class="contact-chip remaining-count" style="background-color: #a8a8a8; color: #ffffff;">+${count}</div>`;
 }
 

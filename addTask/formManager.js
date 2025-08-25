@@ -148,7 +148,7 @@ export function validateTask(task) {
  * 
  * @returns {string[]} Array of user full names.
  */
-function collectAssignedUsers() {
+export function collectAssignedUsers() {
   return Array.from(
     document.querySelectorAll(".user-checkbox-wrapper .user-checkbox:checked")
   ).map((cb) => cb.value);

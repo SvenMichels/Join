@@ -6,6 +6,7 @@
 
 import { loadContactsForTaskAssignment } from "../contactPage/contactService.js";
 import { getUserCheckboxHTML } from "./taskfloatHTML.js";
+import { createRemainingChip } from "../board/boardUtils.js";
 import { getInitials } from "../scripts/utils/helpers.js";
 
 let allSystemUsersModal = [];
@@ -83,7 +84,7 @@ export function applyUserPreselection(assignedUsers) {
 
   resetAllCheckboxes();
   selectAssignedUsers(assignedUsers);
-  updateSelectedModal();
+  updateSelectedModal(assignedUsers);
 }
 
 /**
@@ -176,21 +177,38 @@ function handleCheckboxClick(event, checkbox, wrapper) {
   updateSelectedModal();
 }
 
+function collectAssignedUsers() {
+  return Array.from(
+    document.querySelectorAll(".assigned-user-list .user-checkbox-modal:checked")
+  ).map(cb => cb.value);
+}
+
 /**
  * Updates the UI to show selected users as colored chips.
  */
 export function updateSelectedModal() {
-  const container = document.getElementById("selectedUser-modal");
-  if (!container) return;
-
-  container.innerHTML = "";
-  const checkedBoxes = document.querySelectorAll(".user-checkbox-modal:checked");
-  
-  // Show all selected users in edit modal (no limit)
-  checkedBoxes.forEach(checkbox => {
-    const chip = createUserChip(checkbox.value);
-    container.appendChild(chip);
+  const selectedContainer = document.getElementById("selectedUser-modal");
+  if (!selectedContainer) return;
+  selectedContainer.innerHTML = "";
+  const assignedUsers = collectAssignedUsers();
+  console.log(assignedUsers, " im manager");
+  const users = assignedUsers
+    .map(name => allSystemUsersModal.find(u => u.userFullName === name) || null)
+    .filter(Boolean);
+  const maxVisible = 5;
+  if (users.length <= maxVisible) {
+    users.forEach(user => {
+      selectedContainer.appendChild(createUserChip(user, user.userFullName));
+    });
+    return;
+  }
+  const visible = users.slice(0, maxVisible - 1);
+  visible.forEach(user => {
+    selectedContainer.appendChild(createUserChip(user, user.userFullName));
   });
+
+  const remainingCount = users.length - (maxVisible - 1);
+  selectedContainer.insertAdjacentHTML("beforeend", createRemainingChip(remainingCount));
 }
 
 /**

@@ -1,5 +1,5 @@
 import { loginAsGuest, loginUser } from "../auth/login.js";
-import { collectUserInput, checkFormValidity } from "../../signup/signup.js";
+import { collectUserInput, checkFormValidity, submitUser } from "../../signup/signup.js";
 import { requestData } from "../firebase.js";
 import { validateLoginEmailInput, validateLoginPasswordInput } from "../auth/loginValidation.js";
 
@@ -271,11 +271,11 @@ export function bindSignupForm(formElement) {
  */
 export function bindPrivacyCheckbox() {
   const checkbox = document.getElementById("checkBox");
-  const submitButton = document.getElementById("signUpBtn");
-  if (checkbox && submitButton) {
+  // const submitButton = document.getElementById("signUpBtn");
+  if (checkbox) {
     checkbox.addEventListener("change", () => {
       checkFormValidity();
-    });                                                                                      
+    });
   }
 }
 
@@ -288,6 +288,7 @@ async function handleSignupSubmission(event) {
   event.preventDefault();
   const userRegistrationData = await collectUserInput();
   requestData("POST", "/users/", userRegistrationData);
+  submitUser();
 }
 
 export function loginFailFeedback() {

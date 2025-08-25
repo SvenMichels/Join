@@ -4,56 +4,55 @@ import { getInitials } from "../scripts/utils/helpers.js";
 
 
 /**
- * Creates a new contact for the currently logged-in user.
- * 
- * This function:
- * - Reads the current user from localStorage
- * - Validates that a user is logged in
- * - Sends the contact data via POST to `/contacts/{userId}`
+ * Erstellt einen neuen User (Kontakte = alle User).
+ *
+ * Sendet die Daten via POST an `/users`.
  *
  * @async
  * @function createContact
- * @param {Object} contactData - The contact object to store.
- * @returns {Promise<Object>} The result of the API request (e.g. saved contact or response).
- * @throws {Error} If no user is found in localStorage or user ID is missing.
+ * @param {Object} contactData 
+ * @returns {Promise<Object>} 
+ * @throws {Error} 
  */
 export async function createContact(contactData) {
   const currentUserString = localStorage.getItem("currentUser");
   const currentUserData = JSON.parse(currentUserString);
   if (!currentUserData?.id) throw new Error("No user logged in");
+  const normalized = {
+    ...contactData,
+    userInitials: contactData.userInitials || getInitials(contactData.userFullName),
+    firstCharacter:
+      contactData.firstCharacter ||
+      contactData.userFullName?.charAt(0).toUpperCase() ||
+      "?",
+  };
 
-  const apiPath = `contacts/${currentUserData.id}`;
-  const creationResult = await requestData("POST", apiPath, contactData);
+  const apiPath = `users`;
+  const creationResult = await requestData("POST", apiPath, normalized);
   return creationResult;
 }
 
 /**
- * Loads all contacts of the currently logged-in user from the database.
  *
  * @async
  * @function loadContacts
- * @returns {Promise<Object[]>} An array of contact objects, including the current user.
+ * @returns {Promise<Object[]>}
  */
 export async function loadContacts() {
   const currentUserData = getCurrentUserData();
-  
-  if (!currentUserData?.id) return [];
-  const contactsRawData = await fetchContactsFromFirebase(currentUserData.id);
-  
-  if (!contactsRawData) {
-    return [createUserContactObject(currentUserData)];
-  }
 
+  const usersRawData = await fetchUsersFromFirebase();
+  const contactsList = convertUsersToContacts(usersRawData);
+  if (!currentUserData?.id) return contactsList;
 
-  const processedContactsList = processContactsData(contactsRawData);
-  return ensureCurrentUserInContactsList(processedContactsList, currentUserData);
+  return ensureCurrentUserInContactsList(contactsList, currentUserData);
 }
 
 /**
- * Returns the current user data from localStorage.
+
  * 
  * @function getCurrentUserData
- * @returns {Object|null} The current user data or null if not found.
+ * @returns {Object|null} 
  */
 function getCurrentUserData() {
   try {
@@ -65,21 +64,13 @@ function getCurrentUserData() {
   }
 }
 
-/**
- * Fetches contacts from Firebase for a specific user.
- * 
- * @async
- * @function fetchContactsFromFirebase
- * @param {string} userId - The user ID to fetch contacts for.
- * @returns {Promise<Object|null>} Raw contact data from Firebase or null if not found.
- */
-async function fetchContactsFromFirebase(userId) {
+async function fetchUsersFromFirebase() {
   try {
-    const contactsData = await requestData("GET", `contacts/${userId}`);
-    return contactsData.data;
+    const usersResult = await requestData("GET", "users");
+    return usersResult.data || {};
   } catch (error) {
-    console.error("Error fetching contacts:", error);
-    return null;
+    console.error("Error fetching users:", error);
+    return {};
   }
 }
 
@@ -103,28 +94,6 @@ function createUserContactObject(userData) {
 }
 
 /**
- * Converts raw contact data into an array of formatted contact objects.
- * 
- * @function processContactsData
- * @param {Object} contactsRawData - Raw contact data (e.g. from Firebase).
- * @returns {Object[]} Array of formatted contact objects.
- */
-function processContactsData(contactsRawData) {
-  return Object.entries(contactsRawData)
-    .filter(isValidContactEntry)
-    .map(formatContactEntry);
-}
-
-function isValidContactEntry([key, value]) {
-  const isFireBaseMeta = ['status', 'data', 'error'].includes(key);
-  return value && typeof value === 'object' && value.userFullName && !isFireBaseMeta;
-}
-
-function formatContactEntry([key, value]) {
-  return { id: key, ...value };
-}
-
-/**
  * Ensures the current user is in the contacts list.
  * If not, adds the user to the beginning of the list.
  * 
@@ -134,51 +103,57 @@ function formatContactEntry([key, value]) {
  * @returns {Object[]} The updated contacts list.
  */
 function ensureCurrentUserInContactsList(contactsList, currentUserData) {
-  const userExistsInContacts = contactsList.some(contact => 
+  const userExistsInContacts = contactsList.some(contact =>
     contact.userId === currentUserData.id ||
     contact.userEmailAddress === currentUserData.userEmailAddress ||
     contact.userFullName === currentUserData.userFullName
   );
-  
+
   if (!userExistsInContacts) {
     contactsList.unshift(createUserContactObject(currentUserData));
   }
-  return contactsList ;
-  
+  return contactsList;
+
 }
 
 /**
- * Updates a contact in the Firebase database.
+ * Aktualisiert einen User (Kontakte = alle User).
  *
  * @async
  * @function updateContactInFirebase
- * @param {Object} contact - The contact object to update.
- * @throws {Error} If no user is found in localStorage.
+ * @param {Object} contact
+ * @throws {Error}
  */
 export async function updateContactInFirebase(contact) {
   const currentUserString = localStorage.getItem("currentUser");
   const currentUserData = JSON.parse(currentUserString);
   if (!currentUserData?.id) throw new Error("No user logged in");
 
-  const apiPath = `contacts/${currentUserData.id}/${contact.id}`;
-  const updateResult = await requestData("PUT", apiPath, contact);
+  const apiPath = `users/${contact.id}`;
+  const updateResult = await requestData("PUT", apiPath, {
+    ...contact,
+    userInitials: contact.userInitials || getInitials(contact.userFullName),
+    firstCharacter:
+      contact.firstCharacter ||
+      contact.userFullName?.charAt(0).toUpperCase() ||
+      "?",
+  });
   return updateResult;
 }
 
 /**
- * Deletes a contact from the Firebase database.
  *
  * @async
  * @function deleteContactFromFirebase
- * @param {string} contactId - The ID of the contact to delete.
- * @throws {Error} If no user is found in localStorage.
+ * @param {string} contactId
+ * @throws {Error}
  */
 export async function deleteContactFromFirebase(contactId) {
   const currentUserString = localStorage.getItem("currentUser");
   const currentUserData = JSON.parse(currentUserString);
   if (!currentUserData?.id) throw new Error("No user logged in");
 
-  const apiPath = `contacts/${currentUserData.id}/${contactId}`;
+  const apiPath = `users/${contactId}`;
   const deleteResult = await requestData("DELETE", apiPath);
   return deleteResult;
 }
@@ -188,15 +163,26 @@ export async function deleteContactFromFirebase(contactId) {
  * 
  * @async
  * @function loadContactsForTaskAssignment
- * @returns {Promise<Object[]>} Array of contact objects in a unified format.
+ * @returns {Promise<Object[]>} 
  */
-export async function loadContactsForTaskAssignment() {  
+export async function loadContactsForTaskAssignment() {
   try {
     const contacts = await loadContacts();
-    // console.log("[ContactService] Contacts loaded for task assignment:", contacts);
-    
+
     return contacts || [];
   } catch (error) {
     return [];
   }
+}
+
+function convertUsersToContacts(usersData) {
+  return Object.entries(usersData).map(([id, user]) => ({
+    userFullName: user.userFullName,
+    userEmailAddress: user.userEmailAddress,
+    userPhoneNumber: user.userPhoneNumber,
+    userInitials: user.userInitials || getInitials(user.userFullName),
+    firstCharacter: user.firstCharacter || user.userFullName?.charAt(0).toUpperCase() || "?",
+    userId: id,
+    userColor: user.userColor,
+  }));
 }

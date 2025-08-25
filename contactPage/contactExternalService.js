@@ -20,16 +20,25 @@ import { LocalStorageService } from '../scripts/utils/localStorageHelper.js';
  */
 export async function getAllContactsFromDatabase() {
   try {
-    const currentUser = LocalStorageService.getItem("currentUser");
 
-    if (!currentUser?.id) {
-      return [];
+    const response = await fetch(`${FIREBASE_DATABASE_BASE_URL}/users.json`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
-    const response = await fetch(`${FIREBASE_DATABASE_BASE_URL}/contacts/${currentUser.id}.json`);
     const data = await response.json();
-    return data ? Object.entries(data).map(([key, value]) => ({ ...value, userId: key })) : [];
+    return data
+      ? Object.entries(data).map(([id, user]) => ({
+        userFullName: user.userFullName || user.name || "",
+        userEmailAddress: user.userEmailAddress || user.email || "",
+        userPhoneNumber: user.userPhoneNumber || user.phone || "",
+        userInitials: user.userInitials || getInitials(user.userFullName || user.name || ""),
+        firstCharacter: (user.userFullName || user.name || "?").charAt(0).toUpperCase(),
+        userId: id,
+        userColor: user.userColor || "color-1",
+      }))
+      : [];
   } catch (error) {
-    console.error("Error loading contacts:", error);
+    console.error("Error loading contacts (users):", error);
     return [];
   }
 }

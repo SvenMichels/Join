@@ -130,7 +130,7 @@ export async function updateContact(contact, updated) {
  * @throws {Error} On HTTP errors.
  */
 async function updateContactInFirebase(userId, contactId, contactData) {
-  const response = await fetch(`${FIREBASE_DATABASE_BASE_URL}/contacts/${userId}/${contactId}.json`, {
+  const response = await fetch(`${FIREBASE_DATABASE_BASE_URL}/users/${contactId}.json`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(contactData)
@@ -252,9 +252,7 @@ async function initializeMobileFab(contact) {
  */
 export async function deleteContactFromDatabase(contactId, userName) {
   try {
-    const currentUser = getCurrentUserFromStorage();
-    const wasDeleted = await deleteContactFromFirebase(currentUser.id, contactId);
-
+    const wasDeleted = await deleteContactFromFirebase(contactId);
     if (!wasDeleted) return;
 
     updateContactList(contactId);
@@ -289,8 +287,8 @@ function getCurrentUserFromStorage() {
  * @param {string} contactId - Contact ID (Firebase key).
  * @returns {Promise<boolean>} true on success, false otherwise.
  */
-async function deleteContactFromFirebase(userId, contactId) {
-  const response = await fetch(`${FIREBASE_DATABASE_BASE_URL}/contacts/${userId}/${contactId}.json`, {
+async function deleteContactFromFirebase(targetUserId) {
+  const response = await fetch(`${FIREBASE_DATABASE_BASE_URL}/users/${targetUserId}.json`, {
     method: 'DELETE'
   });
 
@@ -298,7 +296,6 @@ async function deleteContactFromFirebase(userId, contactId) {
     console.warn("Contact deletion failed", response.status);
     return false;
   }
-
   return true;
 }
 

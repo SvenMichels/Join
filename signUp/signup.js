@@ -201,6 +201,7 @@ export function togglePassword(field, icon) {
  */
 export async function handleSignupSubmission(event) {
   event?.preventDefault();
+  
   if (signUpSubmitButton?.disabled) return;
   if (!privacyPolicyCheckbox.checked) return;
 
@@ -299,7 +300,6 @@ export function isFieldValid(inputId, errorId) {
   const errorEl = document.getElementById(errorId);
 
   if (!input || !input.value.trim()) return false;
-  // Prüfe auf vorhandenen Fehlertext statt display
   if (errorEl && errorEl.textContent && errorEl.textContent.trim().length > 0) return false;
 
   return true;
@@ -317,7 +317,6 @@ export function isPasswordFieldValid() {
   if (!password || !confirmPassword) return false;
   if (password.length < 6) return false;
   if (password !== confirmPassword) return false;
-  // Prüfe auf Fehlermeldungstext
   if (errorEl && errorEl.textContent && errorEl.textContent.trim().length > 0) return false;
 
   return true;

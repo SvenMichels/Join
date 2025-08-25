@@ -7,6 +7,7 @@
 
 import { getUserCheckboxTemplate } from "./addtasktemplates.js";
 import { getInitials } from "../scripts/utils/helpers.js";
+import { createRemainingChip } from "../board/boardUtils.js";
 import { loadContactsForTaskAssignment } from "../contactPage/contactService.js";
 
 let allSystemUsers = [];
@@ -122,16 +123,26 @@ function attachCheckboxListener(wrapper) {
 export function updateSelectedUserDisplay() {
   const selectedContainer = document.getElementById("selectedUser");
   if (!selectedContainer) return;
-
   selectedContainer.innerHTML = "";
   const assignedUsers = collectAssignedUsers();
-  
-  // Show all users in add task form (no limit)
-  assignedUsers.forEach(name => {
-    const user = allSystemUsers.find(u => u.userFullName === name);
-    const chip = createUserChip(user, name);
-    selectedContainer.appendChild(chip);
+  console.log(assignedUsers,"im Handler");
+  const users = assignedUsers
+    .map(name => allSystemUsers.find(u => u.userFullName === name) || null)
+    .filter(Boolean);
+  const maxVisible = 5;
+  if (users.length <= maxVisible) {
+    users.forEach(user => {
+      selectedContainer.appendChild(createUserChip(user, user.userFullName));
+    });
+    return;
+  }
+  const visible = users.slice(0, maxVisible - 1);
+  visible.forEach(user => {
+    selectedContainer.appendChild(createUserChip(user, user.userFullName));
   });
+
+  const remainingCount = users.length - (maxVisible - 1);
+  selectedContainer.insertAdjacentHTML("beforeend", createRemainingChip(remainingCount));
 }
 
 /**
@@ -141,6 +152,8 @@ export function updateSelectedUserDisplay() {
  * @param {string} name - Username fallback
  * @returns {HTMLElement} Chip element
  */
+
+//TODO:
 function createUserChip(user, name) {
   const chip = document.createElement("div");
   chip.className = `selected-contact-chip ${user?.userColor || "color-1"}`;
@@ -148,12 +161,27 @@ function createUserChip(user, name) {
   return chip;
 }
 
+export function renderUserChips(users, container, maxVisible = 5) {
+  if (!Array.isArray(users) || !container) return;
+  container.innerHTML = "";
+  const visibleUsers = users.length > maxVisible
+    ? users.slice(0, maxVisible - 1)
+    : users;
+  visibleUsers.forEach(user => {
+    container.appendChild(createUserChip(user, user?.name));
+  });
+  if (users.length > maxVisible) {
+    const remainingCount = users.length - (maxVisible - 1);
+    container.insertAdjacentHTML("beforeend", createRemainingChip(remainingCount));
+  }
+}
+
 /**
  * Returns a list of currently assigned users.
  *
  * @returns {Array<string>} List of usernames
  */
-function collectAssignedUsers() {
+export function collectAssignedUsers() {
   return Array.from(
     document.querySelectorAll(".user-checkbox-wrapper .user-checkbox:checked")
   ).map(cb => cb.value);
