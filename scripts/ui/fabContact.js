@@ -102,6 +102,23 @@ function setupFabActions({ container, editBtn, delBtn }, contact) {
   });
 }
 
+/**
+ * Bindet einen globalen Klick-Listener, um ein Container-Element bei Klicks außerhalb zu schließen.
+ *
+ * - Verhindert Mehrfachbindung durch die Prüfung von `outsideClickHandlerBound`.
+ * - Fügt dem `document` einen `click`-Listener hinzu, der prüft,
+ *   ob der Klick nicht innerhalb des übergebenen Containers erfolgt ist.
+ * - Wenn der Klick außerhalb liegt, wird die CSS-Klasse `"open"` 
+ *   vom Container entfernt, sodass er geschlossen wird.
+ *
+ * Voraussetzungen:
+ * - Eine globale Variable `outsideClickHandlerBound` muss existieren,
+ *   um Mehrfachregistrierungen des Listeners zu verhindern.
+ *
+ * @function bindOutsideClickToClose
+ * @param {HTMLElement} container - Das Container-Element, das geschlossen werden soll, wenn außerhalb geklickt wird.
+ * @returns {void} Diese Funktion gibt keinen Wert zurück.
+ */
 function bindOutsideClickToClose(container) {
   if (outsideClickHandlerBound) return
 

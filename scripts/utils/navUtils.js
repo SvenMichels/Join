@@ -41,6 +41,25 @@ function getPageNameFromHref(href) {
   return href.split("/").pop().replace(/[#?].*$/, "");
 }
 
+/**
+ * Initialisiert den Listener zum Öffnen des Menüs (Desktop und Mobile).
+ *
+ * - Ersetzt den bestehenden Button mit einem geklonten Element, 
+ *   um doppelte Event-Listener zu vermeiden.
+ * - Fügt dem neuen Button einen Click-Listener hinzu, 
+ *   der je nach Bildschirmbreite unterschiedliche Aktionen ausführt:
+ *   - **Mobile (<= 768px):** Öffnet oder schließt das mobile Dropdown-Menü
+ *     über `toggleMobileMenu()`.
+ *   - **Desktop (> 768px):** Schaltet die Sichtbarkeit des Dropdown-Menüs
+ *     über die Klasse `dp-none` um.
+ *
+ * Voraussetzungen:
+ * - Es muss ein Button mit der ID `"openMenu"` existieren.
+ * - Das Dropdown-Menü muss ein Element mit der ID `"dropDownMenu"` haben.
+ *
+ * @function setupOpenMenuListener
+ * @returns {void} Diese Funktion gibt keinen Wert zurück.
+ */
 export function setupOpenMenuListener() {
   const openMenuButton = document.getElementById("openMenu");
   const dropDownMenu = document.getElementById("dropDownMenu");
@@ -58,6 +77,16 @@ export function setupOpenMenuListener() {
   }
 }
 
+/**
+ * Schaltet die Sichtbarkeit des mobilen Dropdown-Menüs um.
+ *
+ * Diese Funktion greift auf das Element mit der ID `"dropDownMenu"` zu
+ * und toggelt die CSS-Klasse `"dp-none"`.  
+ * Damit wird das Menü ein- oder ausgeblendet.
+ *
+ * @function toggleMobileMenu
+ * @returns {void} Diese Funktion gibt keinen Wert zurück.
+ */
 function toggleMobileMenu() {
   const dropDownMenu = document.getElementById("dropDownMenu");
   if (dropDownMenu) {
