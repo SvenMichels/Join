@@ -323,6 +323,10 @@ select {
   opacity: 0;
 }
 
+.remaining-count {
+  margin-left: 0px !important;
+}
+
 @media (max-width: 575px) {
   h1 {
     margin: 0;

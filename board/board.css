@@ -392,3 +392,17 @@ h3 {
   width: 15px;
   height: 15px;
 }
+
+@keyframes wiggle {
+  0% { transform: rotate(-2deg);}
+  25% { transform: rotate(2deg);}
+  50% { transform: rotate(-2deg);}
+  75% { transform: rotate(2deg);}
+  100% { transform: rotate(0deg);}
+
+}
+
+.task-list-dragging {
+  animation: wiggle 0.6s ease-in-out infinite;
+  cursor: grabbing;
+}

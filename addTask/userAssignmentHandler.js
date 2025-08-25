@@ -129,7 +129,7 @@ export function updateSelectedUserDisplay() {
   const users = assignedUsers
     .map(name => allSystemUsers.find(u => u.userFullName === name) || null)
     .filter(Boolean);
-  const maxVisible = 5;
+  const maxVisible = 6;
   if (users.length <= maxVisible) {
     users.forEach(user => {
       selectedContainer.appendChild(createUserChip(user, user.userFullName));

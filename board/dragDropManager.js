@@ -41,8 +41,14 @@ function setupColumnDragEvents(columnElement, loadedTasksReference) {
 function handleDragOverEvent(dragEvent) {
   dragEvent.preventDefault();
   dragEvent.currentTarget.classList.add("drag-over");
+  triggerWiggle(dragEvent);
 }
 
+
+function triggerWiggle(dragEvent) {
+  const draggedTask = document.querySelector("task");
+  dragEvent.currentTarget.classList.add("task-list-dragging");
+}
 /**
  * Handles the dragleave event.
  * 
@@ -50,6 +56,11 @@ function handleDragOverEvent(dragEvent) {
  */
 function handleDragLeaveEvent(dragLeaveEvent) {
   dragLeaveEvent.currentTarget.classList.remove("drag-over");
+}
+
+function removeWiggle(dragEvent) {
+  const draggedTask = document.querySelector("task");
+  dragEvent.currentTarget.classList.remove("task-list-dragging");
 }
 
 /**

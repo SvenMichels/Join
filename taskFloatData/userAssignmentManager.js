@@ -204,7 +204,7 @@ export function updateSelectedModal() {
   }
   const visible = users.slice(0, maxVisible - 1);
   visible.forEach(user => {
-    selectedContainer.appendChild(createUserChip(user, user.userFullName));
+    selectedContainer.appendChild(createUserChip(user.userFullName));
   });
 
   const remainingCount = users.length - (maxVisible - 1);
