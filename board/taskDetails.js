@@ -86,10 +86,9 @@ function renderTaskDetailSubtasks(subtasks = [], subtaskDone = []) {
   const subtasksHtml = subtasks.map((txt, i) => {
     const isChecked = subtaskDone?.[i] ? "checked" : "";
     return `
-      <li>
+      
         <input type="checkbox" id="sub-${i}" class="subtask-checkbox" ${isChecked}>
-        <label for="sub-${i}">${txt}</label>
-      </li>`;
+        <label for="sub-${i}">${txt}</label>${`<br class="m12-t">`}`;
   }).join("");
 
   subtasksEl.innerHTML = subtasksHtml;

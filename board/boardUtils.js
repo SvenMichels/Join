@@ -61,17 +61,12 @@ export function generateAssignedChips(assignedUsersList, allSystemUsers = [], sh
     .map(extractUserName)
     .map(name => findUserByName(allSystemUsers, name))
     .filter(Boolean);
-
-  // Show first 5 users as chips
-  const visibleUsers = allUsers.slice(0, 5);
+  const visibleUsers = allUsers.slice(0, 4);
   let chipsHTML = visibleUsers.map(user => createUserChip(user, showNames)).join("");
-
-  // Add "+X" chip if more than 5 users
-  if (allUsers.length > 5) {
-    const remainingCount = allUsers.length - 5;
+  if (allUsers.length > 4) {
+    const remainingCount = allUsers.length - 4;
     chipsHTML += createRemainingChip(remainingCount);
   }
-
   return chipsHTML;
 }
 /**
@@ -164,13 +159,10 @@ export function calculateSubtaskProgress(completedSubtasks, allSubtasks) {
       }
     }
   }
-
   const totalSubtasks = Array.isArray(allSubtasks) ? allSubtasks.length : 0;
-
   if (totalSubtasks === 0) {
     return 0;
   }
-
   return (completedCount / totalSubtasks) * 100;
 }
 

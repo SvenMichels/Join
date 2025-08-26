@@ -156,7 +156,7 @@ function createCheckboxWrapper(user) {
  * @private
  */
 function attachCheckboxListener(wrapper) {
-  const checkbox = wrapper.querySelector("input");
+  const checkbox = wrapper.querySelector("input");  
   wrapper.addEventListener("click", (event) => {
     handleCheckboxClick(event, checkbox, wrapper);
   });
@@ -187,28 +187,24 @@ function collectAssignedUsers() {
  * Updates the UI to show selected users as colored chips.
  */
 export function updateSelectedModal() {
-  const selectedContainer = document.getElementById("selectedUser-modal");
-  if (!selectedContainer) return;
-  selectedContainer.innerHTML = "";
-  const assignedUsers = collectAssignedUsers();
-  console.log(assignedUsers, " im manager");
-  const users = assignedUsers
-    .map(name => allSystemUsersModal.find(u => u.userFullName === name) || null)
+  const container = document.getElementById("selectedUser-modal");
+  if (!container) return;
+  container.innerHTML = "";
+
+  const users = collectAssignedUsers()
+    .map(name => allSystemUsersModal.find(u => u.userFullName === name))
     .filter(Boolean);
-  const maxVisible = 5;
-  if (users.length <= maxVisible) {
-    users.forEach(user => {
-      selectedContainer.appendChild(createUserChip(user, user.userFullName));
-    });
-    return;
-  }
-  const visible = users.slice(0, maxVisible - 1);
-  visible.forEach(user => {
-    selectedContainer.appendChild(createUserChip(user.userFullName));
+
+  const MAX = 5;
+  const showCount = users.length > MAX ? MAX - 1 : users.length;
+
+  users.slice(0, showCount).forEach(user => {
+    container.appendChild(createUserChip(user)); // Nutzer-Objekt übergeben
   });
 
-  const remainingCount = users.length - (maxVisible - 1);
-  selectedContainer.insertAdjacentHTML("beforeend", createRemainingChip(remainingCount));
+  if (users.length > MAX) {
+    container.insertAdjacentHTML("beforeend", createRemainingChip(users.length - showCount));
+  }
 }
 
 /**
@@ -217,11 +213,15 @@ export function updateSelectedModal() {
  * @returns {HTMLElement} The chip element.
  * @private
  */
-function createUserChip(userName) {
-  const user = allSystemUsersModal.find(u => u.userFullName === userName);
+function createUserChip(userOrName) {
+  const user = typeof userOrName === "string"
+    ? allSystemUsersModal.find(u => u.userFullName === userOrName)
+    : userOrName;
+
+  const fullName = user?.userFullName || String(userOrName || "");
   const chip = document.createElement("div");
   chip.className = `selected-contact-chip ${user?.userColor || "color-1"}`;
-  chip.textContent = user?.userInitials || getInitials(userName);
+  chip.textContent = user?.userInitials || getInitials(fullName);
   return chip;
 }
 

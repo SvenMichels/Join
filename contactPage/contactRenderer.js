@@ -9,7 +9,10 @@ let alphabetLettersUsedSet = new Set();
  *
  * @param {Array} contactList - Array of contact objects.
  */
+
+import { refreshUI } from './contactDataService.js';
 export function renderAllContacts(contactList) {
+
   const contacts = normalizeContactList(contactList);
   if (!Array.isArray(contacts)) return;
 

@@ -111,6 +111,7 @@ function attachCheckboxListener(wrapper) {
   const checkbox = wrapper.querySelector("input");
 
   wrapper.addEventListener("click", (e) => {
+
     if (e.target !== checkbox) checkbox.checked = !checkbox.checked;
     wrapper.classList.toggle("active", checkbox.checked);
     updateSelectedUserDisplay();
@@ -121,28 +122,26 @@ function attachCheckboxListener(wrapper) {
  * Updates the visual display of selected user chips.
  */
 export function updateSelectedUserDisplay() {
-  const selectedContainer = document.getElementById("selectedUser");
-  if (!selectedContainer) return;
-  selectedContainer.innerHTML = "";
-  const assignedUsers = collectAssignedUsers();
-  console.log(assignedUsers,"im Handler");
-  const users = assignedUsers
-    .map(name => allSystemUsers.find(u => u.userFullName === name) || null)
+  const container = document.getElementById("selectedUser");
+  if (!container) return;
+  container.innerHTML = "";
+  const assignedNames = collectAssignedUsers() || [];
+  const users = assignedNames
+    .map(name => allSystemUsers.find(u => u.userFullName === name))
     .filter(Boolean);
   const maxVisible = 6;
-  if (users.length <= maxVisible) {
-    users.forEach(user => {
-      selectedContainer.appendChild(createUserChip(user, user.userFullName));
-    });
-    return;
+  let visibleUsers = users;
+  let overflowCount = 0;
+  if (users.length > maxVisible) {
+    visibleUsers = users.slice(0, maxVisible - 1);
+    overflowCount = users.length - (maxVisible - 1);
   }
-  const visible = users.slice(0, maxVisible - 1);
-  visible.forEach(user => {
-    selectedContainer.appendChild(createUserChip(user, user.userFullName));
+  visibleUsers.forEach(user => {
+    container.appendChild(createUserChip(user, user.userFullName));
   });
-
-  const remainingCount = users.length - (maxVisible - 1);
-  selectedContainer.insertAdjacentHTML("beforeend", createRemainingChip(remainingCount));
+  if (overflowCount) {
+    container.insertAdjacentHTML("beforeend", createRemainingChip(overflowCount));
+  }
 }
 
 /**
@@ -153,7 +152,6 @@ export function updateSelectedUserDisplay() {
  * @returns {HTMLElement} Chip element
  */
 
-//TODO:
 function createUserChip(user, name) {
   const chip = document.createElement("div");
   chip.className = `selected-contact-chip ${user?.userColor || "color-1"}`;
@@ -221,12 +219,14 @@ export function toggleUserAssignmentList(clickEvent) {
  */
 export function setupUserSearch() {
   const searchBar = document.getElementById("searchUser");
-  searchBar?.addEventListener("input", () => {
+  searchBar?.addEventListener("onkeydown", () => {
     const term = searchBar.value.toLowerCase();
     if (term.length < 3) {
       if (!term.length) renderUserCheckboxes(allSystemUsers);
       return;
     }
+    console.log("try Here");
+    
     document.getElementById("assignedUserList").classList.add("visible");
     renderUserCheckboxes(
       allSystemUsers.filter(u => u.userFullName.toLowerCase().includes(term))

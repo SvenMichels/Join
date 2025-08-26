@@ -3,6 +3,7 @@
  */
 
 import { clearContactListUI, renderAllContacts, clearBigContactView } from './contactRenderer.js';
+import { refreshUI } from './contactDataService.js';
 
 /**
  * Adds a click event listener to a button inside a container.
@@ -51,6 +52,7 @@ export function handlePostDeleteView(list) {
   renderAllContacts(list);
   clearBigContactView();
   hideSingleContactView();
+  refreshUI();
 }
 
 /**
@@ -92,14 +94,10 @@ export function contactFeedback() {
   return new Promise((resolve) => {
     const LoginFeedback = document.getElementById("contactFeedback");
     if (!LoginFeedback) return resolve();
-
     LoginFeedback.classList.remove("dp-none");
     LoginFeedback.classList.add("centerFeedback");
-
     LoginFeedback.addEventListener(
-      "animationend",
-      () => {
-        setTimeout(() => {
+      "animationend", () => { setTimeout(() => {
           LoginFeedback.classList.add("dp-none");
           LoginFeedback.classList.remove("centerFeedback");
           resolve();

@@ -78,7 +78,12 @@
   gap: 4px;
 }
 
-ul {
+
+.m12-t {
+  margin-top: 12px;
+}
+
+#task-detail-subtasks {
   font-weight: 400;
   font-size: 16px;
   line-height: 120%;

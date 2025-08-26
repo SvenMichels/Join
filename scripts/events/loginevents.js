@@ -47,7 +47,7 @@ function bindGuestLoginButton() {
 async function handleUserLogin(isGuest = false) {
   if (isGuest == true) {
     const emailEl = "developer@akademie.de";
-    const pwEl = "123";
+    const pwEl = "123456";
     const credentials = { email: emailEl, password: pwEl }
     handleUser(credentials);
     return
@@ -60,7 +60,6 @@ async function handleUserLogin(isGuest = false) {
 async function handleUser(credentials) {
   const loginBtn = document.querySelector(".btn");
 
-  // Vor Login: Validierung anstoßen (Fehlertext anzeigen)
   validateLoginEmailInput(document.querySelector("#loginEmail"));
   validateLoginPasswordInput(document.querySelector("#loginPassword"));
 
@@ -121,7 +120,6 @@ function bindLoginInputValidation() {
   const btn = getLoginButton();
 
   const update = () => {
-    // Zeige Fehlermeldungen live an
     validateLoginEmailInput(email);
     validateLoginPasswordInput(password);
 

@@ -1,12 +1,8 @@
-/**
- * Main file for contact management
- */
-
 import { LocalStorageService } from '../scripts/utils/localStorageHelper.js';
 import { handleContactEditSubmission, openEditDialog, emptyInput } from './contactEditor.js';
 import { getAllContactsFromDatabase, generateBigContactTemplate } from './contactExternalService.js';
 import { openContactAdditionWindow, closeAddWindow, closeEditWindow, showUserFeedback } from './contactModal.js';
-import { loadAllContactsFromFirebaseDatabase, createContact, deleteContactFromDatabase } from './contactDataService.js';
+import { loadAllContactsFromFirebaseDatabase, refreshUI, createContact, deleteContactFromDatabase } from './contactDataService.js';
 import { getInitials } from '../scripts/utils/helpers.js';
 import { generateRandomColorClass } from '../scripts/utils/colors.js';
 import { bindButton, loadAndShowContactDetails, contactFeedback } from './contactUtils.js';
@@ -47,7 +43,6 @@ function setupContactFormListeners() {
 
   if (addBtn) addBtn.addEventListener("click", openContactAdditionWindow);
   if (addForm) {
-    // Validierung für Add-Modal initialisieren (einmalig, Submit-Guard inklusive)
     initAddContactValidation();
     addForm.addEventListener("submit", addNewContactToDatabase);
   }
@@ -76,18 +71,12 @@ function setupCloseButtons() {
  */
 export function setupDeleteButton(contact) {
   if (!contact || !contact.userId) return;
-
   const contactId = contact.userId;
   const contactName = contact.userFullName;
-
   document.querySelectorAll(".deleteModalBtn").forEach((btn) => {
-    // alte Listener entfernen durch Clonen
     const clone = btn.cloneNode(true);
     btn.replaceWith(clone);
-
-    clone.addEventListener(
-      "click",
-      async (event) => {
+    clone.addEventListener("click", async (event) => {
         event.preventDefault();
         await deleteContactFromDatabase(contactId, contactName);
       },
@@ -194,9 +183,7 @@ function setActiveContactState(contactId) {
     document.querySelector(`.contact-item[data-id="${contactId}"]`) ||
     document.querySelector(`[data-contact-id="${contactId}"]`) ||
     document.querySelector(`[onclick*="${contactId}"]`);
-
   if (!candidate) return;
-
   const target = candidate.closest('.contact-item') || candidate;
   target.classList.add('active');
 }
@@ -274,9 +261,9 @@ function updateUIAfterContactCreation() {
   clearContactListUI();
   renderAllContacts(contactList);
   emptyInput();
-  // showUserFeedback();
   contactFeedback();
   setTimeout(closeAddWindow, 800);
+  refreshUI();
 }
 
 /**
@@ -376,7 +363,6 @@ function getUserFromStorage() {
   return currentUserString ? currentUserString : null;
 }
 
-// Initialize page on DOM load
 document.addEventListener('DOMContentLoaded', init);
 
 export { setupEventListeners };

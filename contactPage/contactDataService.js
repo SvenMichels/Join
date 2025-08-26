@@ -44,7 +44,6 @@ export async function loadAllContactsFromFirebaseDatabase() {
     }
 
     window.contactList = contactsArray;
-
     clearContactListUI();
     renderAllContacts(contactsArray);
     return contactsArray;
@@ -82,14 +81,18 @@ export async function ensureCurrentUserAsFirstContact(contacts) {
  * @throws {Error} If no current user is found or an HTTP error occurs.
  */
 export async function createContact(contact) {
-  const user = LocalStorageService.getItem("currentUser");
-  if (!user?.id) throw new Error("No current user found");
-  const res = await fetch(`${FIREBASE_DATABASE_BASE_URL}/contacts/${user.id}.json`, {
+  const url = `${FIREBASE_DATABASE_BASE_URL}/users.json`;
+  const res = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(contact)
+    body: JSON.stringify(contact),
   });
-  if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+
+  if (!res.ok) {
+    const text = await res.text().catch(() => "");
+    throw new Error(`Create contact failed ${res.status}: ${text}`);
+  }
+
   const result = await res.json();
   window.contactList = null;
   await loadAllContactsFromFirebaseDatabase();
@@ -164,17 +167,15 @@ function updateLocalContactData(contact, updated) {
  *
  * @returns {Promise<void>}
  */
-async function refreshUI() {
+// TODO:
+export async function refreshUI() {
   const contactList = document.querySelector('.contact-list');
   if (contactList) {
     contactList.innerHTML = '';
   }
-
   clearContactListUI();
-
   await new Promise(resolve => setTimeout(resolve, 10));
-
-  renderAllContacts(window.contactList || []);
+  renderAllContacts(loadAllContactsFromFirebaseDatabase() || []);
 }
 
 /**
@@ -254,7 +255,6 @@ export async function deleteContactFromDatabase(contactId, userName) {
   try {
     const wasDeleted = await deleteContactFromFirebase(contactId);
     if (!wasDeleted) return;
-
     updateContactList(contactId);
     await removeUserFromAllTasks(userName);
     handlePostDeleteView(window.contactList || []);
@@ -262,6 +262,8 @@ export async function deleteContactFromDatabase(contactId, userName) {
   } catch (error) {
     console.error("Error deleting contact:", error);
     throw error;
+  } finally {
+    refreshUI();
   }
 }
 
