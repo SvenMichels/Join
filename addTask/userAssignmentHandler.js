@@ -219,13 +219,12 @@ export function toggleUserAssignmentList(clickEvent) {
  */
 export function setupUserSearch() {
   const searchBar = document.getElementById("searchUser");
-  searchBar?.addEventListener("onkeydown", () => {
+  searchBar?.addEventListener("input", () => {
     const term = searchBar.value.toLowerCase();
     if (term.length < 3) {
       if (!term.length) renderUserCheckboxes(allSystemUsers);
       return;
     }
-    console.log("try Here");
     
     document.getElementById("assignedUserList").classList.add("visible");
     renderUserCheckboxes(
