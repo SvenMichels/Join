@@ -192,33 +192,6 @@ function collectTaskDataModal(form) {
   };
 }
 
-// function collectTaskDataModal(form) {
-//   return {
-//     id: getTaskId(form),
-//     title: getInputValue(form.taskTitle),
-//     description: getInputValue(form.taskDescription),
-//     dueDate: form.taskDate.value,
-//     category: form.category.value,
-//     prio:getCurrentPriority(),
-//     assignedUsers: getCheckedUsers(".user-checkbox-modal"),
-//     subtask: [...getSubtaskItems()],
-//     subtaskDone: [...getCompletedSubtasks()],
-//     status: form.dataset.taskStatus || "todo",
-//   };
-// }
-
-// function getTaskId(form) {
-//   return form.dataset.taskId || crypto.randomUUID();
-// }
-
-// function getInputValue(input) {
-//   return input.value.trim() || "";
-// }
-
-// function getCheckedUsers(selector) {
-//   return Array.from(document.querySelectorAll(selector + ":checked")).map(cb => cb.value);
-// }
-
 /**
  * Validiert Task-Daten
  * @param {Object} task - Task-Objekt zum Validieren
