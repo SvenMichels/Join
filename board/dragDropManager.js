@@ -45,6 +45,14 @@ function handleDragOverEvent(dragEvent) {
   onPickup(dragEvent, isPickup);
 }
 
+/**
+ * Handles the pickup event of a task during drag-and-drop.
+ * Adds drag styling and disables other task lists until drop ends.
+ *
+ * @param {DragEvent} event - The drag event triggered when picking up a task.
+ * @param {boolean} [isPickup=false] - Whether the event represents an active pickup.
+ * @returns {boolean} Always returns false to prevent default behavior.
+ */
 function onPickup(event, isPickup = false) {
   if (isPickup) {
     const taskElement = event.target.closest(".task");
@@ -61,6 +69,12 @@ function onPickup(event, isPickup = false) {
   return false;
 }
 
+/**
+ * Handles the drop event of a task during drag-and-drop.
+ * Removes drag styling and re-enables all task lists.
+ *
+ * @param {DragEvent & { id: string }} event - The drop event containing the task ID.
+ */
 function onDrop(event) {
   const taskElementID = event.id;
   const taskElement = document.getElementById(`task-${taskElementID}`);
@@ -70,6 +84,10 @@ function onDrop(event) {
   enableAllTaskLists();
 }
 
+/**
+ * Disables interactions for all task lists and input wrappers.
+ * Adds the `event-none` class to prevent user actions during drag.
+ */
 function disableAllTaskLists() {
   document.querySelectorAll(".input-wrapper").forEach(input => {
     input.classList.add("event-none");
@@ -79,6 +97,10 @@ function disableAllTaskLists() {
   })
 }
 
+/**
+ * Re-enables interactions for all task lists and input wrappers.
+ * Removes the `event-none` class to restore user actions after drag.
+ */
 function enableAllTaskLists() {
     document.querySelectorAll(".input-wrapper").forEach(input => {
     input.classList.remove("event-none");
@@ -172,12 +194,27 @@ export function setupMoveDropdown(taskElement, taskId, task) {
   bindMoveAction(dropdown, ".moveText:last-child", task, "next");
 }
 
+/**
+ * Toggles the visibility of a dropdown menu and ensures all others are hidden.
+ *
+ * @param {MouseEvent} e - The click event triggering the dropdown toggle.
+ * @param {HTMLElement} dropdown - The dropdown element to show or hide.
+ */
 function toggleDropdown(e, dropdown) {
   e.stopPropagation();
   document.querySelectorAll(".MoveDropdown").forEach(d => d.classList.add("dp-none"));
   dropdown.classList.toggle("dp-none");
 }
 
+/**
+ * Binds a move action to a button inside the dropdown.
+ * When clicked, the task is moved in the given direction and the dropdown closes.
+ *
+ * @param {HTMLElement} dropdown - The dropdown element containing the button.
+ * @param {string} selector - CSS selector for the button inside the dropdown.
+ * @param {Object} task - The task object to be moved.
+ * @param {string} direction - The direction to move the task (e.g., "left" or "right").
+ */
 function bindMoveAction(dropdown, selector, task, direction) {
   const btn = dropdown.querySelector(selector);
   if (!btn) return;
