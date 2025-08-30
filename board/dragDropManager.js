@@ -236,8 +236,8 @@ window.addEventListener("resize", updateSwitchButtonVisibility);
 /**
  * Toggles visibility of `.switchPositionBtn` based on screen width.
  * 
- * - Adds `dp-none` class on devices wider than 767px (desktop/tablet).
- * - Removes `dp-none` class on mobile devices (width < 768px).
+ * - Adds `dp-none` class on devices wider than 900px (desktop/tablet).
+ * - Removes `dp-none` class on mobile devices (width < 900px).
  */
 export function updateSwitchButtonVisibility() {
   const isMobile = window.innerWidth <= 900;

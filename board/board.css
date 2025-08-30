@@ -197,10 +197,6 @@ h3 {
   gap: 8px;
   border-radius: 10px;
   border-width: 1px;
-  padding-top: 8px;
-  padding-right: 16px;
-  padding-bottom: 8px;
-  padding-left: 16px;
 }
 
 .add-task-board-button-second:hover {
