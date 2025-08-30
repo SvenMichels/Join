@@ -153,6 +153,7 @@ h1 {
   img {
     height: 27px;
     align-content: flex-start;
+    pointer-events: none;
   }
 }
 
@@ -395,5 +396,10 @@ h3 {
 
 .task-list-dragging {
   transform: rotate(5deg);
+  transition: 0.3s ease;
   cursor: grabbing;
+}
+
+.event-none {
+  pointer-events: none;
 }

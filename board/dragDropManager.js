@@ -41,24 +41,40 @@ function setupColumnDragEvents(columnElement, loadedTasksReference) {
 function handleDragOverEvent(dragEvent) {
   dragEvent.preventDefault();
   dragEvent.currentTarget.classList.add("drag-over");
-  let isPickup = true
+  let isPickup = true;
   onPickup(dragEvent, isPickup);
 }
 
 function onPickup(event, isPickup = false) {
   if (isPickup) {
-    // const taskElementID = event.id;
-    // const taskElement = document.getElementById(`task-${taskElementID}`);
     const taskElement = event.target.closest(".task");
-    taskElement.classList.add("task-list-dragging");
+    if (taskElement) {
+      taskElement.classList.add("task-list-dragging");
+    disableAllTaskLists()}
 
-  } return isPickup = false;
+  } return false;
+  
 }
 
 function onDrop(event) {
   const taskElementID = event.id;
   const taskElement = document.getElementById(`task-${taskElementID}`);
-  taskElement.classList.remove("task-list-dragging");
+  if (taskElement) {
+    taskElement.classList.remove("task-list-dragging");
+  }
+  enableAllTaskLists();
+}
+
+function disableAllTaskLists() {
+  document.querySelectorAll(".task").forEach(list => {
+    list.classList.add("event-none");
+  })
+}
+
+function enableAllTaskLists() {
+  document.querySelectorAll(".task").forEach(list => {
+    list.classList.remove("event-none");
+  })
 }
 
 /**
