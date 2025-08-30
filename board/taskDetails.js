@@ -156,6 +156,8 @@ export async function openTaskDetails(task) {
 function noScrollTaskDetails(modal) {
   if (modal) {
     document.body.classList.add("no-scroll");
+  } else {
+    document.body.classList.remove("no-scroll");
   }
   
 }

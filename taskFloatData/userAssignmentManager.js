@@ -10,6 +10,7 @@ import { createRemainingChip } from "../board/boardUtils.js";
 import { getInitials } from "../scripts/utils/helpers.js";
 
 let allSystemUsersModal = [];
+const selectedUserNamesModal = new Set();
 
 /**
  * Loads and renders user checkboxes in the modal.
@@ -18,7 +19,7 @@ let allSystemUsersModal = [];
  */
 export async function loadAndRenderUsersModal() {
   await loadContactData();
-  renderUserCheckboxesModal(allSystemUsersModal);
+  renderUserCheckboxesModal(allSystemUsersModal, Array.from(selectedUserNamesModal));
 }
 
 /**
@@ -40,11 +41,13 @@ async function loadContactData() {
  * @param {Array<Object>} users - Array of user objects.
  * @returns {Promise<void>}
  */
-export async function renderUserCheckboxesModal(users) {
+export async function renderUserCheckboxesModal(users, preselected = Array.from(selectedUserNamesModal)) {
   const container = document.getElementById("assignedUserList-modal");
   if (!container) return;
 
   renderCheckboxList(container, users);
+  selectAssignedUsers(preselected);
+  updateSelectedModal();
   handlePendingPreselection();
 }
 
@@ -67,11 +70,11 @@ function renderCheckboxList(container, users) {
  * @private
  */
 function handlePendingPreselection() {
-  if (window.pendingAssignedUsers) {
-    applyUserPreselection(window.pendingAssignedUsers);
-    window.pendingAssignedUsers = null;
-  } else {
+  if (Array.isArray(window.pendingAssignedUsers) && window.pendingAssignedUsers.length) {
+    window.pendingAssignedUsers.forEach(n => selectedUserNamesModal.add(n));
+    selectAssignedUsers(window.pendingAssignedUsers);
     updateSelectedModal();
+    window.pendingAssignedUsers = null;
   }
 }
 
@@ -156,19 +159,16 @@ function createCheckboxWrapper(user) {
  * @private
  */
 function attachCheckboxListener(wrapper) {
-  const checkbox = wrapper.querySelector("input");  
+  const checkbox = wrapper.querySelector("input");
   wrapper.addEventListener("click", (event) => {
     handleCheckboxClick(event, checkbox, wrapper);
+    const name = checkbox.value;
+    if (checkbox.checked) selectedUserNamesModal.add(name);
+    else selectedUserNamesModal.delete(name);
+    updateSelectedModal();
   });
 }
 
-/**
- * Handles the checkbox toggle behavior.
- * @param {Event} event - Click event.
- * @param {HTMLInputElement} checkbox - The checkbox input.
- * @param {HTMLElement} wrapper - The checkbox wrapper.
- * @private
- */
 function handleCheckboxClick(event, checkbox, wrapper) {
   if (event.target !== checkbox) {
     checkbox.checked = !checkbox.checked;
@@ -178,9 +178,7 @@ function handleCheckboxClick(event, checkbox, wrapper) {
 }
 
 function collectAssignedUsers() {
-  return Array.from(
-    document.querySelectorAll(".assigned-user-list .user-checkbox-modal:checked")
-  ).map(cb => cb.value);
+  return Array.from(selectedUserNamesModal);
 }
 
 /**
@@ -199,13 +197,14 @@ export function updateSelectedModal() {
   const showCount = users.length > MAX ? MAX - 1 : users.length;
 
   users.slice(0, showCount).forEach(user => {
-    container.appendChild(createUserChip(user)); // Nutzer-Objekt übergeben
+    container.appendChild(createUserChip(user));
   });
 
   if (users.length > MAX) {
     container.insertAdjacentHTML("beforeend", createRemainingChip(users.length - showCount));
   }
 }
+
 
 /**
  * Creates a chip for the selected user.
@@ -265,21 +264,20 @@ export function initUserSearchEventListener() {
  */
 function handleSearchInput() {
   const searchInput = document.getElementById("searchUser-modal");
-  const filteredUsers = getFilteredUsers(searchInput.value);
-  renderUserCheckboxesModal(filteredUsers);
-}
+  const list = document.getElementById("assignedUserList-modal");
+  if (!searchInput || !list) return;
 
-/**
- * Filters users by a search query.
- * @param {string} query - The search query.
- * @returns {Array<Object>} Filtered array of user objects.
- * @private
- */
-function getFilteredUsers(query) {
-  const searchTerm = query.trim().toLowerCase();
-  if (!searchTerm) return allSystemUsersModal;
+  const term = searchInput.value.trim().toLowerCase();
 
-  return allSystemUsersModal.filter(user =>
-    user.userFullName.toLowerCase().includes(searchTerm)
+  list.classList.add("visible");
+
+  if (term.length < 3) {
+    renderUserCheckboxesModal(allSystemUsersModal);
+    return;
+  }
+
+  const matchedUsers = allSystemUsersModal.filter(user =>
+    user.userFullName.toLowerCase().includes(term)
   );
+  renderUserCheckboxesModal(matchedUsers);
 }

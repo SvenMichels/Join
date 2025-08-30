@@ -56,7 +56,7 @@ export function renderUserCheckboxes(users, preselected = []) {
 /**
  * Clears and returns the checkbox container element.
  *
- * @param {string} id - DOM ID
+ * @param {string} id
  * @returns {HTMLElement|null}
  */
 function clearAndPrepareContainer(id) {
@@ -115,7 +115,6 @@ function attachCheckboxListener(wrapper) {
     if (e.target !== checkbox) checkbox.checked = !checkbox.checked;
     wrapper.classList.toggle("active", checkbox.checked);
 
-    // NEU: Auswahl im Set pflegen
     const userName = checkbox.value;
     if (checkbox.checked) {
       selectedUserNames.add(userName);
@@ -123,7 +122,6 @@ function attachCheckboxListener(wrapper) {
       selectedUserNames.delete(userName);
     }
 
-    // Liste offen halten, wie gewünscht
     document.getElementById("assignedUserList")?.classList.add("visible");
 
     updateSelectedUserDisplay();
@@ -137,8 +135,6 @@ export function updateSelectedUserDisplay() {
   const container = document.getElementById("selectedUser");
   if (!container) return;
   container.innerHTML = "";
-
-  // NEU: nicht mehr aus DOM lesen, sondern aus persistentem Set
   const assignedNames = Array.from(selectedUserNames);
   const users = assignedNames
     .map(name => allSystemUsers.find(u => u.userFullName === name))
