@@ -41,14 +41,26 @@ function setupColumnDragEvents(columnElement, loadedTasksReference) {
 function handleDragOverEvent(dragEvent) {
   dragEvent.preventDefault();
   dragEvent.currentTarget.classList.add("drag-over");
-  triggerWiggle(dragEvent);
+  let isPickup = true
+  onPickup(dragEvent, isPickup);
 }
 
+function onPickup(event, isPickup = false) {
+  if (isPickup) {
+    // const taskElementID = event.id;
+    // const taskElement = document.getElementById(`task-${taskElementID}`);
+    const taskElement = event.target.closest(".task");
+    taskElement.classList.add("task-list-dragging");
 
-function triggerWiggle(dragEvent) {
-  const draggedTask = document.querySelector("task");
-  dragEvent.currentTarget.classList.add("task-list-dragging");
+  } return isPickup = false;
 }
+
+function onDrop(event) {
+  const taskElementID = event.id;
+  const taskElement = document.getElementById(`task-${taskElementID}`);
+  taskElement.classList.remove("task-list-dragging");
+}
+
 /**
  * Handles the dragleave event.
  * 
@@ -56,11 +68,6 @@ function triggerWiggle(dragEvent) {
  */
 function handleDragLeaveEvent(dragLeaveEvent) {
   dragLeaveEvent.currentTarget.classList.remove("drag-over");
-}
-
-function removeWiggle(dragEvent) {
-  const draggedTask = document.querySelector("task");
-  dragEvent.currentTarget.classList.remove("task-list-dragging");
 }
 
 /**
@@ -77,6 +84,7 @@ function handleDropEvent(dropEvent, loadedTasksReference) {
   if (!extractedTaskData.isValid) return;
 
   moveTaskToNewStatusColumn(extractedTaskData.task, extractedTaskData.newStatus, dropEvent.currentTarget);
+
 }
 
 /**
@@ -114,6 +122,7 @@ function moveTaskToNewStatusColumn(taskDataObject, newTaskStatus, targetColumnEl
   targetColumnElement.appendChild(document.getElementById(`task-${taskDataObject.id}`));
   updateEmptyLists();
   updateTask(taskDataObject);
+  onDrop(taskDataObject);
 }
 
 /**

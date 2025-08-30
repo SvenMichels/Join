@@ -11,6 +11,7 @@ import { createRemainingChip } from "../board/boardUtils.js";
 import { loadContactsForTaskAssignment } from "../contactPage/contactService.js";
 
 let allSystemUsers = [];
+const selectedUserNames = new Set();
 
 /**
  * Returns the list of all loaded system users.
@@ -31,7 +32,7 @@ export async function loadAndRenderUsers() {
   try {
     const contacts = await loadContactsForTaskAssignment();
     allSystemUsers = contacts;
-    renderUserCheckboxes(allSystemUsers);
+    renderUserCheckboxes(allSystemUsers, Array.from(selectedUserNames));
   } catch (error) {
     console.error("Error loading contacts for add task:", error);
     allSystemUsers = [];
@@ -111,9 +112,20 @@ function attachCheckboxListener(wrapper) {
   const checkbox = wrapper.querySelector("input");
 
   wrapper.addEventListener("click", (e) => {
-
     if (e.target !== checkbox) checkbox.checked = !checkbox.checked;
     wrapper.classList.toggle("active", checkbox.checked);
+
+    // NEU: Auswahl im Set pflegen
+    const userName = checkbox.value;
+    if (checkbox.checked) {
+      selectedUserNames.add(userName);
+    } else {
+      selectedUserNames.delete(userName);
+    }
+
+    // Liste offen halten, wie gewünscht
+    document.getElementById("assignedUserList")?.classList.add("visible");
+
     updateSelectedUserDisplay();
   });
 }
@@ -125,13 +137,17 @@ export function updateSelectedUserDisplay() {
   const container = document.getElementById("selectedUser");
   if (!container) return;
   container.innerHTML = "";
-  const assignedNames = collectAssignedUsers() || [];
+
+  // NEU: nicht mehr aus DOM lesen, sondern aus persistentem Set
+  const assignedNames = Array.from(selectedUserNames);
   const users = assignedNames
     .map(name => allSystemUsers.find(u => u.userFullName === name))
     .filter(Boolean);
+
   const maxVisible = 6;
   let visibleUsers = users;
   let overflowCount = 0;
+
   if (users.length > maxVisible) {
     visibleUsers = users.slice(0, maxVisible - 1);
     overflowCount = users.length - (maxVisible - 1);
@@ -180,9 +196,7 @@ export function renderUserChips(users, container, maxVisible = 5) {
  * @returns {Array<string>} List of usernames
  */
 export function collectAssignedUsers() {
-  return Array.from(
-    document.querySelectorAll(".user-checkbox-wrapper .user-checkbox:checked")
-  ).map(cb => cb.value);
+  return Array.from(selectedUserNames);
 }
 
 /**
@@ -193,6 +207,8 @@ export function clearSelectedUsers() {
   if (selectedUserContainer) {
     selectedUserContainer.innerHTML = "";
   }
+
+  selectedUserNames.clear();
 
   const checkboxes = document.querySelectorAll('.user-checkbox');
   checkboxes.forEach(cb => {
@@ -217,18 +233,49 @@ export function toggleUserAssignmentList(clickEvent) {
 /**
  * Sets up the user search input and filters the user list.
  */
-export function setupUserSearch() {
+export async function setupUserSearch() {
   const searchBar = document.getElementById("searchUser");
-  searchBar?.addEventListener("input", () => {
-    const term = searchBar.value.toLowerCase();
+  const listEl = document.getElementById("assignedUserList");
+  if (!searchBar || !listEl) return;
+
+  searchBar.addEventListener("input", () => {
+    const term = searchBar.value.trim().toLowerCase();
+    const preselected = Array.from(selectedUserNames);
+
     if (term.length < 3) {
-      if (!term.length) renderUserCheckboxes(allSystemUsers);
+      renderUserCheckboxes(allSystemUsers, preselected);
       return;
     }
-    
-    document.getElementById("assignedUserList").classList.add("visible");
-    renderUserCheckboxes(
-      allSystemUsers.filter(u => u.userFullName.toLowerCase().includes(term))
+
+    listEl.classList.add("visible");
+
+    const matchedUsers = allSystemUsers.filter(u =>
+      u.userFullName.toLowerCase().includes(term)
     );
+
+    renderUserCheckboxes(matchedUsers, preselected);
   });
+}
+
+
+function addToVisibleUserList(users) {
+  if (!Array.isArray(users) || users.length === 0) return;
+  assignedListBeforeSearch(users);
+}
+
+async function assignedListBeforeSearch(usersToAdd = []) {
+  const preselected = Array.from(selectedUserNames);
+  const preselectedUsers = preselected
+    .map(n => allSystemUsers.find(u => u.userFullName === n))
+    .filter(Boolean);
+
+  const visibleUsers = mergeUsersByFullName(preselectedUsers, usersToAdd);
+  renderUserCheckboxes(visibleUsers, preselected);
+}
+
+function mergeUsersByFullName(preselected = [], add = []) {
+  const map = new Map();
+  preselected.forEach(u => u && map.set(u.userFullName, u));
+  add.forEach(u => u && !map.has(u.userFullName) && map.set(u.userFullName, u));
+  return Array.from(map.values());
 }

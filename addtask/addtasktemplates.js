@@ -17,7 +17,7 @@ import { getInitials } from "../scripts/utils/helpers.js";
  * @returns {string} HTML string for rendering the user checkbox.
  */
 export function getUserCheckboxTemplate(user, isChecked = false) {
-  const checkboxId = `user-checkbox-${user.userId || user.userFullName.replace(/\s+/g, '-').toLowerCase()}`;
+  const checkboxId = `user-checkbox-${user.userId}`;
 
   return `
     <div class="user-info-wrapper">
