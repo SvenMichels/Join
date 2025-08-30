@@ -50,10 +50,15 @@ function onPickup(event, isPickup = false) {
     const taskElement = event.target.closest(".task");
     if (taskElement) {
       taskElement.classList.add("task-list-dragging");
-    disableAllTaskLists()}
-
-  } return false;
+      disableAllTaskLists();
   
+      taskElement.addEventListener("dragend", () => {
+        taskElement.classList.remove("task-list-dragging");
+        enableAllTaskLists();
+      }, {once: true });
+    }
+  } 
+  return false;
 }
 
 function onDrop(event) {
