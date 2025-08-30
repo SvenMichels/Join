@@ -71,12 +71,18 @@ function onDrop(event) {
 }
 
 function disableAllTaskLists() {
+  document.querySelectorAll(".input-wrapper").forEach(input => {
+    input.classList.add("event-none");
+  })
   document.querySelectorAll(".task").forEach(list => {
     list.classList.add("event-none");
   })
 }
 
 function enableAllTaskLists() {
+    document.querySelectorAll(".input-wrapper").forEach(input => {
+    input.classList.remove("event-none");
+  })
   document.querySelectorAll(".task").forEach(list => {
     list.classList.remove("event-none");
   })
