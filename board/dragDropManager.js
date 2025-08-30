@@ -239,10 +239,14 @@ window.addEventListener("resize", updateSwitchButtonVisibility);
  * - Adds `dp-none` class on devices wider than 767px (desktop/tablet).
  * - Removes `dp-none` class on mobile devices (width < 768px).
  */
-function updateSwitchButtonVisibility() {
-  const isMobile = window.innerWidth < 900;
+export function updateSwitchButtonVisibility() {
+  const isMobile = window.innerWidth <= 900;
 
   document.querySelectorAll(".switchPositionBtn").forEach(btn => {
-    btn.classList.toggle("dp-none", !isMobile);
+    if (isMobile) {
+      btn.classList.remove("dp-none");
+    } else {
+      btn.classList.add("dp-none");
+    }
   });
 }

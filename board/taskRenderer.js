@@ -6,6 +6,7 @@ import {
 } from "./boardUtils.js";
 
 import { setupMoveDropdown } from "./dragDropManager.js";
+import { updateSwitchButtonVisibility } from "./dragDropManager.js";
 
 /**
  * Maps task statuses to corresponding board column IDs.
@@ -114,11 +115,12 @@ async function generateTaskHTML(taskData, allSystemUsers, subtaskProgressInfo) {
 function buildTaskHTMLTemplate({ taskData, iconFileName, priorityIconPath, assignedUsersHTML, progressBarHTML }) {
   const dropdownId = `moveDropdown-${taskData.id}`;
   const btnId = `moveDropdownBtn-${taskData.id}`;
+  updateSwitchButtonVisibility();
 
   return `
     <div class="task-icon">
       <img src="../assets/icons/${iconFileName}" alt="${taskData.category}">
-      <img class="switchPositionBtn dp-none" id="${btnId}" src="../assets/icons/Frame 380.svg" alt="">
+      <img class="switchPositionBtn" id="${btnId}" src="../assets/icons/Frame 380.svg" alt="">
     </div>
     <div class="MoveDropdown dp-none" id="${dropdownId}">
       <p class="moveHeader">Move to</p>
