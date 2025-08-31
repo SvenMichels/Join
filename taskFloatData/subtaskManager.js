@@ -107,6 +107,7 @@ export function renderSubtasksModal() {
   if (!list) return;
 
   clearSubtaskList(list);
+  clearAssignedList();
   renderSubtaskItems(list);
   attachAllEventListeners(list);
 }
@@ -117,6 +118,19 @@ export function renderSubtasksModal() {
  */
 function clearSubtaskList(list) {
   list.innerHTML = "";
+}
+
+function clearAssignedList() {
+  const assignedListModal = document.getElementById("assignedList-modal");
+  const assignedList = document.getElementById("assignedList");
+
+  if (assignedList) {
+    assignedList.innerHTML = "";
+  }
+  if (assignedListModal) {
+    assignedListModal.innerHTML = "";
+  }
+
 }
 
 /**

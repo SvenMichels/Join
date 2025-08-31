@@ -30,6 +30,8 @@ export async function loadAndRenderUsersModal() {
 async function loadContactData() {
   try {
     const contacts = await loadContactsForTaskAssignment();
+    console.log(contacts);
+
     allSystemUsersModal = contacts || [];
   } catch (error) {
     allSystemUsersModal = [];
@@ -46,9 +48,25 @@ export async function renderUserCheckboxesModal(users, preselected = Array.from(
   if (!container) return;
 
   renderCheckboxList(container, users);
-  selectAssignedUsers(preselected);
+
+  primeSelection(preselected);
+  selectAssignedUsers(Array.from(selectedUserNamesModal));
   updateSelectedModal();
-  handlePendingPreselection();
+}
+
+/**
+ * Übernimmt Preselection + pendingAssignedUsers in das persistente Set.
+ * @param {string[]} preselected
+ * @private
+ */
+function primeSelection(preselected = []) {
+  if (Array.isArray(preselected) && preselected.length) {
+    preselected.forEach(n => selectedUserNamesModal.add(n));
+  }
+  if (Array.isArray(window.pendingAssignedUsers) && window.pendingAssignedUsers.length) {
+    window.pendingAssignedUsers.forEach(n => selectedUserNamesModal.add(n));
+    window.pendingAssignedUsers = null;
+  }
 }
 
 /**
@@ -66,28 +84,13 @@ function renderCheckboxList(container, users) {
 }
 
 /**
- * Applies any pending preselection of users.
- * @private
- */
-function handlePendingPreselection() {
-  if (Array.isArray(window.pendingAssignedUsers) && window.pendingAssignedUsers.length) {
-    window.pendingAssignedUsers.forEach(n => selectedUserNamesModal.add(n));
-    selectAssignedUsers(window.pendingAssignedUsers);
-    updateSelectedModal();
-    window.pendingAssignedUsers = null;
-  }
-}
-
-/**
  * Applies a predefined user selection to the checkboxes.
  * @param {Array<string>} assignedUsers - User names to select.
  */
 export function applyUserPreselection(assignedUsers) {
   if (!Array.isArray(assignedUsers)) return;
-
-  resetAllCheckboxes();
-  selectAssignedUsers(assignedUsers);
-  updateSelectedModal(assignedUsers);
+  assignedUsers.forEach(n => selectedUserNamesModal.add(n));
+  renderUserCheckboxesModal(allSystemUsersModal, Array.from(selectedUserNamesModal));
 }
 
 /**
@@ -108,6 +111,7 @@ function resetAllCheckboxes() {
  * @private
  */
 function selectAssignedUsers(assignedUsers) {
+
   assignedUsers.forEach(userName => {
     const checkbox = document.querySelector(
       `.user-checkbox-modal[value="${userName}"]`
@@ -176,11 +180,6 @@ function handleCheckboxClick(event, checkbox, wrapper) {
   wrapper.classList.toggle("active", checkbox.checked);
   updateSelectedModal();
 }
-
-function collectAssignedUsers() {
-  return Array.from(selectedUserNamesModal);
-}
-
 /**
  * Updates the UI to show selected users as colored chips.
  */
@@ -188,18 +187,14 @@ export function updateSelectedModal() {
   const container = document.getElementById("selectedUser-modal");
   if (!container) return;
   container.innerHTML = "";
-
-  const users = collectAssignedUsers()
+  const users = Array.from(selectedUserNamesModal)
     .map(name => allSystemUsersModal.find(u => u.userFullName === name))
     .filter(Boolean);
-
   const MAX = 5;
   const showCount = users.length > MAX ? MAX - 1 : users.length;
-
   users.slice(0, showCount).forEach(user => {
     container.appendChild(createUserChip(user));
   });
-
   if (users.length > MAX) {
     container.insertAdjacentHTML("beforeend", createRemainingChip(users.length - showCount));
   }
@@ -266,16 +261,12 @@ function handleSearchInput() {
   const searchInput = document.getElementById("searchUser-modal");
   const list = document.getElementById("assignedUserList-modal");
   if (!searchInput || !list) return;
-
   const term = searchInput.value.trim().toLowerCase();
-
   list.classList.add("visible");
-
   if (term.length < 3) {
     renderUserCheckboxesModal(allSystemUsersModal);
     return;
   }
-
   const matchedUsers = allSystemUsersModal.filter(user =>
     user.userFullName.toLowerCase().includes(term)
   );

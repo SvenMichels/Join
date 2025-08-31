@@ -1,8 +1,8 @@
-import { 
-  getCategoryIcon, 
-  getPriorityIconPath, 
+import {
+  getCategoryIcon,
+  getPriorityIconPath,
   generateAssignedChips,
-  calculateSubtaskProgress 
+  calculateSubtaskProgress
 } from "./boardUtils.js";
 
 import { setupMoveDropdown } from "./dragDropManager.js";
@@ -29,10 +29,10 @@ export const TASK_STATUS_COLUMN_MAPPING = {
 export async function createTaskElement(taskData, allSystemUsers) {
   const taskElement = createBaseTaskElement(taskData);
   const subtaskProgressInfo = getSubtaskProgressData(taskData);
-  
+
   taskElement.innerHTML = await generateTaskHTML(taskData, allSystemUsers, subtaskProgressInfo);
   setupTaskElementEvents(taskElement, taskData);
-  
+
   return taskElement;
 }
 
@@ -45,15 +45,15 @@ export async function createTaskElement(taskData, allSystemUsers) {
 function createBaseTaskElement(taskData) {
   const taskPriority = (taskData.prio || "medium").toLowerCase();
   const taskHasSubtasks = Array.isArray(taskData.subtasks) && taskData.subtasks.length > 0;
-  
+
   const taskArticleElement = document.createElement("article");
   const priorityClass = `task prio-${taskPriority}`;
   const subtaskClass = taskHasSubtasks ? " has-subtasks" : "";
-  
+
   taskArticleElement.className = priorityClass + subtaskClass;
   taskArticleElement.id = `task-${taskData.id}`;
   taskArticleElement.draggable = true;
-  
+
   return taskArticleElement;
 }
 
@@ -70,14 +70,14 @@ function getSubtaskProgressData(taskData) {
       if (subtaskStatus) completedSubtasksCount++;
     }
   }
-  
+
   const totalSubtasksCount = Array.isArray(taskData.subtasks) ? taskData.subtasks.length : 0;
   const completionPercentage = calculateSubtaskProgress(taskData.subtaskDone, taskData.subtasks);
-  
-  return { 
-    done: completedSubtasksCount, 
-    total: totalSubtasksCount, 
-    percent: completionPercentage 
+
+  return {
+    done: completedSubtasksCount,
+    total: totalSubtasksCount,
+    percent: completionPercentage
   };
 }
 
@@ -115,7 +115,6 @@ async function generateTaskHTML(taskData, allSystemUsers, subtaskProgressInfo) {
 function buildTaskHTMLTemplate({ taskData, iconFileName, priorityIconPath, assignedUsersHTML, progressBarHTML }) {
   const dropdownId = `moveDropdown-${taskData.id}`;
   const btnId = `moveDropdownBtn-${taskData.id}`;
-  updateSwitchButtonVisibility();
 
   return `
     <div class="task-icon">
@@ -149,7 +148,7 @@ function buildTaskHTMLTemplate({ taskData, iconFileName, priorityIconPath, assig
  */
 function generateSubtaskProgressBar(taskIdentifier, progressInformation) {
   if (progressInformation.total === 0) return "";
-  
+
   return `
     <div class="progress-bar-wrapper">
       <div class="progress-bar-container">
@@ -208,9 +207,9 @@ export function clearTaskLists() {
  */
 export async function renderTasks(tasksArray, allSystemUsers) {
   if (!Array.isArray(tasksArray)) return;
-  
+
   clearTaskLists();
-  
+
   for (let taskIndex = 0; taskIndex < tasksArray.length; taskIndex++) {
     const currentTaskData = tasksArray[taskIndex];
     const taskHtmlElement = await createTaskElement(currentTaskData, allSystemUsers);
@@ -218,4 +217,6 @@ export async function renderTasks(tasksArray, allSystemUsers) {
     const targetListElement = document.getElementById(targetColumnId);
     if (targetListElement) targetListElement.appendChild(taskHtmlElement);
   }
+
+  updateSwitchButtonVisibility();
 }

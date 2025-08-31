@@ -125,7 +125,7 @@ function bindLoginInputValidation() {
 
     const clearEmail = email?.value.trim() || "";
     const clearPwd = password?.value.trim() || "";
-    const isPwdOk = clearPwd.length >= 3 && !clearPwd.startsWith(" ");
+    const isPwdOk = clearPwd.length >= 6 && !clearPwd.startsWith(" ");
 
     (clearEmail && clearPwd && isValidEmail(clearEmail) && isPwdOk)
       ? enableButton(btn)

@@ -28,7 +28,7 @@ import {
   getCompletedSubtasks,
   updateSubtasks
 } from "./subtaskManager.js";
-import { setupOutsideClickHandler } from "../board/taskDetails.js";
+import { setupOutsideClickHandler, removeNoScroll } from "../board/taskDetails.js";
 
 const $ = {};
 
@@ -239,6 +239,7 @@ function resetFormState(task) {
   resetModalState();
   attachEventListeners();
   closeModal();
+  removeNoScroll();
 }
 
 /**
@@ -282,10 +283,7 @@ async function prefillModalWithTaskData(task) {
   fillBasicFields(task);
   updateSubtasks(task.subtasks, task.subtaskDone);
   renderSubtasksModal();
-
   window.pendingAssignedUsers = task.assignedUsers;
-
-  // Warte kurz auf das Rendering und wende dann die Vorauswahl an
   setTimeout(() => {
     if (window.pendingAssignedUsers && window.pendingAssignedUsers.length > 0) {
       applyUserPreselection(window.pendingAssignedUsers);
@@ -330,7 +328,6 @@ export function closeModal() {
  * Setzt das Modal-Formular komplett zurück (für externe Nutzung)
  */
 function resetModalFormState() {
-  // Stelle sicher, dass das DOM geladen ist
   if (!$.form) {
     cacheDom();
   }

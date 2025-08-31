@@ -1,8 +1,8 @@
 import { toArray } from "../scripts/utils/taskUtils.js";
-import { 
-  getCategoryIcon, 
-  getPriorityIcon, 
-  generateAssignedChips 
+import {
+  getCategoryIcon,
+  getPriorityIcon,
+  generateAssignedChips
 } from "./boardUtils.js";
 import { deleteTask, updateTask } from "./taskManager.js";
 
@@ -41,7 +41,7 @@ function renderTaskDetailText(task) {
   const titleEl = document.querySelector("#task-detail-title");
   const descEl = document.querySelector("#detail-description");
   const dateEl = document.querySelector("#task-detail-due-date");
-  
+
   if (titleEl) titleEl.textContent = task.title;
   if (descEl) descEl.textContent = task.description;
   if (dateEl) dateEl.textContent = task.dueDate;
@@ -131,6 +131,7 @@ function closeDetailModal() {
   const overlay = document.getElementById("modal-overlay");
   overlay.classList.add("d_none");
   overlay.innerHTML = "";
+  document.body.classList.remove("no-scroll");
 }
 
 /**
@@ -146,7 +147,7 @@ export async function openTaskDetails(task) {
 
   const allUsers = typeof window.allUsers === 'function' ? window.allUsers() : window.allUsers || [];
   await renderTaskDetailData(task, allUsers);
-  
+
   const modal = overlay.querySelector("#taskDetailModal");
   noScrollTaskDetails(modal);
   setupCloseButton(modal, overlay);
@@ -157,9 +158,9 @@ function noScrollTaskDetails(modal) {
   if (modal) {
     document.body.classList.add("no-scroll");
   } else {
-    document.body.classList.remove("no-scroll");
+    removeNoScroll();
   }
-  
+
 }
 
 /**
@@ -190,8 +191,13 @@ function setupCloseButton(modal, overlay) {
   const closeBtn = modal.querySelector(".taskDetailCloseButton");
   closeBtn?.addEventListener("click", async () => {
     closeOverlay(overlay);
+    removeNoScroll();
     if (window.fetchTasks) await window.fetchTasks();
   });
+}
+
+export function removeNoScroll() {
+  document.body.classList.remove("no-scroll");
 }
 
 /**
@@ -202,11 +208,12 @@ function setupCloseButton(modal, overlay) {
 export function setupOutsideClickHandler(modal, overlay) {
   const handler = (event) => {
     const clickedInside = event.composedPath().includes(modal);
-    const clickedOverlay = event.target === overlay;    
+    const clickedOverlay = event.target === overlay;
 
     if (clickedInside || !clickedOverlay) return;
 
     closeOverlay(overlay);
+    removeNoScroll();
     overlay.removeEventListener("click", handler);
     if (window.fetchTasks) window.fetchTasks();
   };
@@ -219,6 +226,7 @@ export function setupOutsideClickHandler(modal, overlay) {
  */
 function closeOverlay(overlay) {
   overlay.classList.add("d_none");
+  removeNoScroll();
 }
 
 // Make function globally available

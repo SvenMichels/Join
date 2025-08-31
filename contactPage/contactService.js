@@ -167,7 +167,7 @@ export async function deleteContactFromFirebase(contactId) {
  */
 export async function loadContactsForTaskAssignment() {
   try {
-    const contacts = await loadContacts();
+    const contacts = await loadContacts();    
 
     return contacts || [];
   } catch (error) {

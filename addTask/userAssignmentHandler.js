@@ -22,6 +22,16 @@ export function getAllSystemUsers() {
   return allSystemUsers;
 }
 
+export function clearSelectedUserNames() {
+  selectedUserNames.clear();
+  const chips = document.getElementById("selectedUser-modal");
+  if (chips) chips.innerHTML = "";
+  document.querySelectorAll(".user-checkbox-modal").forEach(cb => {
+    cb.checked = false;
+    cb.closest(".user-checkbox-wrapper")?.classList.remove("active");
+  });
+}
+
 /**
  * Loads users from backend and renders them in the checkbox list.
  *
@@ -30,6 +40,7 @@ export function getAllSystemUsers() {
  */
 export async function loadAndRenderUsers() {
   try {
+    clearSelectedUsers();
     const contacts = await loadContactsForTaskAssignment();
     allSystemUsers = contacts;
     renderUserCheckboxes(allSystemUsers, Array.from(selectedUserNames));
@@ -47,6 +58,7 @@ export async function loadAndRenderUsers() {
  */
 export function renderUserCheckboxes(users, preselected = []) {
   const container = clearAndPrepareContainer("assignedUserList");
+  selectedUserNames.clear();
   if (!container) return;
 
   addUniqueCheckboxes(users, preselected, container);
@@ -110,20 +122,16 @@ function createUserCheckboxElement(user, isChecked) {
  */
 function attachCheckboxListener(wrapper) {
   const checkbox = wrapper.querySelector("input");
-
   wrapper.addEventListener("click", (e) => {
     if (e.target !== checkbox) checkbox.checked = !checkbox.checked;
     wrapper.classList.toggle("active", checkbox.checked);
-
     const userName = checkbox.value;
     if (checkbox.checked) {
       selectedUserNames.add(userName);
     } else {
       selectedUserNames.delete(userName);
     }
-
     document.getElementById("assignedUserList")?.classList.add("visible");
-
     updateSelectedUserDisplay();
   });
 }
@@ -131,29 +139,22 @@ function attachCheckboxListener(wrapper) {
 /**
  * Updates the visual display of selected user chips.
  */
+
 export function updateSelectedUserDisplay() {
   const container = document.getElementById("selectedUser");
   if (!container) return;
+
   container.innerHTML = "";
-  const assignedNames = Array.from(selectedUserNames);
-  const users = assignedNames
+  const users = [...selectedUserNames]
     .map(name => allSystemUsers.find(u => u.userFullName === name))
     .filter(Boolean);
 
   const maxVisible = 6;
-  let visibleUsers = users;
-  let overflowCount = 0;
+  const visible = users.slice(0, maxVisible - 1);
+  const overflow = users.length - (maxVisible - 1);
 
-  if (users.length > maxVisible) {
-    visibleUsers = users.slice(0, maxVisible - 1);
-    overflowCount = users.length - (maxVisible - 1);
-  }
-  visibleUsers.forEach(user => {
-    container.appendChild(createUserChip(user, user.userFullName));
-  });
-  if (overflowCount) {
-    container.insertAdjacentHTML("beforeend", createRemainingChip(overflowCount));
-  }
+  visible.forEach(u => container.appendChild(createUserChip(u, u.userFullName)));
+  if (overflow > 0) container.insertAdjacentHTML("beforeend", createRemainingChip(overflow));
 }
 
 /**
@@ -251,27 +252,4 @@ export async function setupUserSearch() {
 
     renderUserCheckboxes(matchedUsers, preselected);
   });
-}
-
-
-function addToVisibleUserList(users) {
-  if (!Array.isArray(users) || users.length === 0) return;
-  assignedListBeforeSearch(users);
-}
-
-async function assignedListBeforeSearch(usersToAdd = []) {
-  const preselected = Array.from(selectedUserNames);
-  const preselectedUsers = preselected
-    .map(n => allSystemUsers.find(u => u.userFullName === n))
-    .filter(Boolean);
-
-  const visibleUsers = mergeUsersByFullName(preselectedUsers, usersToAdd);
-  renderUserCheckboxes(visibleUsers, preselected);
-}
-
-function mergeUsersByFullName(preselected = [], add = []) {
-  const map = new Map();
-  preselected.forEach(u => u && map.set(u.userFullName, u));
-  add.forEach(u => u && !map.has(u.userFullName) && map.set(u.userFullName, u));
-  return Array.from(map.values());
 }

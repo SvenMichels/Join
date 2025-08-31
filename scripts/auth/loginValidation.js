@@ -66,7 +66,7 @@ export function validateLoginPasswordInput(input) {
   if (pwd.startsWith(" "))
     return setLoginValidation(false, errorEl, "Password must not begin with a space.");
   if (pwd.length < 6)
-    return setLoginValidation(false, errorEl, "Password must be at least 3 characters long");
+    return setLoginValidation(false, errorEl, "Password must be at least 6 characters long");
 
   setLoginValidation(true, errorEl);
 }
