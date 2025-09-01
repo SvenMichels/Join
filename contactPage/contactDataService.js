@@ -29,7 +29,7 @@ import { FIREBASE_DATABASE_BASE_URL } from '../scripts/firebase.js';
  */
 export async function loadAllContactsFromFirebaseDatabase() {
   try {
-    // Clear any existing cached data
+
     window.contactList = null;
 
     const allContacts = await getAllContactsFromDatabase();
@@ -167,7 +167,6 @@ function updateLocalContactData(contact, updated) {
  *
  * @returns {Promise<void>}
  */
-// TODO:
 export async function refreshUI() {
   const contactList = document.querySelector('.contact-list');
   if (contactList) {

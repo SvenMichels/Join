@@ -167,6 +167,10 @@ h1 {
   height: 20px;
 }
 
+.task img.switchPositionBtn {
+  pointer-events: auto !important;
+}
+
 .switchPositionBtn:hover {
   cursor: pointer;
 }
@@ -392,7 +396,7 @@ h3 {
 
 .task-list-dragging {
   transform: rotate(5deg);
-  transition: 0.3s ease;
+  transition: transform 0.2s;
   cursor: grabbing;
 }
 

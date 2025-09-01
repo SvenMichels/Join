@@ -71,12 +71,6 @@ function getFabElements() {
  *
  * @param {{container: HTMLElement, toggle: HTMLElement}} param0 - The container and toggle button.
  */
-// function setupFabToggle({ container, toggle }) {
-//   container.classList.remove('open');
-//   toggle.addEventListener('click', () =>
-//     container.classList.toggle('open')
-//   );
-// }
 
 function setupFabToggle({ container, toggle }) {
   toggle.addEventListener("click", (e) => {

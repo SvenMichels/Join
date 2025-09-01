@@ -2,7 +2,6 @@
  * Task Modal Main Controller
  * Hauptsteuerung für das Task Modal
  */
-
 import { requestData } from "../scripts/firebase.js";
 import { getInitials } from "../scripts/utils/helpers.js";
 import {
@@ -12,10 +11,9 @@ import {
 } from "./priorityManager.js";
 import {
   loadAndRenderUsersModal,
-  updateSelectedModal,
   toggleUserListModal,
   initUserSearchEventListener,
-  applyUserPreselection
+  clearSelectedUserNamesModal
 } from "./userAssignmentManager.js";
 import {
   addSubtaskModal,
@@ -108,6 +106,7 @@ function bindAssignToggle() {
  */
 export async function initFormModal() {
   initializeSubtasks();
+  clearSelectedUserNamesModal();
   await initializeUsers();
   initializePriority();
   initializeCategoryValidation();
@@ -283,12 +282,12 @@ async function prefillModalWithTaskData(task) {
   fillBasicFields(task);
   updateSubtasks(task.subtasks, task.subtaskDone);
   renderSubtasksModal();
-  window.pendingAssignedUsers = task.assignedUsers;
-  setTimeout(() => {
-    if (window.pendingAssignedUsers && window.pendingAssignedUsers.length > 0) {
-      applyUserPreselection(window.pendingAssignedUsers);
-    }
-  }, 100);
+
+  const assigned = Array.isArray(task?.assignedUsers) ? task.assignedUsers
+    : Array.isArray(task?.assignedTo) ? task.assignedTo
+      : [];
+  clearSelectedUserNamesModal();
+  await loadAndRenderUsersModal(assigned);
 }
 
 /**
@@ -320,6 +319,7 @@ export function closeModal() {
   const overlay = document.getElementById("modal-overlay");
   if (overlay) {
     overlay.classList.add("d_none");
+    removeNoScroll();
     resetModalFormState();
   }
 }
@@ -336,16 +336,12 @@ function resetModalFormState() {
   resetModalState();
   setSubtaskItems([]);
   setCompletedSubtasks([]);
+  clearSelectedUserNamesModal();
   cacheDom();
   setupOutsideClickHandler($.modal, document.getElementById("modal-overlay"));
 }
 
-// ==================== INITIALIZATION ====================
-
 document.addEventListener("DOMContentLoaded", initTaskFloat);
-
-// ==================== REQUIRED GLOBAL FUNCTIONS ====================
-// Nur die wirklich nötigen Funktionen global verfügbar machen
 
 window.initTaskFloat = initTaskFloat;
 window.prefillModalWithTaskData = prefillModalWithTaskData;

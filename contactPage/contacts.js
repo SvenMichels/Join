@@ -14,9 +14,8 @@ import { LocalStorageService } from '../scripts/utils/localStorageHelper.js';
  * @param {Object} contact - Contact object to edit. If not provided, loads current user.
  */
 export function openEditWindow(contact) {
-  // If no contact provided, try to load current user
   if (!contact) {
-    getCurrentUserForEdit(); // For "MyUser" page
+    getCurrentUserForEdit(); 
     return;
   }
   
@@ -59,8 +58,7 @@ async function getCurrentUserForEdit() {
  * @param {string} [userData.id] - The user's unique ID.
  * @returns {object} A contact object with properties: userFullName, userEmailAddress, userPhoneNumber, userColor, userId.
  * @example
- * const contact = getContactData({ name: 'Alice', email: 'alice@example.com' });
- * // contact.userFullName === 'Alice'
+ * const contact = getContactData({ name: 'Alice', email: 'alice@example.com' });'
  */
 function getContactData(userData){
   return {

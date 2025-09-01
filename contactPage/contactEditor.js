@@ -76,7 +76,6 @@ export function openEditDialog(contact) {
     fillEditForm(contact);
     setupDeleteButton(contact);
     setUserInitials(contact);
-    // Neu: Validierung initialisieren (Listener + Submit-Guard)
     initContactEditValidation();
   }
 }

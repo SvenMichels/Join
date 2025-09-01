@@ -221,6 +221,49 @@ export function setupOutsideClickHandler(modal, overlay) {
 }
 
 /**
+ * Initialisiert globale (einmalige) Handler für den Switch-Button / Dropdown.
+ * - Capture-Phase: Klick auf Button/Dropdown abfangen, Modal-Öffnen verhindern.
+ * - Button: zugehöriges Dropdown toggeln.
+ * - Bubble-Phase: Outside-Klick schließt alle.
+ */
+function initSwitchButtonHandlers() {
+  document.addEventListener("click", handleSwitchBtnClick, true);
+  document.addEventListener("click", blockDropdownPropagation, true);
+  document.addEventListener("click", closeDropdownOnOutsideClick);
+}
+
+function handleSwitchBtnClick(e) {
+  const btn = e.target.closest(".switchPositionBtn");
+  if (!btn) return;
+  e.preventDefault();
+  e.stopPropagation();
+  const id = btn.id?.match(/^moveDropdownBtn-(.+)$/)?.[1];
+  const dropdown = id && document.getElementById(`moveDropdown-${id}`);
+  if (!dropdown) return;
+  closeAllMoveDropdowns(dropdown);
+  dropdown.classList.toggle("dp-none");
+}
+
+function blockDropdownPropagation(e) {
+  if (e.target.closest(".MoveDropdown")) e.stopPropagation();
+}
+
+function closeDropdownOnOutsideClick(e) {
+  if (!e.target.closest(".MoveDropdown") && !e.target.closest(".switchPositionBtn")) {
+    closeAllMoveDropdowns();
+  }
+}
+
+
+window.addEventListener("DOMContentLoaded", () => {
+});
+function closeAllMoveDropdowns(except = null) {
+  document.querySelectorAll(".MoveDropdown").forEach(d => {
+    if (d !== except) d.classList.add("dp-none");
+  });
+}
+
+/**
  * Closes overlay
  * @param {HTMLElement} overlay - Overlay element
  */

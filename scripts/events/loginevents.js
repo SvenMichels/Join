@@ -16,7 +16,6 @@ export async function loginListeners() {
     handleUserLogin();
   });
 
-  // Initialize validation and bindings
   bindLoginInputValidation();
   bindUserLoginButton();
   bindGuestLoginButton();
@@ -269,7 +268,6 @@ export function bindSignupForm(formElement) {
  */
 export function bindPrivacyCheckbox() {
   const checkbox = document.getElementById("checkBox");
-  // const submitButton = document.getElementById("signUpBtn");
   if (checkbox) {
     checkbox.addEventListener("change", () => {
       checkFormValidity();

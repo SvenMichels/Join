@@ -59,13 +59,12 @@ function onPickup(event, isPickup = false) {
     if (taskElement) {
       taskElement.classList.add("task-list-dragging");
       disableAllTaskLists();
-  
       taskElement.addEventListener("dragend", () => {
         taskElement.classList.remove("task-list-dragging");
         enableAllTaskLists();
-      }, {once: true });
+      }, { once: true });
     }
-  } 
+  }
   return false;
 }
 
@@ -102,7 +101,7 @@ function disableAllTaskLists() {
  * Removes the `event-none` class to restore user actions after drag.
  */
 function enableAllTaskLists() {
-    document.querySelectorAll(".input-wrapper").forEach(input => {
+  document.querySelectorAll(".input-wrapper").forEach(input => {
     input.classList.remove("event-none");
   })
   document.querySelectorAll(".task").forEach(list => {
@@ -185,11 +184,12 @@ export function setupMoveDropdown(taskElement, taskId, task) {
   const btn = taskElement.querySelector(`#moveDropdownBtn-${taskId}`);
   const dropdown = taskElement.querySelector(`#moveDropdown-${taskId}`);
   if (!btn || !dropdown) return;
-
   btn.addEventListener("click", (e) => toggleDropdown(e, dropdown));
   dropdown.addEventListener("click", e => e.stopPropagation());
-  document.addEventListener("click", () => dropdown.classList.add("dp-none"));
-
+  document.addEventListener("click", (ev) => {
+    if (ev.target.closest(".MoveDropdown") || ev.target.closest(".switchPositionBtn")) return;
+    dropdown.classList.add("dp-none");
+  });
   bindMoveAction(dropdown, ".moveText:first-child", task, "prev");
   bindMoveAction(dropdown, ".moveText:last-child", task, "next");
 }
@@ -201,8 +201,11 @@ export function setupMoveDropdown(taskElement, taskId, task) {
  * @param {HTMLElement} dropdown - The dropdown element to show or hide.
  */
 function toggleDropdown(e, dropdown) {
+  e.preventDefault();
   e.stopPropagation();
-  document.querySelectorAll(".MoveDropdown").forEach(d => d.classList.add("dp-none"));
+  document.querySelectorAll(".MoveDropdown").forEach(d => {
+    if (d !== dropdown) d.classList.add("dp-none");
+  });
   dropdown.classList.toggle("dp-none");
 }
 
@@ -276,6 +279,7 @@ function persistTaskStatus(task) {
 
 window.addEventListener("DOMContentLoaded", () => {
   updateSwitchButtonVisibility();
+  initializationDropdownButton();
   initializeBoard();
 });
 
@@ -295,6 +299,24 @@ export function updateSwitchButtonVisibility() {
       btn.classList.remove("dp-none");
     } else {
       btn.classList.add("dp-none");
+    }
+  });
+}
+
+function initializationDropdownButton() {
+  document.querySelectorAll(".switchPositionBtn").forEach(btn => {
+    const match = btn.id && btn.id.match(/^moveDropdownBtn-(.+)$/);
+    if (match) {
+      const taskId = match[1];
+      // Fix: richtige ID (kleines m)
+      const dropdown = document.getElementById(`moveDropdown-${taskId}`);
+      if (dropdown) {
+        btn.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          toggleDropdown(e, dropdown);
+        }, { once: true }); // doppelte Bindung vermeiden
+      }
     }
   });
 }

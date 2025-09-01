@@ -83,7 +83,7 @@ export function hideSingleContactView() {
  * Usage example:
  * ```js
  * await contactFeedback();
- * console.log("Feedback animation finished");
+ * "Feedback animation finished");
  * ```
  *
  * @function contactFeedback

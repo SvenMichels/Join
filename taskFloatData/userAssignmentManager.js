@@ -17,9 +17,19 @@ const selectedUserNamesModal = new Set();
  * Always reloads contacts to ensure current user's data is displayed.
  * @returns {Promise<void>}
  */
-export async function loadAndRenderUsersModal() {
+export async function loadAndRenderUsersModal(preselected = []) {
   await loadContactData();
-  renderUserCheckboxesModal(allSystemUsersModal, Array.from(selectedUserNamesModal));
+
+  clearSelectedUserNamesModal();
+
+  const initial = Array.isArray(preselected) ? preselected : [];
+  if (Array.isArray(window.pendingAssignedUsers) && window.pendingAssignedUsers.length) {
+    initial.push(...window.pendingAssignedUsers);
+    window.pendingAssignedUsers = null;
+  }
+  initial.forEach(n => selectedUserNamesModal.add(n));
+
+  await renderUserCheckboxesModal(allSystemUsersModal);
 }
 
 /**
@@ -30,43 +40,33 @@ export async function loadAndRenderUsersModal() {
 async function loadContactData() {
   try {
     const contacts = await loadContactsForTaskAssignment();
-    console.log(contacts);
-
     allSystemUsersModal = contacts || [];
   } catch (error) {
     allSystemUsersModal = [];
   }
 }
 
+export function clearSelectedUserNamesModal() {
+  selectedUserNamesModal.clear();
+  const chips = document.getElementById("selectedUser-modal");
+  if (chips) chips.innerHTML = "";
+  document.querySelectorAll(".user-checkbox-modal").forEach(cb => {
+    cb.checked = false;
+    cb.closest(".user-checkbox-wrapper-modal")?.classList.remove("active");
+  });
+}
 /**
  * Renders user checkboxes in the modal.
  * @param {Array<Object>} users - Array of user objects.
  * @returns {Promise<void>}
  */
-export async function renderUserCheckboxesModal(users, preselected = Array.from(selectedUserNamesModal)) {
+export async function renderUserCheckboxesModal(users) {
   const container = document.getElementById("assignedUserList-modal");
   if (!container) return;
 
   renderCheckboxList(container, users);
-
-  primeSelection(preselected);
   selectAssignedUsers(Array.from(selectedUserNamesModal));
   updateSelectedModal();
-}
-
-/**
- * Übernimmt Preselection + pendingAssignedUsers in das persistente Set.
- * @param {string[]} preselected
- * @private
- */
-function primeSelection(preselected = []) {
-  if (Array.isArray(preselected) && preselected.length) {
-    preselected.forEach(n => selectedUserNamesModal.add(n));
-  }
-  if (Array.isArray(window.pendingAssignedUsers) && window.pendingAssignedUsers.length) {
-    window.pendingAssignedUsers.forEach(n => selectedUserNamesModal.add(n));
-    window.pendingAssignedUsers = null;
-  }
 }
 
 /**
@@ -89,20 +89,10 @@ function renderCheckboxList(container, users) {
  */
 export function applyUserPreselection(assignedUsers) {
   if (!Array.isArray(assignedUsers)) return;
-  assignedUsers.forEach(n => selectedUserNamesModal.add(n));
-  renderUserCheckboxesModal(allSystemUsersModal, Array.from(selectedUserNamesModal));
-}
 
-/**
- * Resets all checkboxes to unchecked state.
- * @private
- */
-function resetAllCheckboxes() {
-  const checkboxes = document.querySelectorAll(".user-checkbox-modal");
-  checkboxes.forEach(checkbox => {
-    checkbox.checked = false;
-    checkbox.closest(".user-checkbox-wrapper-modal")?.classList.remove("active");
-  });
+  selectedUserNamesModal.clear();
+  assignedUsers.forEach(n => selectedUserNamesModal.add(n));
+  renderUserCheckboxesModal(allSystemUsersModal);
 }
 
 /**
@@ -261,8 +251,10 @@ function handleSearchInput() {
   const searchInput = document.getElementById("searchUser-modal");
   const list = document.getElementById("assignedUserList-modal");
   if (!searchInput || !list) return;
+
   const term = searchInput.value.trim().toLowerCase();
   list.classList.add("visible");
+
   if (term.length < 3) {
     renderUserCheckboxesModal(allSystemUsersModal);
     return;

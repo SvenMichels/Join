@@ -9,6 +9,7 @@ import { getUserCheckboxTemplate } from "./addtasktemplates.js";
 import { getInitials } from "../scripts/utils/helpers.js";
 import { createRemainingChip } from "../board/boardUtils.js";
 import { loadContactsForTaskAssignment } from "../contactPage/contactService.js";
+import { clearSelectedUserNamesModal } from "../taskFloatData/userAssignmentManager.js";
 
 let allSystemUsers = [];
 const selectedUserNames = new Set();
@@ -22,16 +23,14 @@ export function getAllSystemUsers() {
   return allSystemUsers;
 }
 
-export function clearSelectedUserNames() {
+export function clearSelectedUserNamesHandler() {
   selectedUserNames.clear();
-  const chips = document.getElementById("selectedUser-modal");
-  if (chips) chips.innerHTML = "";
-  document.querySelectorAll(".user-checkbox-modal").forEach(cb => {
-    cb.checked = false;
-    cb.closest(".user-checkbox-wrapper")?.classList.remove("active");
-  });
 }
 
+export function clearBothSelectedUserNames() {
+  clearSelectedUserNamesHandler();
+  clearSelectedUserNamesModal();
+}
 /**
  * Loads users from backend and renders them in the checkbox list.
  *
@@ -40,7 +39,6 @@ export function clearSelectedUserNames() {
  */
 export async function loadAndRenderUsers() {
   try {
-    clearSelectedUsers();
     const contacts = await loadContactsForTaskAssignment();
     allSystemUsers = contacts;
     renderUserCheckboxes(allSystemUsers, Array.from(selectedUserNames));
@@ -58,7 +56,6 @@ export async function loadAndRenderUsers() {
  */
 export function renderUserCheckboxes(users, preselected = []) {
   const container = clearAndPrepareContainer("assignedUserList");
-  selectedUserNames.clear();
   if (!container) return;
 
   addUniqueCheckboxes(users, preselected, container);
@@ -203,9 +200,9 @@ export function clearSelectedUsers() {
   const selectedUserContainer = document.getElementById("selectedUser");
   if (selectedUserContainer) {
     selectedUserContainer.innerHTML = "";
+    clearBothSelectedUserNames();
   }
 
-  selectedUserNames.clear();
 
   const checkboxes = document.querySelectorAll('.user-checkbox');
   checkboxes.forEach(cb => {

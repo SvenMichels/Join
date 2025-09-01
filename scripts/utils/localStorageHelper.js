@@ -42,7 +42,7 @@ function setItem(key, value) {
  * // Retrieve an object from localStorage
  * const user = LocalStorageService.getItem('user');
  * if (user) {
- *   console.log(user.name); // 'Alice'
+ *   user.name); // 'Alice'
  * }
  */
 function getItem(key) {

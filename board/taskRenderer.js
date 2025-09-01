@@ -170,11 +170,19 @@ function generateSubtaskProgressBar(taskIdentifier, progressInformation) {
  */
 function setupTaskElementEvents(element, task) {
   element.addEventListener("dragstart", handleDragStart);
-  element.addEventListener("click", () => {
+
+  // Öffne Details NUR wenn nicht auf Switch-Button/Dropdown geklickt wurde
+  element.addEventListener("click", (ev) => {
+    if (ev.target.closest(".switchPositionBtn") || ev.target.closest(".MoveDropdown")) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      return;
+    }
     if (window.openTaskDetails) {
       window.openTaskDetails(task);
     }
   });
+
   setupMoveDropdown(element, task.id, task);
 }
 

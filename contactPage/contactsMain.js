@@ -85,12 +85,6 @@ export function setupDeleteButton(contact) {
   });
 }
 
-// function bindContactActions(id, name, contact) {
-//   const container = document.getElementById("bigContact");
-//   bindButton(container, "#delete", () => deleteContactFromDatabase(id, name));
-//   bindButton(container, "#edit", () => openEditDialog(contact));
-// }
-
 /**
  * Sets up outside click handlers for modals
  */
