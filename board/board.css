@@ -188,7 +188,7 @@ h3 {
 }
 
 .add-task-board-button-second {
-  font-size: 14px;
+  font-size: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -376,7 +376,7 @@ h3 {
   height: 18px;
   width: 90px;
   padding: 4px 5px 4px 2px;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   color: #ffffff;
 }

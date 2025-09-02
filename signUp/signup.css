@@ -14,13 +14,13 @@ main {
   align-items: center;
   width: 100vw;
   height: 100%;
-  padding-top: 170px;
+  /* padding-top: 170px; */
 }
 
 .errorDiv {
   width: 100%;
   color: #ff0000;
-  font-size: 13px;
+  font-size: 16px;
   margin-top: 5px;
 }
 
@@ -32,7 +32,7 @@ main {
   box-shadow: 0px 0px 14px 3px rgba(0, 0, 0, 0.08);
   border-radius: 30px;
   background-color: white;
-  padding: clamp(2.5rem, 10vw, 5rem);
+  padding: clamp(1.5rem, 10vw, 5rem);
   padding-top: 48px;
   padding-bottom: 48px;
   gap: 32px;
@@ -46,6 +46,18 @@ form {
   align-items: center;
   width: 100%;
   /* gap: 12px; */
+}
+
+.nav-logo-container {
+  display: flex;
+  width: 100%;
+  max-width: 1440px;
+  margin: 2rem;
+  box-sizing: border-box;
+}
+
+.main-container {
+  max-width: 1440px;
 }
 
 .checkbox-wrapper label {
@@ -137,7 +149,7 @@ form {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
+  font-size: 16px;
   gap: 8px;
   text-align: center;
 }
@@ -145,7 +157,13 @@ form {
 .checkbox-wrapper input[type="checkbox"] {
   width: 16px;
   height: 16px;
+  margin-right: 8px;
+  border: 1px solid #000000;
 }
+
+/* #checkBox { 
+
+} */
 
 .checkbox-wrapper a {
   color: rgba(41, 171, 226, 1);
@@ -202,13 +220,6 @@ footer a {
 footer a:hover {
   color: #29abe2;
   font-weight: 700;
-}
-
-.nav-logo {
-  position: absolute;
-  top: calc(100% - 98%);
-  left: calc(100% - 98%);
-  padding-top: 0 !important;
 }
 
 .visually-hidden {
@@ -273,8 +284,12 @@ input:focus::placeholder {
   }
 }
 
-@media (max-width: 410px) {
-
+#checkBoxLabel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  text-align: center;
 }
 
 #nameValidationError,
@@ -283,7 +298,7 @@ input:focus::placeholder {
 #passwordValidationConfirmError {
   width: 100%;
   color: #ff0000;
-  font-size: 13px;
+  font-size: 14px;
   margin: 4px 0px 4px 6px;
   min-height: 22px;
 }

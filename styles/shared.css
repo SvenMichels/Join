@@ -286,3 +286,11 @@
 .color-38 { background-color: #023047; }
 .color-39 { background-color: #FFB703; }
 .color-40 { background-color: #FB8500; }
+
+.nav-logo {
+    padding-top: 2rem;
+    /* width: 100px; */
+    height: 121px;
+    display: flex;
+    justify-content: space-between;
+}

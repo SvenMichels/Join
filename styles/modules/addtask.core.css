@@ -1,6 +1,6 @@
 .task-title,
 .task-description,
-.task-date{
+.task-date {
   display: flex;
   flex-direction: column;
   max-width: 440px;
@@ -91,15 +91,15 @@
 
 .error-message {
   color: red;
-  font-size: 0.8rem;
+  font-size: 16px;
   display: none;
 }
 
-input:invalid + .error-message {
+input:invalid+.error-message {
   display: block;
 }
 
-input:valid + .error-message {
+input:valid+.error-message {
   display: none;
 }
 

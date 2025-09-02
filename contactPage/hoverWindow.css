@@ -96,7 +96,8 @@
   top: 24px;
   right: 24px;
   border-radius: 56px;
-  background-color: #d1d1d1;;
+  background-color: #d1d1d1;
+  ;
 }
 
 .closeBtn:hover {
@@ -326,7 +327,7 @@ input::placeholder {
 #addContactEmailFeedback,
 #addContactPhoneFeedback {
   color: red;
-  font-size: 0.75rem;
+  font-size: 16px;
   margin-top: 0.25rem;
   height: 24px;
 }

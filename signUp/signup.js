@@ -315,6 +315,7 @@ export function isPasswordFieldValid() {
   const errorEl = document.getElementById("passwordValidationError");
 
   if (!password || !confirmPassword) return false;
+  if (password.startsWith(" ")) return false;
   if (password.length < 6) return false;
   if (password !== confirmPassword) return false;
   if (errorEl && errorEl.textContent && errorEl.textContent.trim().length > 0) return false;

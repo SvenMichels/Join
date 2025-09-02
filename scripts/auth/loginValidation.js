@@ -34,11 +34,13 @@ function setLoginValidation(isValid, errorEl, message = "") {
  */
 export function validateLoginEmailInput(input) {
   if (!input) return;
-  
+
   const errorEl = document.getElementById("loginEmailValidationError");
   const email = input.value || "";
 
   if (!email) return setLoginValidation(true, errorEl);
+  if (email.replace(/\s/g, "").length === 0)
+    return setLoginValidation(false, errorEl, "Email must not begin with a space.");
   if (email.startsWith(" "))
     return setLoginValidation(false, errorEl, "Email must not begin with a space.");
   if (email.includes(" "))

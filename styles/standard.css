@@ -91,8 +91,8 @@ p {
 }
 
 .nav-logo {
-  padding-top: 48px;
-  width: 100px;
+  padding-left: 2rem;
+  /* width: 100px; */
   height: 121px;
   display: flex;
   justify-content: space-between;
@@ -268,4 +268,11 @@ p {
 
 .nav-media-container {
   display: none;
+}
+
+@media (max-width: 410px) {
+  .nav-logo {
+    height: clamp(4rem, 4rem, 8rem);
+  }
+
 }

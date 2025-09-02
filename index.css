@@ -80,6 +80,7 @@ input.password {
   resize: none;
   outline: none;
   transition: border 0.2s ease, outline 0.2s ease;
+  font-size: 16px;
 }
 
 input.email:focus,
@@ -343,7 +344,7 @@ input:focus::placeholder {
 #loginEmailValidationError {
   width: 100%;
   color: #ff0000;
-  font-size: 13px;
+  font-size: 15px;
   margin: 4px 0px 4px 6px;
   min-height: 22px;
 }

@@ -86,15 +86,15 @@
 
 .error-message {
   color: red;
-  font-size: 0.8rem;
+  font-size: 16px;
   display: none;
 }
 
-input:invalid + .error-message {
+input:invalid+.error-message {
   display: block;
 }
 
-input:valid + .error-message {
+input:valid+.error-message {
   display: none;
 }
 
@@ -206,7 +206,7 @@ input:valid + .error-message {
   transform: rotate(180deg);
 }
 
-.assigned-user-list.visible ~ .assigned-container .dropdown-arrow {
+.assigned-user-list.visible~.assigned-container .dropdown-arrow {
   transform: rotate(180deg);
 }
 
@@ -249,7 +249,6 @@ textarea:focus {
 select {
   -webkit-appearance: none;
   -moz-appearance: none;
-  background: url(../assets/icons/arrow_drop_down.svg) no-repeat right 0.75rem
-    center;
+  background: url(../assets/icons/arrow_drop_down.svg) no-repeat right 0.75rem center;
   background-size: 1rem;
 }
