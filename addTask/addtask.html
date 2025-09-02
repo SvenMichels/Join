@@ -40,32 +40,32 @@
     Please rotate your device back to portrait mode.
   </div>
   <div class="header-wrapper">
-  <header class="header-style" id="">
-    <img class="header-nav-logo" src="../assets/icons/Capa 3.svg" />
-    <div class="header-container">
-      <p class="media-d-none">Kanban Project Management Tool</p>
-    </div>
-    <div class="help-container">
-      <a href="../help/help.html">
-        <img alt="Bild" class="help-icon" src="../assets/icons/help.svg" />
-      </a>
-      <button id="openMenu" class="profile-button"></button>
-    </div>
-    <div id="dropDownMenu" class="dropDownMenu dp-none">
-      <a class="txtDeco-none" id="help-none" href="../help/help.html">
-        <p class="dropDownTxt">Help</p>
-      </a>
-      <a class="txtDeco-none" href="../legalnotice/legalnotice.html">
-        <p class="dropDownTxt">Legal Notice</p>
-      </a>
-      <a class="txtDeco-none" href="../privatePolicy/privatpolicy.html">
-        <p class="dropDownTxt">Privacy Policy</p>
-      </a>
-      <a class="txtDeco-none" onclick="logoutUser()" href="../index.html">
-        <p class="dropDownTxt">Log out</p>
-      </a>
-    </div>
-  </header>
+    <header class="header-style" id="">
+      <img class="header-nav-logo" src="../assets/icons/Capa 3.svg" />
+      <div class="header-container">
+        <p class="media-d-none">Kanban Project Management Tool</p>
+      </div>
+      <div class="help-container">
+        <a href="../help/help.html">
+          <img alt="Bild" class="help-icon" src="../assets/icons/help.svg" />
+        </a>
+        <button id="openMenu" class="profile-button"></button>
+      </div>
+      <div id="dropDownMenu" class="dropDownMenu dp-none">
+        <a class="txtDeco-none" id="help-none" href="../help/help.html">
+          <p class="dropDownTxt">Help</p>
+        </a>
+        <a class="txtDeco-none" href="../legalnotice/legalnotice.html">
+          <p class="dropDownTxt">Legal Notice</p>
+        </a>
+        <a class="txtDeco-none" href="../privatePolicy/privatpolicy.html">
+          <p class="dropDownTxt">Privacy Policy</p>
+        </a>
+        <a class="txtDeco-none" onclick="logoutUser()" href="../index.html">
+          <p class="dropDownTxt">Log out</p>
+        </a>
+      </div>
+    </header>
   </div>
 
   <nav class="nav-bar">
@@ -123,9 +123,9 @@
       <form class="task-container" id="taskForm">
         <div class="task-wrapper">
           <div class="task-title">
-            <label for="task-title">Title <span style="color: #ff8190">*</span></label>
+            <label for="task-title">Title <span>*</span></label>
             <input class="task-title-input" name="taskTitle" id="task-title" placeholder="Enter a title" type="text" />
-            <span id="titleAlert" class="redSpan" style="display: none; color: #ff8190">This field is required</span>
+            <span id="titleAlert" class="redSpan" style="display: none;">This field is required</span>
           </div>
 
           <div class="task-description">
@@ -135,10 +135,10 @@
           </div>
 
           <div class="task-date">
-            <label for="task-date">Due Date <span style="color: #ff8190">*</span></label>
+            <label for="task-date">Due Date <span>*</span></label>
             <input class="task-dateInput" name="taskDate" id="task-date" placeholder="dd/mm/yyyy" type="date"
               min="2025-06-21" />
-            <span id="dateAlert" class="redSpan" style="display: none; color: #ff8190">This field is required</span>
+            <span id="dateAlert" class="redSpan" style="display: none;">This field is required</span>
           </div>
         </div>
 
@@ -182,13 +182,13 @@
           </div>
 
           <div class="prio-category-container">
-            <label for="category">Category <span style="color: #ff8190">*</span></label>
+            <label for="category">Category <span>*</span></label>
             <select class="prio-category-input" id="category" name="category">
               <option value="">Bitte auswählen</option>
               <option value="Technical_Task">Technical Task</option>
               <option value="User_Story">User Story</option>
             </select>
-            <span id="categoryAlert" class="redSpan" style="display: none; color: #ff8190">This field is required</span>
+            <span id="categoryAlert" class="redSpan" style="display: none;">This field is required</span>
           </div>
 
           <div class="prio-subtask-container">
@@ -205,7 +205,7 @@
 
         <div class="required-container">
           <div>
-            <span style="color: #ff8190">*</span>
+            <span>*</span>
             <span>This field is required</span>
           </div>
           <div class="create-container">

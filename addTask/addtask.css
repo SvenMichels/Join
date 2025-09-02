@@ -9,11 +9,16 @@ h1 {
   padding-top: 24px;
 }
 
+#titleAlert {
+  color: red;
+}
+
 .redSpan {
   font-family: "Inter";
   font-weight: 400;
   font-size: 16px;
   line-height: 120%;
+  color: red;
 }
 
 .prio-assigned-container {

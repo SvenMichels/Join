@@ -151,6 +151,7 @@ input:valid+.error-message {
   padding: 16px;
   border: 1px solid #2a3647;
   background-color: #f6f7f8;
+  font-size: 1rem;
 }
 
 .clear-button:hover {
@@ -172,6 +173,7 @@ input:valid+.error-message {
   background: #2a3647;
   color: #ffffff;
   border: 0px;
+  font-size: 1rem;
 }
 
 .create-button:hover {

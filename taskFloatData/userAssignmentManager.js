@@ -154,8 +154,10 @@ function createCheckboxWrapper(user) {
  */
 function attachCheckboxListener(wrapper) {
   const checkbox = wrapper.querySelector("input");
+  const checkboxLabel = wrapper.getElementsByClassName("checkboxLabel");
+
   wrapper.addEventListener("click", (event) => {
-    handleCheckboxClick(event, checkbox, wrapper);
+    handleCheckboxClick(event, checkbox, wrapper, checkboxLabel);
     const name = checkbox.value;
     if (checkbox.checked) selectedUserNamesModal.add(name);
     else selectedUserNamesModal.delete(name);
@@ -255,7 +257,7 @@ function handleSearchInput() {
   const term = searchInput.value.trim().toLowerCase();
   list.classList.add("visible");
 
-  if (term.length < 3) {
+  if (term.length < 1) {
     renderUserCheckboxesModal(allSystemUsersModal);
     return;
   }
