@@ -165,8 +165,8 @@ function attachCheckboxListener(wrapper) {
   });
 }
 
-function handleCheckboxClick(event, checkbox, wrapper) {
-  if (event.target !== checkbox) {
+function handleCheckboxClick(event, checkbox, wrapper, checkboxLabel) {
+  if (event.target !== checkbox || event.target !== checkboxLabel) {
     checkbox.checked = !checkbox.checked;
   }
   wrapper.classList.toggle("active", checkbox.checked);

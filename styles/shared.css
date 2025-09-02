@@ -289,8 +289,4 @@
 
 .nav-logo {
     padding-top: 2rem;
-    /* width: 100px; */
-    height: 121px;
-    display: flex;
-    justify-content: space-between;
 }
