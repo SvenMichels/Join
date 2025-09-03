@@ -17,8 +17,6 @@
   }
 
   .logo-fullscreen {
-    /* padding-top: 10px;
-    padding-left: 10px; */
     width: 100vw;
     height: 100vh;
     background-color: #2a3647;
@@ -36,15 +34,18 @@
     position: absolute;
     width: 200px;
     height: auto;
-    transform: scale(1);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1);
     transform-origin: center center;
     animation: shrink-logo 2s ease forwards;
     animation-delay: 1.2s;
   }
 
   .logo-old {
-    display: block;
-    transform: scale(1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
     opacity: 1;
     animation: shrink-logo 2s ease forwards, fade-out 2s ease forwards;
     animation-delay: 1.2s;
@@ -52,7 +53,6 @@
 
   .logo-new {
     opacity: 0;
-    transform: scale(1);
     animation: shrink-logo 2s ease forwards, fade-in 2s ease forwards;
     animation-delay: 1.2s;
   }
@@ -62,20 +62,18 @@
     }
     100% {
       background-color: transparent;
+      z-index: 1;
     }
   }
 
   @keyframes shrink-logo {
     0% {
-      width: 200px;
-      height: auto;
-      top: 36%;
-      left: 30%;
+      transform: translate(-50%, -50%) scale(1);
     }
     100% {
-      width: 100px;
-      top: 1%;
-      left: 1%;
+      transform: translate(0, 0) scale(0.5);
+      top: -50px;
+      left: -45px;
     }
   }
 
@@ -93,6 +91,7 @@
     }
     to {
       opacity: 1;
+
     }
   }
 
