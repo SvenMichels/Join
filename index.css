@@ -215,7 +215,6 @@ input.password:focus {
   color: #ffffff;
   font-weight: 400;
   font-size: 20px;
-
   border: 1px solid #2a3647;
   border-radius: 20px;
   position: fixed;
@@ -288,11 +287,12 @@ input:focus::placeholder {
 }
 
  .logo-fullscreen {
-  position: fixed;
+  position: absolute;
   inset: 0;
   width: 100vw;
+  max-width: 1440px;
   height: 100vh;
-  background-color: white;
+  background-color: #f6f7f8;
   overflow: hidden;
   animation: fade-container 2s ease forwards;
   animation-delay: 1.2s;
