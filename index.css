@@ -7,6 +7,8 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
+  background-color: #f6f7f8;
 }
 
 .landscape {
@@ -33,17 +35,17 @@ body {
   padding-top: 170px;
 }
 
-.content-holder>div:nth-child(1),
-.content-holder>div:nth-child(3) {
+.content-holder > div:nth-child(1),
+.content-holder > div:nth-child(3) {
   position: absolute;
   top: 0;
 }
 
-.content-holder>div:nth-child(1) {
+.content-holder > div:nth-child(1) {
   left: 0;
 }
 
-.content-holder>div:nth-child(3) {
+.content-holder > div:nth-child(3) {
   right: 0;
 }
 
@@ -181,7 +183,6 @@ input.password:focus {
   align-items: center;
   justify-content: center;
   gap: 64px;
-  padding-bottom: 0px;
   max-width: 1440px;
   margin-bottom: 20px;
 }
@@ -286,58 +287,53 @@ input:focus::placeholder {
   gap: 16px;
 }
 
-.logo-fullscreen {
+ .logo-fullscreen {
+  position: fixed;
+  inset: 0;
   width: 100vw;
   height: 100vh;
   background-color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   overflow: hidden;
-  animation: shrink-container 2s ease forwards;
+  animation: fade-container 2s ease forwards;
   animation-delay: 1.2s;
   z-index: 10;
 }
 
 .logo-new {
-  position: relative;
+  position: absolute;
   width: 274px;
   height: 334px;
-  animation: shrink-logo 2s ease forwards;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  transform-origin: center center;
+  animation: to-corner 2s ease forwards;
   animation-delay: 1.2s;
+  will-change: transform, top, left;
 }
 
 .logo-old {
   display: none;
 }
 
-@keyframes shrink-container {
-  0% {
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    background-color: white;
-  }
-
-  100% {
-    width: 100px;
-    height: 130px;
-    top: calc(100% - 98%);
-    left: calc(100% - 98%);
+@keyframes fade-container {
+  to {
     background-color: transparent;
+    z-index: -1;
+    pointer-events: none;
   }
 }
 
-@keyframes shrink-logo {
+@keyframes to-corner {
   0% {
-    width: 274px;
-    height: 334px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1);
   }
-
   100% {
-    width: 100px;
-    height: 130px;
+    top: -75px;
+    left: -55px;
+    transform: translate(0, 0) scale(0.365);
   }
 }
 
