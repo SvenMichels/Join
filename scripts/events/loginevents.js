@@ -1,7 +1,7 @@
 import { loginAsGuest, loginUser } from "../auth/login.js";
 import { collectUserInput, checkFormValidity, submitUser } from "../../signup/signup.js";
 import { requestData } from "../firebase.js";
-import { validateLoginEmailInput, validateLoginPasswordInput } from "../auth/loginValidation.js";
+import { validateInput } from "../auth/Validation.js";
 
 /**
  * Initializes login event listeners.
@@ -59,8 +59,8 @@ async function handleUserLogin(isGuest = false) {
 async function handleUser(credentials) {
   const loginBtn = document.querySelector(".btn");
 
-  validateLoginEmailInput(document.querySelector("#loginEmail"));
-  validateLoginPasswordInput(document.querySelector("#loginPassword"));
+  validateEmailInput(document.querySelector("#loginEmail"), "loginEmailValidationError");
+  validatePasswordInput(document.querySelector("#loginPassword"), "loginPasswordValidationError");
 
   const emailOk = !!credentials.email && isValidEmail(credentials.email);
   const pwdOk = !!credentials.password && credentials.password.length >= 3 && !credentials.password.startsWith(" ");
@@ -119,8 +119,8 @@ function bindLoginInputValidation() {
   const btn = getLoginButton();
 
   const update = () => {
-    validateLoginEmailInput(email);
-    validateLoginPasswordInput(password);
+    validateEmailInput(email, "loginEmailValidationError");
+    validatePasswordInput(password, "loginPasswordValidationError");
 
     const clearEmail = email?.value.trim() || "";
     const clearPwd = password?.value.trim() || "";

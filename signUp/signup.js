@@ -8,7 +8,7 @@
 import { bindPrivacyCheckbox, bindPolicyLinks, bindSignupForm } from "../scripts/events/loginevents.js";
 import { generateRandomColorClass } from "../scripts/utils/colors.js";
 import { getInitials } from "../scripts/utils/helpers.js";
-import { validatePasswordInput, validatePasswords, validateEmailInput, validateNameInput } from "./signupvalidate.js";
+import { initEmailField, initPasswordField, initNameField, confirmInputForFormValidation, showValidateBubble, hideValidateBubble } from "../scripts/auth/Validation.js";
 
 export const userPasswordInputField = document.getElementById("inputPassword");
 export const confirmPasswordInputField = document.getElementById("inputConfirmPassword");
@@ -27,74 +27,31 @@ export async function signupListeners() {
   bindSignupForm(signupFormElement);
   bindPrivacyCheckbox();
   bindPolicyLinks();
-  setupInputValidation();
   checkFormValidity();
 }
-
+loadAllFormInits();
 /**
  * Initializes signup page when loaded.
  */
 if (window.location.pathname.endsWith("signup.html")) {
   signupListeners();
-  setupPasswordEvents();
 }
 
-/**
- * Sets up password field event listeners for validation and toggle functionality.
- */
-export function setupPasswordEvents() {
-  userPasswordInputField.addEventListener("input", validatePasswords);
-  confirmPasswordInputField.addEventListener("input", validatePasswords);
+function loadAllFormInits() {
+  initNameField('inputName', 'nameHint');
+  initEmailField('inputEmail', 'emailHint');
+  initPasswordField('inputPassword', 'pwHint');
+  initPasswordField('inputConfirmPassword', 'pwCheckHint');
 
-  passwordToggleIcon.addEventListener("click", () =>
-    togglePassword(userPasswordInputField, passwordToggleIcon)
-  );
-  confirmToggleIcon.addEventListener("click", () =>
-    togglePassword(confirmPasswordInputField, confirmToggleIcon)
-  );
-}
+  ['inputName', 'inputEmail', 'inputPassword', 'inputConfirmPassword'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', checkFormValidity);
+  });
 
-/**
- * Initializes validation for all input fields.
- */
-export function setupInputValidation() {
-  setupNameValidation();
-  setupEmailValidation();
-  setupPasswordValidation();
-  setupPrivacyCheckboxValidation();
-}
-
-/**
- * Sets up name input validation and keypress prevention.
- */
-export function setupNameValidation() {
-  const nameInput = document.querySelector("#inputName");
-  if (!nameInput) return;
-
-  nameInput.addEventListener("input", (event) => validateNameInput(event.target));
-  nameInput.addEventListener("keypress", (event) => preventInvalidNameInput(event));
-}
-
-/**
- * Sets up email input validation and keypress prevention.
- */
-export function setupEmailValidation() {
-  const emailInput = document.querySelector("#inputEmail");
-  if (!emailInput) return;
-
-  emailInput.addEventListener("input", (event) => validateEmailInput(event.target));
-  emailInput.addEventListener("keypress", (event) => preventInvalidEmailInput(event));
-}
-
-/**
- * Sets up password input validation and keypress prevention.
- */
-export function setupPasswordValidation() {
-  const passwordInput = document.querySelector("#inputPassword");
-  if (!passwordInput) return;
-
-  passwordInput.addEventListener("input", (event) => validatePasswordInput(event.target));
-  passwordInput.addEventListener("keypress", (event) => preventInvalidPasswordInput(event));
+  // Privacy-Checkbox überwachen
+  if (privacyPolicyCheckbox) {
+    privacyPolicyCheckbox.addEventListener('change', checkFormValidity);
+  }
 }
 
 /**
@@ -104,84 +61,6 @@ export function setupPrivacyCheckboxValidation() {
   if (privacyPolicyCheckbox) {
     privacyPolicyCheckbox.addEventListener("change", checkFormValidity);
   }
-}
-
-/**
- * Prevents invalid characters from being entered in name field.
- * @param {KeyboardEvent} event - The keypress event
- */
-export function preventInvalidNameInput(event) {
-  const char = event.key;
-  const currentValue = event.target.value;
-
-  if (char === " " && currentValue.length === 0) {
-    event.preventDefault();
-    return;
-  }
-
-  const allowedKeys = ["Backspace", "Delete", "ArrowLeft", "ArrowRight", "Tab"];
-  const isLetter = /[a-zA-ZäöüÄÖÜß]/.test(char);
-  const isSpace = char === " ";
-
-  if (!isLetter && !isSpace && !allowedKeys.includes(char)) {
-    event.preventDefault();
-  }
-}
-
-/**
- * Prevents invalid characters from being entered in email field.
- * @param {KeyboardEvent} event - The keypress event
- */
-export function preventInvalidEmailInput(event) {
-  const char = event.key;
-  const currentValue = event.target.value;
-
-  if (char === " ") {
-    event.preventDefault();
-    return;
-  }
-
-  if (currentValue.length === 0 && !/[a-zA-Z0-9]/.test(char)) {
-    const allowedKeys = ["Backspace", "Delete", "ArrowLeft", "ArrowRight", "Tab"];
-    if (!allowedKeys.includes(char)) {
-      event.preventDefault();
-    }
-  }
-}
-
-/**
- * Prevents invalid characters from being entered in password field.
- * @param {KeyboardEvent} event - The keypress event
- */
-export function preventInvalidPasswordInput(event) {
-  const char = event.key;
-  const currentValue = event.target.value;
-
-  if (char === " " && currentValue.length === 0) {
-    event.preventDefault();
-  }
-}
-
-/**
- * Displays validation error message for a field.
- * @param {HTMLElement} errorDiv - The error display element
- * @param {string} message - The error message to display
- */
-export function showValidationError(errorDiv, message) {
-  if (!errorDiv) return;
-
-  errorDiv.textContent = message;
-  errorDiv.style.color = "red";
-}
-
-/**
- * Hides validation error message for a field.
- * @param {HTMLElement} errorDiv - The error display element
- */
-export function hideValidationError(errorDiv) {
-  if (!errorDiv) return;
-  errorDiv.textContent = "";
-  errorDiv.style.color = "white";
 }
 
 /**
@@ -201,7 +80,7 @@ export function togglePassword(field, icon) {
  */
 export async function handleSignupSubmission(event) {
   event?.preventDefault();
-  
+
   if (signUpSubmitButton?.disabled) return;
   if (!privacyPolicyCheckbox.checked) return;
 
@@ -220,7 +99,7 @@ export async function collectUserInput() {
   const userEmailAddress = getTrimmedInputValue("inputEmail");
   const userPassword = userPasswordInputField.value;
   const userColor = generateRandomColorClass();
-  
+
   return {
     userFullName,
     userEmailAddress,
@@ -273,53 +152,61 @@ export async function submitUser() {
 /**
  * Checks overall form validity and enables/disables submit button.
  */
-export function checkFormValidity() {
-  const isNameValid = isFieldValid("inputName", "nameValidationError");
-  const isEmailValid = isFieldValid("inputEmail", "emailValidationError");
-  const isPasswordValid = isPasswordFieldValid();
+function getFormValidation() {
+  const isNameValid = confirmInputForFormValidation('inputName', 'nameHint');
+  const isEmailValid = confirmInputForFormValidation('inputEmail', 'emailHint');
+  const isPasswordValid = confirmInputForFormValidation('inputPassword', 'pwHint');
+  const isPasswordConfirmValid = confirmInputForFormValidation('inputConfirmPassword', 'pwCheckHint');
   const isPrivacyChecked = privacyPolicyCheckbox?.checked || false;
 
-  const isFormValid = isNameValid && isEmailValid && isPasswordValid && isPrivacyChecked;
+  const passwordValue = document.getElementById('inputPassword')?.value;
+  const passwordConfirmValue = document.getElementById('inputConfirmPassword')?.value;
+  let doPasswordsMatch = false;
+  let shownPasswordMatch = true;
 
-  if (signUpSubmitButton) {    
-    signUpSubmitButton.disabled = !isFormValid;
-    signUpSubmitButton.style.backgroundColor = isFormValid ? "#2a3647" : "#2a3647";
-    signUpSubmitButton.style.opacity = isFormValid ? "1" : "0.5";
-    signUpSubmitButton.style.cursor = isFormValid ? "pointer" : "not-allowed";
+  checkPasswordForMatch(shownPasswordMatch, passwordValue, passwordConfirmValue, isPasswordValid);
+  return {
+    isNameValid,
+    isEmailValid,
+    isPasswordValid,
+    isPasswordConfirmValid,
+    isPrivacyChecked,
+    doPasswordsMatch
+  };
+}
+
+function updateSubmitButton(isFormValid) {
+  if (!signUpSubmitButton) return;
+  signUpSubmitButton.disabled = !isFormValid;
+  signUpSubmitButton.style.backgroundColor = "#2a3647";
+  signUpSubmitButton.style.opacity = isFormValid ? "1" : "0.5";
+  signUpSubmitButton.style.cursor = isFormValid ? "pointer" : "not-allowed";
+}
+
+export function checkFormValidity() {
+  const state = getFormValidation();
+  const isFormValid =
+    state.isNameValid &&
+    state.isEmailValid &&
+    state.isPasswordValid &&
+    state.isPasswordConfirmValid &&
+    state.doPasswordsMatch &&
+    state.isPrivacyChecked;
+
+  updateSubmitButton(isFormValid);
+  return isFormValid;
+}
+
+function checkPasswordForMatch(shownPasswordMatch, passwordValue, passwordConfirmValue, isPasswordValid) {
+  const passwordOk = passwordValue.length >= 6 && passwordConfirmValue.length >= 6;
+  const doPasswordsMatch = passwordValue === passwordConfirmValue;
+
+  if (passwordOk && doPasswordsMatch && !shownPasswordMatch) {
+    showValidateBubble("", "Password Matches", "pwCheckHint", 3000);
+    shownPasswordMatch = true;
+  } else if (passwordOk && isPasswordValid && !doPasswordsMatch) {
+    showValidateBubble("", "Looks Good, but Passwords do not match", "pwCheckHint", 3000);
+    shownPasswordMatch = false;
   }
-}
-
-/**
- * Checks if a specific input field is valid.
- * @param {string} inputId - The input element ID
- * @param {string} errorId - The error element ID
- * @returns {boolean} True if field is valid
- */
-export function isFieldValid(inputId, errorId) {
-  const input = document.getElementById(inputId);
-  const errorEl = document.getElementById(errorId);
-
-  if (!input || !input.value.trim()) return false;
-  if (errorEl && errorEl.textContent && errorEl.textContent.trim().length > 0) return false;
-
-  return true;
-}
-
-/**
- * Checks if password fields are valid and match.
- * @returns {boolean} True if password fields are valid
- */
-export function isPasswordFieldValid() {
-  const password = userPasswordInputField?.value;
-  const confirmPassword = confirmPasswordInputField?.value;
-  const errorEl = document.getElementById("passwordValidationError");
-
-  if (!password || !confirmPassword) return false;
-  if (password.startsWith(" ")) return false;
-  if (password.length < 6) return false;
-  if (password !== confirmPassword) return false;
-  if (errorEl && errorEl.textContent && errorEl.textContent.trim().length > 0) return false;
-
-  return true;
 }
 

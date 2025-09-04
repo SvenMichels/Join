@@ -63,7 +63,8 @@ form {
   flex-direction: column;
   max-width: 422px;
   width: 100%;
-  height: 152px;
+  gap: 0.5rem;
+
 }
 
 .text-area-icon-comb {
