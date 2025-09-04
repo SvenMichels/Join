@@ -11,7 +11,7 @@ import { highlightActiveNavigationLinks, setupOpenMenuListener } from '../script
 import { updateTask } from '../board/taskManager.js';
 import { fetchAllTasks } from '../scripts/auth/login.js';
 import { initializeBackButton, initializeFabMenu } from "../scripts/ui/fabContact.js";
-import { initEmailField, initNameField } from "../scripts/auth/Validation.js";
+import { initEmailField, initNameField, initPhoneField } from "../scripts/auth/Validation.js";
 
 let contactList = [];
 let editingContact = null;
@@ -35,9 +35,11 @@ function setupEventListeners() {
 
 initEmailField('contactEmail', 'emailHint');
 initNameField('contactName', 'nameHint');
+initPhoneField('contactPhone', 'phoneHint');
 
 initEmailField('editContactEmail', 'editEmailHint');
 initNameField('editContactName', 'editNameHint');
+initPhoneField('editContactPhone', 'editPhoneHint');
 
 /**
  * Sets up contact form event listeners (add/edit forms)

@@ -76,6 +76,26 @@ export function initNameField(inputId, bubbleId) {
   input.addEventListener('blur', () => hideValidateBubble(bubbleId));
 }
 
+export function initPhoneField(inputId, bubbleId) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  validateInput(input, bubbleId);
+
+  setFieldValidity(inputId, false);
+
+  input.addEventListener('input', (e) => {
+    const msg = getPhoneMessage(e.target.value);
+    showValidateBubble(input, msg || 'Looks good!', bubbleId);
+    setFieldValidity(inputId, !msg);
+  });
+
+  input.addEventListener('focus', () =>
+    showValidateBubble(input, 'Use 6–28 chars incl. upper, lower, number, special.', bubbleId, 2000)
+  );
+
+  input.addEventListener('blur', () => hideValidateBubble(bubbleId));
+}
+
 export function validateInput(input, bubbleId, options = {}) {
   if (!input) return;
   const { allowInnerSpaces = false } = options;
@@ -182,6 +202,18 @@ function getNameMessage(userInput) {
   }
   if (!namePattern.test(userInput)) {
     message += 'Only letters, accents, hyphen, apostrophes, single spaces between parts. ';
+  }
+  return message.trim();
+}
+
+function getPhoneMessage(userInput) {
+  const phonePattern = /^(?! )(?:\+?\d+(?: \d+)*)$/;
+  let message = '';
+  if (userInput.length <6 || userInput.length > 32) {
+    message += 'Use 6–32 characters. ';
+  }
+  if (!phonePattern.test(userInput)) {
+    message += 'valid Options: +49 , 0176 12345 , +49 176 12 ';
   }
   return message.trim();
 }
