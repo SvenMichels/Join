@@ -90,19 +90,23 @@ export function initPhoneField(inputId, bubbleId) {
   });
 
   input.addEventListener('focus', () =>
-    showValidateBubble(input, 'Use 6–28 chars incl. upper, lower, number, special.', bubbleId, 2000)
+    showValidateBubble(input, 'valid Options: +49 , 0176 12345 , +49 176 12 ', bubbleId, 2000)
   );
 
   input.addEventListener('blur', () => hideValidateBubble(bubbleId));
 }
 
-export function validateInput(input, bubbleId, options = {}) {
+export function validateInput(input, bubbleId, options = {}, numberOptions = {}) {
   if (!input) return;
   const { allowInnerSpaces = false } = options;
+  const { allowNumbers = false } = numberOptions;
 
   if (input.dataset.spaceBlockerAttached === "true") return;
 
   attachSpaceKeydownBlocker(input, bubbleId, allowInnerSpaces);
+  if (bubbleId.includes("phone")) {
+    attachSpaceAndLetterKeydownBlocker(input, bubbleId, allowInnerSpaces, allowNumbers);
+  }
 
   if (allowInnerSpaces) {
     attachLeadingSpaceNormalizer(input, bubbleId);
@@ -126,6 +130,29 @@ function attachSpaceKeydownBlocker(input, bubbleId, allowInnerSpaces) {
       showValidateBubble(input, "Leading space is not allowed", bubbleId, 3000);
     }
   });
+}
+
+function attachSpaceAndLetterKeydownBlocker(input, bubbleId, allowInnerSpaces, allowNumbers) {
+  input.addEventListener("keydown", (e) => {
+    if (e.key !== " ") return;
+
+    if (!allowInnerSpaces) {
+      e.preventDefault();
+      showValidateBubble(input, "Spaces are not allowed", bubbleId, 3000);
+      return;
+    }
+
+    if (isLeadingSpacePosition(input)) {
+      e.preventDefault();
+      showValidateBubble(input, "Leading space is not allowed", bubbleId, 3000);
+    }
+
+    if (!allowNumbers) {
+      e.preventDefault();
+      showValidateBubble(input, "Letters are not allowed", bubbleId, 3000);
+    }
+  });
+
 }
 
 function attachLeadingSpaceNormalizer(input, bubbleId) {
@@ -209,7 +236,7 @@ function getNameMessage(userInput) {
 function getPhoneMessage(userInput) {
   const phonePattern = /^(?! )(?:\+?\d+(?: \d+)*)$/;
   let message = '';
-  if (userInput.length <6 || userInput.length > 32) {
+  if (userInput.length < 6 || userInput.length > 32) {
     message += 'Use 6–32 characters. ';
   }
   if (!phonePattern.test(userInput)) {

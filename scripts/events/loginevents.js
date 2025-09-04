@@ -1,7 +1,13 @@
-import { loginAsGuest, loginUser } from "../auth/login.js";
+import { loginUser } from "../auth/login.js";
 import { collectUserInput, checkFormValidity, submitUser } from "../../signup/signup.js";
 import { requestData } from "../firebase.js";
-import { validateInput } from "../auth/Validation.js";
+
+import { validateInput, initEmailField, initPasswordField } from "../auth/Validation.js";
+
+
+
+initEmailField("loginEmail", "emailHint");
+initPasswordField("loginPassword", "pwHint");
 
 /**
  * Initializes login event listeners.
@@ -56,14 +62,19 @@ async function handleUserLogin(isGuest = false) {
   }
 }
 
+export function getFormValidation() {
+  const isEmailValid = confirmInputForFormValidation('inputEmail', 'emailHint');
+  const isPasswordValid = confirmInputForFormValidation('inputPassword', 'pwHint');
+
+  const passwordValue = document.getElementById('inputPassword')?.value;
+  const emailValue = document.getElementById('inputEmail')?.value;
+  if (passwordValue && emailValue) return isEmailValid, isPasswordValid;
+}
+
 async function handleUser(credentials) {
   const loginBtn = document.querySelector(".btn");
-
-  validateEmailInput(document.querySelector("#loginEmail"), "loginEmailValidationError");
-  validatePasswordInput(document.querySelector("#loginPassword"), "loginPasswordValidationError");
-
-  const emailOk = !!credentials.email && isValidEmail(credentials.email);
-  const pwdOk = !!credentials.password && credentials.password.length >= 3 && !credentials.password.startsWith(" ");
+  let emailOk = credentials.email;
+  let pwdOk = credentials.password;
 
   if (!emailOk || !pwdOk) {
     disableButton(loginBtn);
@@ -96,11 +107,11 @@ function disableButton(btn) {
  * @returns {{ email: string, password: string }}
  */
 function collectLoginCredentials() {
-  const emailEl = document.querySelector("#loginEmail");
-  const pwEl = document.querySelector("#loginPassword");
+  const passwordValue = document.getElementById('loginPassword')?.value;
+  const emailValue = document.getElementById('loginEmail')?.value;
   return {
-    email: emailEl ? emailEl.value.trim() : "",
-    password: pwEl ? pwEl.value.trim() : "",
+    email: emailValue,
+    password: passwordValue,
   };
 }
 
@@ -114,41 +125,31 @@ function getLoginButton() {
 /**
  * Binds input listeners for login email/password and updates the login button state.
  */
+function grabAllInputToCheck() {
+  const credentials = collectLoginCredentials();
+
+  const loginEmailIsOk = validateInput(document.getElementById("loginEmail"), "emailHint");
+  console.log("Email valid:", loginEmailIsOk);
+  const loginPasswordIsOk = validateInput(document.getElementById("loginPassword"), "pwHint");
+  const loginEmail = credentials.email;
+  const loginPassword = credentials.password;
+
+  return loginEmail, loginPassword;
+}
+
 function bindLoginInputValidation() {
-  const [email, password] = ["#loginEmail", "#loginPassword"].map(s => document.querySelector(s));
   const btn = getLoginButton();
+  if (!btn) return;
 
   const update = () => {
-    validateEmailInput(email, "loginEmailValidationError");
-    validatePasswordInput(password, "loginPasswordValidationError");
-
-    const clearEmail = email?.value.trim() || "";
-    const clearPwd = password?.value.trim() || "";
-    const isPwdOk = clearPwd.length >= 6 && !clearPwd.startsWith(" ");
-
-    (clearEmail && clearPwd && isValidEmail(clearEmail) && isPwdOk)
+    grabAllInputToCheck();
+    (loginEmail && loginPassword)
       ? enableButton(btn)
       : disableButton(btn);
   };
 
-  [email, password].forEach(i => i && i.addEventListener("input", update));
+  [loginEmail, loginPassword].forEach(input => input && input.addEventListener("input", update));
   update();
-}
-
-/**
- * Validates email format using regex.
- * 
- * @param {string} email
- * @returns {boolean}
- */
-export function isValidEmail(email) {
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(de|com|net|nl|org|uk|cn|au|dk|pl|cz|at|lu|ru)$/;
-  return emailRegex.test(email);
-}
-
-export function isValidPhoneNumber(phone) {
-  const phoneRegex = /^(?:\+49)?[0-9]{0,}$/;
-  return phoneRegex.test(phone);
 }
 
 /**

@@ -2,10 +2,13 @@ import { requestData } from "../firebase.js";
 import { fetchUsersFromDatabase } from "../firebase.js";
 import { countByStatus } from "../../startpage/taskStatisticsManager.js";
 import { loginFailFeedback } from "../events/loginevents.js"
+import { initEmailField, initPasswordField, initNameField, confirmInputForFormValidation, showValidateBubble, hideValidateBubble } from "../auth/Validation.js";
+
 
 const loginFormElement = document.getElementById("loginForm");
 
 loginFormElement?.addEventListener("submit", handleFormSubmission);
+
 
 /**
  * Handles form submission and triggers login process.
@@ -25,8 +28,8 @@ async function handleFormSubmission(submitEvent) {
  */
 function collectFormCredentials() {
   return {
-    email: document.getElementById("email").value.trim(),
-    password: document.getElementById("password").value.trim(),
+    email: document.getElementById("loginEmail").value.trim(),
+    password: document.getElementById("loginPassword").value.trim(),
   };
 }
 
@@ -37,6 +40,8 @@ function collectFormCredentials() {
  */
 async function processLoginAttempt(credentials) {
   try {
+    console.log("ckeck", credentials);
+
     await loginUser(credentials.email, credentials.password);
     redirectToStartpage();
   } catch (loginError) {
@@ -106,7 +111,7 @@ function credentialsMatch(user, emailAddress, userPassword) {
 
   const emailMatches = userEmail?.toLowerCase() === emailAddress.toLowerCase();
   const passwordMatches = password === userPassword;
-  
+
   return emailMatches && passwordMatches;
 }
 
