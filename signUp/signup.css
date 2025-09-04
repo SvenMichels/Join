@@ -51,6 +51,7 @@ form {
   width: 100%;
   max-width: 1440px;
   margin: 2rem;
+  padding-left: 2rem;
   box-sizing: border-box;
 }
 
