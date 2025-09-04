@@ -4,8 +4,7 @@
 
 import { getInitials } from '../scripts/utils/helpers.js';
 import { updateContact } from './contactDataService.js';
-import { setupDeleteButton } from '../contactPage/contactsMain.js';
-import { initContactEditValidation } from './contactEditValidation.js';
+import { setupDeleteButton } from '../contactpage/contactsMain.js';
 
 let editingContact = null;
 
@@ -76,7 +75,6 @@ export function openEditDialog(contact) {
     fillEditForm(contact);
     setupDeleteButton(contact);
     setUserInitials(contact);
-    initContactEditValidation();
   }
 }
 

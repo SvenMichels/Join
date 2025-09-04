@@ -17,28 +17,6 @@
   <script src="./index.js" type="module"></script>
   <script type="module" src="../board/board.js"></script>
   <style>
-    .hint-bubble {
-      position: relative;
-      display: flex;
-      background: #ffffff;
-      color: #ff0000;
-      padding: 6px 10px;
-      border-radius: 6px;
-      font-size: 0.85rem;
-      white-space: nowrap;
-      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
-      word-break: break-word;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-      z-index: 1000;
-      box-sizing: border-box;
-      height: 28px;
-    }
-
-    .hint-bubble.show {
-      opacity: 1;
-    }
   </style>
 </head>
 
@@ -72,7 +50,7 @@
         <form class="login-form" id="loginForm">
           <div class="text-area-icon-comb">
             <img alt="Mail Icon" class="mail-icon" src="./assets/icons/mail.svg" />
-            <input class="email" id="loginEmail" placeholder="E-Mail" type="email" />
+            <input class="email" id="loginEmail" placeholder="E-Mail"/>
           </div>
           <div style="position: relative; display: flex;">
             <div id="emailHint" class="hint-bubble"></div>

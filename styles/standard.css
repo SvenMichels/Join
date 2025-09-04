@@ -274,5 +274,27 @@ p {
   .nav-logo {
     height: clamp(4rem, 4rem, 8rem);
   }
+}
 
+.hint-bubble {
+  position: relative;
+  display: flex;
+  background: #ffffff;
+  color: #ff0000;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+  word-break: break-word;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 1000;
+  box-sizing: border-box;
+  height: 28px;
+}
+
+.hint-bubble.show {
+  opacity: 1;
 }

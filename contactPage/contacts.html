@@ -24,7 +24,6 @@
   <script type="module" src="./contactRenderer.js"></script>
   <script type="module" src="./contactEditor.js"></script>
   <script type="module" src="./contactUtils.js"></script>
-  <script type="module" src="./contactsMain.js"></script>
   <script type="module" src="./contactService.js"></script>
   <script type="module" src="./contactMyUser.js"></script>
   <script type="module" src="./contacts.js"></script>
@@ -81,22 +80,28 @@
           </div>
           <form class="editContactForm" id="addContactForm">
             <div class="pers">
-              <input id="contactName" placeholder="Name" type="text"></input>
+              <input id="contactName" placeholder="Name"></input>
               <img alt="Bild" class="inputIconPers" src="../assets/icons/person.svg" />
             </div>
-            <div id="addContactNameFeedback"></div>
+            <div style="position: relative; display: flex;">
+              <div id="nameHint" class="hint-bubble"></div>
+            </div>
             <div class="mail-add">
-              <input id="contactEmail" placeholder="Email" src="../assets/icons/" type="email"
-                maxlength="30"></input>
+              <input id="contactEmail" placeholder="Email" src="../assets/icons/"
+                maxlength="64"></input>
               <img alt="Bild" class="inputIconMail" src="../assets/icons/mail.svg" />
             </div>
-            <div id="addContactEmailFeedback"></div>
+            <div style="position: relative; display: flex;">
+              <div id="emailHint" class="hint-bubble"></div>
+            </div>
             <div class="call">
-              <input id="contactPhone" placeholder="Phone" src="../assets/icons/" type="tel"
-                inputmode="numeric" pattern="(\+49)?[0-9]{0,}"></input>
+              <input id="contactPhone" placeholder="Phone" src="../assets/icons/"
+                inputmode="numeric"></input>
               <img alt="Bild" class="inputIconCall" src="../assets/icons/call.svg" />
             </div>
-            <div id="addContactPhoneFeedback"></div>
+            <div style="position: relative; display: flex;">
+              <div id="phoneHint" class="hint-bubble"></div>
+            </div>
             <div class="formBtns">
               <button class="deleteModalBtn" id="deleteModalBtn" type="reset">
                 Cancel x
@@ -138,22 +143,27 @@
           </div>
           <form class="editContactForm" id="editContactForm">
             <div class="pers">
-              <input id="editContactName" placeholder="Name" type="text"></input>
+              <input id="editContactName" placeholder="Name"></input>
               <img alt="Bild" class="inputIconPers" src="../assets/icons/person.svg" />
             </div>
-            <div id="editModalNameFeedback"></div>
+            <div style="position: relative; display: flex;">
+              <div id="editNameHint" class="hint-bubble"></div>
+            </div>
             <div class="mail-edit">
-              <input id="editContactEmail" placeholder="Email" src="../assets/icons/" type="email"
-                maxlength="64"></input>
+              <input id="editContactEmail" placeholder="Email" src="../assets/icons/"></input>
               <img alt="Bild" class="inputIconMail" src="../assets/icons/mail.svg" />
             </div>
-            <div id="editModalEmailFeedback"></div>
+            <div style="position: relative; display: flex;">
+              <div id="editEmailHint" class="hint-bubble"></div>
+            </div>
             <div class="call">
-              <input id="editContactPhone" placeholder="Phone" src="../assets/icons/" type="tel"
+              <input id="editContactPhone" placeholder="Phone" src="../assets/icons/"
                 inputmode="numeric"></input>
               <img alt="Bild" class="inputIconCall" src="../assets/icons/call.svg" />
             </div>
-            <div id="editModalPhoneFeedback"></div>
+            <div style="position: relative; display: flex;">
+              <div id="editPhoneHint" class="hint-bubble"></div>
+            </div>
             <div class="formBtns">
               <button class="deleteModalBtn" type="button">
                 Delete
@@ -269,6 +279,7 @@
       <p>Contact created successfully</p>
     </article>
   </section>
+    <script type="module" src="./contactsMain.js"></script>
 </body>
 
 </html>

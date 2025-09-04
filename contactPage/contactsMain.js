@@ -1,6 +1,6 @@
 import { LocalStorageService } from '../scripts/utils/localStorageHelper.js';
 import { handleContactEditSubmission, openEditDialog, emptyInput } from './contactEditor.js';
-import { getAllContactsFromDatabase, generateBigContactTemplate } from './contactExternalService.js';
+import { generateBigContactTemplate } from './contactExternalService.js';
 import { openContactAdditionWindow, closeAddWindow, closeEditWindow, showUserFeedback } from './contactModal.js';
 import { loadAllContactsFromFirebaseDatabase, refreshUI, createContact, deleteContactFromDatabase } from './contactDataService.js';
 import { getInitials } from '../scripts/utils/helpers.js';
@@ -11,7 +11,7 @@ import { highlightActiveNavigationLinks, setupOpenMenuListener } from '../script
 import { updateTask } from '../board/taskManager.js';
 import { fetchAllTasks } from '../scripts/auth/login.js';
 import { initializeBackButton, initializeFabMenu } from "../scripts/ui/fabContact.js";
-import { initAddContactValidation } from "./addContactValidation.js";
+import { initEmailField, initNameField } from "../scripts/auth/Validation.js";
 
 let contactList = [];
 let editingContact = null;
@@ -33,6 +33,12 @@ function setupEventListeners() {
   setupKeyboardListeners();
 }
 
+initEmailField('contactEmail', 'emailHint');
+initNameField('contactName', 'nameHint');
+
+initEmailField('editContactEmail', 'editEmailHint');
+initNameField('editContactName', 'editNameHint');
+
 /**
  * Sets up contact form event listeners (add/edit forms)
  */
@@ -43,7 +49,6 @@ function setupContactFormListeners() {
 
   if (addBtn) addBtn.addEventListener("click", openContactAdditionWindow);
   if (addForm) {
-    initAddContactValidation();
     addForm.addEventListener("submit", addNewContactToDatabase);
   }
   if (editForm) editForm.addEventListener("submit", handleContactEditSubmission);
