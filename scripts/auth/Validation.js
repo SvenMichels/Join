@@ -29,9 +29,10 @@ export function initEmailField(inputId, bubbleId) {
     setFieldValidity(inputId, !msg);
   });
 
-  input.addEventListener('focus', () =>
-    showValidateBubble(input, 'Use 6–64 chars incl. upper, lower, number, special.', bubbleId, 2000)
-  );
+  input.addEventListener('focus', (e) => {
+    const msg = getEmailMessage(e.target.value);
+    showValidateBubble(input, msg || 'Use 6–64 chars incl. upper, lower, number, special.', bubbleId, 2000);
+  });
 
   input.addEventListener('blur', () => hideValidateBubble(bubbleId));
 }
@@ -152,7 +153,6 @@ function attachSpaceAndLetterKeydownBlocker(input, bubbleId, allowInnerSpaces, a
       showValidateBubble(input, "Letters are not allowed", bubbleId, 3000);
     }
   });
-
 }
 
 function attachLeadingSpaceNormalizer(input, bubbleId) {
