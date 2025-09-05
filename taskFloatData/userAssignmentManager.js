@@ -8,7 +8,6 @@ import { loadContactsForTaskAssignment } from "../contactPage/contactService.js"
 import { getUserCheckboxHTML } from "./taskfloatHTML.js";
 import { createRemainingChip } from "../board/boardUtils.js";
 import { getInitials } from "../scripts/utils/helpers.js";
-import { setupOutsideClickToClose } from "../addTask/userAssignmentHandler.js";
 
 let allSystemUsersModal = [];
 const selectedUserNamesModal = new Set();
@@ -29,7 +28,7 @@ setupOutsideClickToClose(
 export async function loadAndRenderUsersModal(preselected = []) {
   await loadContactData();
 
-  clearSelectedUserNamesModal();
+  // clearSelectedUserNamesModal();
 
   const initial = Array.isArray(preselected) ? preselected : [];
   if (Array.isArray(window.pendingAssignedUsers) && window.pendingAssignedUsers.length) {
@@ -37,6 +36,7 @@ export async function loadAndRenderUsersModal(preselected = []) {
     window.pendingAssignedUsers = null;
   }
   initial.forEach(n => selectedUserNamesModal.add(n));
+  console.log(selectedUserNamesModal);
 
   await renderUserCheckboxesModal(allSystemUsersModal);
 }
@@ -64,6 +64,7 @@ export function clearSelectedUserNamesModal() {
     cb.closest(".user-checkbox-wrapper-modal")?.classList.remove("active");
   });
 }
+
 /**
  * Renders user checkboxes in the modal.
  * @param {Array<Object>} users - Array of user objects.
@@ -274,4 +275,28 @@ function handleSearchInput() {
     user.userFullName.toLowerCase().includes(term)
   );
   renderUserCheckboxesModal(matchedUsers);
+}
+
+function setupOutsideClickToClose(containerId, toggleElementSelector, arrowSelector, inputSelector) {
+  document.addEventListener("click", (event) => {
+    const container = document.getElementById(containerId);
+    const toggleElement = document.querySelector(toggleElementSelector);
+    const arrow = document.querySelector(arrowSelector);
+    const input = document.querySelector(inputSelector);
+    if (!container || !toggleElement) return;
+    if (
+      container.classList.contains("visible") &&
+      !container.contains(event.target) &&
+      !toggleElement.contains(event.target)
+    ) {
+      container.classList.remove("visible");
+      if (arrow) arrow.classList.remove("rotated");
+      if (input) {
+        input.value = "";
+        if ( typeof loadAndRenderUsersModal() === "function") {
+          loadAndRenderUsersModal();
+        }
+      }
+    }
+  });
 }

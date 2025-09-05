@@ -55,6 +55,7 @@ function cacheDom() {
   if (!$.modal) return;
 
   $.closeBtn = $.modal?.querySelector(".close-button-modal");
+  $.clearBtn = document.getElementById("clearBtn-modal");
   $.form = document.getElementById("taskForm-modal");
   $.date = document.getElementById("task-date-modal");
   $.subInput = document.getElementById("subtask-modal");
@@ -77,6 +78,7 @@ function attachEventListeners() {
   bindSubtaskAdd();
   bindSubtaskEnter();
   bindAssignToggle();
+  bindClearButton();
 }
 
 function bindCloseButton() {
@@ -97,6 +99,10 @@ function bindSubtaskEnter() {
 
 function bindAssignToggle() {
   $.assignBtn?.addEventListener("click", toggleUserListModal);
+}
+
+function bindClearButton() {
+  $.clearBtn?.addEventListener("click", clearSelectedUserNamesModal);
 }
 
 
@@ -271,6 +277,7 @@ function resetModalState() {
   if ($.form) {
     $.form.reset();
   }
+  clearSelectedUserNamesModal();
   selectPriorityModal("medium");
 }
 

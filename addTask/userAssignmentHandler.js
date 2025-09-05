@@ -21,6 +21,7 @@ setupOutsideClickToClose(
   "#searchUser",
    () => renderAllUsers()
 );
+
 /**
  * Returns the list of all loaded system users.
  *
@@ -258,15 +259,13 @@ export async function setupUserSearch() {
   });
 }
 
-export function setupOutsideClickToClose(containerId, toggleElementSelector, arrowSelector, inputSelector) {
+function setupOutsideClickToClose(containerId, toggleElementSelector, arrowSelector, inputSelector) {
   document.addEventListener("click", (event) => {
     const container = document.getElementById(containerId);
     const toggleElement = document.querySelector(toggleElementSelector);
     const arrow = document.querySelector(arrowSelector);
     const input = document.querySelector(inputSelector);
-
     if (!container || !toggleElement) return;
-
     if (
       container.classList.contains("visible") &&
       !container.contains(event.target) &&
