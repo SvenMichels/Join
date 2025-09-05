@@ -296,3 +296,11 @@ p {
 .hint-bubble.show {
   opacity: 1;
 }
+
+.validate-border-red:focus {
+  border: 2px solid #ff0000 !important;
+}
+
+.validate-border-blue:focus {
+  border: 2px solid #29abe2 !important;
+}

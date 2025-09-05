@@ -183,18 +183,23 @@ export function confirmInputForFormValidation(inputId, _bubbleId) {
   return isFieldValid(inputId);
 }
 
-export function showValidateBubble(_input, message, bubbleId, timeout = 3000) {
-  const el = document.getElementById(bubbleId);
-  if (!el) return;
-  el.textContent = message;
-  el.classList.add('show');
-  clearTimeout(el.hideTimer);
-  el.hideTimer = setTimeout(() => el.classList.remove('show'), timeout);
+export function showValidateBubble(inputId, message, bubbleId, timeout = 3000) {
+  const bubbleElement = document.getElementById(bubbleId);
+  if (!bubbleElement || !inputId) return;
+  bubbleElement.textContent = message;
+  const isValid = message === 'Looks good!';
+  inputId.classList.toggle('validate-border-blue', isValid);
+  inputId.classList.toggle('validate-border-red', !isValid);
+  bubbleElement.classList.add('show');
+  clearTimeout(bubbleElement.hideTimer);
+  bubbleElement.hideTimer = setTimeout(() => {
+    bubbleElement.classList.remove('show');
+  }, timeout);
 }
 
 export function hideValidateBubble(bubbleId) {
-  const el = document.getElementById(bubbleId);
-  if (el) el.classList.remove('show');
+  const bubbleElement = document.getElementById(bubbleId);
+  if (bubbleElement) bubbleElement.classList.remove('show');
 }
 
 function getEmailMessage(userInput) {

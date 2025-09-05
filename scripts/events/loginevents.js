@@ -127,14 +127,17 @@ function getLoginButton() {
  */
 function grabAllInputToCheck() {
   const credentials = collectLoginCredentials();
-
-  const loginEmailIsOk = validateInput(document.getElementById("loginEmail"), "emailHint");
-  console.log("Email valid:", loginEmailIsOk);
-  const loginPasswordIsOk = validateInput(document.getElementById("loginPassword"), "pwHint");
+  const loginEmailHint = document.getElementById("emailHint");
+  const loginPasswordHint = document.getElementById("pwHint");
+  let validateOkay = false;
+  if (loginEmailHint.innerText === "Looks good!" && loginPasswordHint.innerText === "Looks good!") {
+    return validateOkay = true;
+  }
+  if (credentials.email.length <= 0) return;
   const loginEmail = credentials.email;
   const loginPassword = credentials.password;
 
-  return loginEmail, loginPassword;
+  return loginEmail, loginPassword, validateOkay;
 }
 
 function bindLoginInputValidation() {
@@ -142,8 +145,8 @@ function bindLoginInputValidation() {
   if (!btn) return;
 
   const update = () => {
-    grabAllInputToCheck();
-    (loginEmail && loginPassword)
+    let validateOkay = grabAllInputToCheck();
+    (loginEmail && loginPassword && validateOkay)
       ? enableButton(btn)
       : disableButton(btn);
   };

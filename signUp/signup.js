@@ -48,7 +48,6 @@ function loadAllFormInits() {
     if (el) el.addEventListener('input', checkFormValidity);
   });
 
-  // Privacy-Checkbox überwachen
   if (privacyPolicyCheckbox) {
     privacyPolicyCheckbox.addEventListener('change', checkFormValidity);
   }
