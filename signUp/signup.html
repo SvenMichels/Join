@@ -14,30 +14,6 @@
     <link rel="stylesheet" href="../styles/nav-logo.css">
 
     <script type="module" src="../board/board.js"></script>
-    <style>
-        .hint-bubble {
-            position: relative;
-            display: flex;
-            background: #ffffff;
-            color: #ff0000;
-            padding: 6px 10px;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            white-space: nowrap;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
-            word-break: break-word;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-            z-index: 1000;
-            box-sizing: border-box;
-            height: 28px;
-        }
-
-        .hint-bubble.show {
-            opacity: 1;
-        }
-    </style>
 </head>
 
 <body>
@@ -78,7 +54,7 @@
                     <label class="visually-hidden" for="inputName">
                         Name
                     </label>
-                    <input autocomplete="name" id="inputName" name="name" placeholder="Name"/>
+                    <input class="name" autocomplete="name" id="inputName" name="name" placeholder="Name"/>
                     <img alt="Name icon" class="input-icon" src="../assets/icons/person.svg" />
 
                 </div>
@@ -89,7 +65,7 @@
                     <label class="visually-hidden" for="inputEmail">
                         Email
                     </label>
-                    <input autocomplete="email" id="inputEmail" name="email" placeholder="Email"/>
+                    <input class="email" autocomplete="email" id="inputEmail" name="email" placeholder="Email"/>
                     <img alt="Email icon" class="input-icon" src="../assets/icons/mail.svg" />
 
                 </div>
@@ -100,7 +76,7 @@
                     <label class="visually-hidden" for="inputPassword">
                         Passwort
                     </label>
-                    <input autocomplete="new-password" id="inputPassword" name="password" placeholder="Password"/>
+                    <input class="password" autocomplete="new-password" id="inputPassword" name="password" placeholder="Password"/>
                     <img alt="Toggle password visibility" class="input-icon toggle-password"
                         src="../assets/icons/visibility.svg" />
                 </div>
@@ -111,7 +87,7 @@
                     <label class="visually-hidden" for="inputConfirmPassword">
                         Passwort bestätigen
                     </label>
-                    <input autocomplete="new-password" id="inputConfirmPassword" name="confirmPassword"
+                    <input class="conf-password" autocomplete="new-password" id="inputConfirmPassword" name="confirmPassword"
                         placeholder="Confirm Password"/>
                     <img alt="Toggle password visibility" class="input-icon toggle-password"
                         src="../assets/icons/visibility.svg" />

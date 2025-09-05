@@ -304,3 +304,8 @@ p {
 .validate-border-blue:focus {
   border: 1px solid #29abe2 !important;
 }
+
+input.email:focus,
+input.password:focus {
+  border: 1px solid #29abe2;
+}
