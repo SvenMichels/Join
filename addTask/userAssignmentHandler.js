@@ -18,9 +18,9 @@ setupOutsideClickToClose(
   "assignedUserList",
   ".assigned-input-wrapper", 
   "#assignedBtnImg", 
-  "#searchUser"
+  "#searchUser",
+   () => renderAllUsers()
 );
-
 /**
  * Returns the list of all loaded system users.
  *
@@ -274,7 +274,12 @@ export function setupOutsideClickToClose(containerId, toggleElementSelector, arr
     ) {
       container.classList.remove("visible");
       if (arrow) arrow.classList.remove("rotated");
-      if (input) input.value = "";
+      if (input) {
+        input.value = "";
+        if ( typeof loadAndRenderUsers() === "function") {
+          loadAndRenderUsers();
+        }
+      }
     }
   });
 }

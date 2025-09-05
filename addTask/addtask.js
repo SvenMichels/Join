@@ -11,28 +11,10 @@ import { setupDropdown } from "../scripts/ui/dropdown.js";
 import { highlightActiveNavigationLinks } from "../scripts/utils/navUtils.js";
 import { getInitials } from "../scripts/utils/helpers.js";
 import { setupMobileDeviceListeners } from "../scripts/utils/mobileUtils.js";
-
-import {
-  collectTaskData,
-  validateTask,
-  resetFormState,
-  clearValidationAlerts
-} from "./formManager.js";
-
+import { collectTaskData, validateTask, resetFormState, clearValidationAlerts } from "./formManager.js";
 import { selectPriority, initPriorityEventListeners } from "./priorityHandler.js";
-
-import {
-  loadAndRenderUsers,
-  toggleUserAssignmentList,
-  setupUserSearch,
-  clearSelectedUsers
-} from "./userAssignmentHandler.js";
-
-import {
-  addNewSubtask,
-  addSubtaskOnEnterKey,
-  renderSubtasks
-} from "./subtaskHandler.js";
+import { loadAndRenderUsers, toggleUserAssignmentList, setupUserSearch, clearSelectedUsers } from "./userAssignmentHandler.js";
+import { addNewSubtask, addSubtaskOnEnterKey, renderSubtasks } from "./subtaskHandler.js";
 
 /** @type {Object<string, HTMLElement>} */
 const domCache = {};
@@ -127,8 +109,6 @@ function updateSubmitState({ categorySelect, taskDateInput, submitButton }) {
   submitButton.disabled = !(categoryOk && dateOk);
 }
 
-
-
 /**
  * Handles the task form submission event.
  * 
@@ -166,7 +146,7 @@ async function saveTask(taskData) {
  */
 function loadUserInitials() {
   const userData = LocalStorageService.getItem("currentUser");
-  const userName = userData.userFullName || "Guest";
+  const userName = userData && userData.userFullName ? userData.userFullName : "Guest";
 
   const menuButton = document.getElementById("openMenu");
   if (!menuButton) {

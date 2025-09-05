@@ -17,7 +17,8 @@ setupOutsideClickToClose(
   "assignedUserList-modal",
   ".assigned-input-wrapper", 
   "#assignedBtnImg-modal", 
-  "#searchUser-modal"
+  "#searchUser-modal",
+   () => renderAllUsers()
 );
 
 /**
