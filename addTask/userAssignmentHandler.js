@@ -14,6 +14,13 @@ import { clearSelectedUserNamesModal } from "../taskFloatData/userAssignmentMana
 let allSystemUsers = [];
 const selectedUserNames = new Set();
 
+setupOutsideClickToClose(
+  "assignedUserList",
+  ".assigned-input-wrapper", 
+  "#assignedBtnImg", 
+  "#searchUser"
+);
+
 /**
  * Returns the list of all loaded system users.
  *
@@ -248,5 +255,26 @@ export async function setupUserSearch() {
     );
 
     renderUserCheckboxes(matchedUsers, preselected);
+  });
+}
+
+export function setupOutsideClickToClose(containerId, toggleElementSelector, arrowSelector, inputSelector) {
+  document.addEventListener("click", (event) => {
+    const container = document.getElementById(containerId);
+    const toggleElement = document.querySelector(toggleElementSelector);
+    const arrow = document.querySelector(arrowSelector);
+    const input = document.querySelector(inputSelector);
+
+    if (!container || !toggleElement) return;
+
+    if (
+      container.classList.contains("visible") &&
+      !container.contains(event.target) &&
+      !toggleElement.contains(event.target)
+    ) {
+      container.classList.remove("visible");
+      if (arrow) arrow.classList.remove("rotated");
+      if (input) input.value = "";
+    }
   });
 }

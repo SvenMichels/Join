@@ -8,9 +8,17 @@ import { loadContactsForTaskAssignment } from "../contactPage/contactService.js"
 import { getUserCheckboxHTML } from "./taskfloatHTML.js";
 import { createRemainingChip } from "../board/boardUtils.js";
 import { getInitials } from "../scripts/utils/helpers.js";
+import { setupOutsideClickToClose } from "../addTask/userAssignmentHandler.js";
 
 let allSystemUsersModal = [];
 const selectedUserNamesModal = new Set();
+
+setupOutsideClickToClose(
+  "assignedUserList-modal",
+  ".assigned-input-wrapper", 
+  "#assignedBtnImg-modal", 
+  "#searchUser-modal"
+);
 
 /**
  * Loads and renders user checkboxes in the modal.
