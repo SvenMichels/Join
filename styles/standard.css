@@ -21,6 +21,10 @@ p {
   text-decoration: none;
 }
 
+.color-red {
+  color: red;
+}
+
 .header-wrapper {
   display: flex;
   align-items: center;

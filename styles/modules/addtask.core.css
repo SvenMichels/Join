@@ -8,15 +8,6 @@
   gap: 8px;
 }
 
-.task-title {
-  height: 96px;
-}
-
-.task-description {
-  height: 120px;
-  padding-bottom: 10px;
-}
-
 .task-date {
   height: 96px;
 }
@@ -29,13 +20,8 @@
   max-width: 440px;
 }
 
-.task-title-input,
 .task-dateInput {
   height: 48px;
-}
-
-.task-description-input {
-  height: 120px;
 }
 
 .prio-container {

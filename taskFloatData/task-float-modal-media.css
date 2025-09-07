@@ -139,7 +139,6 @@
     width: 100%;
     max-width: 440px;
     justify-content: space-between;
-    gap: 30px;
   }
 
   .required-container-modal {

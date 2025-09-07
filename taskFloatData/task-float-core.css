@@ -5,14 +5,11 @@
 .task-title {
   display: flex;
   flex-direction: column;
-  height: 96px;
   gap: 8px;
 }
 
 .task-title-input {
   height: 48px;
-  border-radius: 10px;
-  border: 1px solid #d1d1d1;
 }
 
 .task-description {
@@ -236,16 +233,10 @@ input:valid+.error-message {
   cursor: pointer;
 }
 
-input[type="text"]:focus {
-  border: 1px solid #29abe2;
-  outline: 1px solid #29abe2;
-}
-
 textarea:focus {
   padding-left: 12px;
   padding-top: 12px;
   border: 1px solid #29abe2;
-  outline: 1px solid #29abe2;
 }
 
 select {

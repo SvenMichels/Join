@@ -10,7 +10,6 @@ textarea {
 input:focus,
 textarea:focus {
   border: 1px solid #29abe2;
-  outline: 1px solid #29abe2;
 }
 
 input::placeholder {

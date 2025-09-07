@@ -34,7 +34,7 @@
       <form class="task-container-modal" id="taskForm-modal">
         <div class="task-wrapper-modal">
           <div class="task-title">
-            <label for="task-title-modal">Title <span>*</span></label>
+            <label for="task-title-modal">Title <span class="color-red">*</span></label>
             <input class="task-title-input" name="taskTitle" id="task-title-modal" placeholder="Enter a title"
               type="text" />
             <span id="titleAlert-modal" class="redSpan" style="display: none;">This field is
@@ -58,7 +58,7 @@
 
 
           <div class="task-date">
-            <label for="task-date-modal">Due Date <span>*</span></label>
+            <label for="task-date-modal">Due Date <span class="color-red">*</span></label>
             <input class="task-dateInput" name="taskDate" id="task-date-modal" placeholder="dd/mm/yyyy" type="date"
               min="2025-06-21" />
             <span id="dateAlert-modal" class="redSpan" style="display: none;">This field is
@@ -109,7 +109,7 @@
             </div>
 
             <div class="prio-category-container">
-              <label for="category-modal">Category <span>*</span></label>
+              <label for="category-modal">Category <span class="color-red">*</span></label>
               <select class="prio-category-input-modal" id="category-modal" name="category">
                 <option value="">Bitte auswählen</option>
                 <option value="Technical_Task">Technical Task</option>
@@ -133,7 +133,7 @@
         </div>
         <div class="required-container-modal">
           <div>
-            <span>*</span>
+            <span class="color-red">*</span>
             <span>This field is required</span>
           </div>
           <div class="create-container-modal">
