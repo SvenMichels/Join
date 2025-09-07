@@ -39,13 +39,23 @@
               type="text" />
             <span id="titleAlert-modal" class="redSpan" style="display: none;">This field is
               required</span>
+
+            <div style="position: relative; display: flex;">
+              <div id="titelModalHint" class="hint-bubble"></div>
+            </div>
           </div>
+
 
           <div class="task-description">
             <label for="task-description-modal">Description</label>
             <textarea class="task-description-input" name="taskDescription" id="task-description-modal"
               placeholder="Enter a Description"></textarea>
+            <div style="position: relative; display: flex;">
+              <div id="descriptionModalHint" class="hint-bubble"></div>
+            </div>
           </div>
+
+
 
           <div class="task-date">
             <label for="task-date-modal">Due Date <span>*</span></label>

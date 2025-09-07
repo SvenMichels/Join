@@ -15,6 +15,7 @@ import { collectTaskData, validateTask, resetFormState, clearValidationAlerts } 
 import { selectPriority, initPriorityEventListeners } from "./priorityHandler.js";
 import { loadAndRenderUsers, toggleUserAssignmentList, setupUserSearch, clearSelectedUsers } from "./userAssignmentHandler.js";
 import { addNewSubtask, addSubtaskOnEnterKey, renderSubtasks } from "./subtaskHandler.js";
+import { initInputField } from "../scripts/auth/Validation.js";
 
 /** @type {Object<string, HTMLElement>} */
 const domCache = {};
@@ -35,6 +36,8 @@ function initializeApplication() {
   setupDropdown("#openMenu", "#dropDownMenu");
   highlightActiveNavigationLinks();
   setupMobileDeviceListeners();
+  initInputField("task-title", 'titleHint', 'name');
+  initInputField("task-description", 'descriptionHint', 'name');
 }
 
 /**

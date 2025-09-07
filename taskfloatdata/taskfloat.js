@@ -27,6 +27,7 @@ import {
   updateSubtasks
 } from "./subtaskManager.js";
 import { setupOutsideClickHandler, removeNoScroll } from "../board/taskDetails.js";
+import { initInputField } from "../scripts/auth/Validation.js";
 
 const $ = {};
 
@@ -43,6 +44,8 @@ export function initTaskFloat() {
   loadUserInitialsModal();
   initUserSearchEventListener();
   initPriorityEventListeners();
+  initInputField("task-title-modal", 'titelModalHint', 'name');
+  initInputField("task-description-modal", 'descriptionModalHint', 'name');
 
   return initFormModal();
 }
@@ -79,6 +82,7 @@ function attachEventListeners() {
   bindSubtaskEnter();
   bindAssignToggle();
   bindClearButton();
+
 }
 
 function bindCloseButton() {

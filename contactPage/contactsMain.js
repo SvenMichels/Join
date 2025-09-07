@@ -11,7 +11,7 @@ import { highlightActiveNavigationLinks, setupOpenMenuListener } from '../script
 import { updateTask } from '../board/taskManager.js';
 import { fetchAllTasks } from '../scripts/auth/login.js';
 import { initializeBackButton, initializeFabMenu } from "../scripts/ui/fabContact.js";
-import { initEmailField, initNameField, initPhoneField } from "../scripts/auth/Validation.js";
+import { initInputField } from "../scripts/auth/Validation.js";
 
 let contactList = [];
 let editingContact = null;
@@ -33,13 +33,13 @@ function setupEventListeners() {
   setupKeyboardListeners();
 }
 
-initEmailField('contactEmail', 'emailHint');
-initNameField('contactName', 'nameHint');
-initPhoneField('contactPhone', 'phoneHint');
+initInputField('contactEmail', 'emailHint', 'email');
+initInputField('contactName', 'nameHint', 'name');
+initInputField('contactPhone', 'phoneHint', 'phone');
 
-initEmailField('editContactEmail', 'editEmailHint');
-initNameField('editContactName', 'editNameHint');
-initPhoneField('editContactPhone', 'editPhoneHint');
+initInputField('editContactEmail', 'editEmailHint', 'email');
+initInputField('editContactName', 'editNameHint', 'name');
+initInputField('editContactPhone', 'editPhoneHint', 'phone');
 
 /**
  * Sets up contact form event listeners (add/edit forms)
@@ -84,9 +84,9 @@ export function setupDeleteButton(contact) {
     const clone = btn.cloneNode(true);
     btn.replaceWith(clone);
     clone.addEventListener("click", async (event) => {
-        event.preventDefault();
-        await deleteContactFromDatabase(contactId, contactName);
-      },
+      event.preventDefault();
+      await deleteContactFromDatabase(contactId, contactName);
+    },
       { once: true }
     );
   });
