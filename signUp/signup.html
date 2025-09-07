@@ -17,21 +17,9 @@
 </head>
 
 <body>
-    <div id="rotateWarning" style="
-  display: none;
-  position: fixed;
-  inset: 0;
-  background-color: #000;
-  color: #fff;
-  z-index: 9999;
-  font-size: 1.5rem;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 2rem;
-">
-        Please rotate your device back to portrait mode.
-    </div>
+    <div id="rotateWarning" class="rotate-warning">
+    Please rotate your device back to portrait mode.
+  </div>
     <main class="main-container">
         <div class="nav-logo-container">
             <img alt="Join nav-logo" class="nav-logo" src="../assets/icons/join_logo_2.svg" />
@@ -58,7 +46,7 @@
                     <img alt="Name icon" class="input-icon" src="../assets/icons/person.svg" />
 
                 </div>
-                <div style="position: relative; display: flex;">
+                <div class="hint-container">
                     <div id="nameHint" class="hint-bubble"></div>
                 </div>
                 <div class="input-wrapper">
@@ -69,7 +57,7 @@
                     <img alt="Email icon" class="input-icon" src="../assets/icons/mail.svg" />
 
                 </div>
-                <div style="position: relative; display: flex;">
+                <div class="hint-container">
                     <div id="emailHint" class="hint-bubble"></div>
                 </div>
                 <div class="input-wrapper">
@@ -80,7 +68,7 @@
                     <img alt="Toggle password visibility" class="input-icon toggle-password" id="togglePasswordIcon"
                         src="../assets/icons/visibility.svg" />
                 </div>
-                <div style="position: relative; display: flex;">
+                <div class="hint-container">
                     <div id="pwHint" class="hint-bubble"></div>
                 </div>
                 <div class="input-wrapper">
@@ -92,7 +80,7 @@
                     <img alt="Toggle password visibility" id="toggleConfirmPasswordIcon" class="input-icon toggle-password"
                         src="../assets/icons/visibility.svg" />
                 </div>
-                <div style="position: relative; display: flex;">
+                <div class="hint-container">
                     <div id="pwCheckHint" class="hint-bubble"></div>
                 </div>
                 <div class="checkbox-wrapper">

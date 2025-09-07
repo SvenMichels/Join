@@ -180,39 +180,22 @@ input::placeholder {
   padding: 11px;
 }
 
-.pers {
+.pers,
+.mail-edit,
+.mail-add,
+.call {
   position: relative;
   display: inline-block;
   width: 100%;
 }
 
-.pers input {
+.pers input,
+.mail-edit input,
+.mail-add input,
+.call input {
   width: 100%;
-  padding-right: 2.5rem;
-  box-sizing: border-box;
-}
-
-.mail-edit {
-  position: relative;
-  display: inline-block;
-  width: 100%;
-}
-
-.mail-edit input {
-  width: 100%;
-  padding-right: 2.5rem;
-  box-sizing: border-box;
-}
-
-.mail-add {
-  position: relative;
-  display: inline-block;
-  width: 100%;
-}
-
-.mail-add input {
-  width: 100%;
-  padding-right: 2.5rem;
+  padding-left: 20px;
+  padding-right: 40px;
   box-sizing: border-box;
 }
 
@@ -223,18 +206,6 @@ input::placeholder {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-.call {
-  position: relative;
-  display: inline-block;
-  width: 100%;
-}
-
-.call input {
-  width: 100%;
-  padding-right: 2.5rem;
-  box-sizing: border-box;
 }
 
 .inputIconPers {

@@ -276,13 +276,12 @@ p {
 
 .hint-bubble {
   position: relative;
-  display: flex;
+  display: inline-block;
   background: #ffffff;
   color: #ff0000;
   padding: 6px 10px;
   border-radius: 6px;
   font-size: 0.85rem;
-  white-space: nowrap;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
   word-break: break-word;
   opacity: 0;
@@ -291,10 +290,18 @@ p {
   z-index: 1000;
   box-sizing: border-box;
   height: 28px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .hint-bubble.show {
   opacity: 1;
+}
+
+.hint-container {
+  display: flex;
+  position: relative;
 }
 
 .validate-border-red:focus {
@@ -310,14 +317,16 @@ input.password:focus {
   border: 1px solid #29abe2;
 }
 
-#togglePasswordIcon,
-#toggleConfirmPasswordIcon {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 24px;
-  height: 24px;
-  cursor: pointer;
-  opacity: 0.6;
+.rotate-warning {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background-color: #000;
+  color: #fff;
+  z-index: 9999;
+  font-size: 1.5rem;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
 }

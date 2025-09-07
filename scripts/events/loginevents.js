@@ -26,7 +26,7 @@ export async function loginListeners() {
   bindUserLoginButton();
   bindGuestLoginButton();
   bindPolicyLinks();
-  togglePassword('loginPassword', "togglePasswordIcon");
+  togglePassword('loginPassword', "togglePasswordIcon"); 
 }
 
 /**

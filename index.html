@@ -22,19 +22,7 @@
 </head>
 
 <body>
-  <div id="rotateWarning" style="
-        display: none;
-        position: fixed;
-        inset: 0;
-        background-color: #000;
-        color: #fff;
-        z-index: 9999;
-        font-size: 1.5rem;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        padding: 2rem;
-      ">
+  <div id="rotateWarning" class="rotate-warning">
     Please rotate your device back to portrait mode.
   </div>
   <div class="content-holder">
@@ -53,7 +41,7 @@
             <img alt="Mail Icon" class="mail-icon" src="./assets/icons/mail.svg" />
             <input class="email" id="loginEmail" placeholder="E-Mail" />
           </div>
-          <div style="position: relative; display: flex;">
+          <div class="hint-container">
             <div id="emailHint" class="hint-bubble"></div>
           </div>
 

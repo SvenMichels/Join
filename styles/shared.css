@@ -119,7 +119,6 @@
   border: 2px solid #ffffff;
   margin-left: -8px;
   position: relative;
-  z-index: 1;
 }
 
 .selected-contact-chip {
