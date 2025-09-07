@@ -79,7 +79,7 @@ input.password {
   border-radius: 10px;
   padding: 8px 10px;
   height: 48px;
-  width: 422px;
+  width: 100%;
   resize: none;
   outline: none;
   transition: border 0.2s ease, outline 0.2s ease;

@@ -133,11 +133,6 @@
   .bar {
     width: 100px;
   }
-
-  input.email,
-  input.password {
-    width: 100%;
-  }
 }
 
 @media (min-width: 576px) and (max-width: 768px) {
