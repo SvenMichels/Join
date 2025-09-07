@@ -19,38 +19,34 @@ initInputField('loginPassword', 'pwHint', 'password');
 export function initInputField(inputId, bubbleId, inputType) {
   const input = document.getElementById(inputId);
   if (!input) return;
-  const allowInnerSpaces = inputType === 'name' || inputType === 'phone';
+  const allowInnerSpaces = inputType === 'name';
+  const blockLetters = inputType === 'phone';
 
-  validateInput(input, bubbleId, { allowInnerSpaces });
+  validateInput(input, bubbleId, { allowInnerSpaces, blockLetters });
   setFieldValidity(inputId, false);
 
-  input.addEventListener('input', (e) => {
-    inputEventlistener(inputId, bubbleId, e, inputType);
-  });
-  input.addEventListener('focus', (e) => {
-    focusEventlistener(inputId, bubbleId, e, inputType);
-  });
+  input.addEventListener('input', (e) => inputEventlistener(inputId, bubbleId, e, inputType));
+  input.addEventListener('focus', (e) => focusEventlistener(inputId, bubbleId, e, inputType));
   input.addEventListener('blur', () => hideValidateBubble(bubbleId));
 }
 
 
 export function focusEventlistener(inputId, bubbleId, e, inputType) {
-  validateInput(e.target, bubbleId);
+  let msg = '';
+  if (inputType === 'email') msg = getEmailMessage(e.target.value);
+  if (inputType === 'password') msg = getPasswordMessage(e.target.value);
+  if (inputType === 'name') msg = getNameMessage(e.target.value);
+  if (inputType === 'phone') msg = getPhoneMessage(e.target.value);
+  if (msg === '') msg = 'Looks good!';
+  showValidateBubble(inputId, msg, bubbleId, 2000);
+}
+
+export function inputEventlistener(inputId, bubbleId, e, inputType) {
   let msg = '';
   if (inputType === 'email') { msg = getEmailMessage(e.target.value); }
   if (inputType === 'password') { msg = getPasswordMessage(e.target.value); }
   if (inputType === 'name') { msg = getNameMessage(e.target.value); }
   if (inputType === 'phone') { msg = getPhoneMessage(e.target.value); }
-  if (msg == '') msg = 'Looks good!';
-  showValidateBubble(inputId, msg || '', bubbleId, 2000);
-}
-
-export function inputEventlistener(inputId, bubbleId, e, inputType) {
-  let msg = '';
-  if (inputType === 'email')   { msg = getEmailMessage(e.target.value); }
-  if (inputType === 'password'){ msg = getPasswordMessage(e.target.value); }
-  if (inputType === 'name')    { msg = getNameMessage(e.target.value); }
-  if (inputType === 'phone')   { msg = getPhoneMessage(e.target.value); }
   showValidateBubble(inputId, msg, bubbleId);
   const isValid = msg === '' || /^Looks good!?$/i.test(msg);
   setFieldValidity(inputId, isValid);
@@ -58,24 +54,22 @@ export function inputEventlistener(inputId, bubbleId, e, inputType) {
 
 export function validateInput(input, bubbleId, options = {}) {
   if (!input) return;
-  const { allowInnerSpaces = false } = options;
+  if (input.dataset.validationAttached === "true") return;
 
-  if (input.dataset.spaceBlockerAttached === "true") return;
+  const { allowInnerSpaces = false, blockLetters = false } = options;
 
   attachSpaceKeydownBlocker(input, bubbleId, allowInnerSpaces);
+  if (allowInnerSpaces) attachLeadingSpaceNormalizer(input, bubbleId);
+  if (blockLetters) attachLetterBlocker(input, bubbleId);
 
-  if (allowInnerSpaces) {
-    attachLeadingSpaceNormalizer(input, bubbleId);
-  }
-
-  input.dataset.spaceBlockerAttached = "true";
+  input.dataset.validationAttached = "true";
 }
+
 
 function attachSpaceKeydownBlocker(input, bubbleId, allowInnerSpaces) {
   input.addEventListener("keydown", (e) => {
-    if (e.key !== " ") {
-      return;
-    }
+    if (e.key !== " ") return;
+
     if (!allowInnerSpaces) {
       e.preventDefault();
       showValidateBubble(input.id, "Spaces are not allowed", bubbleId, 3000);
@@ -85,6 +79,16 @@ function attachSpaceKeydownBlocker(input, bubbleId, allowInnerSpaces) {
       e.preventDefault();
       showValidateBubble(input.id, "Leading space is not allowed", bubbleId, 3000);
     }
+
+  });
+}
+
+function attachLetterBlocker(input, bubbleId) {
+  input.addEventListener("keydown", (e) => {
+    if (e.key.length === 1 && /\p{L}/u.test(e.key)) {
+      e.preventDefault();
+      showValidateBubble(input.id, "Letters are not allowed here!", bubbleId, 3000);
+    }
   });
 }
 
@@ -92,7 +96,7 @@ function attachLeadingSpaceNormalizer(input, bubbleId) {
   input.addEventListener("input", () => {
     if (input.value.startsWith(" ")) {
       input.value = input.value.replace(/^\s+/, "");
-      showValidateBubble(input, "Leading space is not allowed", bubbleId, 2000);
+      showValidateBubble(input.id, "Leading space is not allowed", bubbleId, 2000);
     }
   });
 }
