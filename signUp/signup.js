@@ -8,14 +8,12 @@
 import { bindPrivacyCheckbox, bindPolicyLinks, bindSignupForm } from "../scripts/events/loginevents.js";
 import { generateRandomColorClass } from "../scripts/utils/colors.js";
 import { getInitials } from "../scripts/utils/helpers.js";
-import { initEmailField, initPasswordField, initNameField, confirmInputForFormValidation, showValidateBubble, hideValidateBubble } from "../scripts/auth/Validation.js";
+import { initInputField, confirmInputForFormValidation, showValidateBubble } from "../scripts/auth/Validation.js";
 
 export const userPasswordInputField = document.getElementById("inputPassword");
 export const confirmPasswordInputField = document.getElementById("inputConfirmPassword");
 export const privacyPolicyCheckbox = document.getElementById("checkBox");
 export const signUpSubmitButton = document.getElementById("signUpBtn");
-export const passwordToggleIcon = document.querySelector("#inputPassword + .toggle-password");
-export const confirmToggleIcon = document.querySelector("#inputConfirmPassword + .toggle-password");
 
 /**
  * Initializes all signup event listeners and bindings.
@@ -25,6 +23,8 @@ export async function signupListeners() {
   if (!signupFormElement) return;
 
   bindSignupForm(signupFormElement);
+  togglePassword('inputPassword', "togglePasswordIcon");
+  togglePassword('inputConfirmPassword', "toggleConfirmPasswordIcon");
   bindPrivacyCheckbox();
   bindPolicyLinks();
   checkFormValidity();
@@ -38,10 +38,10 @@ if (window.location.pathname.endsWith("signup.html")) {
 }
 
 function loadAllFormInits() {
-  initNameField('inputName', 'nameHint');
-  initEmailField('inputEmail', 'emailHint');
-  initPasswordField('inputPassword', 'pwHint');
-  initPasswordField('inputConfirmPassword', 'pwCheckHint');
+  initInputField('inputName', 'nameHint', 'name');
+  initInputField('inputEmail', 'emailHint', 'email');
+  initInputField('inputPassword', 'pwHint', 'password');
+  initInputField('inputConfirmPassword', 'pwCheckHint', 'password');
 
   ['inputName', 'inputEmail', 'inputPassword', 'inputConfirmPassword'].forEach(id => {
     const el = document.getElementById(id);
@@ -67,11 +67,14 @@ export function setupPrivacyCheckboxValidation() {
  * @param {HTMLInputElement} field - The password input field
  * @param {HTMLElement} icon - The toggle icon element
  */
-export function togglePassword(field, icon) {
-  const isHidden = field.type === "password";
-  field.type = isHidden ? "text" : "password";
-  icon.src = isHidden ? "../assets/icons/visibility_off.svg" : "../assets/icons/visibility.svg";
-}
+function togglePassword(elementId, iconId) {
+  const pw = document.getElementById(elementId);
+  pw.setAttribute('type', 'password');
+  document.getElementById(iconId).addEventListener('click', () => {
+    pw.type = pw.type === 'password' ? 'text' : 'password';
+    pw.nextElementSibling.src = pw.type === 'password' ? '../assets/icons/visibility.svg' : '../assets/icons/visibility_off.svg';
+  })
+};
 
 /**
  * Handles signup form submission.
@@ -152,18 +155,22 @@ export async function submitUser() {
  * Checks overall form validity and enables/disables submit button.
  */
 function getFormValidation() {
-  const isNameValid = confirmInputForFormValidation('inputName', 'nameHint');
-  const isEmailValid = confirmInputForFormValidation('inputEmail', 'emailHint');
-  const isPasswordValid = confirmInputForFormValidation('inputPassword', 'pwHint');
-  const isPasswordConfirmValid = confirmInputForFormValidation('inputConfirmPassword', 'pwCheckHint');
-  const isPrivacyChecked = privacyPolicyCheckbox?.checked || false;
+  const {
+    isNameValid,
+    isEmailValid,
+    isPasswordValid,
+    isPasswordConfirmValid,
+    isPrivacyChecked,
+    passwordValue,
+    passwordConfirmValue
+  } = getFormValidationInputs();
 
-  const passwordValue = document.getElementById('inputPassword')?.value;
-  const passwordConfirmValue = document.getElementById('inputConfirmPassword')?.value;
-  let doPasswordsMatch = false;
-  let shownPasswordMatch = true;
+  const doPasswordsMatch = checkPasswordForMatch(
+    'pwCheckHint',
+    passwordValue,
+    passwordConfirmValue
+  );
 
-  checkPasswordForMatch(shownPasswordMatch, passwordValue, passwordConfirmValue, isPasswordValid);
   return {
     isNameValid,
     isEmailValid,
@@ -173,6 +180,39 @@ function getFormValidation() {
     doPasswordsMatch
   };
 }
+
+
+function getFormValidationInputs() {
+  const isNameValid = confirmInputForFormValidation('inputName', 'nameHint');
+  const isEmailValid = confirmInputForFormValidation('inputEmail', 'emailHint');
+  const isPasswordValid = confirmInputForFormValidation('inputPassword', 'pwHint');
+  const isPasswordConfirmValid = confirmInputForFormValidation('inputConfirmPassword', 'pwCheckHint');
+  const isPrivacyChecked = privacyPolicyCheckbox?.checked || false;
+
+  const passwordValue = document.getElementById('inputPassword')?.value ?? '';
+  const passwordConfirmValue = document.getElementById('inputConfirmPassword')?.value ?? '';
+
+  console.table({
+    isNameValid,
+    isEmailValid,
+    isPasswordValid,
+    isPasswordConfirmValid,
+    isPrivacyChecked,
+    passwordValue,
+    passwordConfirmValue
+  });
+
+  return {
+    isNameValid,
+    isEmailValid,
+    isPasswordValid,
+    isPasswordConfirmValid,
+    isPrivacyChecked,
+    passwordValue,
+    passwordConfirmValue
+  };
+}
+
 
 function updateSubmitButton(isFormValid) {
   if (!signUpSubmitButton) return;
@@ -192,20 +232,27 @@ export function checkFormValidity() {
     state.doPasswordsMatch &&
     state.isPrivacyChecked;
 
+  console.log("logstates:", state.isNameValid, state.isEmailValid, state.isPasswordValid, state.isPasswordConfirmValid, state.doPasswordsMatch, state.isPrivacyChecked);
+
+
   updateSubmitButton(isFormValid);
   return isFormValid;
 }
 
-function checkPasswordForMatch(shownPasswordMatch, passwordValue, passwordConfirmValue, isPasswordValid) {
-  const passwordOk = passwordValue.length >= 6 && passwordConfirmValue.length >= 6;
-  const doPasswordsMatch = passwordValue === passwordConfirmValue;
+function checkPasswordForMatch(bubbleId, passwordValue, passwordConfirmValue) {
+  const passwordOk = (passwordValue?.length ?? 0) >= 6 && (passwordConfirmValue?.length ?? 0) >= 6;
+  const passwordMatch = passwordOk && passwordValue === passwordConfirmValue;
 
-  if (passwordOk && doPasswordsMatch && !shownPasswordMatch) {
-    showValidateBubble("", "Password Matches", "pwCheckHint", 3000);
-    shownPasswordMatch = true;
-  } else if (passwordOk && isPasswordValid && !doPasswordsMatch) {
-    showValidateBubble("", "Looks Good, but Passwords do not match", "pwCheckHint", 3000);
-    shownPasswordMatch = false;
+  if (passwordOk) {
+    // Vorher: showValidateBubble(bubbleId, message, "pwCheckHint"...)
+    // Korrekt: inputId zuerst (hier das Confirm-Feld), bubbleId = "pwCheckHint"
+    showValidateBubble(
+      'inputConfirmPassword',
+      passwordMatch ? "Password Matches" : "Looks Good, but Passwords do not match",
+      "pwCheckHint",
+      3000
+    );
   }
+  return passwordMatch;
 }
 

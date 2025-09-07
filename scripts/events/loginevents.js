@@ -2,12 +2,13 @@ import { loginUser } from "../auth/login.js";
 import { collectUserInput, checkFormValidity, submitUser } from "../../signup/signup.js";
 import { requestData } from "../firebase.js";
 
-import { validateInput, initEmailField, initPasswordField } from "../auth/Validation.js";
+import { initInputField } from "../auth/Validation.js";
 
 
 
-initEmailField("loginEmail", "emailHint");
-initPasswordField("loginPassword", "pwHint");
+initInputField("loginEmail", "emailHint", "email");
+initInputField("loginPassword", "pwHint", "password");
+togglePassword('loginPassword', "togglePasswordIcon");
 
 /**
  * Initializes login event listeners.
@@ -36,6 +37,15 @@ function bindUserLoginButton() {
   if (!loginButton) return;
   loginButton.addEventListener("click", handleUserLogin);
 }
+
+export function togglePassword(elementId, iconId) {
+  const pw = document.getElementById(elementId);
+  pw.setAttribute('type', 'password');
+  document.getElementById(iconId).addEventListener('click', () => {
+    pw.type = pw.type === 'password' ? 'text' : 'password';
+    pw.nextElementSibling.src = pw.type === 'password' ? './assets/icons/lock.svg' : '../../assets/icons/visibility_off.svg';
+  })
+};
 
 /**
  * Binds the guest login button click event.

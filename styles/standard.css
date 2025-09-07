@@ -309,3 +309,15 @@ input.email:focus,
 input.password:focus {
   border: 1px solid #29abe2;
 }
+
+#togglePasswordIcon,
+#toggleConfirmPasswordIcon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  opacity: 0.6;
+}

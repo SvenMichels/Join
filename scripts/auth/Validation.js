@@ -12,102 +12,57 @@ const allowedTlds = [
 
 const fieldValidityState = Object.create(null);
 
-initEmailField('loginEmail', 'emailHint');
-initPasswordField('loginPassword', 'pwHint');
+initInputField('loginEmail', 'emailHint', 'email');
+initInputField('loginPassword', 'pwHint', 'password');
 
 
-export function initEmailField(inputId, bubbleId) {
+export function initInputField(inputId, bubbleId, inputType) {
   const input = document.getElementById(inputId);
   if (!input) return;
-  validateInput(input, bubbleId);
+  const allowInnerSpaces = inputType === 'name' || inputType === 'phone';
 
+  validateInput(input, bubbleId, { allowInnerSpaces });
   setFieldValidity(inputId, false);
 
   input.addEventListener('input', (e) => {
-    const msg = getEmailMessage(e.target.value);
-    showValidateBubble(input, msg || 'Looks good!', bubbleId);
-    setFieldValidity(inputId, !msg);
+    inputEventlistener(inputId, bubbleId, e, inputType);
   });
-
   input.addEventListener('focus', (e) => {
-    const msg = getEmailMessage(e.target.value);
-    showValidateBubble(input, msg || 'Use 6–64 chars incl. upper, lower, number, special.', bubbleId, 2000);
+    focusEventlistener(inputId, bubbleId, e, inputType);
   });
-
   input.addEventListener('blur', () => hideValidateBubble(bubbleId));
 }
 
-export function initPasswordField(inputId, bubbleId) {
-  const input = document.getElementById(inputId);
-  if (!input) return;
-  validateInput(input, bubbleId);
 
-  setFieldValidity(inputId, false);
-
-  input.addEventListener('input', (e) => {
-    const msg = getPasswordMessage(e.target.value);
-    showValidateBubble(input, msg || 'Looks good!', bubbleId);
-    setFieldValidity(inputId, !msg);
-  });
-
-  input.addEventListener('focus', () =>
-    showValidateBubble(input, 'Use 6–28 chars incl. upper, lower, number, special.', bubbleId, 2000)
-  );
-
-  input.addEventListener('blur', () => hideValidateBubble(bubbleId));
+export function focusEventlistener(inputId, bubbleId, e, inputType) {
+  validateInput(e.target, bubbleId);
+  let msg = '';
+  if (inputType === 'email') { msg = getEmailMessage(e.target.value); }
+  if (inputType === 'password') { msg = getPasswordMessage(e.target.value); }
+  if (inputType === 'name') { msg = getNameMessage(e.target.value); }
+  if (inputType === 'phone') { msg = getPhoneMessage(e.target.value); }
+  if (msg == '') msg = 'Looks good!';
+  showValidateBubble(inputId, msg || '', bubbleId, 2000);
 }
 
-export function initNameField(inputId, bubbleId) {
-  const input = document.getElementById(inputId);
-  if (!input) return;
-  validateInput(input, bubbleId, { allowInnerSpaces: true });
-
-  setFieldValidity(inputId, false);
-
-  input.addEventListener('input', (e) => {
-    const msg = getNameMessage(e.target.value);
-    showValidateBubble(input, msg || 'Looks good!', bubbleId);
-    setFieldValidity(inputId, !msg);
-  });
-
-  input.addEventListener('focus', () =>
-    showValidateBubble(input, 'Use 6–28 chars incl. upper, lower, number, special.', bubbleId, 2000)
-  );
-
-  input.addEventListener('blur', () => hideValidateBubble(bubbleId));
+export function inputEventlistener(inputId, bubbleId, e, inputType) {
+  let msg = '';
+  if (inputType === 'email')   { msg = getEmailMessage(e.target.value); }
+  if (inputType === 'password'){ msg = getPasswordMessage(e.target.value); }
+  if (inputType === 'name')    { msg = getNameMessage(e.target.value); }
+  if (inputType === 'phone')   { msg = getPhoneMessage(e.target.value); }
+  showValidateBubble(inputId, msg, bubbleId);
+  const isValid = msg === '' || /^Looks good!?$/i.test(msg);
+  setFieldValidity(inputId, isValid);
 }
 
-export function initPhoneField(inputId, bubbleId) {
-  const input = document.getElementById(inputId);
-  if (!input) return;
-  validateInput(input, bubbleId);
-
-  setFieldValidity(inputId, false);
-
-  input.addEventListener('input', (e) => {
-    const msg = getPhoneMessage(e.target.value);
-    showValidateBubble(input, msg || 'Looks good!', bubbleId);
-    setFieldValidity(inputId, !msg);
-  });
-
-  input.addEventListener('focus', () =>
-    showValidateBubble(input, 'valid Options: +49 , 0176 12345 , +49 176 12 ', bubbleId, 2000)
-  );
-
-  input.addEventListener('blur', () => hideValidateBubble(bubbleId));
-}
-
-export function validateInput(input, bubbleId, options = {}, numberOptions = {}) {
+export function validateInput(input, bubbleId, options = {}) {
   if (!input) return;
   const { allowInnerSpaces = false } = options;
-  const { allowNumbers = false } = numberOptions;
 
   if (input.dataset.spaceBlockerAttached === "true") return;
 
   attachSpaceKeydownBlocker(input, bubbleId, allowInnerSpaces);
-  if (bubbleId.includes("phone")) {
-    attachSpaceAndLetterKeydownBlocker(input, bubbleId, allowInnerSpaces, allowNumbers);
-  }
 
   if (allowInnerSpaces) {
     attachLeadingSpaceNormalizer(input, bubbleId);
@@ -118,39 +73,17 @@ export function validateInput(input, bubbleId, options = {}, numberOptions = {})
 
 function attachSpaceKeydownBlocker(input, bubbleId, allowInnerSpaces) {
   input.addEventListener("keydown", (e) => {
-    if (e.key !== " ") return;
-
-    if (!allowInnerSpaces) {
-      e.preventDefault();
-      showValidateBubble(input, "Spaces are not allowed", bubbleId, 3000);
+    if (e.key !== " ") {
       return;
     }
-
-    if (isLeadingSpacePosition(input)) {
-      e.preventDefault();
-      showValidateBubble(input, "Leading space is not allowed", bubbleId, 3000);
-    }
-  });
-}
-
-function attachSpaceAndLetterKeydownBlocker(input, bubbleId, allowInnerSpaces, allowNumbers) {
-  input.addEventListener("keydown", (e) => {
-    if (e.key !== " ") return;
-
     if (!allowInnerSpaces) {
       e.preventDefault();
-      showValidateBubble(input, "Spaces are not allowed", bubbleId, 3000);
+      showValidateBubble(input.id, "Spaces are not allowed", bubbleId, 3000);
       return;
     }
-
     if (isLeadingSpacePosition(input)) {
       e.preventDefault();
-      showValidateBubble(input, "Leading space is not allowed", bubbleId, 3000);
-    }
-
-    if (!allowNumbers) {
-      e.preventDefault();
-      showValidateBubble(input, "Letters are not allowed", bubbleId, 3000);
+      showValidateBubble(input.id, "Leading space is not allowed", bubbleId, 3000);
     }
   });
 }
@@ -185,17 +118,17 @@ export function confirmInputForFormValidation(inputId, _bubbleId) {
 
 export function showValidateBubble(inputId, message, bubbleId, timeout = 3000) {
   const bubbleElement = document.getElementById(bubbleId);
-  if (!bubbleElement || !inputId) return;
+  const inputIdElement = document.getElementById(inputId);
+  if (!bubbleElement || !inputIdElement) return;
   bubbleElement.textContent = message;
   const isValid = message === 'Looks good!';
-  inputId.classList.toggle('validate-border-blue', isValid);
-  inputId.classList.toggle('validate-border-red', !isValid);
+  inputIdElement.classList.toggle('validate-border-blue', isValid);
+  inputIdElement.classList.toggle('validate-border-red', !isValid);
   bubbleElement.classList.add('show');
   clearTimeout(bubbleElement.hideTimer);
-  bubbleElement.hideTimer = setTimeout(() => {
-    bubbleElement.classList.remove('show');
-  }, timeout);
+  bubbleElement.hideTimer = setTimeout(() => bubbleElement.classList.remove('show'), timeout);
 }
+
 
 export function hideValidateBubble(bubbleId) {
   const bubbleElement = document.getElementById(bubbleId);
@@ -213,6 +146,7 @@ function getEmailMessage(userInput) {
   if (!/^[A-Za-z0-9.-]+$/.test(domainPart) || /\.{2,}/.test(domainPart) || domainPart.startsWith('-') || domainPart.endsWith('-') || domainPart.startsWith('.') || domainPart.endsWith('.')) message += 'Invalid domain. ';
   const tld = domainPart.split('.').pop().toLowerCase();
   if (!allowedTlds.includes(tld)) message += `TLD not allowed. `;
+  if (localPart && domainPart && !message) message = 'Looks good! ';
   return message.trim();
 }
 
@@ -223,6 +157,7 @@ function getPasswordMessage(userInput) {
   if (!/[a-z]/.test(userInput)) message += 'Add a lowercase. ';
   if (!/\d/.test(userInput)) message += 'Add a number. ';
   if (!/[^A-Za-z0-9]/.test(userInput)) message += 'Add a special char. ';
+  if (!message) message = 'Looks good! ';
   return message.trim();
 }
 
@@ -230,11 +165,12 @@ function getNameMessage(userInput) {
   const namePattern = /^(?! )(?:[A-Za-zÀ-ÖØ-öø-ÿĀ-žȘșȚțßẞ'´`-]+(?: [A-Za-zÀ-ÖØ-öø-ÿĀ-žȘșȚțßẞ'´`-]+)*)$/;
   let message = '';
   if (userInput.length < 6 || userInput.length > 32) {
-    message += 'Use 6–32 characters. ';
+    message = 'Use 6–32 characters. ';
   }
   if (!namePattern.test(userInput)) {
     message += 'Only letters, accents, hyphen, apostrophes, single spaces between parts. ';
   }
+  if (!message) message = 'Looks good! ';
   return message.trim();
 }
 
@@ -247,5 +183,6 @@ function getPhoneMessage(userInput) {
   if (!phonePattern.test(userInput)) {
     message += 'valid Options: +49 , 0176 12345 , +49 176 12 ';
   }
+  if (!message) message = 'Looks good! ';
   return message.trim();
 }

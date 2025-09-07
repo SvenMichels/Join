@@ -2,7 +2,7 @@ import { requestData } from "../firebase.js";
 import { fetchUsersFromDatabase } from "../firebase.js";
 import { countByStatus } from "../../startpage/taskStatisticsManager.js";
 import { loginFailFeedback } from "../events/loginevents.js"
-import { initEmailField, initPasswordField, initNameField, confirmInputForFormValidation, showValidateBubble, hideValidateBubble } from "../auth/Validation.js";
+import { initInputField } from "../auth/Validation.js";
 
 
 const loginFormElement = document.getElementById("loginForm");
