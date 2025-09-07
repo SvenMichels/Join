@@ -8,7 +8,6 @@ import { initInputField } from "../auth/Validation.js";
 
 initInputField("loginEmail", "emailHint", "email");
 initInputField("loginPassword", "pwHint", "password");
-togglePassword('loginPassword', "togglePasswordIcon");
 
 /**
  * Initializes login event listeners.
@@ -27,6 +26,7 @@ export async function loginListeners() {
   bindUserLoginButton();
   bindGuestLoginButton();
   bindPolicyLinks();
+  togglePassword('loginPassword', "togglePasswordIcon");
 }
 
 /**
@@ -40,12 +40,16 @@ function bindUserLoginButton() {
 
 export function togglePassword(elementId, iconId) {
   const pw = document.getElementById(elementId);
+  const icon = document.getElementById(iconId);
+
   pw.setAttribute('type', 'password');
-  document.getElementById(iconId).addEventListener('click', () => {
-    pw.type = pw.type === 'password' ? 'text' : 'password';
-    pw.nextElementSibling.src = pw.type === 'password' ? './assets/icons/lock.svg' : '../../assets/icons/visibility_off.svg';
-  })
-};
+
+  icon.addEventListener('click', () => {
+    const isHidden = pw.type === 'password';
+    pw.type = isHidden ? 'text' : 'password';
+    icon.src = isHidden ? '../../assets/icons/visibility_off.svg' : './assets/icons/lock.svg';
+  });
+}
 
 /**
  * Binds the guest login button click event.
@@ -320,3 +324,15 @@ export function loginFailFeedback() {
       }, { once: true });
   });
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  const emailInput = document.getElementById("loginEmail");
+  if (emailInput) {
+    emailInput.setAttribute("autocomplete", "username");
+  }
+
+  const pwInput = document.getElementById("loginPassword");
+  if (pwInput) {
+    pwInput.setAttribute("autocomplete", "current-password");
+  }
+});
