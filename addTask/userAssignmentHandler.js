@@ -210,8 +210,6 @@ export function clearSelectedUsers() {
     selectedUserContainer.innerHTML = "";
     clearBothSelectedUserNames();
   }
-
-
   const checkboxes = document.querySelectorAll('.user-checkbox');
   checkboxes.forEach(cb => {
     cb.checked = false;
@@ -239,22 +237,17 @@ export async function setupUserSearch() {
   const searchBar = document.getElementById("searchUser");
   const listEl = document.getElementById("assignedUserList");
   if (!searchBar || !listEl) return;
-
   searchBar.addEventListener("input", () => {
     const term = searchBar.value.trim().toLowerCase();
     const preselected = Array.from(selectedUserNames);
-
     if (term.length < 3) {
       renderUserCheckboxes(allSystemUsers, preselected);
       return;
     }
-
     listEl.classList.add("visible");
-
     const matchedUsers = allSystemUsers.filter(u =>
       u.userFullName.toLowerCase().includes(term)
     );
-
     renderUserCheckboxes(matchedUsers, preselected);
   });
 }

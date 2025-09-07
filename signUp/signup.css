@@ -32,9 +32,8 @@ main {
   border-radius: 30px;
   background-color: white;
   padding: clamp(1.5rem, 10vw, 5rem);
-  padding-top: 48px;
-  padding-bottom: 48px;
-  gap: 32px;
+  padding-top: 32px;
+  padding-bottom: 32px;
   box-sizing: border-box;
 }
 
@@ -117,12 +116,12 @@ form {
 input.name,
 input.email,
 input.password,
-input.conf-password{
+input.conf-password {
   border: 1px solid #d1d1d1;
   border-radius: 10px;
   padding: 4px 10px;
   height: 48px;
-  width: 422px;
+  width: 100%;
   resize: none;
   outline: none;
   transition: border 0.2s ease, outline 0.2s ease;
@@ -276,6 +275,31 @@ input:focus::placeholder {
 @media (max-width: 575px) {
   .form-title h1 {
     font-size: clamp(2.8rem, 10.5vw, 4rem);
+  }
+
+  .nav-logo-container {
+    margin: 1rem;
+    padding-left: 1rem;
+    img {
+      width: 64px;
+      height: 78px;
+    }
+  }
+
+  .form-container {
+    padding-top: 24px;
+    padding-bottom: 24px;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 991px) {
+    .nav-logo-container {
+    margin: 1rem;
+    padding-left: 1rem;
+    img {
+      width: 64px;
+      height: 78px;
+    }
   }
 }
 
