@@ -4,7 +4,7 @@
 
 import { getInitials } from '../scripts/utils/helpers.js';
 import { updateContact } from './contactDataService.js';
-import { setupDeleteButton } from '../contactpage/contactsMain.js';
+import { setupDeleteButton } from '../contactPage/contactsMain.js';
 
 let editingContact = null;
 
@@ -14,9 +14,9 @@ let editingContact = null;
  * @param {Object} contact - Contact object to populate the form with
  */
 export function fillEditForm(contact) {
-    document.getElementById("editContactName").value = contact.userFullName || "";
-    document.getElementById("editContactEmail").value = contact.userEmailAddress || "";
-    document.getElementById("editContactPhone").value = contact.userPhoneNumber || "";
+  document.getElementById("editContactName").value = contact.userFullName || "";
+  document.getElementById("editContactEmail").value = contact.userEmailAddress || "";
+  document.getElementById("editContactPhone").value = contact.userPhoneNumber || "";
 }
 
 
@@ -46,7 +46,6 @@ export function handleContactEditSubmission(e) {
 
   updated.userInitials = getInitials(updated.userFullName);
   updated.firstCharacter = updated.userFullName.charAt(0).toUpperCase();
-  updated.userColor = contact.userColor;
 
   updateContact(contact, updated);
 }
@@ -68,7 +67,7 @@ export function emptyInput() {
  * @param {Object} contact - Contact to be edited
  */
 export function openEditDialog(contact) {
-  editingContact = contact;  
+  editingContact = contact;
   const editWindow = document.getElementById("editWindow");
   if (editWindow) {
     editWindow.classList.remove("dp-none");
