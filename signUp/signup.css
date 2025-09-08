@@ -120,7 +120,7 @@ input.password,
 input.conf-password {
   border-radius: 10px;
   padding: 4px 10px;
-  padding-right: 40px;
+  padding-right: 0px;
   height: 48px;
   width: 100%;
   resize: none;
@@ -199,28 +199,28 @@ button[type="submit"]:hover {
   border-radius: 2px;
 }
 
-footer {
+.footer {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  width: 246px;
-  height: 35px;
-  flex-direction: row;
-  padding-top: 20px;
-  padding-bottom: 20px;
+  justify-content: center;
+  gap: 64px;
+  max-width: 1440px;
+  margin-bottom: 20px;
 }
 
-footer a {
-  color: #a8a8a8;
+.footer-text {
   font-weight: 400;
   font-size: 16px;
   height: 19px;
+  color: #a8a8a8;
   text-decoration: none;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
 }
 
-footer a:hover {
+.footer-text:hover {
   color: #29abe2;
-  font-weight: 700;
+  opacity: 1;
 }
 
 .visually-hidden {
@@ -305,10 +305,14 @@ input:focus::placeholder {
     padding-top: 24px;
     padding-bottom: 24px;
   }
+
+  .footer {
+    gap: 16px;
+  }
 }
 
 @media (min-width: 576px) and (max-width: 991px) {
-    .nav-logo-container {
+  .nav-logo-container {
     margin: 1rem;
     padding-left: 1rem;
     img {
