@@ -15,7 +15,6 @@ const fieldValidityState = Object.create(null);
 initInputField('loginEmail', 'emailHint', 'email');
 initInputField('loginPassword', 'pwHint', 'password');
 
-
 export function initInputField(inputId, bubbleId, inputType) {
   const input = document.getElementById(inputId);
   if (!input) return;
@@ -30,25 +29,60 @@ export function initInputField(inputId, bubbleId, inputType) {
   input.addEventListener('blur', () => hideValidateBubble(bubbleId));
 }
 
-
 export function focusEventlistener(inputId, bubbleId, e, inputType) {
+  if (inputId === 'inputConfirmPassword') {
+    const { passwordInput, currentValue, matchedValues } = getListenerConfig(e);
+    if (matchedValues && passwordInput !== currentValue) {
+      showValidateBubble(inputId, 'Looks good!, but Passwords do not match', bubbleId, 2000);
+      setFieldValidity(inputId, false);
+      return;
+    }
+    if (matchedValues && passwordInput === currentValue) {
+      showValidateBubble(inputId, 'Password Matches', bubbleId, 2000);
+      setFieldValidity(inputId, true);
+      return;
+    }
+  }
+  const msg = getMessage(inputType, e);
+  showValidateBubble(inputId, msg, bubbleId, 2000);
+}
+
+function getMessage(inputType, e) {
   let msg = '';
   if (inputType === 'email') msg = getEmailMessage(e.target.value);
   if (inputType === 'password') msg = getPasswordMessage(e.target.value);
   if (inputType === 'name') msg = getNameMessage(e.target.value);
   if (inputType === 'phone') msg = getPhoneMessage(e.target.value);
   if (msg === '') msg = 'Looks good!';
-  showValidateBubble(inputId, msg, bubbleId, 2000);
+  return msg;
+}
+
+function getListenerConfig(e) {
+  const passwordInput = document.getElementById('inputPassword')?.value || '';
+  const currentValue = e.target.value;
+  const matchedValues = passwordInput.length >= 6 && currentValue.length >= 6;
+  return { passwordInput, currentValue, matchedValues };
 }
 
 export function inputEventlistener(inputId, bubbleId, e, inputType) {
-  let msg = '';
-  if (inputType === 'email') { msg = getEmailMessage(e.target.value); }
-  if (inputType === 'password') { msg = getPasswordMessage(e.target.value); }
-  if (inputType === 'name') { msg = getNameMessage(e.target.value); }
-  if (inputType === 'phone') { msg = getPhoneMessage(e.target.value); }
+  if (inputId === 'inputConfirmPassword') {
+    const { passwordInput, currentValue, matchedValues } = getListenerConfig(e);
+    if (matchedValues && passwordInput !== currentValue) {
+      showValidateBubble(inputId, 'Passwords do not match', bubbleId);
+      setFieldValidity(inputId, false);
+      return;
+    }
+    if (matchedValues && passwordInput === currentValue) {
+      showValidateBubble(inputId, 'Password Matches', bubbleId);
+      setFieldValidity(inputId, true);
+      return;
+    }
+  }
+
+  const msg = getMessage(inputType, e);
+
   showValidateBubble(inputId, msg, bubbleId);
-  const isValid = msg === '' || /^Looks good!?$/i.test(msg);
+  const isValid = msg === '' || /^Looks good!?$/i.test(msg) || msg === 'Password Matches';
   setFieldValidity(inputId, isValid);
 }
 
@@ -64,7 +98,6 @@ export function validateInput(input, bubbleId, options = {}) {
 
   input.dataset.validationAttached = "true";
 }
-
 
 function attachSpaceKeydownBlocker(input, bubbleId, allowInnerSpaces) {
   input.addEventListener("keydown", (e) => {
@@ -121,18 +154,35 @@ export function confirmInputForFormValidation(inputId, _bubbleId) {
 }
 
 export function showValidateBubble(inputId, message, bubbleId, timeout = 3000) {
-  const bubbleElement = document.getElementById(bubbleId);
-  const inputIdElement = document.getElementById(inputId);
-  if (!bubbleElement || !inputIdElement) return;
+  const { inputIdElement, bubbleElement } = getBubbleElements(inputId, bubbleId);
+  if (!inputIdElement || !bubbleElement) return;
+  const isValid = checkBubbleContext(message, bubbleElement);
+  toggleBubbleColor(inputIdElement, isValid);
+  setBubbleTimeout(bubbleElement, timeout);
+}
+
+function checkBubbleContext(message, bubbleElement) {
   bubbleElement.textContent = message;
-  const isValid = message === 'Looks good!';
-  inputIdElement.classList.toggle('validate-border-blue', isValid);
-  inputIdElement.classList.toggle('validate-border-red', !isValid);
+  const isValid = message === 'Looks good!' || message === 'Password Matches';
+  return isValid;
+}
+
+function setBubbleTimeout(bubbleElement, timeout) {
   bubbleElement.classList.add('show');
   clearTimeout(bubbleElement.hideTimer);
   bubbleElement.hideTimer = setTimeout(() => bubbleElement.classList.remove('show'), timeout);
 }
 
+function toggleBubbleColor(inputIdElement, isValid) {
+  inputIdElement.classList.toggle('validate-border-blue', isValid);
+  inputIdElement.classList.toggle('validate-border-red', !isValid);
+}
+
+function getBubbleElements(inputId, bubbleId) {
+  const inputIdElement = document.getElementById(inputId);
+  const bubbleElement = document.getElementById(bubbleId);
+  return { inputIdElement, bubbleElement };
+}
 
 export function hideValidateBubble(bubbleId) {
   const bubbleElement = document.getElementById(bubbleId);
