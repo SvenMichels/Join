@@ -38,6 +38,7 @@ function initializeApplication() {
   setupMobileDeviceListeners();
   initInputField("task-title", 'titleHint', 'name');
   initInputField("task-description", 'descriptionHint', 'name');
+  initInputField("subtask", 'subtaskHint', 'subtask');
 }
 
 /**

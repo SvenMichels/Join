@@ -201,7 +201,7 @@ function checkPasswordForMatch(bubbleId, passwordValue, passwordConfirmValue, is
   if (!match && !isPrivacyChecked) {
     showValidateBubble("inputConfirmPassword", "Passwords do not match", bubbleId, 3000);
     setFullValidity(inputId, confirmInput, false);
-  }
+  }    
   return match;
 }
 

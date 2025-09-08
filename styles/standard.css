@@ -309,16 +309,19 @@ p {
 }
 
 .validate-border-red:focus {
-  border: 1px solid #ff0000 !important;
+  outline: none;
+  border: 2px solid #ff0000 !important;
 }
 
 .validate-border-blue:focus {
-  border: 1px solid #29abe2 !important;
+  outline: none;
+  border: 2px solid #29abe2 !important;
 }
 
 input.email:focus,
-input.password:focus {
-  border: 1px solid #29abe2;
+input.password:focus,
+textarea:focus {
+  border: 2px solid #29abe2;
 }
 
 .rotate-warning {
@@ -333,4 +336,27 @@ input.password:focus {
   align-items: center;
   text-align: center;
   padding: 2rem;
+}
+
+.prio-assign-input,
+.prio-subtask-input,
+.assigned-userlist-modal,
+.prio-category-input-modal,
+.task-description-input,
+.task-title-input,
+.task-dateInput,
+.prio-assign-input,
+.prio-subtask-input,
+.assigned-user-list,
+.prio-category-input,
+.form-input,
+input.name,
+input.email,
+input.password,
+input.conf-password
+textarea,
+input,
+.stripe
+ {
+  border: 2px solid #d1d1d1;
 }

@@ -117,7 +117,6 @@ input.name,
 input.email,
 input.password,
 input.conf-password {
-  border: 1px solid #d1d1d1;
   border-radius: 10px;
   padding: 4px 10px;
   height: 48px;

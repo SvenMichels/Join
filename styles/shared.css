@@ -90,7 +90,6 @@
 .form-input {
   width: 100%;
   padding: 12px 16px;
-  border: 1px solid #d1d1d1;
   border-radius: 10px;
   font-family: 'Inter', sans-serif;
   font-size: 16px;
@@ -233,3 +232,4 @@
 .nav-logo {
     padding-top: 2rem;
 }
+

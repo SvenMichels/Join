@@ -46,6 +46,7 @@ export function initTaskFloat() {
   initPriorityEventListeners();
   initInputField("task-title-modal", 'titelModalHint', 'name');
   initInputField("task-description-modal", 'descriptionModalHint', 'name');
+  initInputField("subtask-modal", 'subtaskModalHint', 'subtask');
 
   return initFormModal();
 }

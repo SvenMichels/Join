@@ -35,17 +35,17 @@ body {
   padding-top: 170px;
 }
 
-.content-holder > div:nth-child(1),
-.content-holder > div:nth-child(3) {
+.content-holder>div:nth-child(1),
+.content-holder>div:nth-child(3) {
   position: absolute;
   top: 0;
 }
 
-.content-holder > div:nth-child(1) {
+.content-holder>div:nth-child(1) {
   left: 0;
 }
 
-.content-holder > div:nth-child(3) {
+.content-holder>div:nth-child(3) {
   right: 0;
 }
 
@@ -75,7 +75,6 @@ form {
 
 input.email,
 input.password {
-  border: 1px solid #d1d1d1;
   border-radius: 10px;
   padding: 8px 10px;
   height: 48px;
@@ -280,7 +279,7 @@ input:focus::placeholder {
   gap: 16px;
 }
 
- .logo-fullscreen {
+.logo-fullscreen {
   position: absolute;
   inset: 0;
   width: 100vw;
@@ -324,6 +323,7 @@ input:focus::placeholder {
     left: 50%;
     transform: translate(-50%, -50%) scale(1);
   }
+
   100% {
     top: -75px;
     left: -55px;

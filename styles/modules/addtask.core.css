@@ -15,7 +15,6 @@
 .task-title-input,
 .task-description-input,
 .task-dateInput {
-  border: 1px solid #d1d1d1;
   border-radius: 10px;
   max-width: 440px;
 }
@@ -61,7 +60,6 @@
   justify-content: space-between;
   align-items: center;
   padding: 12px 16px;
-  border: 1px solid #d1d1d1;
   border-radius: 10px;
   background-color: white;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);

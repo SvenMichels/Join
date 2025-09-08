@@ -50,9 +50,9 @@ export function getUserCheckboxHTML(user) {
   if (!user || !user.userFullName) {
     return '<div class="error">Invalid user data</div>';
   }
-  
+
   const checkboxId = `user-checkbox-modal-${user.userId || user.userFullName.replace(/\s+/g, '-').toLowerCase()}`;
-  
+
   return `
     <div class="user-info-wrapper">
       <div class="selected-contact-chip ${user.userColor || 'color-1'}">
@@ -73,7 +73,7 @@ export function getUserCheckboxHTML(user) {
  */
 export function getEditableSubtaskTemplate(value) {
   return `
-    <input type="text" class="subtask-text-input-modal" value="${value}">
+    <input type="text" class="subtask-text-input-modal" value="${value}" id="subtaskEditModal" placeholder="Enter subtask" />
     <div class="subtask-button-wrapper-modal">
       <button class="subtask-delete-button-modal" data-del>
         <img class="subtask-delete-button-images-modal" src="../assets/icons/delete.svg" />
@@ -82,6 +82,9 @@ export function getEditableSubtaskTemplate(value) {
       <button class="subtask-save-button-modal" data-save>
         <img class="subtask-delete-button-images-modal" src="../assets/icons/check.svg" />
       </button>
+      <div class="hint-container">
+      <div id="subtaskEditModalHint" class="hint-bubble"></div>
+      </div>
     </div>
   `;
 }

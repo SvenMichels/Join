@@ -77,7 +77,6 @@
   .task-title-input,
   .task-description-input,
   .task-dateInput {
-    border: 1px solid #d1d1d1;
     border-radius: 10px;
     max-width: 600px;
   }

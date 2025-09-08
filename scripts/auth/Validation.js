@@ -20,8 +20,9 @@ export function initInputField(inputId, bubbleId, inputType) {
   if (!input) return;
   const allowInnerSpaces = inputType === 'name';
   const blockLetters = inputType === 'phone';
+  const subtaskAllowed = inputId === 'subtask';
 
-  validateInput(input, bubbleId, { allowInnerSpaces, blockLetters });
+  validateInput(input, bubbleId, { allowInnerSpaces, blockLetters, subtaskAllowed });
   setFieldValidity(inputId, false);
 
   input.addEventListener('input', (e) => inputEventlistener(inputId, bubbleId, e, inputType));
@@ -90,11 +91,12 @@ export function validateInput(input, bubbleId, options = {}) {
   if (!input) return;
   if (input.dataset.validationAttached === "true") return;
 
-  const { allowInnerSpaces = false, blockLetters = false } = options;
+  const { allowInnerSpaces = false, blockLetters = false, subtaskAllowed = false } = options;
 
   attachSpaceKeydownBlocker(input, bubbleId, allowInnerSpaces);
   if (allowInnerSpaces) attachLeadingSpaceNormalizer(input, bubbleId);
   if (blockLetters) attachLetterBlocker(input, bubbleId);
+  if (subtaskAllowed) attachLeadingSpaceNormalizer(input, bubbleId);
 
   input.dataset.validationAttached = "true";
 }
@@ -179,8 +181,8 @@ function toggleBubbleColor(inputIdElement, isValid) {
 }
 
 function getBubbleElements(inputId, bubbleId) {
-  const inputIdElement = document.getElementById(inputId);
-  const bubbleElement = document.getElementById(bubbleId);
+  const inputIdElement = document.getElementById(inputId.id || inputId);
+  const bubbleElement = document.getElementById(bubbleId.id || bubbleId);
   return { inputIdElement, bubbleElement };
 }
 

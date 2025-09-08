@@ -22,7 +22,6 @@
 .task-description-input {
   height: 120px;
   border-radius: 10px;
-  border: 1px solid #d1d1d1;
 }
 
 .task-date {
@@ -35,7 +34,6 @@
 .task-dateInput {
   height: 96px;
   border-radius: 10px;
-  border: 1px solid #d1d1d1;
 }
 
 .space-container {
@@ -108,7 +106,6 @@ input:valid+.error-message {
   display: flex;
   justify-content: space-between;
   border-radius: 10px;
-  border: 1px solid #d1d1d1;
   box-sizing: border-box;
 }
 
@@ -132,7 +129,6 @@ input:valid+.error-message {
   display: flex;
   justify-content: space-between;
   border-radius: 10px;
-  border: 1px solid #d1d1d1;
   box-sizing: border-box;
 }
 
@@ -186,7 +182,6 @@ input:valid+.error-message {
 
 .assigned-user-list {
   background-color: #ffffff;
-  border: 1px solid #d1d1d1;
   max-height: 0;
   opacity: 0;
   overflow-y: scroll;

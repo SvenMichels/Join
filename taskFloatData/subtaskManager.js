@@ -4,6 +4,7 @@
  */
 
 import { getSubtaskHTML, getEditableSubtaskTemplate } from "./taskfloatHTML.js";
+import { initInputField } from "../scripts/auth/Validation.js";
 
 let subtaskItemsListModal = [];
 let completedSubtasksModal = [];
@@ -228,6 +229,7 @@ function makeSubtaskEditableModal(index) {
 
   replaceWithEditTemplate(item, index);
   attachEditModeListeners(item, index);
+  initInputField("subtaskEditModal", 'subtaskEditModalHint', 'subtask');
 }
 
 /**
