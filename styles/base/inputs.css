@@ -65,9 +65,7 @@ select {
   border-color: #a8a8a8;
 }
 
-.prio-assign-input:focus {
-  border: 2px solid #29abe2;
-}
+.test
 
 .assignInput {
   border: none;
@@ -97,4 +95,12 @@ select {
   width: 100%;
   padding-right: 40px;
   box-sizing: border-box;
+}
+
+
+#searchUser:focus,
+#task-date:focus,
+#category:focus {
+  outline: none;
+  border: 2px solid #29abe2;
 }

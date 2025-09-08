@@ -106,7 +106,7 @@
 
 .subtask-button-in-input {
   position: absolute;
-  top: 50%;
+  top: 30%;
   right: 10px;
   transform: translateY(-50%);
 }

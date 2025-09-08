@@ -12,11 +12,19 @@
   height: 96px;
 }
 
+.task-title-input {
+  height: 48px;
+}
+
 .task-title-input,
 .task-description-input,
 .task-dateInput {
   border-radius: 10px;
   max-width: 440px;
+}
+
+.task-description-input {
+  height: 120px;
 }
 
 .task-dateInput {

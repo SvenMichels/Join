@@ -110,6 +110,7 @@ form {
 
 .input-wrapper {
   position: relative;
+  box-sizing: border-box;
   width: 100%;
 }
 
@@ -125,6 +126,7 @@ input.conf-password {
   outline: none;
   transition: border 0.2s ease, outline 0.2s ease;
   font-size: 16px;
+  box-sizing: inherit;
 }
 
 .input-icon {

@@ -96,7 +96,7 @@ export function validateInput(input, bubbleId, options = {}) {
   attachSpaceKeydownBlocker(input, bubbleId, allowInnerSpaces);
   if (allowInnerSpaces) attachLeadingSpaceNormalizer(input, bubbleId);
   if (blockLetters) attachLetterBlocker(input, bubbleId);
-  if (subtaskAllowed) attachLeadingSpaceNormalizer(input, bubbleId);
+  if (subtaskAllowed && allowInnerSpaces) attachLeadingSpaceNormalizer(input, bubbleId);
 
   input.dataset.validationAttached = "true";
 }
@@ -117,6 +117,8 @@ function attachSpaceKeydownBlocker(input, bubbleId, allowInnerSpaces) {
 
   });
 }
+
+
 
 function attachLetterBlocker(input, bubbleId) {
   input.addEventListener("keydown", (e) => {
