@@ -120,6 +120,7 @@ input.password,
 input.conf-password {
   border-radius: 10px;
   padding: 4px 10px;
+  padding-right: 40px;
   height: 48px;
   width: 100%;
   resize: none;
