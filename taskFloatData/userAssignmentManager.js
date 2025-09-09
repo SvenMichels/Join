@@ -201,7 +201,6 @@ export function updateSelectedModal() {
   }
 }
 
-
 /**
  * Creates a chip for the selected user.
  * @param {string} userName - Name of the user.
@@ -241,8 +240,6 @@ export function toggleUserListModal(event) {
 function toggleListVisibility(list, assignImg) {
   list.classList.toggle("visible");
   const backgroundElement = document.getElementById("formWrapper");
-  // backgroundElement.classList.toggle("no-scroll");
-  // toggleNoScroll();
   if (backgroundElement.classList.contains("no-scroll") ) {
     backgroundElement.classList.remove("no-scroll");
   } else {
@@ -250,10 +247,6 @@ function toggleListVisibility(list, assignImg) {
   }
   assignImg?.classList.toggle("rotated", list.classList.contains("visible"));
 }
-
-// function toggleNoScroll() {
-
-// }
 
 /**
  * Initializes the event listener for the user search input field.
@@ -288,13 +281,18 @@ function handleSearchInput() {
   renderUserCheckboxesModal(matchedUsers);
 }
 
-function setupOutsideClickToClose(containerId, toggleElementSelector, arrowSelector, inputSelector) {
-  document.addEventListener("click", (event) => {
+function setupConst(containerId, toggleElementSelector, arrowSelector, inputSelector) {
     const container = document.getElementById(containerId);
-    const backgroundElement = document.getElementById("formWrapper");  
+    const backgroundElement = document.getElementById("formWrapper");
     const toggleElement = document.querySelector(toggleElementSelector);
     const arrow = document.querySelector(arrowSelector);
     const input = document.querySelector(inputSelector);
+    return { container, backgroundElement, toggleElement, arrow, input};
+} 
+
+function setupOutsideClickToClose(containerId, toggleElementSelector, arrowSelector, inputSelector) {
+  document.addEventListener("click", (event) => {
+    const { container, backgroundElement, toggleElement, arrow, input} = setupConst(containerId, toggleElementSelector, arrowSelector, inputSelector);
     if (!container || !toggleElement) return;
     if (
       container.classList.contains("visible") &&
