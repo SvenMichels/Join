@@ -96,13 +96,7 @@ export function inputEventlistener(inputId, bubbleId, e, inputType) {
 export function validateInput(input, bubbleId, options = {}) {
   if (!input) return;
   if (input.dataset.validationAttached === "true") return;
-
-  const {
-    allowInnerSpaces = false,
-    subtaskAllowed = false,
-    phoneMode = false
-  } = options;
-
+  const { allowInnerSpaces = false, subtaskAllowed = false, phoneMode = false } = options;
   if (subtaskAllowed) {
     attachSubtaskSpaceHandler(input, bubbleId);
   } else {
@@ -110,14 +104,12 @@ export function validateInput(input, bubbleId, options = {}) {
     if (allowInnerSpaces) attachLeadingSpaceNormalizer(input, bubbleId);
   }
   if (phoneMode) attachPhoneCharBlocker(input, bubbleId);
-
   input.dataset.validationAttached = "true";
 }
 
 function attachSpaceKeydownBlocker(input, bubbleId, allowInnerSpaces) {
   input.addEventListener("keydown", (e) => {
     if (e.key !== " ") return;
-
     if (!allowInnerSpaces) {
       e.preventDefault();
       showValidateBubble(input.id, "Spaces are not allowed", bubbleId, 3000);
@@ -127,7 +119,6 @@ function attachSpaceKeydownBlocker(input, bubbleId, allowInnerSpaces) {
       e.preventDefault();
       showValidateBubble(input.id, "Leading space is not allowed", bubbleId, 3000);
     }
-
   });
 }
 

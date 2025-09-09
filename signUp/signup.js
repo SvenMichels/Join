@@ -193,7 +193,6 @@ function getPasswordElements() {
 function handleTooShort(isPrivacyChecked, bubbleId, confirmEl) {
   setFieldValidity("inputConfirmPassword", false);
   if (!isPrivacyChecked && confirmEl) {
-    showValidateBubble("inputConfirmPassword", "Passwords must be at least 6 chars", bubbleId, 2000);
     setFieldClass(confirmEl, false);
   } else {
     hideValidateBubble(bubbleId);
