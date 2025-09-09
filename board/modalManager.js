@@ -3,6 +3,7 @@
  */
 
 import { changeModalTitleAdd, changeModalTitleEdit } from "./board.js";
+import { noScrollTaskDetails } from "./taskDetails.js";
 
 /**
  * Initializes modal contents and sets up appropriate mode
@@ -112,6 +113,7 @@ function setupCloseButton(overlay) {
  */
 export function openTaskModal(isEdit = false, task = null) {
   const overlay = document.getElementById("modal-overlay");
+  noScrollTaskDetails(overlay);
 
   fetch("../taskFloatData/taskfloat.html")
     .then((res) => res.text())

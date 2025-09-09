@@ -36,7 +36,6 @@ export async function loadAndRenderUsersModal(preselected = []) {
     window.pendingAssignedUsers = null;
   }
   initial.forEach(n => selectedUserNamesModal.add(n));
-  console.log(selectedUserNamesModal);
 
   await renderUserCheckboxesModal(allSystemUsersModal);
 }

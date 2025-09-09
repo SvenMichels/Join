@@ -142,19 +142,19 @@ export async function openTaskDetails(task) {
   const overlay = document.getElementById("modal-overlay");
   resetOverlay(overlay);
 
-  const modalHTML = await fetchModalHTML("../edittask/taskdetail.html");
+  const modalHTML = await fetchModalHTML("../edittask/taskdetail.html");  
   overlay.innerHTML = modalHTML;
 
   const allUsers = typeof window.allUsers === 'function' ? window.allUsers() : window.allUsers || [];
   await renderTaskDetailData(task, allUsers);
 
-  const modal = overlay.querySelector("#taskDetailModal");
+  const modal = overlay.querySelector("#taskDetailModal");  
   noScrollTaskDetails(modal);
   setupCloseButton(modal, overlay);
   setupOutsideClickHandler(modal, overlay);
 }
 
-function noScrollTaskDetails(modal) {
+export function noScrollTaskDetails(modal) {
   if (modal) {
     document.body.classList.add("no-scroll");
   } else {
