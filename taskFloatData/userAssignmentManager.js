@@ -240,8 +240,20 @@ export function toggleUserListModal(event) {
  */
 function toggleListVisibility(list, assignImg) {
   list.classList.toggle("visible");
+  const backgroundElement = document.getElementById("formWrapper");
+  // backgroundElement.classList.toggle("no-scroll");
+  // toggleNoScroll();
+  if (backgroundElement.classList.contains("no-scroll") ) {
+    backgroundElement.classList.remove("no-scroll");
+  } else {
+    backgroundElement.classList.add("no-scroll");
+  }
   assignImg?.classList.toggle("rotated", list.classList.contains("visible"));
 }
+
+// function toggleNoScroll() {
+
+// }
 
 /**
  * Initializes the event listener for the user search input field.
@@ -279,6 +291,7 @@ function handleSearchInput() {
 function setupOutsideClickToClose(containerId, toggleElementSelector, arrowSelector, inputSelector) {
   document.addEventListener("click", (event) => {
     const container = document.getElementById(containerId);
+    const backgroundElement = document.getElementById("formWrapper");  
     const toggleElement = document.querySelector(toggleElementSelector);
     const arrow = document.querySelector(arrowSelector);
     const input = document.querySelector(inputSelector);
@@ -286,7 +299,8 @@ function setupOutsideClickToClose(containerId, toggleElementSelector, arrowSelec
     if (
       container.classList.contains("visible") &&
       !container.contains(event.target) &&
-      !toggleElement.contains(event.target)
+      !toggleElement.contains(event.target) &&
+      !backgroundElement.classList.remove("no-scroll")
     ) {
       container.classList.remove("visible");
       if (arrow) arrow.classList.remove("rotated");

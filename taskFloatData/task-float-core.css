@@ -240,3 +240,7 @@ select {
   background: url(../assets/icons/arrow_drop_down.svg) no-repeat right 0.75rem center;
   background-size: 1rem;
 }
+
+.no-scroll {
+  overflow: hidden;
+}
