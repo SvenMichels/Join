@@ -7,6 +7,7 @@
 
 import { getSubtaskControlGroupTemplate } from "./addtasktemplates.js";
 import { getSubtaskItems, addSubtaskItem, removeSubtaskItem, updateSubtaskItem } from "./formManager.js";
+import { initInputField } from "../scripts/auth/Validation.js";
 
 /**
  * Handles adding a new subtask via button click.
@@ -15,7 +16,7 @@ import { getSubtaskItems, addSubtaskItem, removeSubtaskItem, updateSubtaskItem }
  */
 export function addNewSubtask(element) {
   element.preventDefault();
-  
+
   const subtaskInput = document.getElementById("subtask");
   const subtaskInputValue = subtaskInput?.value.trim();
   if (!subtaskInputValue) return;
@@ -30,7 +31,7 @@ export function addNewSubtask(element) {
  *
  * @param {KeyboardEvent} element - Keydown event.
  */
-export function addSubtaskOnEnterKey(element) {  
+export function addSubtaskOnEnterKey(element) {
   if (element.key === "Enter") {
     element.preventDefault();
     addNewSubtask(element);
@@ -135,11 +136,31 @@ function makeSubtaskEditable(index) {
   const subtasks = getSubtaskItems();
   container.innerHTML = "";
 
-  const input = createSubtaskInput(subtasks[index]);
+  const input = getOrCreateSubtaskEditInput(subtasks[index]);
   const buttonGroup = createSubtaskButtons(index, input);
-
   container.append(input, buttonGroup);
+  container.insertAdjacentHTML('beforeend', createSubtaskHint());
+
 }
+
+function createSubtaskHint() {
+  return (`<div class="hint-container">
+      <div id="subtaskAddHint" class="hint-bubble"></div>
+    </div>`
+  );
+}
+
+function getOrCreateSubtaskEditInput(initialValue) {
+  if (!_subtaskEditInput) {
+    _subtaskEditInput = createSubtaskInput(initialValue);
+    _subtaskEditInput.id = 'subtaskEdit';
+    initInputField('subtaskEdit', 'subtaskAddHint', 'subtask');
+  } else {
+    _subtaskEditInput.value = initialValue;
+  }
+  return _subtaskEditInput;
+}
+
 
 /**
  * Creates an input element pre-filled with the subtask text.
@@ -152,6 +173,7 @@ function createSubtaskInput(value) {
   input.type = "text";
   input.value = value;
   input.className = "subtask-text-input";
+  input.id = `subtaskEdit`;
   return input;
 }
 

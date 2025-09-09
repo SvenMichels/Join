@@ -1,7 +1,7 @@
 import { bindPrivacyCheckbox, bindPolicyLinks, bindSignupForm } from "../scripts/events/loginevents.js";
 import { generateRandomColorClass } from "../scripts/utils/colors.js";
 import { getInitials } from "../scripts/utils/helpers.js";
-import { initInputField, confirmInputForFormValidation, showValidateBubble, setFieldValidity } from "../scripts/auth/Validation.js";
+import { initInputField, confirmInputForFormValidation, showValidateBubble, setFieldValidity, hideValidateBubble } from "../scripts/auth/Validation.js";
 
 
 let signUpSubmitButton;
@@ -183,36 +183,65 @@ export function checkFormValidity() {
   return isFormValid;
 }
 
-function checkPasswordForMatch(bubbleId, passwordValue, passwordConfirmValue, isPrivacyChecked) {
-  const inputId = document.getElementById("inputPassword");
-  const confirmInput = document.getElementById("inputConfirmPassword");
+function getPasswordElements() {
+  return {
+    passwordEl: document.getElementById("inputPassword"),
+    confirmEl: document.getElementById("inputConfirmPassword"),
+  };
+}
 
-  const okLength = passwordValue.length >= 6 && passwordConfirmValue.length >= 6;
-  if (!okLength) {
-    setFieldValidity("inputConfirmPassword", false);
-    return false;
+function handleTooShort(isPrivacyChecked, bubbleId, confirmEl) {
+  setFieldValidity("inputConfirmPassword", false);
+  if (!isPrivacyChecked && confirmEl) {
+    showValidateBubble("inputConfirmPassword", "Passwords must be at least 6 chars", bubbleId, 2000);
+    setFieldClass(confirmEl, false);
+  } else {
+    hideValidateBubble(bubbleId);
   }
+  return false;
+}
 
-  const match = passwordValue === passwordConfirmValue;
-  if (match && !isPrivacyChecked) {
-    showValidateBubble("inputConfirmPassword", "Password Matches", bubbleId, 3000);
-    setFullValidity(inputId, confirmInput, true);
-  }
-  if (!match && !isPrivacyChecked) {
-    showValidateBubble("inputConfirmPassword", "Passwords do not match", bubbleId, 3000);
-    setFullValidity(inputId, confirmInput, false);
-  }    
+function applyPrivacyCheckedUI(passwordEl, confirmEl, match, bubbleId) {
+  hideValidateBubble(bubbleId);
+  setFieldClass(passwordEl, true);
+  setFieldClass(confirmEl, match);
   return match;
 }
 
-function setFieldClass(inputId, isValid) {
-  if (!inputId) return;
-  inputId.classList.toggle("validate-border-blue", !!isValid);
-  inputId.classList.toggle("validate-border-red", !isValid);
+function showMatchFlow(passwordEl, confirmEl, bubbleId) {
+  showValidateBubble("inputConfirmPassword", "Password Matches", bubbleId, 3000);
+  setFieldClass(passwordEl, true);
+  setFieldClass(confirmEl, true);
 }
 
-function setFullValidity(inputId, confirmInput, isValid) {
-  setFieldClass(inputId, isValid);
-  setFieldClass(confirmInput, isValid);
-  setFieldValidity("inputConfirmPassword", isValid);
+function showMismatchFlow(passwordEl, confirmEl, bubbleId) {
+  showValidateBubble("inputConfirmPassword", "Passwords do not match", bubbleId, 3000);
+  setFieldClass(passwordEl, true);
+  setFieldClass(confirmEl, false);
+}
+
+function checkPasswordForMatch(bubbleId, passwordValue, passwordConfirmValue, isPrivacyChecked) {
+  const { passwordEl, confirmEl } = getPasswordElements();
+  const okLength = passwordValue.length >= 6 && passwordConfirmValue.length >= 6;
+  if (!okLength) {
+    return handleTooShort(isPrivacyChecked, bubbleId, confirmEl);
+  }
+  const match = passwordValue === passwordConfirmValue;
+  setFieldValidity("inputConfirmPassword", match);
+  if (isPrivacyChecked) {
+    return applyPrivacyCheckedUI(passwordEl, confirmEl, match, bubbleId);
+  }
+  if (match) {
+    showMatchFlow(passwordEl, confirmEl, bubbleId);
+  } else {
+    showMismatchFlow(passwordEl, confirmEl, bubbleId);
+  }
+  return match;
+}
+
+
+function setFieldClass(el, isValid) {
+  if (!el) return;
+  el.classList.toggle("validate-border-blue", !!isValid);
+  el.classList.toggle("validate-border-red", !isValid);
 }

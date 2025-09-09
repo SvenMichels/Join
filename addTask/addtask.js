@@ -36,8 +36,8 @@ function initializeApplication() {
   setupDropdown("#openMenu", "#dropDownMenu");
   highlightActiveNavigationLinks();
   setupMobileDeviceListeners();
-  initInputField("task-title", 'titleHint', 'name');
-  initInputField("task-description", 'descriptionHint', 'name');
+  initInputField("task-title", 'titleHint', 'subtask');
+  initInputField("task-description", 'descriptionHint', 'subtask');
   initInputField("subtask", 'subtaskHint', 'subtask');
 }
 
