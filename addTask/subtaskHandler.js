@@ -6,9 +6,9 @@
  */
 
 import { getSubtaskControlGroupTemplate } from "./addtasktemplates.js";
-import { getSubtaskItems, addSubtaskItem, removeSubtaskItem, updateSubtaskItem, validateSubtaskBeforeSave } from "./formManager.js";
+import { getSubtaskItems, addSubtaskItem, removeSubtaskItem, updateSubtaskItem, validateSubtaskBeforeSave, setSubtaskItems } from "./formManager.js";
 import { initInputField } from "../scripts/auth/Validation.js";
-import { bindOutsideClickToClose } from "../scripts/ui/fabContact.js";
+
 
 let outsideClickHandlerBound = false;
 
@@ -148,8 +148,25 @@ function makeSubtaskEditable(index) {
   const buttonGroup = createSubtaskButtons(index, input);
   container.append(input, buttonGroup);
   initInputField(`subtaskEdit-${counter}`, "subtaskEditHint", "subtask");
+  bindOutsideClickToClose(container);
 }
 
+export function bindOutsideClickToClose(containerEl) {
+  if (outsideClickHandlerBound) return;
+  const onDocClick = (e) => {
+    if (containerEl.contains(e.target)) return;
+    const input = containerEl.querySelector('.subtask-text-input') || containerEl.querySelector('input');
+    if (input) {
+      updateSubtaskItem(containerEl, input.value.trim());
+      renderSubtasks();
+    }
+    isSubtaskEditMode = false;
+    document.removeEventListener('click', onDocClick);
+    outsideClickHandlerBound = false;
+  };
+  setTimeout(() => document.addEventListener('click', onDocClick), 0);
+  outsideClickHandlerBound = true;
+}
 /**
  * Creates an input element pre-filled with the subtask text.
  *

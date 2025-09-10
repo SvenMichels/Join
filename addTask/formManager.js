@@ -99,13 +99,6 @@ export function resetFormState() {
  * @param {HTMLFormElement} form - The form element to extract data from.
  * @returns {Object} Task data object.
  */
-
-/**
- * Collects and returns all form data in a structured object.
- * 
- * @param {HTMLFormElement} form - The form element to extract data from.
- * @returns {Object} Task data object.
- */
 export function collectTaskData(form) {
   const id = form.getAttribute("data-task-id");
   const title = form.taskTitle.value.trim();
@@ -139,13 +132,6 @@ export function collectTaskData(form) {
  */
 export function validateTask(task) {
   let isValid = true;
-
-  /**
-   * Toggles alert display and tracks validation state.
-   * 
-   * @param {string} id - The ID of the alert element.
-   * @param {boolean} condition - Whether to show the alert.
-   */
   const show = (id, condition) => {
     const element = document.getElementById(id);
     if (!element) return;
@@ -188,6 +174,6 @@ export function clearValidationAlerts() {
  * @returns {string[]} Array of trimmed subtask strings.
  */
 export function getSubtasksForPayload() {
-  const items = getSubtaskItems(); // deine bestehende Liste
+  const items = getSubtaskItems();
   return (items || []).map(s => (s || "").trim()).filter(Boolean);
 }
