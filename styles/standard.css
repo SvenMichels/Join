@@ -353,10 +353,22 @@ textarea:focus {
 input.name,
 input.email,
 input.password,
-input.conf-password
-textarea,
+input.conf-password textarea,
 input,
-.stripe
- {
+.stripe {
   border: 2px solid #d1d1d1;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #a7a7a7;
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  text-align: start;
+  padding-inline-start: 0px !important;
+  padding-inline-end: 0px !important;
+  padding-block-end: 0px !important;
+  padding-block-start: 0px !important;
+  line-height: normal;
 }

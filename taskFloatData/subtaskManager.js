@@ -230,6 +230,8 @@ function makeSubtaskEditableModal(index) {
   replaceWithEditTemplate(item, index);
   attachEditModeListeners(item, index);
   initInputField("subtaskEditModal", 'subtaskEditModalHint', 'subtask');
+  console.log("im Manager");
+  
 }
 
 /**

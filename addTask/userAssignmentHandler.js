@@ -240,7 +240,7 @@ export async function setupUserSearch() {
   searchBar.addEventListener("input", () => {
     const term = searchBar.value.trim().toLowerCase();
     const preselected = Array.from(selectedUserNames);
-    if (term.length < 3) {
+    if (term.length < 1) {
       renderUserCheckboxes(allSystemUsers, preselected);
       return;
     }

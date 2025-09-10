@@ -168,10 +168,7 @@ function updateLocalContactData(contact, updated) {
  * @returns {Promise<void>}
  */
 export async function refreshUI() {
-  const contactList = document.querySelector('.contact-list');
-  if (contactList) {
-    contactList.innerHTML = '';
-  }
+  await loadAllContactsFromFirebaseDatabase();
   clearContactListUI();
   await new Promise(resolve => setTimeout(resolve, 10));
   renderAllContacts(loadAllContactsFromFirebaseDatabase() || []);

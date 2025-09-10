@@ -1,3 +1,5 @@
+import { getSubtaskMessage, showValidateBubble, setFieldValidity } from "../scripts/auth/Validation.js";
+
 /**
  * Add Task Form Management
  * Provides functions and state management for the Add Task form.
@@ -10,6 +12,8 @@ export let currentlySelectedPriority = "medium";
 
 /** @type {string[]} */
 export let subtaskItemsList = [];
+
+const isSubtaskEditMode = false;
 
 /**
  * Gets the currently selected task priority.
@@ -49,6 +53,19 @@ export function setSubtaskItems(items) {
  */
 export function addSubtaskItem(item) {
   subtaskItemsList.push(item);
+}
+
+export function validateSubtaskBeforeSave(inputElment, bubbleId) {
+  const input = inputElment?.value ?? "";
+  const value = input.trim();
+  const msg = getSubtaskMessage(value);
+  if (msg !== "Looks good!") {
+    showValidateBubble(inputElment.id, msg, bubbleId, 2000);
+    setFieldValidity(inputElment.id, false);
+    return false;
+  }
+  setFieldValidity(inputElment.id, true);
+  return true;
 }
 
 /**
@@ -163,4 +180,14 @@ export function clearValidationAlerts() {
     const alertElement = document.getElementById(alertId);
     if (alertElement) alertElement.style.display = "none";
   });
+}
+
+/**
+ * Gets the subtasks formatted for payload submission.
+ * 
+ * @returns {string[]} Array of trimmed subtask strings.
+ */
+export function getSubtasksForPayload() {
+  const items = getSubtaskItems(); // deine bestehende Liste
+  return (items || []).map(s => (s || "").trim()).filter(Boolean);
 }

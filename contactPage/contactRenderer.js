@@ -22,13 +22,8 @@ export function renderAllContacts(contactList) {
 
 function normalizeContactList(list) {
   if (!Array.isArray(list)) return [];
-
-  if (list.lenght === 0) return [];
-
-  const first = list[0];
-  const isWrappedObject = typeof first === 'object' && !first.userFullName;
-
-  return isWrappedObject ? Object.values(first) : list;
+  if (list.length === 0) return [];
+  return list;
 }
 
 function sortContactsByName(contacts) {
@@ -59,10 +54,16 @@ function renderValidContact(contact) {
  * @param {string|number} id - Unique ID of the contact.
  * @param {string} color - Color class of the contact.
  */
+function getContactsContainer() {
+  return document.getElementById("allContacts") || document.querySelector(".contact-list");
+}
+
 export function renderContact(name, email, phone, initials, firstChar, id, color) {
   renderAlphabetFilter(firstChar);
+  const container = getContactsContainer();
+  if (!container) return;
   const html = renderContactCard(name, email, initials, id, color, phone);
-  document.getElementById("allContacts").innerHTML += html;
+  container.innerHTML += html;
 }
 
 /**
@@ -73,8 +74,9 @@ export function renderContact(name, email, phone, initials, firstChar, id, color
 export function renderAlphabetFilter(letter) {
   if (!alphabetLettersUsedSet.has(letter)) {
     alphabetLettersUsedSet.add(letter);
-    document.getElementById("allContacts").innerHTML +=
-      `<div class="startLetter"><h2>${letter}</h2></div>`;
+    const container = getContactsContainer();
+    if (!container) return;
+    container.innerHTML += `<div class="startLetter"><h2>${letter}</h2></div>`;
   }
 }
 
@@ -106,7 +108,9 @@ export function renderContactCard(name, email, initials, id, color, phone) {
  * Clears the entire contact list UI.
  */
 export function clearContactListUI() {
-  document.getElementById("allContacts").innerHTML = "";
+  const container = getContactsContainer();
+  if (!container) return;
+  container.innerHTML = "";
   alphabetLettersUsedSet.clear();
 }
 

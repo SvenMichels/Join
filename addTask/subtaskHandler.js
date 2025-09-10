@@ -6,8 +6,12 @@
  */
 
 import { getSubtaskControlGroupTemplate } from "./addtasktemplates.js";
-import { getSubtaskItems, addSubtaskItem, removeSubtaskItem, updateSubtaskItem } from "./formManager.js";
+import { getSubtaskItems, addSubtaskItem, removeSubtaskItem, updateSubtaskItem, validateSubtaskBeforeSave } from "./formManager.js";
 import { initInputField } from "../scripts/auth/Validation.js";
+import { bindOutsideClickToClose } from "../scripts/ui/fabContact.js";
+
+let outsideClickHandlerBound = false;
+
 
 /**
  * Handles adding a new subtask via button click.
@@ -16,13 +20,11 @@ import { initInputField } from "../scripts/auth/Validation.js";
  */
 export function addNewSubtask(element) {
   element.preventDefault();
-
-  const subtaskInput = document.getElementById("subtask");
-  const subtaskInputValue = subtaskInput?.value.trim();
-  if (!subtaskInputValue) return;
-
-  addSubtaskItem(subtaskInputValue);
-  subtaskInput.value = "";
+  const input = document.getElementById("subtask");
+  if (!input) return;
+  if (!validateSubtaskBeforeSave(input, "subtaskHint")) return;
+  addSubtaskItem(input.value.trim());
+  input.value = "";
   renderSubtasks();
 }
 
@@ -97,10 +99,8 @@ function createControlGroup(index) {
   const wrapper = document.createElement("div");
   wrapper.className = "subtask-controls";
   wrapper.innerHTML = getSubtaskControlGroupTemplate();
-
   const [editBtn, , deleteBtn] = wrapper.children;
   addControlListeners(editBtn, deleteBtn, index);
-
   return wrapper;
 }
 
@@ -110,10 +110,14 @@ function createControlGroup(index) {
  * @param {HTMLElement} editBtn - The edit button.
  * @param {HTMLElement} deleteBtn - The delete button.
  * @param {number} index - Subtask index.
- */
+*/
+let isSubtaskEditMode = false;
+
 function addControlListeners(editBtn, deleteBtn, index) {
   editBtn.addEventListener("click", (e) => {
     e.preventDefault();
+    if (isSubtaskEditMode) return;
+    isSubtaskEditMode = true;
     makeSubtaskEditable(index);
   });
   deleteBtn.addEventListener("click", (e) => {
@@ -121,6 +125,11 @@ function addControlListeners(editBtn, deleteBtn, index) {
     removeSubtaskItem(index);
     renderSubtasks();
   });
+  exitEditMode();
+}
+
+function exitEditMode() {
+  isSubtaskEditMode = false;
 }
 
 /**
@@ -132,35 +141,14 @@ function makeSubtaskEditable(index) {
   const list = document.getElementById("subtaskList");
   const container = list.children[index];
   if (!container) return;
-
   const subtasks = getSubtaskItems();
   container.innerHTML = "";
-
-  const input = getOrCreateSubtaskEditInput(subtasks[index]);
+  const counter = crypto.randomUUID();
+  const input = createSubtaskInput(subtasks[index], counter);
   const buttonGroup = createSubtaskButtons(index, input);
   container.append(input, buttonGroup);
-  container.insertAdjacentHTML('beforeend', createSubtaskHint());
-
+  initInputField(`subtaskEdit-${counter}`, "subtaskEditHint", "subtask");
 }
-
-function createSubtaskHint() {
-  return (`<div class="hint-container">
-      <div id="subtaskAddHint" class="hint-bubble"></div>
-    </div>`
-  );
-}
-
-function getOrCreateSubtaskEditInput(initialValue) {
-  if (!_subtaskEditInput) {
-    _subtaskEditInput = createSubtaskInput(initialValue);
-    _subtaskEditInput.id = 'subtaskEdit';
-    initInputField('subtaskEdit', 'subtaskAddHint', 'subtask');
-  } else {
-    _subtaskEditInput.value = initialValue;
-  }
-  return _subtaskEditInput;
-}
-
 
 /**
  * Creates an input element pre-filled with the subtask text.
@@ -168,12 +156,12 @@ function getOrCreateSubtaskEditInput(initialValue) {
  * @param {string} value - Text value of the subtask.
  * @returns {HTMLInputElement} Input element.
  */
-function createSubtaskInput(value) {
+function createSubtaskInput(value, counter) {
   const input = document.createElement("input");
   input.type = "text";
   input.value = value;
   input.className = "subtask-text-input";
-  input.id = `subtaskEdit`;
+  input.id = `subtaskEdit-${counter}`;
   return input;
 }
 
@@ -187,17 +175,15 @@ function createSubtaskInput(value) {
 function createSubtaskButtons(index, input) {
   const wrapper = createElement("div", "subtask-button-wrapper");
   const spacer = createElement("div", "subtask-spacer");
-
   const saveBtn = createIconButton("check.svg", "subtask-save-button", () => {
+    if (!validateSubtaskBeforeSave(input, "subtaskEditHint")) return;
     updateSubtaskItem(index, input.value.trim());
     renderSubtasks();
   });
-
   const deleteBtn = createIconButton("delete.svg", "subtask-delete-button", () => {
     removeSubtaskItem(index);
     renderSubtasks();
   });
-
   wrapper.append(deleteBtn, spacer, saveBtn);
   return wrapper;
 }

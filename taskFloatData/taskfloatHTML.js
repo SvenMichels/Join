@@ -82,9 +82,6 @@ export function getEditableSubtaskTemplate(value) {
       <button class="subtask-save-button-modal" data-save>
         <img class="subtask-delete-button-images-modal" src="../assets/icons/check.svg" />
       </button>
-      <div class="hint-container">
-      <div id="subtaskEditModalHint" class="hint-bubble"></div>
-      </div>
     </div>
   `;
 }

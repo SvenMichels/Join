@@ -113,7 +113,7 @@ function setupFabActions({ container, editBtn, delBtn }, contact) {
  * @param {HTMLElement} container - Das Container-Element, das geschlossen werden soll, wenn außerhalb geklickt wird.
  * @returns {void} Diese Funktion gibt keinen Wert zurück.
  */
-function bindOutsideClickToClose(container) {
+export function bindOutsideClickToClose(container) {
   if (outsideClickHandlerBound) return
 
   document.addEventListener("click", function handleClick(e) {

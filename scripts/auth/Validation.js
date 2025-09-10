@@ -171,7 +171,7 @@ function allowedInputBtn(event) {
   return (
     event.key === 'Backspace' || event.key === 'Delete' || event.key === 'Tab' ||
     event.key === 'ArrowLeft' || event.key === 'ArrowRight' ||
-    event.key === 'Home' || event.key === 'End'
+    event.key === 'Home' || event.key === 'End' || event.key === 'Shift'
   );
 }
 

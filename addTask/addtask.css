@@ -118,6 +118,10 @@ h1 {
   height: 14px;
 }
 
+#subtask {
+  margin-bottom: 8px;
+}
+
 .subtask-container {
   position: relative;
   display: flex;
@@ -260,9 +264,24 @@ select {
 }
 
 #subtaskList {
-  height: 70px;
+  max-height: 6rem;
   overflow: auto;
 }
+
+#subtaskList::-webkit-scrollbar {
+  display: block;
+  width: 6px;
+}
+
+#subtaskList::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 4px;
+}
+
+#subtaskList::-webkit-scrollbar-thumb:hover {
+  background-color: transparent;
+}
+
 
 .subtask-display-text::before {
   content: "";
