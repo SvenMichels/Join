@@ -342,3 +342,9 @@
   color: #fff;
   border-radius: 10px;
 }
+
+#searchUser-modal:focus,
+#task-date-modal:focus {
+  outline: none;
+  border: 2px solid #29abe2;
+}
