@@ -137,6 +137,7 @@ h2 {
 
 .bigContact {
   display: flex;
+  max-width: 475px;
 }
 
 .profilePic {
@@ -147,7 +148,7 @@ h2 {
   font-weight: 500;
   font-size: 40px;
   color: #ffffff;
-  width: 90px;
+  min-width: 116px;
   aspect-ratio: 1;
   border-radius: 70px;
   border: 2px solid #ffffff;
@@ -169,7 +170,8 @@ h2 {
 .profileHeader {
   display: flex;
   justify-content: start;
-  align-items: center;
+  align-items: flex-start;
+  height: 146px;
   gap: 21px;
   margin-top: 25px;
   margin-bottom: 25px;
