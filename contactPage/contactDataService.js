@@ -362,7 +362,7 @@ function buildContactFromUserData(user) {
     firstCharacter: name.charAt(0).toUpperCase(),
     userId: user.userId || user.id || "current-user",
     userColor: user.userColor || "color-1",
-    userPassword: user.userPassword || user.password || ""
+    userPassword: user.userPassword || user.password
   };
 }
 

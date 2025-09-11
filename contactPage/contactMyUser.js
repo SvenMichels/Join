@@ -78,7 +78,7 @@ function extractContactInformation(userData) {
   const firstCharacter = userData.userFullName ? userData.userFullName.charAt(0).toUpperCase() : "?";
   const userId = userData.id;
   const userColor = userData.userColor;
-  const userPassword = userData.userPassword || '';
+  const userPassword = userData.userPassword;
 
   return {
     userFullName,

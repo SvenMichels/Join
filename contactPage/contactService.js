@@ -90,7 +90,7 @@ function createUserContactObject(userData) {
     firstCharacter: userData.firstCharacter || userData.userFullName?.charAt(0).toUpperCase() || "?",
     userId: userData.id,
     userColor: userData.userColor,
-    userPassword: userData.userPassword || ""
+    ...(userData.userPassword !== undefined ? { userPassword: userData.userPassword } : {})
   };
 }
 
@@ -131,15 +131,19 @@ export async function updateContactInFirebase(contact) {
   if (!currentUserData?.id) throw new Error("No user logged in");
 
   const apiPath = `users/${contact.id}`;
-  const updateResult = await requestData("PATCH", apiPath, {
+  const payload = {
     ...contact,
     userInitials: contact.userInitials || getInitials(contact.userFullName),
     firstCharacter:
       contact.firstCharacter ||
       contact.userFullName?.charAt(0).toUpperCase() ||
       "?",
-    userPassword: contact.userPassword || '',
-  });
+  };
+  if (payload.userPassword === "" || payload.userPassword === undefined) {
+    delete payload.userPassword;
+  }
+
+  const updateResult = await requestData("PATCH", apiPath, payload);
   return updateResult;
 }
 
@@ -186,6 +190,6 @@ function convertUsersToContacts(usersData) {
     firstCharacter: user.firstCharacter || user.userFullName?.charAt(0).toUpperCase() || "?",
     userId: id,
     userColor: user.userColor,
-    userPassword: user.userPassword || ""
+    ...(user.userPassword !== undefined ? { userPassword: user.userPassword } : {})
   }));
 }

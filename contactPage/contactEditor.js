@@ -19,19 +19,17 @@ export function fillEditForm(contact) {
   document.getElementById("editContactPhone").value = contact.userPhoneNumber || "";
 }
 
-
-
 /**
  * Retrieves edited values from the form.
  * 
  * @returns {Object} Form input values (name, email, phone)
  */
-export function getEditContactInput() {
+export function getEditContactInput(contact) {
   return {
     userFullName: document.getElementById("editContactName").value.trim(),
     userEmailAddress: document.getElementById("editContactEmail").value.trim(),
     userPhoneNumber: document.getElementById("editContactPhone").value.trim(),
-    userPassword: editingContact.userPassword
+    userPassword: contact.userPassword
   };
 }
 
@@ -40,10 +38,10 @@ export function getEditContactInput() {
  * 
  * @param {Event} e - Submit event
  */
-export async function handleContactEditSubmission(e) { // Zeile 41
+export async function handleContactEditSubmission(e) {
   e.preventDefault();
   const contact = editingContact;
-  const updated = getEditContactInput();
+  const updated = getEditContactInput(contact);
 
   updated.userInitials = getInitials(updated.userFullName);
   updated.firstCharacter = updated.userFullName.charAt(0).toUpperCase();

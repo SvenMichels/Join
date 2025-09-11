@@ -15,10 +15,10 @@ import { LocalStorageService } from '../scripts/utils/localStorageHelper.js';
  */
 export function openEditWindow(contact) {
   if (!contact) {
-    getCurrentUserForEdit(); 
+    getCurrentUserForEdit();
     return;
   }
-  
+
   openEditDialog(contact);
 }
 
@@ -34,13 +34,13 @@ export function openEditWindow(contact) {
  * @returns {Promise<void>} This function does not return anything.
  */
 async function getCurrentUserForEdit() {
-    const userData = LocalStorageService.getItem('userData');
-    if(userData){
-      console.debug("[Contacts.js] No user data found in localStorage. Using fallback values");
-    }
+  const userData = LocalStorageService.getItem('userData');
+  if (userData) {
+    console.debug("[Contacts.js] No user data found in localStorage. Using fallback values");
+  }
 
-    const contact = getContactData(userData);
-    openEditDialog(contact);
+  const contact = getContactData(userData);
+  openEditDialog(contact);
 }
 
 /**
@@ -60,15 +60,14 @@ async function getCurrentUserForEdit() {
  * @example
  * const contact = getContactData({ name: 'Alice', email: 'alice@example.com' });'
  */
-function getContactData(userData){
+function getContactData(userData) {
   return {
-      userFullName: userData?.name || '',
-      userEmailAddress: userData?.email || '',
-      userPhoneNumber: userData?.phone || '',
-      userColor: userData?.color || '#FF7A00',
-      userId: userData?.id || 'current-user',
-      userPassword: userData?.userPassword || ''
-    }
+    userFullName: userData?.name || '',
+    userEmailAddress: userData?.email || '',
+    userPhoneNumber: userData?.phone || '',
+    userColor: userData?.color || '#FF7A00',
+    userId: userData?.id || 'current-user',
+  }
 }
 
 /**

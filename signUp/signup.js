@@ -102,7 +102,7 @@ export async function collectUserInput() {
     userPhoneNumber: "",
     userColor,
     userInitials: getInitials(userFullName),
-    firstCharachter: getFirstCharacter(userFullName)
+    firstCharacter: getFirstCharacter(userFullName)
   };
 }
 
