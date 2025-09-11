@@ -121,11 +121,7 @@ p {
 
 .nav-buttons:hover {
   cursor: pointer;
-  background-color: #091931;
-}
-
-.nav-buttons:active {
-  background-color: #091931;
+  background-color: rgb(9, 25, 49, 0.5);
 }
 
 .nav-buttons.active,

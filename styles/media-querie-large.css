@@ -357,12 +357,13 @@
   }
 
   .task-list {
-    min-height: 100vh;
+    min-height: 100%;
     display: flex;
     gap: 16px;
     overflow-x: auto;
     overflow-y: hidden;
     padding: 8px;
+    scroll-behavior: smooth;
   }
 
   .board {

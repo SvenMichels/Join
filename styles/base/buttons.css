@@ -179,13 +179,6 @@
   gap: 20px;
 }
 
-.nav-buttons:hover,
-.nav-buttons:active,
-.nav-buttons.active,
-.taskFrameLink.active {
-  background-color: #091931;
-}
-
 .nav-button-login {
   justify-content: center;
   gap: 8px;
