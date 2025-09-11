@@ -6,11 +6,18 @@
  */
 
 import { getSubtaskControlGroupTemplate } from "./addtasktemplates.js";
-import { getSubtaskItems, addSubtaskItem, removeSubtaskItem, updateSubtaskItem, validateSubtaskBeforeSave, setSubtaskItems } from "./formManager.js";
+import {
+  getSubtaskItems,
+  addSubtaskItem,
+  removeSubtaskItem,
+  updateSubtaskItem,
+  validateSubtaskBeforeSave,
+  setSubtaskItems
+} from "./formManager.js";
 import { initInputField } from "../scripts/auth/Validation.js";
 
-
 let outsideClickHandlerBound = false;
+let isSubtaskEditMode = false;
 
 
 /**
@@ -18,13 +25,14 @@ let outsideClickHandlerBound = false;
  *
  * @param {Event} element - Click event.
  */
-export function addNewSubtask(element) {
-  element.preventDefault();
-  const input = document.getElementById("subtask");
-  if (!input) return;
-  if (!validateSubtaskBeforeSave(input, "subtaskHint")) return;
-  addSubtaskItem(input.value.trim());
-  input.value = "";
+export function addNewSubtask(e) {
+  e?.preventDefault?.();
+  e?.stopPropagation?.();
+  const inputEl = document.getElementById("subtask");
+  if (!inputEl) return;
+  if (!validateSubtaskBeforeSave(inputEl, "subtaskHint")) return;
+  addSubtaskItem(inputEl.value.trim());
+  inputEl.value = "";
   renderSubtasks();
 }
 
@@ -33,11 +41,12 @@ export function addNewSubtask(element) {
  *
  * @param {KeyboardEvent} element - Keydown event.
  */
-export function addSubtaskOnEnterKey(element) {
-  if (element.key === "Enter") {
-    element.preventDefault();
-    addNewSubtask(element);
-  }
+export function addSubtaskOnEnterKey(e) {
+  if (!e || e.type !== "keydown") return;
+  if (e.key !== "Enter") return;
+  e.preventDefault();
+  e.stopPropagation();
+  addNewSubtask(e);
 }
 
 /**
@@ -111,25 +120,25 @@ function createControlGroup(index) {
  * @param {HTMLElement} deleteBtn - The delete button.
  * @param {number} index - Subtask index.
 */
-let isSubtaskEditMode = false;
 
 function addControlListeners(editBtn, deleteBtn, index) {
+  editBtn.setAttribute("type", "button");
+  deleteBtn.setAttribute("type", "button");
+
   editBtn.addEventListener("click", (e) => {
     e.preventDefault();
+    e.stopPropagation();
     if (isSubtaskEditMode) return;
     isSubtaskEditMode = true;
     makeSubtaskEditable(index);
   });
+
   deleteBtn.addEventListener("click", (e) => {
     e.preventDefault();
+    e.stopPropagation();
     removeSubtaskItem(index);
     renderSubtasks();
   });
-  exitEditMode();
-}
-
-function exitEditMode() {
-  isSubtaskEditMode = false;
 }
 
 /**
@@ -139,34 +148,53 @@ function exitEditMode() {
  */
 function makeSubtaskEditable(index) {
   const list = document.getElementById("subtaskList");
-  const container = list.children[index];
+  const container = list?.children[index];
   if (!container) return;
+
   const subtasks = getSubtaskItems();
   container.innerHTML = "";
   const counter = crypto.randomUUID();
   const input = createSubtaskInput(subtasks[index], counter);
   const buttonGroup = createSubtaskButtons(index, input);
   container.append(input, buttonGroup);
+
   initInputField(`subtaskEdit-${counter}`, "subtaskEditHint", "subtask");
-  bindOutsideClickToClose(container);
+  bindOutsideClickToClose(container, input, index);
+
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      e.stopPropagation();
+      if (!validateSubtaskBeforeSave(input, "subtaskEditHint")) return;
+      updateSubtaskItem(index, input.value.trim());
+      isSubtaskEditMode = false;
+      renderSubtasks();
+    } else if (e.key === "Escape") {
+      e.preventDefault();
+      e.stopPropagation();
+      isSubtaskEditMode = false;
+      renderSubtasks();
+    }
+  });
 }
 
-export function bindOutsideClickToClose(containerEl) {
+export function bindOutsideClickToClose(containerEl, inputEl, index) {
   if (outsideClickHandlerBound) return;
   const onDocClick = (e) => {
     if (containerEl.contains(e.target)) return;
-    const input = containerEl.querySelector('.subtask-text-input') || containerEl.querySelector('input');
-    if (input) {
-      updateSubtaskItem(containerEl, input.value.trim());
-      renderSubtasks();
+    const val = inputEl?.value?.trim() || "";
+    if (val && validateSubtaskBeforeSave(inputEl, "subtaskEditHint")) {
+      updateSubtaskItem(index, val);
     }
     isSubtaskEditMode = false;
-    document.removeEventListener('click', onDocClick);
+    document.removeEventListener("click", onDocClick, true);
     outsideClickHandlerBound = false;
+    renderSubtasks();
   };
-  setTimeout(() => document.addEventListener('click', onDocClick), 0);
+  setTimeout(() => document.addEventListener("click", onDocClick, true), 0);
   outsideClickHandlerBound = true;
 }
+
 /**
  * Creates an input element pre-filled with the subtask text.
  *
@@ -229,7 +257,12 @@ function createElement(tag, className) {
 function createIconButton(icon, className, onClick) {
   const btn = document.createElement("button");
   btn.className = className;
+  btn.type = "button";
   btn.innerHTML = `<img src="../assets/icons/${icon}" alt="${className}">`;
-  btn.addEventListener("click", onClick);
+  btn.addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onClick?.(e);
+  });
   return btn;
 }

@@ -61,11 +61,20 @@ function cacheDomElements() {
  * Sets up all relevant event listeners.
  */
 function setupEventListeners() {
-  domCache.taskForm?.addEventListener("submit", handleFormSubmission);
-  domCache.subtaskAddBtn?.addEventListener("click", addNewSubtask);
+  // ...
   domCache.subtaskInput?.addEventListener("keydown", addSubtaskOnEnterKey);
-  domCache.assignUserBtn?.addEventListener("click", toggleUserAssignmentList);
-  domCache.clearBtn?.addEventListener("click", clearAllFormData);
+  domCache.subtaskAddBtn?.setAttribute("type", "button");
+  domCache.subtaskAddBtn?.addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    addNewSubtask(e);
+  });
+  domCache.taskForm?.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && e.target.closest("#subtaskArea")) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  });
 }
 
 /**

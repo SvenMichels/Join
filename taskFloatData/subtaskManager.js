@@ -5,9 +5,13 @@
 
 import { getSubtaskHTML, getEditableSubtaskTemplate } from "./taskfloatHTML.js";
 import { initInputField } from "../scripts/auth/Validation.js";
+import { validateSubtaskBeforeSave } from "../addTask/formManager.js";
 
 let subtaskItemsListModal = [];
 let completedSubtasksModal = [];
+let isSubtaskEditMode = false;
+let currentEditIndex = -1;
+let outsideClickHandlerBound = false;
 
 /**
  * Returns the current subtask items
@@ -50,15 +54,6 @@ export function resetSubtasks() {
 }
 
 /**
- * Gets the trimmed value of the subtask input field
- * @returns {string} Input value
- */
-function getSubtaskInputValue() {
-  const subInput = document.getElementById("subtask-modal");
-  return subInput?.value.trim() || "";
-}
-
-/**
  * Clears the subtask input field
  */
 function clearSubtaskInput() {
@@ -72,12 +67,21 @@ function clearSubtaskInput() {
  */
 export function addSubtaskModal(event) {
   event.preventDefault();
-  const value = getSubtaskInputValue();
-  if (!value) return;
-
-  addSubtaskToList(value);
+  event.stopPropagation();
+  const inputEl = document.getElementById("subtask-modal");
+  if (!inputEl) return;
+  if (!validateSubtaskBeforeSave(inputEl, "subtaskModalHint")) return;
+  addSubtaskToList(inputEl.value.trim());
   clearSubtaskInput();
   renderSubtasksModal();
+}
+
+export function addSubtaskOnEnterModal(event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    event.stopPropagation();
+    addSubtaskModal(event);
+  }
 }
 
 /**
@@ -87,17 +91,6 @@ export function addSubtaskModal(event) {
 function addSubtaskToList(value) {
   subtaskItemsListModal.push(value);
   completedSubtasksModal.push(false);
-}
-
-/**
- * Handles Enter key press in the subtask input field
- * @param {KeyboardEvent} event - Key event
- */
-export function addSubtaskOnEnterModal(event) {
-  if (event.key === "Enter") {
-    event.preventDefault();
-    addSubtaskModal(event);
-  }
 }
 
 /**
@@ -174,7 +167,10 @@ function attachAllEventListeners(list) {
 function attachDeleteListeners(list) {
   const deleteButtons = list.querySelectorAll("[data-del]");
   deleteButtons.forEach(button => {
-    button.addEventListener("click", () => {
+    button.setAttribute("type", "button");
+    button.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       const index = parseInt(button.dataset.del);
       deleteSubtask(index);
     });
@@ -188,6 +184,10 @@ function attachDeleteListeners(list) {
 function deleteSubtask(index) {
   subtaskItemsListModal.splice(index, 1);
   completedSubtasksModal.splice(index, 1);
+  if (currentEditIndex === index) {
+    isSubtaskEditMode = false;
+    currentEditIndex = -1;
+  }
   renderSubtasksModal();
 }
 
@@ -198,8 +198,18 @@ function deleteSubtask(index) {
 function attachEditListeners(list) {
   const editButtons = list.querySelectorAll("[data-edit]");
   editButtons.forEach(button => {
-    button.addEventListener("click", () => {
+    button.setAttribute("type", "button");
+    button.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       const index = parseInt(button.dataset.edit);
+      if (isSubtaskEditMode && currentEditIndex !== index) {
+        isSubtaskEditMode = false;
+        currentEditIndex = -1;
+        unbindOutsideClick();
+        renderSubtasksModal();
+      }
+      if (isSubtaskEditMode) return;
       makeSubtaskEditableModal(index);
     });
   });
@@ -226,12 +236,11 @@ function attachCheckboxListeners(list) {
 function makeSubtaskEditableModal(index) {
   const item = getSubtaskElement(index);
   if (!item) return;
-
+  isSubtaskEditMode = true;
+  currentEditIndex = index;
   replaceWithEditTemplate(item, index);
   attachEditModeListeners(item, index);
-  initInputField("subtaskEditModal", 'subtaskEditModalHint', 'subtask');
-  console.log("im Manager");
-  
+  initInputField("subtaskEditModal", "subtaskEditModalHint", "subtask");
 }
 
 /**
@@ -254,6 +263,32 @@ function replaceWithEditTemplate(item, index) {
   item.innerHTML = getEditableSubtaskTemplate(currentText);
 }
 
+function bindOutsideClickToClose(containerEl, inputEl, index) {
+  if (outsideClickHandlerBound) return;
+
+  const onDocClick = (e) => {
+    if (containerEl.contains(e.target)) return;
+
+    const val = inputEl?.value?.trim() || "";
+    if (val && validateSubtaskBeforeSave(inputEl, "subtaskEditModalHint")) {
+      subtaskItemsListModal[index] = val;
+    }
+
+    exitEditMode();
+    document.removeEventListener("click", onDocClick, true);
+    outsideClickHandlerBound = false;
+    renderSubtasksModal();
+  };
+  setTimeout(() => document.addEventListener("click", onDocClick, true), 0);
+  outsideClickHandlerBound = true;
+  unbindOutsideClick = () => {
+    document.removeEventListener("click", onDocClick, true);
+    outsideClickHandlerBound = false;
+    unbindOutsideClick = () => { };
+  };
+}
+
+
 /**
  * Attaches save and delete listeners to edit-mode subtask
  * @param {HTMLElement} container - Container DOM element
@@ -263,11 +298,24 @@ function attachEditModeListeners(container, index) {
   const input = container.querySelector("input");
   const saveBtn = container.querySelector("[data-save]");
   const deleteBtn = container.querySelector("[data-del]");
-
+  if (saveBtn) saveBtn.setAttribute("type", "button");
+  if (deleteBtn) deleteBtn.setAttribute("type", "button");
   attachSaveListener(saveBtn, input, index);
   attachDeleteListener(deleteBtn, index);
+  input?.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      e.stopPropagation();
+      saveSubtaskEdit(input, index);
+    } else if (e.key === "Escape") {
+      e.preventDefault();
+      e.stopPropagation();
+      exitEditMode();
+      renderSubtasksModal();
+    }
+  });
+  bindOutsideClickToClose(container, input, index);
 }
-
 /**
  * Attaches save button event listener
  * @param {HTMLElement} saveBtn - Save button element
@@ -276,8 +324,9 @@ function attachEditModeListeners(container, index) {
  */
 function attachSaveListener(saveBtn, input, index) {
   if (!saveBtn) return;
-
-  saveBtn.addEventListener("click", () => {
+  saveBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
     saveSubtaskEdit(input, index);
   });
 }
@@ -288,7 +337,10 @@ function attachSaveListener(saveBtn, input, index) {
  * @param {number} index - Index of the subtask
  */
 function saveSubtaskEdit(input, index) {
+  if (!input) return;
+  if (!validateSubtaskBeforeSave(input, "subtaskEditModalHint")) return;
   subtaskItemsListModal[index] = input.value.trim();
+  exitEditMode();
   renderSubtasksModal();
 }
 
@@ -299,12 +351,12 @@ function saveSubtaskEdit(input, index) {
  */
 function attachDeleteListener(deleteBtn, index) {
   if (!deleteBtn) return;
-
-  deleteBtn.addEventListener("click", () => {
+  deleteBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
     deleteSubtask(index);
   });
 }
-
 /**
  * Updates the modal subtasks with external data
  * @param {Array<string>} subtasks - Array of subtask texts
@@ -315,6 +367,8 @@ export function updateSubtasks(subtasks = [], subtaskDone = []) {
   completedSubtasksModal = createCompletedArray(subtasks, subtaskDone);
 }
 
+let unbindOutsideClick = () => { };
+
 /**
  * Ensures the completed state array matches the number of subtasks
  * @param {Array<string>} subtasks - Subtask texts
@@ -324,4 +378,10 @@ export function updateSubtasks(subtasks = [], subtaskDone = []) {
 function createCompletedArray(subtasks, subtaskDone) {
   const hasValidDoneArray = subtaskDone.length === subtasks.length;
   return hasValidDoneArray ? [...subtaskDone] : new Array(subtasks.length).fill(false);
+}
+
+function exitEditMode() {
+  isSubtaskEditMode = false;
+  currentEditIndex = -1;
+  unbindOutsideClick();
 }
