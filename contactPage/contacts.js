@@ -66,7 +66,8 @@ function getContactData(userData){
       userEmailAddress: userData?.email || '',
       userPhoneNumber: userData?.phone || '',
       userColor: userData?.color || '#FF7A00',
-      userId: userData?.id || 'current-user'
+      userId: userData?.id || 'current-user',
+      userPassword: userData?.userPassword || ''
     }
 }
 

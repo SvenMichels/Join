@@ -112,7 +112,7 @@ export async function createContact(contact) {
 export async function updateContact(contact, updated) {
   try {
     const currentUser = getCurrentUserFromStorage();
-    await updateContactInFirebase(currentUser.id, contact.userId, updated);
+    await updateContactInFirebase(currentUser.id, contact.userId, { ...contact, ...updated });
     updateLocalContactData(contact, updated);
     await refreshUI();
     await updateBigContactIfVisible(contact);
@@ -133,8 +133,9 @@ export async function updateContact(contact, updated) {
  * @throws {Error} On HTTP errors.
  */
 async function updateContactInFirebase(userId, contactId, contactData) {
+  console.warn('[updateContactInFirebase:dataService] PATCH', { contactId, keys: Object.keys(contactData) });
   const response = await fetch(`${FIREBASE_DATABASE_BASE_URL}/users/${contactId}.json`, {
-    method: 'PUT',
+    method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(contactData)
   });
@@ -360,7 +361,8 @@ function buildContactFromUserData(user) {
     userInitials: user.userInitials || getInitialsFromName(name),
     firstCharacter: name.charAt(0).toUpperCase(),
     userId: user.userId || user.id || "current-user",
-    userColor: user.userColor || "color-1"
+    userColor: user.userColor || "color-1",
+    userPassword: user.userPassword || user.password || ""
   };
 }
 

@@ -226,6 +226,7 @@ function createContactFromForm(fullName) {
     userInitials: getInitials(fullName),
     firstCharacter: fullName ? fullName.charAt(0).toUpperCase() : "?",
     userColor: generateRandomColorClass(),
+    userPassword: fullName.userPassword || '',
   };
 }
 
@@ -247,7 +248,6 @@ async function addNewContactToDatabase(e) {
  * @param {Object} contact - Contact object
  */
 async function saveNewContact(contact) {
-  console.table(contact);
   const result = await createContact(contact);
   if (result && result.name) {
     contact.userId = result.name;

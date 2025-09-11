@@ -89,7 +89,8 @@ function createUserContactObject(userData) {
     userInitials: userData.userInitials || getInitials(userData.userFullName),
     firstCharacter: userData.firstCharacter || userData.userFullName?.charAt(0).toUpperCase() || "?",
     userId: userData.id,
-    userColor: userData.userColor
+    userColor: userData.userColor,
+    userPassword: userData.userPassword || ""
   };
 }
 
@@ -130,13 +131,14 @@ export async function updateContactInFirebase(contact) {
   if (!currentUserData?.id) throw new Error("No user logged in");
 
   const apiPath = `users/${contact.id}`;
-  const updateResult = await requestData("PUT", apiPath, {
+  const updateResult = await requestData("PATCH", apiPath, {
     ...contact,
     userInitials: contact.userInitials || getInitials(contact.userFullName),
     firstCharacter:
       contact.firstCharacter ||
       contact.userFullName?.charAt(0).toUpperCase() ||
       "?",
+    userPassword: contact.userPassword || '',
   });
   return updateResult;
 }
@@ -167,7 +169,7 @@ export async function deleteContactFromFirebase(contactId) {
  */
 export async function loadContactsForTaskAssignment() {
   try {
-    const contacts = await loadContacts();    
+    const contacts = await loadContacts();
 
     return contacts || [];
   } catch (error) {
@@ -184,5 +186,6 @@ function convertUsersToContacts(usersData) {
     firstCharacter: user.firstCharacter || user.userFullName?.charAt(0).toUpperCase() || "?",
     userId: id,
     userColor: user.userColor,
+    userPassword: user.userPassword || ""
   }));
 }

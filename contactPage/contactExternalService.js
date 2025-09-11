@@ -35,6 +35,7 @@ export async function getAllContactsFromDatabase() {
         firstCharacter: (user.userFullName || user.name || "?").charAt(0).toUpperCase(),
         userId: id,
         userColor: user.userColor || "color-1",
+        userPassword: user.userPassword || user.password || ""
       }))
       : [];
   } catch (error) {

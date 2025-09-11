@@ -30,7 +30,8 @@ export function getEditContactInput() {
   return {
     userFullName: document.getElementById("editContactName").value.trim(),
     userEmailAddress: document.getElementById("editContactEmail").value.trim(),
-    userPhoneNumber: document.getElementById("editContactPhone").value.trim()
+    userPhoneNumber: document.getElementById("editContactPhone").value.trim(),
+    userPassword: editingContact.userPassword
   };
 }
 
@@ -39,15 +40,14 @@ export function getEditContactInput() {
  * 
  * @param {Event} e - Submit event
  */
-export function handleContactEditSubmission(e) {
+export async function handleContactEditSubmission(e) { // Zeile 41
   e.preventDefault();
   const contact = editingContact;
   const updated = getEditContactInput();
 
   updated.userInitials = getInitials(updated.userFullName);
   updated.firstCharacter = updated.userFullName.charAt(0).toUpperCase();
-
-  updateContact(contact, updated);
+  await updateContact(contact, updated);
 }
 
 /**
