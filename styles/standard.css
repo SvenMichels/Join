@@ -368,3 +368,8 @@ textarea::placeholder {
   padding-block-start: 0px !important;
   line-height: normal;
 }
+
+.board-icon {
+  width: 24px;
+  height: 24px;
+}
