@@ -121,9 +121,3 @@ input:valid+.error-message {
   gap: 16px;
   max-width: 900px;
 }
-
-.space-container {
-  width: 0px;
-  border: solid 1px;
-  color: #d1d1d1;
-}

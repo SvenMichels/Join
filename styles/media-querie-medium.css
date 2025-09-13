@@ -79,6 +79,7 @@
     max-width: 500px;
     overflow-y: auto;
     padding: 0 16px;
+    padding-top: 46px;
     box-sizing: border-box;
   }
 
@@ -139,7 +140,7 @@
     max-width: 600px;
   }
 
-  .nav-menu>*:has(.nav-buttons) {
+  .nav-menu > *:has(.nav-buttons) {
     width: 80px;
   }
 
@@ -221,7 +222,7 @@
     height: clamp(2rem, 5vw, 3.5rem);
   }
 
-  .stats>div .counter {
+  .stats > div .counter {
     font-size: clamp(3rem, 5vw, 4rem);
   }
 
@@ -301,5 +302,13 @@
     cursor: pointer;
     color: #00bee8;
     font-weight: 700;
+  }
+
+  .task-detail-container {
+    flex-direction: column;
+  }
+
+  .space-container {
+    display: none;
   }
 }
