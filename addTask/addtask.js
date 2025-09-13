@@ -39,6 +39,7 @@ function initializeApplication() {
   initInputField("task-title", 'titleHint', 'subtask');
   initInputField("task-description", 'descriptionHint', 'subtask');
   initInputField("subtask", 'subtaskHint', 'subtask');
+  initInputField("task-date", 'addtaskdatehint', 'date');
 }
 
 /**
@@ -61,7 +62,6 @@ function cacheDomElements() {
  * Sets up all relevant event listeners.
  */
 function setupEventListeners() {
-  // ...
   domCache.subtaskInput?.addEventListener("keydown", addSubtaskOnEnterKey);
   domCache.subtaskAddBtn?.setAttribute("type", "button");
   domCache.subtaskAddBtn?.addEventListener("click", (e) => {

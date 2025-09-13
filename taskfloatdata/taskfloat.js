@@ -47,6 +47,7 @@ export function initTaskFloat() {
   initInputField("task-title-modal", 'titelModalHint', 'name');
   initInputField("task-description-modal", 'descriptionModalHint', 'name');
   initInputField("subtask-modal", 'subtaskModalHint', 'subtask');
+  initInputField("task-date-modal", 'task-date-modal-Hint', 'date');
 
   return initFormModal();
 }

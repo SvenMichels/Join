@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Task Detail</title>
   <link rel="stylesheet" href="../edittask/taskdetails.css" />
 </head>
+
 <body>
 
   <!-- Modal-Fenster -->
@@ -50,16 +52,17 @@
     </div>
 
   </div>
-<script type="module">
-  import { closeModal } from '../taskFloatData/taskfloat.js';
+  <script type="module">
+    import { closeModal } from '../taskFloatData/taskfloat.js';
 
-  document.addEventListener('DOMContentLoaded', () => {
-    const closeBtn = document.getElementById('taskDetailCloseButton');
-    
-    if (closeBtn) {
-      closeBtn.addEventListener('click', closeModal);
-    }
-  });
-</script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const closeBtn = document.getElementById('taskDetailCloseButton');
+
+      if (closeBtn) {
+        closeBtn.addEventListener('click', closeModal);
+      }
+    });
+  </script>
 </body>
+
 </html>

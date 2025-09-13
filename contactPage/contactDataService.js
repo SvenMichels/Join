@@ -133,8 +133,7 @@ export async function updateContact(contact, updated) {
  * @throws {Error} On HTTP errors.
  */
 async function updateContactInFirebase(userId, contactId, contactData) {
-  console.warn('[updateContactInFirebase:dataService] PATCH', { contactId, keys: Object.keys(contactData) });
-  const response = await fetch(`${FIREBASE_DATABASE_BASE_URL}/users/${contactId}.json`, {
+    const response = await fetch(`${FIREBASE_DATABASE_BASE_URL}/users/${contactId}.json`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(contactData)

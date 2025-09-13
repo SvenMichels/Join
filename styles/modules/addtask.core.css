@@ -47,8 +47,9 @@
 
 .prio-button-container {
   display: flex;
+  margin: 0px 3px;
   justify-content: space-between;
-  gap: 16px;
+  gap: clamp(0.4rem, 0.05rem, 1rem);
 }
 
 .prio-icons {

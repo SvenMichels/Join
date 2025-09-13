@@ -128,6 +128,15 @@
     box-sizing: border-box;
   }
 
+  .task-wrapper {
+    display: flex;
+    flex-direction: column;
+    max-height: 382px;
+    width: 100%;
+    justify-content: space-between;
+    gap: 30px;
+  }
+
   .task-container {
     padding-right: 40px;
   }
@@ -184,7 +193,6 @@
 
   .required-container {
     padding-bottom: 64px;
-    position: absolute;
     bottom: 0;
     width: 65%;
   }
@@ -200,10 +208,6 @@
   .task-description,
   .task-date {
     width: 100%;
-  }
-
-  .prio-container {
-    width: 52%;
   }
 
   .create-container {
@@ -333,7 +337,6 @@
 
   .required-container {
     padding-bottom: 64px;
-    position: absolute;
     bottom: 0;
     width: 70%;
   }

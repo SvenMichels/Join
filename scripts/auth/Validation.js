@@ -21,8 +21,9 @@ export function initInputField(inputId, bubbleId, inputType) {
   const allowInnerSpaces = inputType === 'name';
   const subtaskAllowed = inputType === 'subtask';
   const phoneMode = inputType === 'phone';
+  const dateMode = inputType === 'date';
 
-  validateInput(input, bubbleId, { allowInnerSpaces, subtaskAllowed, phoneMode });
+  validateInput(input, bubbleId, { allowInnerSpaces, subtaskAllowed, phoneMode, dateMode });
   setFieldValidity(inputId, false);
 
   input.addEventListener('input', (e) => inputEventlistener(inputId, bubbleId, e, inputType));
@@ -62,6 +63,7 @@ function getMessage(inputType, inputId, bubbleId, e) {
   if (inputType === 'password') msg = getPasswordMessage(e.target.value);
   if (inputType === 'name') msg = getNameMessage(e.target.value);
   if (inputType === 'phone') msg = getPhoneMessage(e.target.value);
+  if (inputType === 'date') msg = getDateMessage(e.target.value);
   if (msg === '') hideValidateBubble(inputId + bubbleId);
   return msg;
 }
@@ -299,4 +301,21 @@ function getPhoneMessage(userInput) {
   if (!pattern.test(userInput)) message += 'Allowed: digits, optional leading +, "/" as separator. ';
   if (!message) message = 'Looks good!';
   return message.trim();
+}
+
+export function getDateMessage(userInput) {
+  const value = String(userInput ?? '').trim();
+  if (!value) return 'Select a date.';
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
+  if (!m) return 'Invalid date format (YYYY-MM-DD).';
+  const y = Number(m[1]), mo = Number(m[2]), d = Number(m[3]);
+  const dt = new Date(y, mo - 1, d);
+  if (dt.getFullYear() !== y || dt.getMonth() !== mo - 1 || dt.getDate() !== d) {
+    return 'Invalid calendar date.';
+  }
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  dt.setHours(0, 0, 0, 0);
+  if (dt < today) return 'Date cannot be in the past.';
+  return 'Looks good!';
 }
