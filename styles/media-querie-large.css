@@ -239,10 +239,6 @@
     gap: 30px;
   }
 
-  .space-container {
-    display: none;
-  }
-
   .add-task-board-button {
     display: none;
   }
