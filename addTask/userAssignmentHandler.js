@@ -7,7 +7,6 @@
 import { getUserCheckboxTemplate } from "./addtasktemplates.js";
 import { getInitials } from "../scripts/utils/helpers.js";
 import { createRemainingChip } from "../board/boardUtils.js";
-import { loadAllContactsFromFirebaseDatabase } from "../contactPage/contactDataService.js";
 import { clearSelectedUserNamesModal } from "../taskFloatData/userAssignmentManager.js";
 import { fetchContactsListForAssignment } from "../scripts/firebase.js";
 
@@ -50,7 +49,6 @@ export async function loadAndRenderUsers() {
   try {
     const contacts = await fetchContactsListForAssignment();
     allSystemUsers = Array.isArray(contacts) ? contacts : [];
-    console.debug("AssignedTo loaded users:", allSystemUsers.length);
     renderUserCheckboxes(allSystemUsers, Array.from(selectedUserNames));
   } catch (error) {
     console.error("Error loading contacts for add task:", error);
@@ -117,7 +115,6 @@ function createUserCheckboxElement(user, isChecked) {
   const wrapper = document.createElement("div");
   wrapper.className = "user-checkbox-wrapper";
   if (isChecked) wrapper.classList.add("active");
-
   wrapper.innerHTML = getUserCheckboxTemplate(user, isChecked);
   attachCheckboxListener(wrapper);
   return wrapper;
@@ -244,22 +241,30 @@ export function initUserAssignmentList() {
 export async function setupUserSearch() {
   const searchBar = document.getElementById("searchUser");
   const listEl = document.getElementById("assignedUserList");
-  console.log("Setting up user search");
-
+  await loadAndRenderUsers();
   if (!searchBar || !listEl) return;
-  searchBar.addEventListener("input", () => {
+  const showAll = () => {
+    const preselected = Array.from(selectedUserNames);
+    listEl.classList.add("visible");
+    renderUserCheckboxes(allSystemUsers, preselected);
+  };
+  const filterList = () => {
     const term = searchBar.value.trim().toLowerCase();
     const preselected = Array.from(selectedUserNames);
-    if (term.length < 1) {
+    listEl.classList.add("visible");
+    if (!term) {
       renderUserCheckboxes(allSystemUsers, preselected);
       return;
     }
-    listEl.classList.add("visible");
     const matchedUsers = allSystemUsers.filter(u =>
       u.userFullName.toLowerCase().includes(term)
     );
     renderUserCheckboxes(matchedUsers, preselected);
-  });
+  };
+  searchBar.addEventListener("focus", showAll);
+  searchBar.addEventListener("click", showAll);
+  searchBar.addEventListener("input", filterList);
+  renderUserCheckboxes(allSystemUsers, Array.from(selectedUserNames));
 }
 
 function setupOutsideClickToClose(containerId, toggleElementSelector, arrowSelector, inputSelector, onClose) {
