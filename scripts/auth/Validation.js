@@ -1,4 +1,14 @@
+/**
+ * @fileoverview Zentrale Eingabe-Validierung und Validierungs-Bubbles.
+ * Unterstützt u. a. E-Mail, Passwort, Name, Telefon, Subtask-Text und Datum.
+ * Enthält Initialisierer für Input-Felder inkl. Live-Feedback.
+ * @module Validation
+ */
 
+/**
+ * Zulässige Top-Level-Domains für E-Mail-Validierung.
+ * @type {string[]}
+ */
 const allowedTlds = [
   'com', 'net', 'org', 'info', 'biz', 'name', 'pro', 'xyz',
   'online', 'site', 'tech', 'app', 'shop', 'co', 'io',
@@ -10,11 +20,23 @@ const allowedTlds = [
   'sm', 'va', 'mc', 'fo', 'gl'
 ];
 
+/**
+ * Interner Speicher der Feld-Gültigkeit pro Input-ID.
+ * @type {Record<string, boolean>}
+ */
 const fieldValidityState = Object.create(null);
 
 initInputField('loginEmail', 'emailHint', 'email');
 initInputField('loginPassword', 'pwHint', 'password');
 
+/**
+ * Initialisiert ein Eingabefeld mit Validierung und Validierungs-Bubble.
+ * Bindet Input-/Focus-/Blur-Handler und setzt Startzustand.
+ * @param {string} inputId - ID des Input-Elements
+ * @param {string} bubbleId - ID des Bubble-Elements für Meldungen
+ * @param {'email'|'password'|'name'|'phone'|'subtask'|'date'} inputType - Typ der Validierung
+ * @returns {void}
+ */
 export function initInputField(inputId, bubbleId, inputType) {
   const input = document.getElementById(inputId);
   if (!input) return;
@@ -31,6 +53,12 @@ export function initInputField(inputId, bubbleId, inputType) {
   input.addEventListener('blur', () => { inputTrimmer(input); hideValidateBubble(bubbleId); });
 }
 
+/**
+ * Schneidet führende und nachgestellte Leerzeichen vom aktuellen Input-Wert.
+ * @param {HTMLInputElement} input - Das Eingabefeld
+ * @returns {void}
+ * @private
+ */
 function inputTrimmer(input) {
   const trimmed = input.value.replace(/^\s+|\s+$/g, '');
   if (trimmed !== input.value) {
@@ -38,6 +66,15 @@ function inputTrimmer(input) {
   }
 }
 
+/**
+ * Focus-Handler: zeigt kontextbasierte Validierungsnachricht.
+ * Handhabt Sonderfall "Confirm Password".
+ * @param {string} inputId
+ * @param {string} bubbleId
+ * @param {Event} e
+ * @param {'email'|'password'|'name'|'phone'|'subtask'|'date'} inputType
+ * @returns {void}
+ */
 export function focusEventlistener(inputId, bubbleId, e, inputType) {
   if (inputId === 'inputConfirmPassword') {
     const { passwordInput, currentValue, matchedValues } = getListenerConfig(e);
@@ -56,6 +93,15 @@ export function focusEventlistener(inputId, bubbleId, e, inputType) {
   showValidateBubble(inputId, msg, bubbleId, 2000);
 }
 
+/**
+ * Liefert eine Validierungsnachricht abhängig vom Eingabetyp.
+ * @param {'email'|'password'|'name'|'phone'|'subtask'|'date'} inputType
+ * @param {string} inputId
+ * @param {string} bubbleId
+ * @param {Event} e
+ * @returns {string} Meldungstext
+ * @private
+ */
 function getMessage(inputType, inputId, bubbleId, e) {
   let msg = '';
   if (inputType === 'subtask') msg = getSubtaskMessage(e.target.value);
@@ -68,6 +114,12 @@ function getMessage(inputType, inputId, bubbleId, e) {
   return msg;
 }
 
+/**
+ * Liest Vergleichswerte für Passwort/Bestätigung aus dem DOM.
+ * @param {Event} e
+ * @returns {{ passwordInput: string, currentValue: string, matchedValues: boolean }}
+ * @private
+ */
 function getListenerConfig(e) {
   const passwordInput = document.getElementById('inputPassword')?.value || '';
   const currentValue = e.target.value;
@@ -75,6 +127,15 @@ function getListenerConfig(e) {
   return { passwordInput, currentValue, matchedValues };
 }
 
+/**
+ * Input-Handler: live Validieren und Bubble aktualisieren.
+ * Handhabt Sonderfall "Confirm Password".
+ * @param {string} inputId
+ * @param {string} bubbleId
+ * @param {Event} e
+ * @param {'email'|'password'|'name'|'phone'|'subtask'|'date'} inputType
+ * @returns {void}
+ */
 export function inputEventlistener(inputId, bubbleId, e, inputType) {
   if (inputId === 'inputConfirmPassword') {
     const { passwordInput, currentValue, matchedValues } = getListenerConfig(e);
@@ -95,6 +156,13 @@ export function inputEventlistener(inputId, bubbleId, e, inputType) {
   setFieldValidity(inputId, isValid);
 }
 
+/**
+ * Hängt Validierungsregeln und Tastatur-Guards an ein Eingabefeld.
+ * @param {HTMLInputElement} input
+ * @param {string} bubbleId
+ * @param {{ allowInnerSpaces?: boolean, subtaskAllowed?: boolean, phoneMode?: boolean, dateMode?: boolean }} [options]
+ * @returns {void}
+ */
 export function validateInput(input, bubbleId, options = {}) {
   if (!input) return;
   if (input.dataset.validationAttached === "true") return;
@@ -109,6 +177,14 @@ export function validateInput(input, bubbleId, options = {}) {
   input.dataset.validationAttached = "true";
 }
 
+/**
+ * Verhindert unzulässige Leerzeichen (führend/innen) per Tastatur.
+ * @param {HTMLInputElement} input
+ * @param {string} bubbleId
+ * @param {boolean} allowInnerSpaces - Erlaubt einfache Innen-Leerzeichen
+ * @returns {void}
+ * @private
+ */
 function attachSpaceKeydownBlocker(input, bubbleId, allowInnerSpaces) {
   input.addEventListener("keydown", (e) => {
     if (e.key !== " ") return;
@@ -124,6 +200,14 @@ function attachSpaceKeydownBlocker(input, bubbleId, allowInnerSpaces) {
   });
 }
 
+/**
+ * Subtask-spezifische Leerzeichen-Logik:
+ * verbietet führende und unselektierte End-Leerzeichen.
+ * @param {HTMLInputElement} input
+ * @param {string} bubbleId
+ * @returns {void}
+ * @private
+ */
 function attachSubtaskSpaceHandler(input, bubbleId) {
   input.addEventListener('keydown', (e) => {
     if (e.key !== ' ') return;
@@ -140,7 +224,12 @@ function attachSubtaskSpaceHandler(input, bubbleId) {
   });
 }
 
-
+/**
+ * Liefert Cursor-Positionen für Subtask-Leerzeichenprüfung.
+ * @param {HTMLInputElement} input
+ * @returns {{ atStart: boolean, atEndUnselected: boolean }}
+ * @private
+ */
 function getSubtaskPositions(input) {
   const pos = input.selectionStart ?? 0;
   const end = input.selectionEnd ?? pos;
@@ -150,6 +239,13 @@ function getSubtaskPositions(input) {
   return { atStart, atEndUnselected };
 }
 
+/**
+ * Beschränkt erlaubte Zeichen für Telefonnummern (Ziffern, führendes +, / als Trenner).
+ * @param {HTMLInputElement} input
+ * @param {string} bubbleId
+ * @returns {void}
+ * @private
+ */
 function attachPhoneCharBlocker(input, bubbleId) {
   input.addEventListener('keydown', (e) => {
     if (allowedInputBtn(e)) return;
@@ -169,6 +265,12 @@ function attachPhoneCharBlocker(input, bubbleId) {
   });
 };
 
+/**
+ * Erlaubt Navigations-/Editiertasten in Keydown-Handlern.
+ * @param {KeyboardEvent} event
+ * @returns {boolean} true, wenn Taste erlaubt ist
+ * @private
+ */
 function allowedInputBtn(event) {
   return (
     event.key === 'Backspace' || event.key === 'Delete' || event.key === 'Tab' ||
@@ -177,6 +279,13 @@ function allowedInputBtn(event) {
   );
 }
 
+/**
+ * Entfernt führende Leerzeichen live beim Tippen (Name-Felder).
+ * @param {HTMLInputElement} input
+ * @param {string} bubbleId
+ * @returns {void}
+ * @private
+ */
 function attachLeadingSpaceNormalizer(input, bubbleId) {
   input.addEventListener("input", () => {
     if (input.value.startsWith(" ")) {
@@ -186,6 +295,12 @@ function attachLeadingSpaceNormalizer(input, bubbleId) {
   });
 }
 
+/**
+ * Prüft, ob Cursor an führender Leerzeichenposition steht.
+ * @param {HTMLInputElement} input
+ * @returns {boolean}
+ * @private
+ */
 function isLeadingSpacePosition(input) {
   const pos = input.selectionStart ?? 0;
   if (pos === 0) return true;
@@ -193,14 +308,31 @@ function isLeadingSpacePosition(input) {
   return /^\s*$/.test(left);
 }
 
+/**
+ * Liefert die aktuelle Gültigkeit eines Felds.
+ * @param {string} inputId
+ * @returns {boolean}
+ */
 export function isFieldValid(inputId) {
   return fieldValidityState[inputId] === true;
 }
 
+/**
+ * Setzt die Gültigkeit eines Felds.
+ * @param {string} inputId
+ * @param {boolean} isValid
+ * @returns {void}
+ */
 export function setFieldValidity(inputId, isValid) {
   fieldValidityState[inputId] = !!isValid;
 }
 
+/**
+ * Wrapper für Formularvalidierung (nutzt gespeicherten Zustand).
+ * @param {string} inputId
+ * @param {string} _bubbleId
+ * @returns {boolean}
+ */
 export function confirmInputForFormValidation(inputId, _bubbleId) {
   return isFieldValid(inputId);
 }
@@ -213,34 +345,72 @@ export function showValidateBubble(inputId, message, bubbleId, timeout = 3000) {
   setBubbleTimeout(bubbleElement, timeout);
 }
 
+/**
+ * Schreibt Nachricht in die Bubble und liefert Validitätsstatus.
+ * @param {string} message
+ * @param {HTMLElement} bubbleElement
+ * @returns {boolean} true, wenn "Looks good!" oder "Password Matches"
+ * @private
+ */
 function checkBubbleContext(message, bubbleElement) {
   bubbleElement.textContent = message;
   const isValid = message === 'Looks good!' || message === 'Password Matches';
   return isValid;
 }
 
+/**
+ * Steuert Ein-/Ausblenden der Bubble via Timeout.
+ * @param {HTMLElement} bubbleElement
+ * @param {number} timeout
+ * @returns {void}
+ * @private
+ */
 function setBubbleTimeout(bubbleElement, timeout) {
   bubbleElement.classList.add('show');
   clearTimeout(bubbleElement.hideTimer);
   bubbleElement.hideTimer = setTimeout(() => bubbleElement.classList.remove('show'), timeout);
 }
 
+/**
+ * Toggelt Validierungs-Border-Farben am Eingabefeld.
+ * @param {HTMLElement} inputIdElement
+ * @param {boolean} isValid
+ * @returns {void}
+ * @private
+ */
 function toggleBubbleColor(inputIdElement, isValid) {
   inputIdElement.classList.toggle('validate-border-blue', isValid);
   inputIdElement.classList.toggle('validate-border-red', !isValid);
 }
 
+/**
+ * Liefert Referenzen auf Input- und Bubble-Element.
+ * @param {string} inputId
+ * @param {string} bubbleId
+ * @returns {{ inputIdElement: HTMLElement|null, bubbleElement: HTMLElement|null }}
+ * @private
+ */
 function getBubbleElements(inputId, bubbleId) {
   const inputIdElement = document.getElementById(inputId);
   const bubbleElement = document.getElementById(bubbleId);
   return { inputIdElement, bubbleElement };
 }
 
+/**
+ * Blendet die Validierungs-Bubble aus.
+ * @param {string} bubbleId
+ * @returns {void}
+ */
 export function hideValidateBubble(bubbleId) {
   const bubbleElement = document.getElementById(bubbleId);
   if (bubbleElement) bubbleElement.classList.remove('show');
 }
 
+/**
+ * E-Mail-Validierung inkl. TLD-Prüfung und diversen RFC-nahen Checks.
+ * @param {string} userInput
+ * @returns {string} Validierungsnachricht
+ */
 function getEmailMessage(userInput) {
   let message = '';
   if (userInput.length < 6 || userInput.length > 64) message += 'Use 6–64 characters. ';
@@ -256,6 +426,11 @@ function getEmailMessage(userInput) {
   return message.trim();
 }
 
+/**
+ * Passwort-Validierung (Länge, Groß-/Kleinbuchstaben, Zahl, Symbol).
+ * @param {string} userInput
+ * @returns {string} Validierungsnachricht
+ */
 function getPasswordMessage(userInput) {
   let message = '';
   if (userInput.length < 6 || userInput.length > 32) message += 'Use 6–32 characters. ';
@@ -267,7 +442,11 @@ function getPasswordMessage(userInput) {
   return message.trim();
 }
 
-
+/**
+ * Name-Validierung (Mehrteilig, Akzente, Bindestriche, einfache Innen-Leerzeichen).
+ * @param {string} userInput
+ * @returns {string} Validierungsnachricht
+ */
 export function getNameMessage(userInput) {
   let message = '';
   const value = String(userInput ?? '');
@@ -281,6 +460,11 @@ export function getNameMessage(userInput) {
   return message.trim();
 }
 
+/**
+ * Subtask-Text-Validierung (Zeichenumfang, Interpunktion, Leerzeichenregeln).
+ * @param {string} userInput
+ * @returns {string} Validierungsnachricht
+ */
 export function getSubtaskMessage(userInput) {
   let message = '';
   const value = String(userInput ?? '');
@@ -294,6 +478,11 @@ export function getSubtaskMessage(userInput) {
   return message.trim();
 }
 
+/**
+ * Telefonnummer-Validierung (Ziffern, optional führendes +, / als Trenner).
+ * @param {string} userInput
+ * @returns {string} Validierungsnachricht
+ */
 function getPhoneMessage(userInput) {
   const pattern = /^\+?[0-9]+(?:\/[0-9]+)*$/;
   let message = '';
@@ -303,6 +492,11 @@ function getPhoneMessage(userInput) {
   return message.trim();
 }
 
+/**
+ * Datum-Validierung für <input type="date"> (YYYY-MM-DD, echter Kalendertag, nicht in der Vergangenheit).
+ * @param {string} userInput - Erwartet ISO-Format YYYY-MM-DD
+ * @returns {string} Validierungsnachricht
+ */
 export function getDateMessage(userInput) {
   const value = String(userInput ?? '').trim();
   if (!value) return 'Select a date.';
