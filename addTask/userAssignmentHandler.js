@@ -127,10 +127,10 @@ function createUserCheckboxElement(user, isChecked) {
  */
 function attachCheckboxListener(wrapper) {
   const checkbox = wrapper.querySelector("input");
+  const userName = checkbox.value;
   wrapper.addEventListener("click", (e) => {
-    if (e.target !== checkbox) checkbox.checked = !checkbox.checked;
+    if (e.target !== checkbox || e.target !== userName);
     wrapper.classList.toggle("active", checkbox.checked);
-    const userName = checkbox.value;
     if (checkbox.checked) {
       selectedUserNames.add(userName);
     } else {

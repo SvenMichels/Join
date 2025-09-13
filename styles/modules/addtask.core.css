@@ -121,3 +121,7 @@ input:valid+.error-message {
   gap: 16px;
   max-width: 900px;
 }
+
+.user-info-wrapper label {
+  cursor: pointer;
+}
