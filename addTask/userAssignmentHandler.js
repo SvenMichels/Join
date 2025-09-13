@@ -4,7 +4,6 @@
  *
  * @module userAssignmentHandler
  */
-
 import { getUserCheckboxTemplate } from "./addtasktemplates.js";
 import { getInitials } from "../scripts/utils/helpers.js";
 import { createRemainingChip } from "../board/boardUtils.js";
@@ -226,12 +225,17 @@ export function clearSelectedUsers() {
  *
  * @param {Event} clickEvent - Button click event
  */
-export function toggleUserAssignmentList(clickEvent) {
-  clickEvent.preventDefault();
+export function initUserAssignmentList() {
+  const assignBtn = document.querySelector(".assignUserListBtn");
   const userAssignmentList = document.getElementById("assignedUserList");
   const arrowIndicator = document.getElementById("assignedBtnImg");
-  const isListVisible = userAssignmentList.classList.toggle("visible");
-  arrowIndicator?.classList.toggle("rotated", isListVisible);
+
+  if (!assignBtn || !userAssignmentList) return;
+
+  assignBtn.addEventListener("click", () => {
+    const isListVisible = userAssignmentList.classList.toggle("visible");
+    arrowIndicator?.classList.toggle("rotated", isListVisible);
+  });
 }
 
 /**
@@ -277,7 +281,7 @@ function setupOutsideClickToClose(containerId, toggleElementSelector, arrowSelec
         input.value = "";
         if (typeof onClose === "function") {
           onClose();
-        } else if (typeof loadAndRenderUsers === "function") {
+        }else if (typeof loadAndRenderUsers === "function") {
           loadAndRenderUsers();
         }
       }

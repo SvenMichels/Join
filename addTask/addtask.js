@@ -13,7 +13,7 @@ import { getInitials } from "../scripts/utils/helpers.js";
 import { setupMobileDeviceListeners } from "../scripts/utils/mobileUtils.js";
 import { collectTaskData, validateTask, resetFormState, clearValidationAlerts } from "./formManager.js";
 import { selectPriority, initPriorityEventListeners } from "./priorityHandler.js";
-import { loadAndRenderUsers, toggleUserAssignmentList, setupUserSearch, clearSelectedUsers } from "./userAssignmentHandler.js";
+import { loadAndRenderUsers, initUserAssignmentList, setupUserSearch, clearSelectedUsers } from "./userAssignmentHandler.js";
 import { addNewSubtask, addSubtaskOnEnterKey, renderSubtasks } from "./subtaskHandler.js";
 import { initInputField } from "../scripts/auth/Validation.js";
 
@@ -41,6 +41,7 @@ function initializeApplication() {
   initInputField("task-description", 'descriptionHint', 'subtask');
   initInputField("subtask", 'subtaskHint', 'subtask');
   initInputField("task-date", 'addtaskdatehint', 'date');
+  initUserAssignmentList();
 }
 
 /**

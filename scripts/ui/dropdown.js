@@ -9,7 +9,7 @@ export function setupDropdown() {
 
   trigger.addEventListener("click", (e) => handleTriggerClick(e, menu));
   menu.addEventListener("click", stopEventPropagation);
-  document.addEventListener("click", (e) => handleDocumentClick(e, trigger, menu));
+  // document.addEventListener("click", (e) => handleDocumentClick(e, trigger, menu));
 }
 
 /**
