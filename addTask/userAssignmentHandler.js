@@ -8,18 +8,19 @@
 import { getUserCheckboxTemplate } from "./addtasktemplates.js";
 import { getInitials } from "../scripts/utils/helpers.js";
 import { createRemainingChip } from "../board/boardUtils.js";
-import { loadContactsForTaskAssignment } from "../contactPage/contactService.js";
+import { loadAllContactsFromFirebaseDatabase } from "../contactPage/contactDataService.js";
 import { clearSelectedUserNamesModal } from "../taskFloatData/userAssignmentManager.js";
+import { fetchContactsListForAssignment } from "../scripts/firebase.js";
 
 let allSystemUsers = [];
 const selectedUserNames = new Set();
 
 setupOutsideClickToClose(
   "assignedUserList",
-  ".assigned-input-wrapper", 
-  "#assignedBtnImg", 
+  ".assigned-input-wrapper",
+  "#assignedBtnImg",
   "#searchUser",
-   () => renderAllUsers()
+  () => loadAndRenderUsers()
 );
 
 /**
@@ -39,6 +40,7 @@ export function clearBothSelectedUserNames() {
   clearSelectedUserNamesHandler();
   clearSelectedUserNamesModal();
 }
+
 /**
  * Loads users from backend and renders them in the checkbox list.
  *
@@ -47,12 +49,14 @@ export function clearBothSelectedUserNames() {
  */
 export async function loadAndRenderUsers() {
   try {
-    const contacts = await loadContactsForTaskAssignment();
-    allSystemUsers = contacts;
+    const contacts = await fetchContactsListForAssignment();
+    allSystemUsers = Array.isArray(contacts) ? contacts : [];
+    console.debug("AssignedTo loaded users:", allSystemUsers.length);
     renderUserCheckboxes(allSystemUsers, Array.from(selectedUserNames));
   } catch (error) {
     console.error("Error loading contacts for add task:", error);
     allSystemUsers = [];
+    renderUserCheckboxes(allSystemUsers, []);
   }
 }
 
@@ -236,6 +240,8 @@ export function toggleUserAssignmentList(clickEvent) {
 export async function setupUserSearch() {
   const searchBar = document.getElementById("searchUser");
   const listEl = document.getElementById("assignedUserList");
+  console.log("Setting up user search");
+
   if (!searchBar || !listEl) return;
   searchBar.addEventListener("input", () => {
     const term = searchBar.value.trim().toLowerCase();
@@ -252,13 +258,14 @@ export async function setupUserSearch() {
   });
 }
 
-function setupOutsideClickToClose(containerId, toggleElementSelector, arrowSelector, inputSelector) {
+function setupOutsideClickToClose(containerId, toggleElementSelector, arrowSelector, inputSelector, onClose) {
   document.addEventListener("click", (event) => {
     const container = document.getElementById(containerId);
     const toggleElement = document.querySelector(toggleElementSelector);
     const arrow = document.querySelector(arrowSelector);
     const input = document.querySelector(inputSelector);
     if (!container || !toggleElement) return;
+
     if (
       container.classList.contains("visible") &&
       !container.contains(event.target) &&
@@ -268,7 +275,9 @@ function setupOutsideClickToClose(containerId, toggleElementSelector, arrowSelec
       if (arrow) arrow.classList.remove("rotated");
       if (input) {
         input.value = "";
-        if ( typeof loadAndRenderUsers() === "function") {
+        if (typeof onClose === "function") {
+          onClose();
+        } else if (typeof loadAndRenderUsers === "function") {
           loadAndRenderUsers();
         }
       }

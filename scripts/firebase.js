@@ -85,3 +85,25 @@ export async function requestData(method = "GET", path = "", data = {}) {
   return processResponse(response);
 }
 
+/**
+ * Lädt alle Kontakte aus Firebase als Array (ohne UI-Seiteneffekte).
+ * @returns {Promise<Array<Object>>}
+ */
+export async function fetchContactsListForAssignment() {
+  const res = await fetch(`${FIREBASE_DATABASE_BASE_URL}/users.json`);
+  if (!res.ok) throw new Error(`Failed to load users: ${res.status}`);
+  const data = (await res.json()) || {};
+  const list = Object.entries(data).map(([id, u]) => ({
+    userId: id,
+    userFullName: u.userFullName || "",
+    userEmailAddress: u.userEmailAddress || "",
+    userPhoneNumber: u.userPhoneNumber || "",
+    userInitials: u.userInitials || (u.userFullName ? u.userFullName.split(" ").map(p => p[0]).join("").toUpperCase() : ""),
+    firstCharacter: (u.userFullName || "?").charAt(0).toUpperCase(),
+    userColor: u.userColor || "color-1",
+    // userPassword bewusst nicht benötigt für AssignedTo
+  }));
+  // Nach Name sortieren
+  list.sort((a, b) => a.userFullName.localeCompare(b.userFullName));
+  return list;
+}

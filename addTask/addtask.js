@@ -31,8 +31,9 @@ function initializeApplication() {
   cacheDomElements();
   setupEventListeners();
   configureForm();
-  loadUserInitials();
+  loadAndRenderUsers();
   setupUserSearch();
+  loadUserInitials();
   setupDropdown("#openMenu", "#dropDownMenu");
   highlightActiveNavigationLinks();
   setupMobileDeviceListeners();
