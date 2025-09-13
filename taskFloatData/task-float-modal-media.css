@@ -71,7 +71,7 @@
 
   .form-container-modal {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-around;
   }
 
@@ -113,7 +113,7 @@
 
   .form-container-modal {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-around;
     height: 470px;
   }
