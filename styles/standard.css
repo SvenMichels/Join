@@ -373,3 +373,8 @@ textarea::placeholder {
   width: 24px;
   height: 24px;
 }
+
+.user-checkbox-modal:hover,
+.user-checkbox:hover {
+  cursor: pointer;
+}

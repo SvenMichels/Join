@@ -5,6 +5,7 @@
 
 .required-container {
   padding-top: 20px;
+  max-width: calc(1440px - 295px);
 }
 
 .space-container {

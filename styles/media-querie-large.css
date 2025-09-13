@@ -73,8 +73,8 @@
   .prio-container {
     display: flex;
     flex-direction: column;
-    max-width: 600px;
     box-sizing: border-box;
+    width: 100%;
     gap: 24px;
   }
 
@@ -87,6 +87,7 @@
 
   .create-container {
     padding-top: 50px;
+    max-width: 440px;
   }
 
   .task-h1-container {
@@ -139,7 +140,6 @@
     max-height: 382px;
     width: 100%;
     justify-content: space-between;
-    gap: 30px;
   }
 
   .task-container {
@@ -206,8 +206,6 @@
 
   .required-container {
     padding-bottom: 64px;
-    bottom: 0;
-    width: 65%;
   }
 
   .task-container {
@@ -227,7 +225,7 @@
     display: flex;
     justify-content: flex-end;
     gap: 16px;
-    padding-top: 50px;
+    max-width: 440px;
   }
 
   .task-wrapper {
@@ -236,7 +234,6 @@
     max-height: 382px;
     width: 100%;
     justify-content: space-between;
-    gap: 30px;
   }
 
   .add-task-board-button {
@@ -322,7 +319,7 @@
     display: flex;
     justify-content: flex-end;
     gap: 16px;
-    padding-top: 50px;
+    max-width: 940px;
   }
 
   .space-container {
@@ -340,7 +337,6 @@
     flex-direction: column;
     width: 100%;
     justify-content: space-between;
-    gap: 30px;
   }
 
   .add-task-board-button {
