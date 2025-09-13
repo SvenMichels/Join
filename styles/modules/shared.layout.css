@@ -2,7 +2,10 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding-top: 20px;
+  max-width: calc(1440px - 295px);
+  padding-top: 100px;
+  padding-right: 16px;
+  padding-left: 295px;
 }
 
 .form-container {
@@ -18,6 +21,7 @@
   width: 0px;
   border: solid 1px;
   color: #d1d1d1;
+  height: 100%;
 }
 
 .subtask-spacer,

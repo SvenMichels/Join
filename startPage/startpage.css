@@ -9,7 +9,6 @@
 }
 
 @keyframes loadingDots {
-
   0%,
   20% {
     opacity: 0.4;
@@ -43,7 +42,7 @@ body {
   padding: 0;
   height: 100%;
   overflow-x: hidden;
-  font-family: 'Inter';
+  font-family: "Inter";
 }
 
 .nav-bar,
@@ -75,12 +74,13 @@ main {
   gap: 50px;
   max-width: 100vw;
   overflow-x: hidden;
-  padding: 0 24px 0 var(--sidebar-width);
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   overflow-y: auto;
-  padding-top: 90px;
+  padding-top: 100px;
+  padding-right: 16px;
+  padding-left: 295px;
 }
 
 .headline {
@@ -123,7 +123,7 @@ main {
   gap: 40px;
 }
 
-.mainContent>* {
+.mainContent > * {
   flex-shrink: 1;
   min-width: 0;
 }
@@ -155,13 +155,13 @@ main {
   height: fit-content;
 }
 
-.info>.row:first-of-type {
+.info > .row:first-of-type {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
 }
 
-.info>.row:nth-of-type(2)>.urgent {
+.info > .row:nth-of-type(2) > .urgent {
   flex: 1 1 100%;
 }
 
@@ -175,7 +175,7 @@ main {
   padding-bottom: 2px;
 }
 
-.stats>div {
+.stats > div {
   flex: 1 1 calc((100% - 2 * clamp(12px, 2vw, 20px)) / 3);
   min-width: 0;
   display: flex;
@@ -185,17 +185,17 @@ main {
   text-align: center;
 }
 
-.stats>div .counter {
+.stats > div .counter {
   font-size: clamp(1.5rem, 4vw, 3rem);
   line-height: 1.1;
 }
 
-.stats>div .taskText {
+.stats > div .taskText {
   font-size: clamp(1rem, 1.5vw, 1.1rem);
   text-align: center;
 }
 
-.stats>div>.btn {
+.stats > div > .btn {
   width: 100%;
   height: 100%;
   padding: 24px 40px;
@@ -258,8 +258,7 @@ main {
   max-width: 100%;
   min-width: 0;
   box-sizing: border-box;
-  padding:
-    clamp(0.75rem, 2vh, 1.5rem) clamp(1rem, 3vw, 2.5rem);
+  padding: clamp(0.75rem, 2vh, 1.5rem) clamp(1rem, 3vw, 2.5rem);
   border-radius: 30px;
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.4);
 }
@@ -331,7 +330,6 @@ main {
 #username {
   font-size: clamp(34px, 6vw, 61px);
   text-align: left;
-
 }
 
 #openMenu {

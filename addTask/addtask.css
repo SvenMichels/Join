@@ -6,7 +6,6 @@ h1 {
   display: inline-block;
   white-space: nowrap;
   margin: 0;
-  padding-top: 24px;
 }
 
 #titleAlert {
@@ -342,6 +341,21 @@ select {
 
 .remaining-count {
   margin-left: 0px !important;
+}
+
+.task-detail-container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 32px;
+  width: 100%;
+  max-width: 1440px;
+}
+
+.task-details-wrapper {
+  max-width: 440px;
+  width: 100%;
 }
 
 @media (max-width: 575px) {

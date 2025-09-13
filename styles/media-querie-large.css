@@ -328,17 +328,17 @@
   .task-wrapper {
     display: flex;
     flex-direction: column;
-    max-height: 382px;
+    /* max-height: 382px; */
     width: 100%;
-    max-width: 440px;
+    /* max-width: 440px; */
     justify-content: space-between;
     gap: 30px;
   }
 
   .required-container {
-    padding-bottom: 64px;
+    /* padding-bottom: 64px;
     bottom: 0;
-    width: 70%;
+    width: 70%; */
   }
 
   .add-task-board-button {
