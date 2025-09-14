@@ -126,18 +126,22 @@ function createUserCheckboxElement(user, isChecked) {
  * @param {HTMLElement} wrapper - Wrapper element
  */
 function attachCheckboxListener(wrapper) {
-  const checkbox = wrapper.querySelector("input");
-  const userName = checkbox.value;
-  wrapper.addEventListener("click", (e) => {
-    if (e.target !== checkbox || e.target !== userName);
-    wrapper.classList.toggle("active", checkbox.checked);
-    if (checkbox.checked) {
-      selectedUserNames.add(userName);
-    } else {
-      selectedUserNames.delete(userName);
-    }
-    document.getElementById("assignedUserList")?.classList.add("visible");
+  const checkbox = wrapper.querySelector('input[type="checkbox"]');
+  checkbox.addEventListener('change', () => {
+    wrapper.classList.toggle('active', checkbox.checked);
+    const name = checkbox.value;
+    if (checkbox.checked) selectedUserNames.add(name);
+    else selectedUserNames.delete(name);
     updateSelectedUserDisplay();
+  });
+  wrapper.addEventListener('click', (e) => {
+    if (e.target === checkbox) return;
+    const label = e.target.closest('label');
+    if (label && (label.contains(checkbox) ||
+      (label.htmlFor && checkbox.id && label.htmlFor === checkbox.id))) {
+      return;
+    }
+    checkbox.click();
   });
 }
 
@@ -148,16 +152,13 @@ function attachCheckboxListener(wrapper) {
 export function updateSelectedUserDisplay() {
   const container = document.getElementById("selectedUser");
   if (!container) return;
-
   container.innerHTML = "";
   const users = [...selectedUserNames]
     .map(name => allSystemUsers.find(u => u.userFullName === name))
     .filter(Boolean);
-
   const maxVisible = 6;
   const visible = users.slice(0, maxVisible - 1);
   const overflow = users.length - (maxVisible - 1);
-
   visible.forEach(u => container.appendChild(createUserChip(u, u.userFullName)));
   if (overflow > 0) container.insertAdjacentHTML("beforeend", createRemainingChip(overflow));
 }
@@ -241,11 +242,13 @@ export function initUserAssignmentList() {
 export async function setupUserSearch() {
   const searchBar = document.getElementById("searchUser");
   const listEl = document.getElementById("assignedUserList");
+  const arrow = document.getElementById("assignedBtnImg");
   await loadAndRenderUsers();
   if (!searchBar || !listEl) return;
   const showAll = () => {
     const preselected = Array.from(selectedUserNames);
     listEl.classList.add("visible");
+    arrow.classList.add("rotated");
     renderUserCheckboxes(allSystemUsers, preselected);
   };
   const filterList = () => {
@@ -269,16 +272,9 @@ export async function setupUserSearch() {
 
 function setupOutsideClickToClose(containerId, toggleElementSelector, arrowSelector, inputSelector, onClose) {
   document.addEventListener("click", (event) => {
-    const container = document.getElementById(containerId);
-    const toggleElement = document.querySelector(toggleElementSelector);
-    const arrow = document.querySelector(arrowSelector);
-    const input = document.querySelector(inputSelector);
+    const { container, toggleElement, arrow, input } = setupOutsideClickToCloseConfig(containerId, toggleElementSelector, arrowSelector, inputSelector);
     if (!container || !toggleElement) return;
-
-    if (
-      container.classList.contains("visible") &&
-      !container.contains(event.target) &&
-      !toggleElement.contains(event.target)
+    if (container.classList.contains("visible") && !container.contains(event.target) && !toggleElement.contains(event.target)
     ) {
       container.classList.remove("visible");
       if (arrow) arrow.classList.remove("rotated");
@@ -286,10 +282,18 @@ function setupOutsideClickToClose(containerId, toggleElementSelector, arrowSelec
         input.value = "";
         if (typeof onClose === "function") {
           onClose();
-        }else if (typeof loadAndRenderUsers === "function") {
+        } else if (typeof loadAndRenderUsers === "function") {
           loadAndRenderUsers();
         }
       }
     }
   });
+}
+
+function setupOutsideClickToCloseConfig(containerId, toggleElementSelector, arrowSelector, inputSelector) {
+  const container = document.getElementById(containerId);
+  const toggleElement = document.querySelector(toggleElementSelector);
+  const arrow = document.querySelector(arrowSelector);
+  const input = document.querySelector(inputSelector);
+  return { container, toggleElement, arrow, input };
 }

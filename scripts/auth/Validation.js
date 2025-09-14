@@ -6,19 +6,25 @@
  */
 
 /**
- * Zulässige Top-Level-Domains für E-Mail-Validierung.
- * @type {string[]}
+ * Funktions-Typ für Validierungs-Meldungen.
+ * @callback ValidationMessageFn
+ * @param {string} userInput - Rohwert aus dem Eingabefeld
+ * @returns {string} Validierungsnachricht (leer oder "Looks good!" bei Erfolg)
  */
-const allowedTlds = [
-  'com', 'net', 'org', 'info', 'biz', 'name', 'pro', 'xyz',
-  'online', 'site', 'tech', 'app', 'shop', 'co', 'io',
-  'dev', 'ai', 'cloud',
-  'de', 'uk', 'fr', 'es', 'it', 'nl', 'pl', 'eu', 'ch', 'be',
-  'se', 'dk', 'no', 'fi', 'at', 'ie', 'pt', 'gr', 'cz', 'hu',
-  'ro', 'sk', 'si', 'hr', 'bg', 'lt', 'lv', 'ee', 'lu', 'is',
-  'mk', 'al', 'rs', 'ba', 'me', 'md', 'cy', 'mt', 'ad', 'li',
-  'sm', 'va', 'mc', 'fo', 'gl'
-];
+
+/**
+ * Importiert reine Message-Generatoren für die Validierung.
+ * Jede Funktion entspricht dem Typ {@link ValidationMessageFn}.
+ * Quelle/Implementierung: ./validationsmessages.js
+ * - getEmailMessage(userInput): string
+ * - getPasswordMessage(userInput): string
+ * - getNameMessage(userInput): string
+ * - getPhoneMessage(userInput): string
+ * - getSubtaskMessage(userInput): string
+ * - getDateMessage(userInput): string
+ * @see ./validationsmessages.js
+ */
+import { getEmailMessage, getPasswordMessage, getNameMessage, getPhoneMessage, getSubtaskMessage, getDateMessage } from "./validationsmessages.js";
 
 /**
  * Interner Speicher der Feld-Gültigkeit pro Input-ID.
@@ -44,8 +50,9 @@ export function initInputField(inputId, bubbleId, inputType) {
   const subtaskAllowed = inputType === 'subtask';
   const phoneMode = inputType === 'phone';
   const dateMode = inputType === 'date';
+  const discriptionMode = inputType === 'description';
 
-  validateInput(input, bubbleId, { allowInnerSpaces, subtaskAllowed, phoneMode, dateMode });
+  validateInput(input, bubbleId, { allowInnerSpaces, subtaskAllowed, phoneMode, dateMode, discriptionMode });
   setFieldValidity(inputId, false);
 
   input.addEventListener('input', (e) => inputEventlistener(inputId, bubbleId, e, inputType));
@@ -404,112 +411,4 @@ function getBubbleElements(inputId, bubbleId) {
 export function hideValidateBubble(bubbleId) {
   const bubbleElement = document.getElementById(bubbleId);
   if (bubbleElement) bubbleElement.classList.remove('show');
-}
-
-/**
- * E-Mail-Validierung inkl. TLD-Prüfung und diversen RFC-nahen Checks.
- * @param {string} userInput
- * @returns {string} Validierungsnachricht
- */
-function getEmailMessage(userInput) {
-  let message = '';
-  if (userInput.length < 6 || userInput.length > 64) message += 'Use 6–64 characters. ';
-  if ((userInput.match(/@/g) || []).length !== 1) return (message + 'Must contain exactly one "@".').trim();
-  const [localPart, domainPart] = userInput.split('@');
-  if (!localPart) message += 'Local part empty. ';
-  if (!domainPart) return (message + 'Domain part empty.').trim();
-  if (!/^[A-Za-z0-9._-]+$/.test(localPart) || /\.{2,}/.test(localPart) || localPart.startsWith('.') || localPart.endsWith('.')) message += 'Invalid local part. ';
-  if (!/^[A-Za-z0-9.-]+$/.test(domainPart) || /\.{2,}/.test(domainPart) || domainPart.startsWith('-') || domainPart.endsWith('-') || domainPart.startsWith('.') || domainPart.endsWith('.')) message += 'Invalid domain. ';
-  const tld = domainPart.split('.').pop().toLowerCase();
-  if (!allowedTlds.includes(tld)) message += `TLD not allowed. `;
-  if (localPart && domainPart && !message) message = 'Looks good! ';
-  return message.trim();
-}
-
-/**
- * Passwort-Validierung (Länge, Groß-/Kleinbuchstaben, Zahl, Symbol).
- * @param {string} userInput
- * @returns {string} Validierungsnachricht
- */
-function getPasswordMessage(userInput) {
-  let message = '';
-  if (userInput.length < 6 || userInput.length > 32) message += 'Use 6–32 characters. ';
-  if (!/[A-Z]/.test(userInput)) message += 'Add a capital letter. ';
-  if (!/[a-z]/.test(userInput)) message += 'Add a lowercase letter. ';
-  if (!/\d/.test(userInput)) message += 'Add a number. ';
-  if (!/[^A-Za-z0-9]/.test(userInput)) message += 'Add a symbol. ';
-  if (!message) message = 'Looks good! ';
-  return message.trim();
-}
-
-/**
- * Name-Validierung (Mehrteilig, Akzente, Bindestriche, einfache Innen-Leerzeichen).
- * @param {string} userInput
- * @returns {string} Validierungsnachricht
- */
-export function getNameMessage(userInput) {
-  let message = '';
-  const value = String(userInput ?? '');
-  if (/^\s/.test(value)) return 'No leading space.';
-  if (value.length < 4 || value.length > 128) return 'Use 4–128 characters.';
-  if (/ {2,}/.test(value)) return 'Only single spaces between parts.';
-  const NAME_PART = "[A-Za-zÀ-ÖØ-öø-ÿĀ-žȘșȚțßẞ'´`-]+";
-  const NAME_PATTERN = new RegExp(`^${NAME_PART}(?: ${NAME_PART})*(?: )?$`);
-  if (!NAME_PATTERN.test(value)) return 'Only letters, accents, hyphens, apostrophes.';
-  if (!message) message = 'Looks good! ';
-  return message.trim();
-}
-
-/**
- * Subtask-Text-Validierung (Zeichenumfang, Interpunktion, Leerzeichenregeln).
- * @param {string} userInput
- * @returns {string} Validierungsnachricht
- */
-export function getSubtaskMessage(userInput) {
-  let message = '';
-  const value = String(userInput ?? '');
-  if (/^\s/.test(value)) return 'No leading space.';
-  if (value.length < 4 || value.length > 128) return 'Use 4–128 characters.';
-  if (/ {2,}/.test(value)) return 'Only single spaces between parts.';
-  const SUB_PART = "[A-Za-zÀ-ÖØ-öø-ÿĀ-žȘșȚțßẞ0-9.,:;!?\\\"'()\\[\\]{}/_+&@#%*°€$-]+";
-  const SUB_PATTERN = new RegExp(`^${SUB_PART}(?: ${SUB_PART})*(?: )?$`);
-  if (!SUB_PATTERN.test(value)) return 'Letters, numbers & common punctuation only.';
-  if (!message) message = 'Looks good! ';
-  return message.trim();
-}
-
-/**
- * Telefonnummer-Validierung (Ziffern, optional führendes +, / als Trenner).
- * @param {string} userInput
- * @returns {string} Validierungsnachricht
- */
-function getPhoneMessage(userInput) {
-  const pattern = /^\+?[0-9]+(?:\/[0-9]+)*$/;
-  let message = '';
-  if (userInput.length < 6 || userInput.length > 32) message += 'Use 6–32 characters. ';
-  if (!pattern.test(userInput)) message += 'Allowed: digits, optional leading +, "/" as separator. ';
-  if (!message) message = 'Looks good!';
-  return message.trim();
-}
-
-/**
- * Datum-Validierung für <input type="date"> (YYYY-MM-DD, echter Kalendertag, nicht in der Vergangenheit).
- * @param {string} userInput - Erwartet ISO-Format YYYY-MM-DD
- * @returns {string} Validierungsnachricht
- */
-export function getDateMessage(userInput) {
-  const value = String(userInput ?? '').trim();
-  if (!value) return 'Select a date.';
-  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
-  if (!m) return 'Invalid date format (YYYY-MM-DD).';
-  const y = Number(m[1]), mo = Number(m[2]), d = Number(m[3]);
-  const dt = new Date(y, mo - 1, d);
-  if (dt.getFullYear() !== y || dt.getMonth() !== mo - 1 || dt.getDate() !== d) {
-    return 'Invalid calendar date.';
-  }
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  dt.setHours(0, 0, 0, 0);
-  if (dt < today) return 'Date cannot be in the past.';
-  return 'Looks good!';
 }

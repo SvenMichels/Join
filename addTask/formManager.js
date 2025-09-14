@@ -1,4 +1,5 @@
-import { getSubtaskMessage, showValidateBubble, setFieldValidity } from "../scripts/auth/Validation.js";
+import { showValidateBubble, setFieldValidity } from "../scripts/auth/Validation.js";
+import { getSubtaskMessage } from "../scripts/auth/validationsmessages.js";
 
 /**
  * Add Task Form Management

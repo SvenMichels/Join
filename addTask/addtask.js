@@ -14,6 +14,7 @@ import { setupMobileDeviceListeners } from "../scripts/utils/mobileUtils.js";
 import { collectTaskData, validateTask, resetFormState, clearValidationAlerts } from "./formManager.js";
 import { selectPriority, initPriorityEventListeners } from "./priorityHandler.js";
 import { loadAndRenderUsers, initUserAssignmentList, setupUserSearch, clearSelectedUsers } from "./userAssignmentHandler.js";
+import { loadAndRenderUsersModal, initUserSearchEventListener } from "../taskFloatData/userAssignmentManager.js";
 import { addNewSubtask, addSubtaskOnEnterKey, renderSubtasks } from "./subtaskHandler.js";
 import { initInputField } from "../scripts/auth/Validation.js";
 

@@ -4,20 +4,28 @@
  * @module userAssignmentManager
  */
 
-import { loadContactsForTaskAssignment } from "../contactPage/contactService.js";
 import { getUserCheckboxHTML } from "./taskfloatHTML.js";
 import { createRemainingChip } from "../board/boardUtils.js";
 import { getInitials } from "../scripts/utils/helpers.js";
+import { fetchContactsListForAssignment } from "../scripts/firebase.js";
 
 let allSystemUsersModal = [];
 const selectedUserNamesModal = new Set();
 
+let usersLoadedOnce = false;
+let searchListenersInit = false;
+
+document.addEventListener("DOMContentLoaded", () => {
+  loadAndRenderUsersModal();
+  initUserSearchEventListener();
+});
+
 setupOutsideClickToClose(
   "assignedUserList-modal",
-  ".assigned-input-wrapper", 
-  "#assignedBtnImg-modal", 
+  ".assigned-input-wrapper",
+  "#assignedBtnImg-modal",
   "#searchUser-modal",
-   () => renderAllUsers()
+  () => loadContactData()
 );
 
 /**
@@ -26,17 +34,15 @@ setupOutsideClickToClose(
  * @returns {Promise<void>}
  */
 export async function loadAndRenderUsersModal(preselected = []) {
-  await loadContactData();
-
-  // clearSelectedUserNamesModal();
-
+  if (!usersLoadedOnce) {
+    await loadContactData();
+  }
   const initial = Array.isArray(preselected) ? preselected : [];
   if (Array.isArray(window.pendingAssignedUsers) && window.pendingAssignedUsers.length) {
     initial.push(...window.pendingAssignedUsers);
     window.pendingAssignedUsers = null;
   }
   initial.forEach(n => selectedUserNamesModal.add(n));
-
   await renderUserCheckboxesModal(allSystemUsersModal);
 }
 
@@ -47,9 +53,11 @@ export async function loadAndRenderUsersModal(preselected = []) {
  */
 async function loadContactData() {
   try {
-    const contacts = await loadContactsForTaskAssignment();
-    allSystemUsersModal = contacts || [];
+    const contacts = await fetchContactsListForAssignment();
+    allSystemUsersModal = Array.isArray(contacts) ? contacts : [];
+    usersLoadedOnce = true;
   } catch (error) {
+    console.error("Error loading contacts for add task:", error);
     allSystemUsersModal = [];
   }
 }
@@ -162,24 +170,25 @@ function createCheckboxWrapper(user) {
  * @private
  */
 function attachCheckboxListener(wrapper) {
-  const checkbox = wrapper.querySelector("input");
-  const checkboxLabel = wrapper.getElementsByClassName("checkboxLabel");
-
-  wrapper.addEventListener("click", (event) => {
-    handleCheckboxClick(event, checkbox, wrapper, checkboxLabel);
+  const checkbox = wrapper.querySelector('input[type="checkbox"]');
+  checkbox.addEventListener('change', () => {
+    wrapper.classList.toggle('active', checkbox.checked);
     const name = checkbox.value;
     if (checkbox.checked) selectedUserNamesModal.add(name);
     else selectedUserNamesModal.delete(name);
     updateSelectedModal();
   });
+  wrapper.addEventListener('click', (e) => {
+    if (e.target === checkbox) return;
+    const label = e.target.closest('label');
+    if (label && (label.contains(checkbox) ||
+      (label.htmlFor && checkbox.id && label.htmlFor === checkbox.id))) {
+      return;
+    }
+    checkbox.click();
+  });
 }
 
-function handleCheckboxClick(event, checkbox, wrapper, checkboxLabel) {
-  if (event.target !== checkbox || event.target !== checkboxLabel) {
-  }
-  wrapper.classList.toggle("active", checkbox.checked);
-  updateSelectedModal();
-}
 /**
  * Updates the UI to show selected users as colored chips.
  */
@@ -239,7 +248,7 @@ export function toggleUserListModal(event) {
 function toggleListVisibility(list, assignImg) {
   list.classList.toggle("visible");
   const backgroundElement = document.getElementById("formWrapper");
-  if (backgroundElement.classList.contains("no-scroll") ) {
+  if (backgroundElement.classList.contains("no-scroll")) {
     backgroundElement.classList.remove("no-scroll");
   } else {
     backgroundElement.classList.add("no-scroll");
@@ -251,10 +260,13 @@ function toggleListVisibility(list, assignImg) {
  * Initializes the event listener for the user search input field.
  */
 export function initUserSearchEventListener() {
+  if (searchListenersInit) return;
   const searchInput = document.getElementById("searchUser-modal");
   if (!searchInput) return;
 
   searchInput.addEventListener("input", handleSearchInput);
+  searchInput.addEventListener("click", handleSearchInput);
+  searchInput.addEventListener("focus", handleSearchInput);
 }
 
 /**
@@ -262,51 +274,66 @@ export function initUserSearchEventListener() {
  * Filters and re-renders user checkboxes.
  * @private
  */
-function handleSearchInput() {
-  const searchInput = document.getElementById("searchUser-modal");
-  const list = document.getElementById("assignedUserList-modal");
-  if (!searchInput || !list) return;
-
-  const term = searchInput.value.trim().toLowerCase();
-  list.classList.add("visible");
-
-  if (term.length < 1) {
-    renderUserCheckboxesModal(allSystemUsersModal);
-    return;
-  }
-  const matchedUsers = allSystemUsersModal.filter(user =>
-    user.userFullName.toLowerCase().includes(term)
-  );
-  renderUserCheckboxesModal(matchedUsers);
+async function handleSearchInput() {
+  const searchBar = document.getElementById("searchUser-modal");
+  const listEl = document.getElementById("assignedUserList-modal");
+  const arrow = document.getElementById("assignedBtnImg-modal");
+  await loadAndRenderUsersModal();
+  if (!searchBar || !listEl) return;
+  const showAll = () => {
+    const preselected = Array.from(selectedUserNamesModal);
+    listEl.classList.add("visible");
+    arrow.classList.add("rotated");
+    renderUserCheckboxesModal(allSystemUsersModal, preselected);
+  };
+  const filterList = () => {
+    const term = searchBar.value.trim().toLowerCase();
+    const preselected = Array.from(selectedUserNamesModal);
+    listEl.classList.add("visible");
+    if (!term) {
+      renderUserCheckboxesModal(allSystemUsersModal, preselected);
+      return;
+    }
+    const matchedUsers = allSystemUsersModal.filter(u =>
+      u.userFullName.toLowerCase().includes(term)
+    );
+    renderUserCheckboxesModal(matchedUsers, preselected);
+  };
+  searchBar.addEventListener("focus", showAll);
+  searchBar.addEventListener("click", showAll);
+  searchBar.addEventListener("input", filterList);
+  renderUserCheckboxesModal(allSystemUsersModal, Array.from(selectedUserNamesModal));
 }
 
 function setupConst(containerId, toggleElementSelector, arrowSelector, inputSelector) {
-    const container = document.getElementById(containerId);
-    const backgroundElement = document.getElementById("formWrapper");
-    const toggleElement = document.querySelector(toggleElementSelector);
-    const arrow = document.querySelector(arrowSelector);
-    const input = document.querySelector(inputSelector);
-    return { container, backgroundElement, toggleElement, arrow, input};
-} 
+  const container = document.getElementById(containerId);
+  const backgroundElement = document.getElementById("formWrapper");
+  const toggleElement = document.querySelector(toggleElementSelector);
+  const arrow = document.querySelector(arrowSelector);
+  const input = document.querySelector(inputSelector);
+  return { container, backgroundElement, toggleElement, arrow, input };
+}
 
-function setupOutsideClickToClose(containerId, toggleElementSelector, arrowSelector, inputSelector) {
+function setupOutsideClickToClose(containerId, toggleElementSelector, arrowSelector, inputSelector, onClose) {
   document.addEventListener("click", (event) => {
-    const { container, backgroundElement, toggleElement, arrow, input} = setupConst(containerId, toggleElementSelector, arrowSelector, inputSelector);
+    const { container, backgroundElement, toggleElement, arrow, input } = setupConst(containerId, toggleElementSelector, arrowSelector, inputSelector);
     if (!container || !toggleElement) return;
-    if (
-      container.classList.contains("visible") &&
+    if (container.classList.contains("visible") &&
       !container.contains(event.target) &&
       !toggleElement.contains(event.target) &&
-      !backgroundElement.classList.remove("no-scroll")
+      !backgroundElement.classList.contains("no-scroll")
     ) {
       container.classList.remove("visible");
       if (arrow) arrow.classList.remove("rotated");
       if (input) {
         input.value = "";
-        if ( typeof loadAndRenderUsersModal() === "function") {
+        if (typeof onClose === "function") {
+          onClose();
+        } else if (typeof loadAndRenderUsersModal === "function") {
           loadAndRenderUsersModal();
         }
       }
     }
   });
 }
+
