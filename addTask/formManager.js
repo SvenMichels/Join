@@ -179,8 +179,7 @@ export function getSubtasksForPayload() {
   return (items || []).map(s => (s || "").trim()).filter(Boolean);
 }
 
-
-export function initCategoryDropdown(categoryWrapperSelector, categorySelectSelector, categoryOptionsSelector) {
+export function initCategoryDropdown(categoryWrapperSelector, categorySelectSelector, categoryOptionsSelector, taskTitleSelector, taskDateSelector) {
   const categoryWrapper = document.querySelector(categoryWrapperSelector);
   const categorySelect = document.querySelector(categorySelectSelector);
   const categoryOptions = document.querySelector(categoryOptionsSelector);
@@ -196,6 +195,18 @@ export function initCategoryDropdown(categoryWrapperSelector, categorySelectSele
     option.addEventListener("click", () => {
       categorySelect.textContent = option.textContent;
       categorySelect.dataset.selected = option.dataset.value;
+      const titleElement = document.getElementById(taskTitleSelector);
+      const dateElement = document.getElementById(taskDateSelector);
+      const titleElementValue = titleElement.value;
+      const dateElementValue = dateElement.value;
+      
+      if (categorySelect && titleElementValue.length > 3 && dateElementValue.length > 0) {
+        const btn = document.querySelector(".create-button");
+        btn.disabled = false;
+      } else {
+        const btn = document.querySelector(".create-button");
+        btn.disabled = true;
+      }
       closeCategoryDropdown(categoryOptions, categoryWrapper);
     });
   });

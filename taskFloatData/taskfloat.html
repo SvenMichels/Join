@@ -109,13 +109,21 @@
             </div>
 
             <div class="prio-category-container">
-              <label for="category-modal">Category <span class="color-red">*</span></label>
-              <select class="prio-category-input-modal" id="category-modal" name="category">
-                <option value="">Bitte auswählen</option>
-                <option value="Technical_Task">Technical Task</option>
-                <option value="User_Story">User Story</option>
-              </select>
-            </div>
+              <p>Category <span class="color-red">*</span></p>
+              <div class="custom-select-wrapper">
+              <div class="custom-select" id="category-modal" data-selected="">
+                 Bitte auswählen
+              </div>
+              <button class="assignUserListBtn" type="button">
+                    <img id="assignedBtnImg" class="assignedInputImg dropdown-arrow"
+                      src="../assets/icons/arrow_drop_down.svg" />
+                  </button>
+                <ul class="custom-options" id="categoryOptions-modal">
+                  <li value="Technical_Task">Technical Task</li>
+                  <li value="User_Story">User Story</li>
+                  </ul>
+                 </div>
+              </div>
 
             <div class="prio-subtask-container">
               <label for="subtask-modal">Subtasks</label>

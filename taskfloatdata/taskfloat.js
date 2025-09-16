@@ -49,7 +49,7 @@ export function initTaskFloat() {
   initInputField("task-description-modal", 'descriptionModalHint', 'name');
   initInputField("subtask-modal", 'subtaskModalHint', 'subtask');
   initInputField("task-date-modal", 'task-date-modal-Hint', 'date');
-  initCategoryDropdown(".prio-category-container", "#category-modal", "#categoryOptions-modal");
+  initCategoryDropdown(".prio-category-container", "#category-modal", "#categoryOptions-modal", "task-title-modal", "task-date-modal");
 
   return initFormModal();
 }
@@ -153,14 +153,13 @@ function initializePriority() {
  */
 function initializeCategoryValidation() {
   const category = document.getElementById("category-modal");
-  const submit = $.form?.querySelector(".create-button");
+  const submit = $.form?.querySelector(".create-button");    
 
   if (!category || !submit) return;
-
-  const updateSubmitState = () => {
-    submit.disabled = category.value.trim() === "";
-  };
-
+  const updateSubmitState = () => {    
+    const value = category.value ?? "";
+    submit.disabled = value.trim() === "";
+  };  
   updateSubmitState();
   category.addEventListener("change", updateSubmitState);
 }
@@ -185,7 +184,6 @@ async function handleSubmitModal(event) {
 function collectTaskDataModal(form) {
   const id = form.dataset.taskId || crypto.randomUUID();
   const status = form.dataset.taskStatus || "todo";
-
   const assignedUsers = Array.from(
     document.querySelectorAll(".user-checkbox-modal:checked")
   ).map(checkbox => checkbox.value);

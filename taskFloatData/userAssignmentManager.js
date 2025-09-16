@@ -146,7 +146,6 @@ function activateCheckbox(checkbox) {
  * @private
  */
 function createUserCheckboxElement(user) {
-  console.log(user);
 
   const wrapper = createCheckboxWrapper(user);
   attachCheckboxListener(wrapper);
@@ -172,7 +171,6 @@ function createCheckboxWrapper(user) {
  * @private
  */
 function attachCheckboxListener(wrapper) {
-  console.log("Attaching listener to", wrapper);
 
   const checkbox = wrapper.querySelector('input[type="checkbox"]');
   checkbox.addEventListener('change', () => {

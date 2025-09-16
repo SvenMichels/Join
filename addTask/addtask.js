@@ -43,7 +43,7 @@ function initializeApplication() {
   initInputField("subtask", 'subtaskHint', 'subtask');
   initInputField("task-date", 'addtaskdatehint', 'date');
   initUserAssignmentList();
-  initCategoryDropdown(".prio-category-container", "#categorySelect", "#categoryOptions");
+  initCategoryDropdown(".prio-category-container", "#categorySelect", "#categoryOptions", "task-title", "task-date");
 }
 
 /**
