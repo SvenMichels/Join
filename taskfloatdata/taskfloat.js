@@ -28,6 +28,7 @@ import {
 } from "./subtaskManager.js";
 import { setupOutsideClickHandler, removeNoScroll } from "../board/taskDetails.js";
 import { initInputField } from "../scripts/auth/Validation.js";
+import { initCategoryDropdown } from "../addTask/formManager.js";
 
 const $ = {};
 
@@ -48,6 +49,7 @@ export function initTaskFloat() {
   initInputField("task-description-modal", 'descriptionModalHint', 'name');
   initInputField("subtask-modal", 'subtaskModalHint', 'subtask');
   initInputField("task-date-modal", 'task-date-modal-Hint', 'date');
+  initCategoryDropdown(".prio-category-container", "#category-modal", "#categoryOptions-modal");
 
   return initFormModal();
 }
@@ -84,7 +86,6 @@ function attachEventListeners() {
   bindSubtaskEnter();
   bindAssignToggle();
   bindClearButton();
-
 }
 
 function bindCloseButton() {
