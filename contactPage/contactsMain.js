@@ -214,9 +214,9 @@ function prepareResponsiveContactView(contact) {
   }
 }
 
-function formValidation(fullName) {
-  const userEmailAddress = document.getElementById("contactEmail").value.trim();
-  let userPhoneNumber = document.getElementById("contactPhone").value.trim();
+export function formValidation(fullName, userEmailElement, userPhoneElement) {
+  const userEmailAddress = document.getElementById(userEmailElement).value.trim();
+  let userPhoneNumber = document.getElementById(userPhoneElement).value.trim();
 
   if (fullName === "") {
     showValidateBubble("contactName", "Input cannot be empty.", "nameHint");
@@ -261,13 +261,13 @@ function createContactFromForm(fullName) {
   const userEmailAddressElement = document.getElementById("contactEmail");
   const userPhoneNumberElement = document.getElementById("contactPhone");
   const emailValidated = userEmailAddressElement.dataset.validationAttached === "true";
-  const nameValidated  = userFullNameElement.dataset.validationAttached === "true";
+  const nameValidated = userFullNameElement.dataset.validationAttached === "true";
 
   if (!emailValidated || !nameValidated) {
     showUserFeedback("Please correct the highlighted fields before submitting.", "error");
     return null;
   }
-  const result = formValidation(fullName);
+  const result = formValidation(fullName, "contactEmail", "contactPhone");
   if (!result) {
     return null;
   }

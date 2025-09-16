@@ -5,6 +5,7 @@
 import { getInitials } from '../scripts/utils/helpers.js';
 import { updateContact } from './contactDataService.js';
 import { setupDeleteButton } from '../contactPage/contactsMain.js';
+import { formValidation } from '../contactPage/contactsMain.js';
 
 let editingContact = null;
 
@@ -25,26 +26,38 @@ export function fillEditForm(contact) {
  * @returns {Object} Form input values (name, email, phone)
  */
 export function getEditContactInput(contact) {
-  return {
-    userFullName: document.getElementById("editContactName").value.trim(),
-    userEmailAddress: document.getElementById("editContactEmail").value.trim(),
-    userPhoneNumber: document.getElementById("editContactPhone").value.trim(),
+  const result = formValidation(contact, "editContactEmail", "editContactPhone");
+  if (!result) {
+    return null;
+  }
+
+  const { userEmailAddress, userPhoneNumber, userFullName } = result;
+
+  const name =
+    typeof userFullName === 'string'
+      ? userFullName.trim()
+      : (document.getElementById("editContactName")?.value ?? '').toString().trim();
+
+  const userForEdit = {
+    userFullName: name,
+    userEmailAddress: typeof userEmailAddress === 'string' ? userEmailAddress.trim() : userEmailAddress,
+    userPhoneNumber: typeof userPhoneNumber === 'string' ? userPhoneNumber.trim() : userPhoneNumber,
     userPassword: contact.userPassword
   };
+  return userForEdit;
 }
+// ...existing code...
 
-/**
- * Handles contact save action after editing.
- * 
- * @param {Event} e - Submit event
- */
 export async function handleContactEditSubmission(e) {
   e.preventDefault();
   const contact = editingContact;
   const updated = getEditContactInput(contact);
+  if (!updated) return;
+  const name = (updated.userFullName ?? '').toString().trim() || (contact?.userFullName ?? '');
+  updated.userFullName = name;
+  updated.userInitials = getInitials(name);
+  updated.firstCharacter = (name.charAt(0) || '?').toUpperCase();
 
-  updated.userInitials = getInitials(updated.userFullName);
-  updated.firstCharacter = updated.userFullName.charAt(0).toUpperCase();
   await updateContact(contact, updated);
 }
 
