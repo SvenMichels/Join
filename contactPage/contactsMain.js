@@ -11,7 +11,8 @@ import { highlightActiveNavigationLinks, setupOpenMenuListener } from '../script
 import { updateTask } from '../board/taskManager.js';
 import { fetchAllTasks } from '../scripts/auth/login.js';
 import { initializeBackButton, initializeFabMenu } from "../scripts/ui/fabContact.js";
-import { initInputField } from "../scripts/auth/Validation.js";
+import { initInputField, showValidateBubble, confirmInputForFormValidation } from "../scripts/auth/Validation.js";
+import { enableButton, disableButton } from '../scripts/events/loginevents.js';
 
 let contactList = [];
 let editingContact = null;
@@ -31,16 +32,23 @@ function setupEventListeners() {
   setupContactFormListeners();
   setupModalListeners();
   setupKeyboardListeners();
+  setupInitInputFields();
+  setupCreateContactButton()
 }
 
-initInputField('contactEmail', 'emailHint', 'email');
-initInputField('contactName', 'nameHint', 'name');
-initInputField('contactPhone', 'phoneHint', 'phone');
+function setupInitInputFields() {
+  initInputField('contactEmail', 'emailHint', 'email');
+  initInputField('contactName', 'nameHint', 'name');
+  initInputField('contactPhone', 'phoneHint', 'phone');
+  initInputField('editContactEmail', 'editEmailHint', 'email');
+  initInputField('editContactName', 'editNameHint', 'name');
+  initInputField('editContactPhone', 'editPhoneHint', 'phone');
+}
 
-initInputField('editContactEmail', 'editEmailHint', 'email');
-initInputField('editContactName', 'editNameHint', 'name');
-initInputField('editContactPhone', 'editPhoneHint', 'phone');
-
+function setupCreateContactButton() {
+  const createContactBtn = document.getElementById("submitBtn");
+  disableButton(createContactBtn);
+}
 /**
  * Sets up contact form event listeners (add/edit forms)
  */
@@ -48,7 +56,6 @@ function setupContactFormListeners() {
   const addBtn = document.getElementById("addBtn");
   const addForm = document.getElementById("addContactForm");
   const editForm = document.getElementById("editContactForm");
-
   if (addBtn) addBtn.addEventListener("click", openContactAdditionWindow);
   if (addForm) {
     addForm.addEventListener("submit", addNewContactToDatabase);
@@ -98,11 +105,9 @@ export function setupDeleteButton(contact) {
 function setupOutsideClickHandlers() {
   const addWindow = document.getElementById("addWindow");
   const editWindow = document.getElementById("editWindow");
-
   if (addWindow) {
     addWindow.addEventListener("click", handleOutsideClick);
   }
-
   if (editWindow) {
     editWindow.addEventListener("click", handleOutsideClick);
   }
@@ -157,13 +162,10 @@ function renderSingleContact(name, email, phone, initials, id, color) {
   const contact = contactList.find(c => c.userId === id);
   if (!contact) return;
   currentRenderedContact = contact;
-
   clearActiveContactState();
   setActiveContactState(id);
-
   const template = generateBigContactTemplate(name, email, phone, initials, color);
   document.getElementById("bigContact").innerHTML = template;
-
   prepareResponsiveContactView(contact);
   bindContactActions(id, name, contact);
   loadAndShowContactDetails();
@@ -212,6 +214,42 @@ function prepareResponsiveContactView(contact) {
   }
 }
 
+function formValidation(fullName) {
+  const userEmailAddress = document.getElementById("contactEmail").value.trim();
+  let userPhoneNumber = document.getElementById("contactPhone").value.trim();
+
+  if (fullName === "") {
+    showValidateBubble("contactName", "Input cannot be empty.", "nameHint");
+    return null;
+  }
+  if (fullName.length < 4) {
+    showValidateBubble("contactName", "Use at least 4 characters.", "nameHint");
+    return null;
+  }
+
+  if (userEmailAddress === "") {
+    showValidateBubble("contactEmail", "Input cannot be empty.", "emailHint");
+    return null;
+  }
+  if (userEmailAddress.length < 6) {
+    showValidateBubble("contactEmail", "Use at least 6 characters.", "emailHint");
+    return null;
+  }
+
+  if (userPhoneNumber === "") userPhoneNumber = "No phone number provided";
+
+  confirmInputForFormValidation("contactName", "nameHint");
+  confirmInputForFormValidation("contactEmail", "emailHint");
+  confirmInputForFormValidation("contactPhone", "phoneHint");
+
+  return {
+    userEmailAddress,
+    userPhoneNumber,
+    userFullName: fullName,
+  };
+}
+
+
 /**
  * Creates a contact object from input form
  * 
@@ -219,16 +257,37 @@ function prepareResponsiveContactView(contact) {
  * @returns {Object} contact - Contact object
  */
 function createContactFromForm(fullName) {
-  return {
-    userFullName: fullName,
-    userEmailAddress: document.getElementById("contactEmail").value.trim(),
-    userPhoneNumber: document.getElementById("contactPhone").value.trim(),
-    userInitials: getInitials(fullName),
-    firstCharacter: fullName ? fullName.charAt(0).toUpperCase() : "?",
+  const userFullNameElement = document.getElementById("contactName");
+  const userEmailAddressElement = document.getElementById("contactEmail");
+  const userPhoneNumberElement = document.getElementById("contactPhone");
+  const emailValidated = userEmailAddressElement.dataset.validationAttached === "true";
+  const nameValidated  = userFullNameElement.dataset.validationAttached === "true";
+
+  if (!emailValidated || !nameValidated) {
+    showUserFeedback("Please correct the highlighted fields before submitting.", "error");
+    return null;
+  }
+  const result = formValidation(fullName);
+  if (!result) {
+    return null;
+  }
+
+  const { userEmailAddress, userPhoneNumber, userFullName } = result;
+  console.log(userEmailAddress, userPhoneNumber, userFullName);
+
+  const normalized = {
+    userFullName,
+    userEmailAddress,
+    userPhoneNumber,
+    userInitials: getInitials(userFullName),
+    firstCharacter: userFullName ? userFullName.charAt(0).toUpperCase() : "?",
     userColor: generateRandomColorClass(),
-    userPassword: fullName.userPassword || '',
+    userPassword: '',
   };
+
+  return normalized;
 }
+
 
 /**
  * Adds a new contact to Firebase and updates UI
@@ -239,6 +298,7 @@ async function addNewContactToDatabase(e) {
   e.preventDefault();
   const userFullName = document.getElementById("contactName").value.trim();
   const contact = createContactFromForm(userFullName);
+  if (!contact) return;
   await addContactTry(contact);
 }
 
@@ -323,10 +383,8 @@ export function updateTaskWithoutUser(task, userName) {
  */
 export async function removeUserFromAllTasks(deletedUserName) {
   const allTasks = await fetchAllTasks();
-
   const filteredTasks = filterTasksByUser(allTasks, deletedUserName);
   const updates = filteredTasks.map(task => updateTaskWithoutUser(task, deletedUserName));
-
   await Promise.all(updates);
 }
 

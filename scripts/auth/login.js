@@ -2,7 +2,7 @@ import { requestData } from "../firebase.js";
 import { fetchUsersFromDatabase } from "../firebase.js";
 import { countByStatus } from "../../startpage/taskStatisticsManager.js";
 import { loginFailFeedback } from "../events/loginevents.js"
-import { initInputField } from "../auth/Validation.js";
+// import { initInputField, showValidateBubble } from "./Validation.js";
 
 
 const loginFormElement = document.getElementById("loginForm");
@@ -28,8 +28,8 @@ async function handleFormSubmission(submitEvent) {
  */
 function collectFormCredentials() {
   return {
-    email: document.getElementById("loginEmail").value.trim(),
-    password: document.getElementById("loginPassword").value.trim(),
+    email,
+    password
   };
 }
 
@@ -40,7 +40,7 @@ function collectFormCredentials() {
  */
 async function processLoginAttempt(credentials) {
   try {
-    console.log("ckeck", credentials);
+    console.log("test");
 
     await loginUser(credentials.email, credentials.password);
     redirectToStartpage();

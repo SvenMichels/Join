@@ -2,7 +2,7 @@ import { loginUser } from "../auth/login.js";
 import { collectUserInput, checkFormValidity, submitUser } from "../../signup/signup.js";
 import { requestData } from "../firebase.js";
 
-import { initInputField } from "../auth/Validation.js";
+import { initInputField, showValidateBubble } from "../auth/Validation.js";
 
 
 
@@ -26,7 +26,7 @@ export async function loginListeners() {
   bindUserLoginButton();
   bindGuestLoginButton();
   bindPolicyLinks();
-  togglePassword('loginPassword', "togglePasswordIcon"); 
+  togglePassword('loginPassword', "togglePasswordIcon");
 }
 
 /**
@@ -80,6 +80,7 @@ export function getFormValidation() {
   const isEmailValid = confirmInputForFormValidation('inputEmail', 'emailHint');
   const isPasswordValid = confirmInputForFormValidation('inputPassword', 'pwHint');
 
+
   const passwordValue = document.getElementById('inputPassword')?.value;
   const emailValue = document.getElementById('inputEmail')?.value;
   if (passwordValue && emailValue) return isEmailValid, isPasswordValid;
@@ -99,17 +100,15 @@ async function handleUser(credentials) {
   await attemptUserLogin(credentials);
 }
 
-function enableButton(btn) {
+export function enableButton(btn) {
   if (!btn) return;
-  btn.disabled = false;
   btn.classList.remove("disabled");
   btn.classList.add("background-color");
   btn.style.backgroundColor = "";
 }
 
-function disableButton(btn) {
+export function disableButton(btn) {
   if (!btn) return;
-  btn.disabled = true;
   btn.classList.add("disabled");
   btn.classList.remove("background-color");
   btn.style.backgroundColor = "#ccc";
@@ -136,37 +135,52 @@ function getLoginButton() {
   return document.querySelector(".logIn") || document.querySelector(".btn") || null;
 }
 
-/**
- * Binds input listeners for login email/password and updates the login button state.
- */
-function grabAllInputToCheck() {
-  const credentials = collectLoginCredentials();
-  const loginEmailHint = document.getElementById("emailHint");
-  const loginPasswordHint = document.getElementById("pwHint");
-  let validateOkay = false;
-  if (loginEmailHint.innerText === "Looks good!" && loginPasswordHint.innerText === "Looks good!") {
-    return validateOkay = true;
-  }
-  if (credentials.email.length <= 0) return;
-  const loginEmail = credentials.email;
-  const loginPassword = credentials.password;
-
-  return loginEmail, loginPassword, validateOkay;
-}
-
 function bindLoginInputValidation() {
   const btn = getLoginButton();
-  if (!btn) return;
+  const emailInput = document.getElementById("loginEmail");
+  const passwordInput = document.getElementById("loginPassword");
+  if (!btn || !emailInput || !passwordInput) return;
 
-  const update = () => {
-    let validateOkay = grabAllInputToCheck();
-    (loginEmail && loginPassword && validateOkay)
-      ? enableButton(btn)
-      : disableButton(btn);
+  const updateEmailListener = () => {
+    const pwd = passwordInput.value?.trim() || "";
+    const email = emailInput.value?.trim() || "";
+    if (email.length < 6 && email.length > 0) {
+      showValidateBubble("loginEmail", 'Use 6–64 characters.', "emailHint", 2000);
+    }
+    const enable = email.length >= 6 && pwd.length >= 6;
+    enable ? enableButton(btn) : disableButton(btn);
   };
 
-  [loginEmail, loginPassword].forEach(input => input && input.addEventListener("input", update));
-  update();
+  const updatePasswordListener = () => {
+
+    const email = emailInput.value?.trim() || "";
+    const pwd = passwordInput.value?.trim() || "";
+    if (pwd.length < 6 && pwd.length > 0) {
+      showValidateBubble("loginPassword", "Use 6–32 characters.", "pwHint", 2000);
+    }
+    const enable = email.length >= 6 && pwd.length >= 6;
+    enable ? enableButton(btn) : disableButton(btn);
+  };
+
+  const update = () => {
+    const email = emailInput.value?.trim() || "";
+    const pwd = passwordInput.value?.trim() || "";
+    if (btn && email.length >= 0) {
+      showValidateBubble("loginEmail", 'Use 6–64 characters.', "emailHint", 2000);
+    }
+    if (btn && pwd.length >= 0) {
+      showValidateBubble("loginPassword", "Use 6–32 characters.", "pwHint", 2000);
+    }
+    const enable = email.length >= 6 && pwd.length >= 6;
+    enable ? enableButton(btn) : disableButton(btn);
+  };
+
+
+  btn.addEventListener("click", update);
+  emailInput.addEventListener("input", updateEmailListener);
+  passwordInput.addEventListener("input", updatePasswordListener);
+  updateEmailListener();
+  updatePasswordListener();
 }
 
 /**
