@@ -103,3 +103,52 @@ select {
   outline: none;
   border: 2px solid #29abe2;
 }
+
+.custom-select-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.custom-select {
+  background: white;
+  border: 1px solid #d1d1d1;
+  border-radius: 8px;
+  padding: 10px;
+  cursor: pointer;
+  user-select: none;
+  transition: margin-bottom 0.3s ease;
+}
+
+.custom-options {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid #d1d1d1;
+  border-radius: 8px;
+  background: white;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+  opacity: 0;
+  position: relative;
+}
+
+.custom-options.open {
+  max-height: 200px;
+  opacity: 1;
+}
+
+.custom-options li {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.custom-options li:hover {
+  background-color: #f0f0f0;
+}
+
+.prio-category-container.expanded {
+  transition: margin-bottom 0.3s ease;
+  margin-bottom: 100px;
+}

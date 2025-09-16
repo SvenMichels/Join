@@ -178,3 +178,33 @@ export function getSubtasksForPayload() {
   const items = getSubtaskItems();
   return (items || []).map(s => (s || "").trim()).filter(Boolean);
 }
+
+const categoryWrapper = document.querySelector(".prio-category-container");
+const categorySelect = document.getElementById("categorySelect");
+const categoryOptions = document.getElementById("categoryOptions");
+
+function toggleCategoryDropdown() {
+  const isOpen = categoryOptions.classList.toggle("open");
+  categoryWrapper.classList.toggle("expanded", isOpen);
+}
+
+function closeCategoryDropdown() {
+  categoryOptions.classList.remove("open");
+  categoryWrapper.classList.remove("expanded");
+}
+
+categorySelect.addEventListener("click", toggleCategoryDropdown);
+
+categoryOptions.querySelectorAll("li").forEach(option => {
+  option.addEventListener("click", () => {
+    categorySelect.textContent = option.textContent;
+    categorySelect.dataset.selected = option.dataset.value;
+    closeCategoryDropdown();
+  });
+});
+
+document.addEventListener("click", (e) => {
+  if (!categoryWrapper.contains(e.target)) {
+    closeCategoryDropdown();
+  }
+});
