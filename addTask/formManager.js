@@ -101,11 +101,13 @@ export function resetFormState() {
  * @returns {Object} Task data object.
  */
 export function collectTaskData(form) {
+  console.log(form);
+
   const id = form.getAttribute("data-task-id");
   const title = form.taskTitle.value.trim();
   const description = form.taskDescription.value.trim();
   const dueDate = form.taskDate.value;
-  const category = form.category.value;
+  const category = document.getElementById("categorySelect").dataset.selected;
   const prio = currentlySelectedPriority;
   const assignedUsers = collectAssignedUsers();
   const subtasks = [...subtaskItemsList];
@@ -199,7 +201,7 @@ export function initCategoryDropdown(categoryWrapperSelector, categorySelectSele
       const dateElement = document.getElementById(taskDateSelector);
       const titleElementValue = titleElement.value;
       const dateElementValue = dateElement.value;
-      
+
       if (categorySelect && titleElementValue.length > 3 && dateElementValue.length > 0) {
         const btn = document.querySelector(".create-button");
         btn.disabled = false;

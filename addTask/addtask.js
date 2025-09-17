@@ -66,6 +66,7 @@ function cacheDomElements() {
  * Sets up all relevant event listeners.
  */
 function setupEventListeners() {
+  domCache.taskForm?.addEventListener("submit", handleFormSubmission);
   domCache.subtaskInput?.addEventListener("keydown", addSubtaskOnEnterKey);
   domCache.subtaskAddBtn?.setAttribute("type", "button");
   domCache.subtaskAddBtn?.addEventListener("click", (e) => {

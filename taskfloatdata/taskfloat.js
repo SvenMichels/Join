@@ -153,13 +153,13 @@ function initializePriority() {
  */
 function initializeCategoryValidation() {
   const category = document.getElementById("category-modal");
-  const submit = $.form?.querySelector(".create-button");    
+  const submit = $.form?.querySelector(".create-button");
 
   if (!category || !submit) return;
-  const updateSubmitState = () => {    
+  const updateSubmitState = () => {
     const value = category.value ?? "";
     submit.disabled = value.trim() === "";
-  };  
+  };
   updateSubmitState();
   category.addEventListener("change", updateSubmitState);
 }
@@ -193,7 +193,7 @@ function collectTaskDataModal(form) {
     title: form.taskTitle.value.trim(),
     description: form.taskDescription.value.trim(),
     dueDate: form.taskDate.value,
-    category: form.category.value,
+    category: document.getElementById("category-modal").value,
     prio: getCurrentPriority(),
     assignedUsers,
     subtasks: [...getSubtaskItems()],
