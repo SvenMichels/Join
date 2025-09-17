@@ -111,10 +111,12 @@ select {
 }
 
 .custom-select {
+  display: flex;
+  justify-content: space-between;
   background: white;
   border: 1px solid #d1d1d1;
   border-radius: 8px;
-  padding: 10px;
+  padding: 11px;
   cursor: pointer;
   user-select: none;
   transition: margin-bottom 0.3s ease;
@@ -149,6 +151,40 @@ select {
 }
 
 .prio-category-container.expanded {
-  transition: margin-bottom 0.3s ease;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
   margin-bottom: 100px;
+}
+
+.categoryListBtn {
+    position: relative;
+    background: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+}
+
+.categoryListBtn:hover {
+  background: #d1d1d1;
+}
+
+.categoryInputImg {
+  width: 15px;
+  height: 14px;
+  cursor: pointer;
+}
+
+#categoryBtnImg {
+  transition: transform 0.3s ease;
+}
+
+#categoryBtnImg.rotated {
+  transform: rotate(180deg);
+}
+
+.rotated {
+  transform: rotate(180deg);
 }
