@@ -204,7 +204,7 @@ function getElementConfigsForAddTaskModal() {
   const titleInput = document.querySelector("#task-title-modal");
   const dateInput = document.querySelector("#task-date-modal");
   const createButton = document.querySelector(".create-button");
-  const arrow = document.querySelector("#assignedBtnImg");
+  const arrow = document.querySelector("#categoryBtnImg-modal");
   const prioContainer = document.querySelector(".prio-category-container");
   console.log({ wrapper, select, options, titleInput, dateInput, createButton, arrow, prioContainer });
 

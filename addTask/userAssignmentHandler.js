@@ -271,11 +271,26 @@ export async function setupUserSearch() {
 }
 
 export function setupOutsideClickToClose(containerId, toggleElementSelector, arrowSelector, inputSelector, onClose) {
+  if (!arrowSelector === "#assignedBtnImg") {
+    console.log("test");
+    return;
+  };
   document.addEventListener("click", (event) => {
     const { container, toggleElement, arrow, input } = setupOutsideClickToCloseConfig(containerId, toggleElementSelector, arrowSelector, inputSelector);
     if (!container || !toggleElement) return;
     if (container.classList.contains("visible") && !container.contains(event.target) && !toggleElement.contains(event.target)
-    );
+    ) {
+      container.classList.remove("visible");
+      if (arrow) arrow.classList.remove("rotated");
+      if (input) {
+        input.value = "";
+        if (typeof onClose === "function") {
+          onClose();
+        } else if (typeof loadAndRenderUsers === "function") {
+          loadAndRenderUsers();
+        }
+      }
+    }
   });
 }
 
