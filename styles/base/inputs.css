@@ -156,8 +156,6 @@ select {
   margin-bottom: 100px;
 }
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 .categoryListBtn {
     position: relative;
     background: transparent;
@@ -192,10 +190,7 @@ select {
   transform: rotate(180deg);
 }
 
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
+
 /* Basis-Layout */
 .custom-select-wrapper { position: relative; }
 
@@ -232,11 +227,3 @@ select {
   transform: rotate(180deg);
   transition: transform .2s ease;
 }
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
-=======
-
->>>>>>> Stashed changes
