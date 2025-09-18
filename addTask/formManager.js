@@ -218,16 +218,17 @@ function getElementConfigsForAddTask() {
   const titleInput = document.querySelector("#task-title");
   const dateInput = document.querySelector("#task-date");
   const createButton = document.querySelector(".create-button");
-  const arrow = document.querySelector(".categoryInputImg");
+  const arrow = document.querySelector("#categoryBtnImg");
   const prioContainer = document.querySelector(".prio-category-container");
   console.log({ wrapper, select, options, titleInput, dateInput, createButton, arrow, prioContainer });
   return { wrapper, select, options, titleInput, dateInput, createButton, arrow, prioContainer };
 }
 
 function attachCoreEvents({ wrapper, select, options, titleInput, dateInput, createButton, arrow, prioContainer }) {
+  arrow.addEventListener("click", () => toggleDropdown(options, wrapper, arrow, prioContainer));
   select.addEventListener("click", () => toggleDropdown(options, wrapper, arrow, prioContainer));
   options.addEventListener("click", (event) =>
-    handleOptionClick(event, select, options, wrapper, { titleInput, dateInput, createButton }, arrow)
+    handleOptionClick(event, select, options, wrapper, { titleInput, dateInput, createButton }, arrow, prioContainer)
   );
 
   clickOutsideToCloseCategory({ wrapper, select, options, arrow, prioContainer });
@@ -292,7 +293,7 @@ function toggleDropdown(options, wrapper, arrow, prioContainer) {
   prioContainer.classList.toggle("expender"), isOpen;
   options.classList.toggle("visible", isOpen);
   arrow?.classList.toggle("rotated", isOpen);
-  wrapper?.classList.toggle("expanded", isOpen);
+  wrapper?.classList.toggle("expanded", isOpen);  
 }
 
 function closeDropdown(options, wrapper, arrow, prioContainer) {
