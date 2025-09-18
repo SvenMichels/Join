@@ -189,7 +189,7 @@ select {
 
 .rotated {
   transform: rotate(180deg);
-}}
+}
 =======
 /* Basis-Layout */
 .custom-select-wrapper { position: relative; }
