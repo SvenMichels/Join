@@ -29,6 +29,7 @@ import {
 import { setupOutsideClickHandler, removeNoScroll } from "../board/taskDetails.js";
 import { initInputField } from "../scripts/auth/Validation.js";
 import { initCategoryDropdown } from "../addTask/formManager.js";
+import { categorySave, categoryLoad } from "../board/boardUtils.js";
 
 const $ = {};
 
@@ -186,13 +187,15 @@ function collectTaskDataModal(form) {
   const assignedUsers = Array.from(
     document.querySelectorAll(".user-checkbox-modal:checked")
   ).map(checkbox => checkbox.value);
+  const categoryElement = document.getElementById("category-modal").innerHTML;
+  const category = categorySave(categoryElement);
 
   return {
     id,
     title: form.taskTitle.value.trim(),
     description: form.taskDescription.value.trim(),
     dueDate: form.taskDate.value,
-    category: document.getElementById("category-modal").value,
+    category: category,
     prio: getCurrentPriority(),
     assignedUsers,
     subtasks: [...getSubtaskItems()],
@@ -281,8 +284,19 @@ function resetModalState() {
   if ($.form) {
     $.form.reset();
   }
+  clearSubtask();
   clearSelectedUserNamesModal();
   selectPriorityModal("medium");
+}
+
+function clearSubtask() {
+  const subtaskInputs = document.getElementsByClassName("subtask-display-text-modal");
+  Array.from(subtaskInputs).forEach(input => {
+    input.value = "";
+  });
+
+  console.log("[Modal] Subtask inputs cleared");
+
 }
 
 /**
@@ -309,7 +323,7 @@ function fillBasicFields(task) {
   document.getElementById("task-title-modal").value = task.title || "";
   document.getElementById("task-description-modal").value = task.description || "";
   document.getElementById("task-date-modal").value = task.dueDate || "";
-  document.getElementById("category-modal").value = task.category || "";
+  document.getElementById("category-modal").innerHTML = categoryLoad(task.category);
   selectPriorityModal((task.prio || "medium").toLowerCase());
 }
 

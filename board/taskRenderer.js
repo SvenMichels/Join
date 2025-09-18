@@ -7,6 +7,7 @@ import {
 
 import { setupMoveDropdown } from "./dragDropManager.js";
 import { updateSwitchButtonVisibility } from "./dragDropManager.js";
+import { categoryLoad } from "./boardUtils.js";
 
 /**
  * Maps task statuses to corresponding board column IDs.
@@ -93,7 +94,6 @@ async function generateTaskHTML(taskData, allSystemUsers, subtaskProgressInfo) {
   const categoryIconPath = getCategoryIcon(taskData.category);
   const iconFileName = categoryIconPath.split('/').pop();
   const priorityIconPath = getPriorityIconPath(taskData.prio);
-
   const assignedUsersHTML = await generateAssignedChips(taskData.assignedUsers, allSystemUsers, false);
   const progressBarHTML = generateSubtaskProgressBar(taskData.id, subtaskProgressInfo);
 

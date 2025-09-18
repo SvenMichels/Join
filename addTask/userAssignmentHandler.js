@@ -270,7 +270,7 @@ export async function setupUserSearch() {
   renderUserCheckboxes(allSystemUsers, Array.from(selectedUserNames));
 }
 
-function setupOutsideClickToClose(containerId, toggleElementSelector, arrowSelector, inputSelector, onClose) {
+export function setupOutsideClickToClose(containerId, toggleElementSelector, arrowSelector, inputSelector, onClose) {
   document.addEventListener("click", (event) => {
     const { container, toggleElement, arrow, input } = setupOutsideClickToCloseConfig(containerId, toggleElementSelector, arrowSelector, inputSelector);
     if (!container || !toggleElement) return;
@@ -290,7 +290,7 @@ function setupOutsideClickToClose(containerId, toggleElementSelector, arrowSelec
   });
 }
 
-function setupOutsideClickToCloseConfig(containerId, toggleElementSelector, arrowSelector, inputSelector) {
+export function setupOutsideClickToCloseConfig(containerId, toggleElementSelector, arrowSelector, inputSelector) {
   const container = document.getElementById(containerId);
   const toggleElement = document.querySelector(toggleElementSelector);
   const arrow = document.querySelector(arrowSelector);

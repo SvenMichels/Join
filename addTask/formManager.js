@@ -1,5 +1,7 @@
 import { showValidateBubble, setFieldValidity } from "../scripts/auth/Validation.js";
 import { getSubtaskMessage } from "../scripts/auth/validationsmessages.js";
+import { setupOutsideClickToClose, setupOutsideClickToCloseConfig } from "./userAssignmentHandler.js";
+import { categorySave } from "../board/boardUtils.js";
 
 /**
  * Add Task Form Management
@@ -101,13 +103,12 @@ export function resetFormState() {
  * @returns {Object} Task data object.
  */
 export function collectTaskData(form) {
-  console.log(form);
-
   const id = form.getAttribute("data-task-id");
   const title = form.taskTitle.value.trim();
   const description = form.taskDescription.value.trim();
   const dueDate = form.taskDate.value;
-  const category = document.getElementById("categorySelect").dataset.selected;
+  const categoryElement = document.getElementById("categorySelect").innerHTML;
+  const category = categorySave(categoryElement);
   const prio = currentlySelectedPriority;
   const assignedUsers = collectAssignedUsers();
   const subtasks = [...subtaskItemsList];
@@ -180,7 +181,8 @@ export function getSubtasksForPayload() {
   const items = getSubtaskItems();
   return (items || []).map(s => (s || "").trim()).filter(Boolean);
 }
-// ".prio-category-container", "#categorySelect", "#categoryOptions", "task-title", "task-date"
+
+
 export function initCategoryDropdown(wrapperElementId) {
   const wrapper = document.getElementById(wrapperElementId);
   if (!wrapper) return;
@@ -203,9 +205,10 @@ function getElementConfigsForAddTaskModal() {
   const titleInput = document.querySelector("#task-title-modal");
   const dateInput = document.querySelector("#task-date-modal");
   const createButton = document.querySelector(".create-button");
-  console.log({ wrapper, select, options, titleInput, dateInput, createButton });
+  const arrow = document.querySelector("#assignedBtnImg");
+  console.log({ wrapper, select, options, titleInput, dateInput, createButton, arrow });
 
-  return { wrapper, select, options, titleInput, dateInput, createButton };
+  return { wrapper, select, options, titleInput, dateInput, createButton, arrow };
 }
 
 function getElementConfigsForAddTask() {
@@ -215,33 +218,44 @@ function getElementConfigsForAddTask() {
   const titleInput = document.querySelector("#task-title");
   const dateInput = document.querySelector("#task-date");
   const createButton = document.querySelector(".create-button");
-  console.log({ wrapper, select, options, titleInput, dateInput, createButton });
-  return { wrapper, select, options, titleInput, dateInput, createButton };
+  const arrow = document.querySelector(".categoryInputImg");
+  console.log({ wrapper, select, options, titleInput, dateInput, createButton, arrow });
+  return { wrapper, select, options, titleInput, dateInput, createButton, arrow };
 }
 
-function attachCoreEvents({ wrapper, select, options, titleInput, dateInput, createButton }) {
-  select.addEventListener("click", () => toggleDropdown(options, select));
+function attachCoreEvents({ wrapper, select, options, titleInput, dateInput, createButton, arrow }) {
+  select.addEventListener("click", () => toggleDropdown(options, wrapper, arrow));
   options.addEventListener("click", (event) =>
-    handleOptionClick(event, select, options, wrapper, { titleInput, dateInput, createButton })
+    handleOptionClick(event, select, options, wrapper, { titleInput, dateInput, createButton }, arrow)
   );
-  document.addEventListener("click", (event) => {
-    if (!wrapper.contains(event.target)) closeDropdown(options, wrapper);
-  });
+
+  clickOutsideToCloseCategory({ wrapper, select, options, arrow });
+
   [titleInput, dateInput].forEach((input) =>
     input.addEventListener("input", () => updateCreateButtonState({ select, titleInput, dateInput, createButton }))
   );
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") closeDropdown(options, wrapper);
+
+
+  dateInput.addEventListener("click", () => dateInput.showPicker?.() || dateInput.focus());
+  dateInput.addEventListener("click", (e) => {
+    if (!dateInput.contains(e.target)) {
+      dateInput.blur();
+    }
   });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeDropdown(options, wrapper, arrow);
+  });
+
 }
 
-function handleOptionClick(event, select, options, wrapper, deps) {
+function handleOptionClick(event, select, options, wrapper, deps, arrow) {
   const clicked = event.target.closest("li");
   if (!clicked) return;
   select.textContent = clicked.textContent.trim();
   select.dataset.selected = clicked.dataset.value || clicked.textContent.trim();
   updateCreateButtonState({ select, ...deps });
-  closeDropdown(options, wrapper);
+  closeDropdown(options, wrapper, arrow);
 }
 
 function updateCreateButtonState({ select, titleInput, dateInput, createButton }) {
@@ -256,22 +270,37 @@ function isFormValid({ select, titleInput, dateInput }) {
   return hasCategory && hasTitle && hasDate;
 }
 
-function toggleDropdown(options, wrapper) {
-  const isOpen = options.classList.toggle("open");
-  wrapper.classList.toggle("expanded", isOpen);
+function clickOutsideToCloseCategory({ wrapper, select, options, arrow }) {
+  if (!options || options.dataset.outsideBound === "true") return;
+  options.dataset.outsideBound = "true";
 
-  options.querySelectorAll("li").forEach((li) => {
-    li.classList.toggle("expanded", isOpen);
-  });
+  const onDocClick = (e) => {
+    const target = e.target;
+    const insideOptions = options.contains(target);
+    const onSelect = !!(select && (select === target || select.contains(target)));
+    const insideWrapper = !!(select && select.contains(target));
+    const isOpen = options.classList.contains("open") || options.classList.contains("visible");
+
+    if (isOpen && !insideOptions && !onSelect && !insideWrapper) {
+      closeDropdown(options, wrapper, arrow);
+    }
+  };
+
+  document.addEventListener("click", onDocClick);
 }
 
-function closeDropdown(options, wrapper) {
-  options.classList.remove("open");
-  wrapper.classList.remove("expanded");
+function toggleDropdown(options, wrapper, arrow) {
+  const isOpen = options.classList.toggle("open");
+  options.classList.toggle("visible", isOpen);
+  arrow?.classList.toggle("rotated", isOpen);
+  wrapper?.classList.toggle("expanded", isOpen);
+}
 
-  options.querySelectorAll("li").forEach((li) => {
-    li.classList.remove("expanded");
-  });
+function closeDropdown(options, wrapper, arrow) {
+  options.classList.remove("open");
+  // options.classList.remove("visible");
+  arrow?.classList.remove("rotated");
+  wrapper?.classList.remove("expanded");
 }
 
 function query(selectorOrElement) {

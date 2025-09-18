@@ -33,9 +33,21 @@ const PRIORITY_LEVEL_ICONS = {
  * @returns {string} The path to the corresponding icon file.
  */
 export function getCategoryIcon(categoryType) {
-  const defaultIcon = "defaulticon.svg";
-  const iconFileName = AVAILABLE_CATEGORY_ICONS[categoryType] || defaultIcon;
+  const iconFileName = AVAILABLE_CATEGORY_ICONS[categoryType];
   return `../assets/icons/${iconFileName}`;
+}
+
+export function categoryLoad(key) {
+  return String(key)
+    .trim()
+    .replace(/_/g, " ");
+}
+
+
+export function categorySave(key) {
+  return String(key)
+    .trim()
+    .replace(/\s+/g, "_");
 }
 
 /**
@@ -92,11 +104,11 @@ function extractUserName(userEntry) {
 function createUserChip(userRecord, showNames = false) {
   const userInitials = getInitials(userRecord.userFullName);
   const userColorClass = userRecord.userColor || "color-1";
-  
+
   if (showNames) {
     return `<div class="detail-style"><div class="contact-chip ${userColorClass}">${userInitials}</div>  <p>${userRecord.userFullName}</p></div>`;
   }
-  
+
   return `<div class="contact-chip ${userColorClass}">${userInitials}</div>`;
 }
 
