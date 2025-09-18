@@ -198,6 +198,7 @@ export function initCategoryDropdown(wrapperElementId) {
 }
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
 export function initCategoryDropdown(wrapperElementId) {
   const wrapper = document.getElementById(wrapperElementId);
@@ -241,6 +242,20 @@ function getElementConfigsForAddTaskModal() {
 }
 
 >>>>>>> Stashed changes
+=======
+function getElementConfigsForAddTaskModal() {
+  const wrapper = document.querySelector("#formWrapper");
+  const select = document.querySelector("#category-modal");
+  const options = document.querySelector("#categoryOptions-modal");
+  const titleInput = document.querySelector("#task-title-modal");
+  const dateInput = document.querySelector("#task-date-modal");
+  const createButton = document.querySelector(".create-button");
+  console.log({ wrapper, select, options, titleInput, dateInput, createButton });
+
+  return { wrapper, select, options, titleInput, dateInput, createButton };
+}
+
+>>>>>>> Stashed changes
 function getElementConfigsForAddTask() {
   const wrapper = document.querySelector(".form-wrapper");
   const select = document.querySelector("#categorySelect");
@@ -248,6 +263,7 @@ function getElementConfigsForAddTask() {
   const titleInput = document.querySelector("#task-title");
   const dateInput = document.querySelector("#task-date");
   const createButton = document.querySelector(".create-button");
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
   const arrow = document.querySelector(".categoryInputImg");
   console.log({ wrapper, select, options, titleInput, dateInput, createButton, arrow });
@@ -273,6 +289,8 @@ function attachCoreEvents({ wrapper, select, options, titleInput, dateInput, cre
       dateInput.blur();
     }
 =======
+=======
+>>>>>>> Stashed changes
   console.log({ wrapper, select, options, titleInput, dateInput, createButton });
   return { wrapper, select, options, titleInput, dateInput, createButton };
 }
@@ -290,6 +308,7 @@ function attachCoreEvents({ wrapper, select, options, titleInput, dateInput, cre
   );
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") closeDropdown(options, wrapper);
+<<<<<<< Updated upstream
 >>>>>>> Stashed changes
   });
 
@@ -380,6 +399,50 @@ function closeDropdown(options, wrapper) {
 >>>>>>> Stashed changes
 }
 
+=======
+  });
+}
+
+function handleOptionClick(event, select, options, wrapper, deps) {
+  const clicked = event.target.closest("li");
+  if (!clicked) return;
+  select.textContent = clicked.textContent.trim();
+  select.dataset.selected = clicked.dataset.value || clicked.textContent.trim();
+  updateCreateButtonState({ select, ...deps });
+  closeDropdown(options, wrapper);
+}
+
+function updateCreateButtonState({ select, titleInput, dateInput, createButton }) {
+  const valid = isFormValid({ select, titleInput, dateInput });
+  createButton.disabled = !valid;
+}
+
+function isFormValid({ select, titleInput, dateInput }) {
+  const hasCategory = Boolean(select.dataset.selected);
+  const hasTitle = titleInput.value.trim().length > 3;
+  const hasDate = Boolean(dateInput.value.trim());
+  return hasCategory && hasTitle && hasDate;
+}
+
+function toggleDropdown(options, wrapper) {
+  const isOpen = options.classList.toggle("open");
+  wrapper.classList.toggle("expanded", isOpen);
+
+  options.querySelectorAll("li").forEach((li) => {
+    li.classList.toggle("expanded", isOpen);
+  });
+}
+
+function closeDropdown(options, wrapper) {
+  options.classList.remove("open");
+  wrapper.classList.remove("expanded");
+
+  options.querySelectorAll("li").forEach((li) => {
+    li.classList.remove("expanded");
+  });
+}
+
+>>>>>>> Stashed changes
 function query(selectorOrElement) {
   return typeof selectorOrElement === "string" ? document.querySelector(selectorOrElement) : selectorOrElement;
 }
