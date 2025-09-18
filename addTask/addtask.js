@@ -138,8 +138,11 @@ async function handleFormSubmission(event) {
   if (!validateTask(taskData)) return;
   await saveTask(taskData);
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   console.log("[AddTaskController] Task saved:", taskData);
 
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
   setTimeout(() => {
@@ -147,15 +150,21 @@ async function handleFormSubmission(event) {
     clearAllFormData();
   }, 100);
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   // setTimeout(() => {
   //   if (window.location.href.includes("board.html")) return;
   //   window.location.href = "../board/board.html";
   // }, 1250);
 =======
+=======
+>>>>>>> Stashed changes
   setTimeout(() => {
     if (window.location.href.includes("board.html")) return;
     window.location.href = "../board/board.html";
   }, 1250);
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 }
 
