@@ -205,9 +205,10 @@ function getElementConfigsForAddTaskModal() {
   const dateInput = document.querySelector("#task-date-modal");
   const createButton = document.querySelector(".create-button");
   const arrow = document.querySelector("#assignedBtnImg");
-  console.log({ wrapper, select, options, titleInput, dateInput, createButton, arrow });
+  const prioContainer = document.querySelector(".prio-category-container");
+  console.log({ wrapper, select, options, titleInput, dateInput, createButton, arrow, prioContainer });
 
-  return { wrapper, select, options, titleInput, dateInput, createButton, arrow };
+  return { wrapper, select, options, titleInput, dateInput, createButton, arrow, prioContainer };
 }
 
 function getElementConfigsForAddTask() {
@@ -217,19 +218,19 @@ function getElementConfigsForAddTask() {
   const titleInput = document.querySelector("#task-title");
   const dateInput = document.querySelector("#task-date");
   const createButton = document.querySelector(".create-button");
-
   const arrow = document.querySelector(".categoryInputImg");
-  console.log({ wrapper, select, options, titleInput, dateInput, createButton, arrow });
-  return { wrapper, select, options, titleInput, dateInput, createButton, arrow };
+  const prioContainer = document.querySelector(".prio-category-container");
+  console.log({ wrapper, select, options, titleInput, dateInput, createButton, arrow, prioContainer });
+  return { wrapper, select, options, titleInput, dateInput, createButton, arrow, prioContainer };
 }
 
-function attachCoreEvents({ wrapper, select, options, titleInput, dateInput, createButton, arrow }) {
-  select.addEventListener("click", () => toggleDropdown(options, wrapper, arrow));
+function attachCoreEvents({ wrapper, select, options, titleInput, dateInput, createButton, arrow, prioContainer }) {
+  select.addEventListener("click", () => toggleDropdown(options, wrapper, arrow, prioContainer));
   options.addEventListener("click", (event) =>
     handleOptionClick(event, select, options, wrapper, { titleInput, dateInput, createButton }, arrow)
   );
 
-  clickOutsideToCloseCategory({ wrapper, select, options, arrow });
+  clickOutsideToCloseCategory({ wrapper, select, options, arrow, prioContainer });
 
   [titleInput, dateInput].forEach((input) =>
     input.addEventListener("input", () => updateCreateButtonState({ select, titleInput, dateInput, createButton }))
@@ -242,17 +243,17 @@ function attachCoreEvents({ wrapper, select, options, titleInput, dateInput, cre
       dateInput.blur();
     }
   });
-  console.log({ wrapper, select, options, titleInput, dateInput, createButton });
+  console.log({ wrapper, select, options, titleInput, dateInput, createButton, prioContainer });
   return { wrapper, select, options, titleInput, dateInput, createButton };
 }
 
-function handleOptionClick(event, select, options, wrapper, deps, arrow) {
+function handleOptionClick(event, select, options, wrapper, deps, arrow, prioContainer) {
   const clicked = event.target.closest("li");
   if (!clicked) return;
   select.textContent = clicked.textContent.trim();
   select.dataset.selected = clicked.dataset.value || clicked.textContent.trim();
   updateCreateButtonState({ select, ...deps });
-  closeDropdown(options, wrapper, arrow);
+  closeDropdown(options, wrapper, arrow, prioContainer);
 }
 
 function updateCreateButtonState({ select, titleInput, dateInput, createButton }) {
@@ -267,7 +268,7 @@ function isFormValid({ select, titleInput, dateInput }) {
   return hasCategory && hasTitle && hasDate;
 }
 
-function clickOutsideToCloseCategory({ wrapper, select, options, arrow }) {
+function clickOutsideToCloseCategory({ wrapper, select, options, arrow, prioContainer }) {
   if (!options || options.dataset.outsideBound === "true") return;
   options.dataset.outsideBound = "true";
 
@@ -279,23 +280,24 @@ function clickOutsideToCloseCategory({ wrapper, select, options, arrow }) {
     const isOpen = options.classList.contains("open") || options.classList.contains("visible");
 
     if (isOpen && !insideOptions && !onSelect && !insideWrapper) {
-      closeDropdown(options, wrapper, arrow);
+      closeDropdown(options, wrapper, arrow, prioContainer);
     }
   };
 
   document.addEventListener("click", onDocClick);
 }
 
-function toggleDropdown(options, wrapper, arrow) {
+function toggleDropdown(options, wrapper, arrow, prioContainer) {
   const isOpen = options.classList.toggle("open");
+  prioContainer.classList.toggle("expender"), isOpen;
   options.classList.toggle("visible", isOpen);
   arrow?.classList.toggle("rotated", isOpen);
   wrapper?.classList.toggle("expanded", isOpen);
 }
 
-function closeDropdown(options, wrapper, arrow) {
+function closeDropdown(options, wrapper, arrow, prioContainer) {
+  prioContainer.classList.remove("expender");
   options.classList.remove("open");
-  // options.classList.remove("visible");
   arrow?.classList.remove("rotated");
   wrapper?.classList.remove("expanded");
 }
