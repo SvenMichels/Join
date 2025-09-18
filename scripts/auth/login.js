@@ -40,8 +40,6 @@ function collectFormCredentials() {
  */
 async function processLoginAttempt(credentials) {
   try {
-    console.log("test");
-
     await loginUser(credentials.email, credentials.password);
     redirectToStartpage();
   } catch (loginError) {

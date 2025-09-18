@@ -180,54 +180,100 @@ export function getSubtasksForPayload() {
   const items = getSubtaskItems();
   return (items || []).map(s => (s || "").trim()).filter(Boolean);
 }
+// ".prio-category-container", "#categorySelect", "#categoryOptions", "task-title", "task-date"
+export function initCategoryDropdown(wrapperElementId) {
+  const wrapper = document.getElementById(wrapperElementId);
+  if (!wrapper) return;
+  if (wrapper.id === "form-wrapper") {
+    const elements = getElementConfigsForAddTask();
+    attachCoreEvents(elements);
+    updateCreateButtonState(elements);
+  }
+  if (wrapper.id === "formWrapper") {
+    const elements = getElementConfigsForAddTaskModal();
+    attachCoreEvents(elements);
+    updateCreateButtonState(elements);
+  }
+}
 
-export function initCategoryDropdown(categoryWrapperSelector, categorySelectSelector, categoryOptionsSelector, taskTitleSelector, taskDateSelector) {
-  const categoryWrapper = document.querySelector(categoryWrapperSelector);
-  const categorySelect = document.querySelector(categorySelectSelector);
-  const categoryOptions = document.querySelector(categoryOptionsSelector);
+function getElementConfigsForAddTaskModal() {
+  const wrapper = document.querySelector("#formWrapper");
+  const select = document.querySelector("#category-modal");
+  const options = document.querySelector("#categoryOptions-modal");
+  const titleInput = document.querySelector("#task-title-modal");
+  const dateInput = document.querySelector("#task-date-modal");
+  const createButton = document.querySelector(".create-button");
+  console.log({ wrapper, select, options, titleInput, dateInput, createButton });
 
-  toggleCategoryDropdown(categoryOptions, categoryWrapper);
-  closeCategoryDropdown(categoryOptions, categoryWrapper);
+  return { wrapper, select, options, titleInput, dateInput, createButton };
+}
 
-  categorySelect.addEventListener("click", () => {
-    toggleCategoryDropdown(categoryOptions, categoryWrapper);
+function getElementConfigsForAddTask() {
+  const wrapper = document.querySelector(".form-wrapper");
+  const select = document.querySelector("#categorySelect");
+  const options = document.querySelector("#categoryOptions");
+  const titleInput = document.querySelector("#task-title");
+  const dateInput = document.querySelector("#task-date");
+  const createButton = document.querySelector(".create-button");
+  console.log({ wrapper, select, options, titleInput, dateInput, createButton });
+  return { wrapper, select, options, titleInput, dateInput, createButton };
+}
+
+function attachCoreEvents({ wrapper, select, options, titleInput, dateInput, createButton }) {
+  select.addEventListener("click", () => toggleDropdown(options, select));
+  options.addEventListener("click", (event) =>
+    handleOptionClick(event, select, options, wrapper, { titleInput, dateInput, createButton })
+  );
+  document.addEventListener("click", (event) => {
+    if (!wrapper.contains(event.target)) closeDropdown(options, wrapper);
   });
-
-  categoryOptions.querySelectorAll("li").forEach(option => {
-    option.addEventListener("click", () => {
-      categorySelect.textContent = option.textContent;
-      categorySelect.dataset.selected = option.dataset.value;
-      const titleElement = document.getElementById(taskTitleSelector);
-      const dateElement = document.getElementById(taskDateSelector);
-      const titleElementValue = titleElement.value;
-      const dateElementValue = dateElement.value;
-
-      if (categorySelect && titleElementValue.length > 3 && dateElementValue.length > 0) {
-        const btn = document.querySelector(".create-button");
-        btn.disabled = false;
-      } else {
-        const btn = document.querySelector(".create-button");
-        btn.disabled = true;
-      }
-      closeCategoryDropdown(categoryOptions, categoryWrapper);
-    });
-  });
-
-  document.addEventListener("click", (e) => {
-    if (!categoryWrapper.contains(e.target)) {
-      closeCategoryDropdown(categoryOptions, categoryWrapper);
-    }
+  [titleInput, dateInput].forEach((input) =>
+    input.addEventListener("input", () => updateCreateButtonState({ select, titleInput, dateInput, createButton }))
+  );
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeDropdown(options, wrapper);
   });
 }
 
-function toggleCategoryDropdown(categoryOptions, categoryWrapper) {
-  const isOpen = categoryOptions.classList.toggle("open");
-  categoryWrapper.classList.toggle("expanded", isOpen);
+function handleOptionClick(event, select, options, wrapper, deps) {
+  const clicked = event.target.closest("li");
+  if (!clicked) return;
+  select.textContent = clicked.textContent.trim();
+  select.dataset.selected = clicked.dataset.value || clicked.textContent.trim();
+  updateCreateButtonState({ select, ...deps });
+  closeDropdown(options, wrapper);
 }
 
+function updateCreateButtonState({ select, titleInput, dateInput, createButton }) {
+  const valid = isFormValid({ select, titleInput, dateInput });
+  createButton.disabled = !valid;
+}
 
+function isFormValid({ select, titleInput, dateInput }) {
+  const hasCategory = Boolean(select.dataset.selected);
+  const hasTitle = titleInput.value.trim().length > 3;
+  const hasDate = Boolean(dateInput.value.trim());
+  return hasCategory && hasTitle && hasDate;
+}
 
-function closeCategoryDropdown(categoryOptions, categoryWrapper) {
-  categoryOptions.classList.remove("open");
-  categoryWrapper.classList.remove("expanded");
+function toggleDropdown(options, wrapper) {
+  const isOpen = options.classList.toggle("open");
+  wrapper.classList.toggle("expanded", isOpen);
+
+  options.querySelectorAll("li").forEach((li) => {
+    li.classList.toggle("expanded", isOpen);
+  });
+}
+
+function closeDropdown(options, wrapper) {
+  options.classList.remove("open");
+  wrapper.classList.remove("expanded");
+
+  options.querySelectorAll("li").forEach((li) => {
+    li.classList.remove("expanded");
+  });
+}
+
+function query(selectorOrElement) {
+  return typeof selectorOrElement === "string" ? document.querySelector(selectorOrElement) : selectorOrElement;
 }

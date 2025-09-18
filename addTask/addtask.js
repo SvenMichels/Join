@@ -43,7 +43,7 @@ function initializeApplication() {
   initInputField("subtask", 'subtaskHint', 'subtask');
   initInputField("task-date", 'addtaskdatehint', 'date');
   initUserAssignmentList();
-  initCategoryDropdown(".prio-category-container", "#categorySelect", "#categoryOptions", "task-title", "task-date");
+  initCategoryDropdown("form-wrapper");
 }
 
 /**
@@ -134,16 +134,17 @@ function updateSubmitState({ categorySelect, taskDateInput, submitButton }) {
  */
 async function handleFormSubmission(event) {
   event.preventDefault();
-
   const taskData = collectTaskData(event.target);
   if (!validateTask(taskData)) return;
-
   await saveTask(taskData);
-
   setTimeout(() => {
     showUserFeedback();
     clearAllFormData();
   }, 100);
+  setTimeout(() => {
+    if (window.location.href.includes("board.html")) return;
+    window.location.href = "../board/board.html";
+  }, 1250);
 }
 
 /**

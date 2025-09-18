@@ -49,8 +49,7 @@ export function initTaskFloat() {
   initInputField("task-description-modal", 'descriptionModalHint', 'name');
   initInputField("subtask-modal", 'subtaskModalHint', 'subtask');
   initInputField("task-date-modal", 'task-date-modal-Hint', 'date');
-  initCategoryDropdown(".prio-category-container", "#category-modal", "#categoryOptions-modal", "task-title-modal", "task-date-modal");
-
+  initCategoryDropdown("formWrapper");
   return initFormModal();
 }
 
