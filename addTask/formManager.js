@@ -332,7 +332,8 @@ function clearFormState(wrapper, select, options, titleInput, dateInput) {
   if (options) options.classList.remove("open", "visible");
   if (titleInput) titleInput.value = "";
   if (dateInput) dateInput.value = "";
-  selectPriorityModal("medium");
+  addActiveClass(id, className);
+  setActiveIcon(id, icon[1]);
   resetAssignedUsers();
   resetSubtasksUI();
   clearValidationAlerts();
