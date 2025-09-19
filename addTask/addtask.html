@@ -112,104 +112,105 @@
         <div class="task-wrapper">
           <div class="task-detail-container">
             <div class="task-details-wrapper">
-          <div class="task-title">
-            <label for="task-title">Title <span class="color-red">*</span></label>
-            <input class="task-title-input" name="taskTitle" id="task-title" placeholder="Enter a title" type="text" />
-            <span id="titleAlert" class="redSpan" style="display: none;">This field is required</span>
-            <div class="hint-container">
-              <div id="titleHint" class="hint-bubble"></div>
-            </div>
-          </div>
-          <div class="task-description">
-            <label for="task-description">Description</label>
-            <textarea class="task-description-input" name="taskDescription" id="task-description"
-              placeholder="Enter a Description" type="text"></textarea>
-            <div class="hint-container">
-              <div id="descriptionHint" class="hint-bubble"></div>
-            </div>
-          </div>
-          <div class="task-date">
-            <label for="task-date">Due Date <span class="color-red">*</span></label>
-            <input class="task-dateInput" name="taskDate" id="task-date" placeholder="dd/mm/yyyy" type="date" />
-            <span id="dateAlert" class="redSpan" style="display: none;">This field is required</span>
-            <div class="hint-container">
-              <div id="addtaskdatehint" class="hint-bubble"></div>
-            </div>
-          </div>
-          </div>
-
-          <div class="space-container"></div>
-
-          <div class="prio-container">
-            <div class="prio-content">
-              <label>Priority</label>
-              <div class="prio-button-container">
-                <button id="urgent-task" class="prioButtons" type="button">
-                  Urgent
-                  <img id="urgent-task-img" src="../assets/icons/urgent_red.svg" alt="urgent" />
-                </button>
-                <button id="medium-task" class="prioButtons" type="button">
-                  Medium
-                  <img id="medium-task-img" src="../assets/icons/medium_yellow.svg" alt="medium" />
-                </button>
-                <button id="low-task" class="prioButtons" type="button">
-                  Low
-                  <img id="low-task-img" src="../assets/icons/low_green.svg" alt="low" />
-                </button>
+              <div class="task-title">
+                <label for="task-title">Title <span class="color-red">*</span></label>
+                <input class="task-title-input" name="taskTitle" id="task-title" placeholder="Enter a title"
+                  type="text" />
+                <span id="titleAlert" class="redSpan" style="display: none;">This field is required</span>
+                <div class="hint-container">
+                  <div id="titleHint" class="hint-bubble"></div>
+                </div>
+              </div>
+              <div class="task-description">
+                <label for="task-description">Description</label>
+                <textarea class="task-description-input" name="taskDescription" id="task-description"
+                  placeholder="Enter a Description" type="text"></textarea>
+                <div class="hint-container">
+                  <div id="descriptionHint" class="hint-bubble"></div>
+                </div>
+              </div>
+              <div class="task-date">
+                <label for="task-date">Due Date <span class="color-red">*</span></label>
+                <input class="task-dateInput" name="taskDate" id="task-date" placeholder="dd/mm/yyyy" type="date" />
+                <span id="dateAlert" class="redSpan" style="display: none;">This field is required</span>
+                <div class="hint-container">
+                  <div id="addtaskdatehint" class="hint-bubble"></div>
+                </div>
               </div>
             </div>
 
-            <div class="prio-assigned-container">
-              <label for="searchUser">Assigned to</label>
+            <div class="space-container"></div>
 
-              <div class="assigned-input-wrapper">
-                <div class="assigned-container">
-                  <input id="searchUser" placeholder="Select contact to assign" name="assignedUsers"
-                    class="prio-assign-input" type="text" />
-                  <button class="assignUserListBtn" type="button">
-                    <img id="assignedBtnImg" class="assignedInputImg dropdown-arrow"
-                      src="../assets/icons/arrow_drop_down.svg" />
+            <div class="prio-container">
+              <div class="prio-content">
+                <label>Priority</label>
+                <div class="prio-button-container">
+                  <button id="urgent-task" class="prioButtons" type="button">
+                    Urgent
+                    <img id="urgent-task-img" src="../assets/icons/urgent_red.svg" alt="urgent" />
+                  </button>
+                  <button id="medium-task" class="prioButtons" type="button">
+                    Medium
+                    <img id="medium-task-img" src="../assets/icons/medium_yellow.svg" alt="medium" />
+                  </button>
+                  <button id="low-task" class="prioButtons" type="button">
+                    Low
+                    <img id="low-task-img" src="../assets/icons/low_green.svg" alt="low" />
                   </button>
                 </div>
-                <div id="assignedUserList" class="assigned-user-list"></div>
               </div>
 
-              <div id="selectedUser" class="selectedUserContainer"></div>
-            </div>
+              <div class="prio-assigned-container">
+                <label for="searchUser">Assigned to</label>
 
-            <div class="prio-category-container">
-              <p>Category <span class="color-red">*</span></p>
-              <div class="custom-select-wrapper">
-              <div class="custom-select" id="categorySelect" data-selected="">
-                 Bitte auswählen
+                <div class="assigned-input-wrapper">
+                  <div class="assigned-container">
+                    <input id="searchUser" placeholder="Select contact to assign" name="assignedUsers"
+                      class="prio-assign-input" type="text" />
+                    <button class="assignUserListBtn" type="button">
+                      <img id="assignedBtnImg" class="assignedInputImg dropdown-arrow"
+                        src="../assets/icons/arrow_drop_down.svg" />
+                    </button>
+                  </div>
+                  <div id="assignedUserList" class="assigned-user-list"></div>
+                </div>
+
+                <div id="selectedUser" class="selectedUserContainer"></div>
               </div>
-                <button class="categoryListBtn" type="button">
-                  <img id="categoryBtnImg" class="categoryInputImg dropdown-arrow"
-                    src="../assets/icons/arrow_drop_down.svg" />
-                </button>
-                <ul class="custom-options" id="categoryOptions">
-                  <li data-value="Technical_Task">Technical Task</li>
-                  <li data-value="User_Story">User Story</li>
+
+              <div class="prio-category-container">
+                <p>Category <span class="color-red">*</span></p>
+                <div class="custom-select-wrapper">
+                  <div class="custom-select" id="categorySelect" data-selected="">
+                    Select a category
+                  </div>
+                  <button class="categoryListBtn" type="button">
+                    <img id="categoryBtnImg" class="categoryInputImg dropdown-arrow"
+                      src="../assets/icons/arrow_drop_down.svg" />
+                  </button>
+                  <ul class="custom-options" id="categoryOptions">
+                    <li data-value="Technical_Task">Technical Task</li>
+                    <li data-value="User_Story">User Story</li>
                   </ul>
-                 </div>
-              </div>
-
-            <div class="prio-subtask-container">
-              <label for="subtask">Subtasks</label>
-              <div class="subtask-wrapper">
-                <input class="prio-subtask-input" name="subtask" id="subtask" type="text" maxlength="128" />
-                <button type="button" class="subtask-add-button subtask-button-in-input">
-                  <img src="../assets/icons/add.svg" />
-                </button>
-
-                <div class="hint-container">
-                  <div id="subtaskHint" class="hint-bubble"></div>
                 </div>
               </div>
-              <div id="subtaskList"></div>
-              <div id="subtaskEditHint" class="hint-bubble"></div>
+
+              <div class="prio-subtask-container">
+                <label for="subtask">Subtasks</label>
+                <div class="subtask-wrapper">
+                  <input class="prio-subtask-input" name="subtask" id="subtask" type="text" maxlength="128" />
+                  <button type="button" class="subtask-add-button subtask-button-in-input">
+                    <img src="../assets/icons/add.svg" />
+                  </button>
+
+                  <div class="hint-container">
+                    <div id="subtaskHint" class="hint-bubble"></div>
+                  </div>
+                </div>
+                <div id="subtaskList"></div>
+                <div id="subtaskEditHint" class="hint-bubble"></div>
+              </div>
             </div>
-          </div>
           </div>
 
           <div class="required-container">

@@ -11,7 +11,7 @@ import { setupDropdown } from "../scripts/ui/dropdown.js";
 import { highlightActiveNavigationLinks } from "../scripts/utils/navUtils.js";
 import { getInitials } from "../scripts/utils/helpers.js";
 import { setupMobileDeviceListeners } from "../scripts/utils/mobileUtils.js";
-import { collectTaskData, validateTask, resetFormState, clearValidationAlerts, initCategoryDropdown } from "./formManager.js";
+import { collectTaskData, validateTask, resetFormState, clearValidationAlerts, initFormAndButtonHandlers } from "./formManager.js";
 import { selectPriority, initPriorityEventListeners } from "./priorityHandler.js";
 import { loadAndRenderUsers, initUserAssignmentList, setupUserSearch, clearSelectedUsers } from "./userAssignmentHandler.js";
 import { loadAndRenderUsersModal, initUserSearchEventListener } from "../taskFloatData/userAssignmentManager.js";
@@ -23,6 +23,7 @@ const domCache = {};
 
 document.addEventListener("DOMContentLoaded", () => {
   initializeApplication();
+
 });
 
 /**
@@ -43,7 +44,8 @@ function initializeApplication() {
   initInputField("subtask", 'subtaskHint', 'subtask');
   initInputField("task-date", 'addtaskdatehint', 'date');
   initUserAssignmentList();
-  initCategoryDropdown("form-wrapper");
+  initFormAndButtonHandlers("form-wrapper");
+  initFormAndButtonHandlers("assignedUserList")
 }
 
 /**

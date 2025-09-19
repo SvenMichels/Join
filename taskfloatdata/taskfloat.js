@@ -28,7 +28,7 @@ import {
 } from "./subtaskManager.js";
 import { setupOutsideClickHandler, removeNoScroll } from "../board/taskDetails.js";
 import { initInputField } from "../scripts/auth/Validation.js";
-import { initCategoryDropdown } from "../addTask/formManager.js";
+import { initFormAndButtonHandlers } from "../addTask/formManager.js";
 import { categorySave, categoryLoad } from "../board/boardUtils.js";
 
 const $ = {};
@@ -50,7 +50,8 @@ export function initTaskFloat() {
   initInputField("task-description-modal", 'descriptionModalHint', 'name');
   initInputField("subtask-modal", 'subtaskModalHint', 'subtask');
   initInputField("task-date-modal", 'task-date-modal-Hint', 'date');
-  initCategoryDropdown("formWrapper");
+  initFormAndButtonHandlers("formWrapper");
+  initFormAndButtonHandlers("assignedUserList-modal");
   return initFormModal();
 }
 
