@@ -97,6 +97,8 @@ function activateSelectedPriority(priorityLevel) {
   if (!config) return;
 
   const { id, icon, className } = config;
+  console.log(config);
+
 
   addActiveClass(id, className);
   setActiveIcon(id, icon[1]);
@@ -107,7 +109,7 @@ function activateSelectedPriority(priorityLevel) {
  * @param {string} elementId - DOM element ID
  * @param {string} activeClass - Class to add
  */
-function addActiveClass(elementId, activeClass) {
+export function addActiveClass(elementId, activeClass) {
   const element = document.getElementById(elementId);
   if (element) {
     element.classList.add(activeClass);
@@ -119,7 +121,7 @@ function addActiveClass(elementId, activeClass) {
  * @param {string} elementId - DOM element ID
  * @param {string} activeIcon - Path to the active icon
  */
-function setActiveIcon(elementId, activeIcon) {
+export function setActiveIcon(elementId, activeIcon) {
   const imageId = getImageId(elementId);
   const imageElement = document.getElementById(imageId);
   if (imageElement) {

@@ -2,6 +2,7 @@ import { showValidateBubble, setFieldValidity } from "../scripts/auth/Validation
 import { getSubtaskMessage } from "../scripts/auth/validationsmessages.js";
 import { categorySave } from "../board/boardUtils.js";
 import { loadAndRenderUsers, updateSelectedUserDisplay, setupUserSearch, clearSelectedUserNamesHandler } from "./userAssignmentHandler.js";
+import { selectPriorityModal, addActiveClass, setActiveIcon } from "../taskFloatData/priorityManager.js";
 
 /**
  * Add Task Form Management
@@ -331,18 +332,22 @@ function clearFormState(wrapper, select, options, titleInput, dateInput) {
   if (options) options.classList.remove("open", "visible");
   if (titleInput) titleInput.value = "";
   if (dateInput) dateInput.value = "";
-  resetPriorityButtonsUI();
+  selectPriorityModal("medium");
   resetAssignedUsers();
   resetSubtasksUI();
   clearValidationAlerts();
 }
 
-function resetPriorityButtonsUI() {
-  const buttons = document.querySelectorAll(".prio-button-container");
-  buttons.forEach(btn => btn.classList.remove("active"));
-  const mediumBtn = document.querySelector('prioButtons');
-  mediumBtn?.classList.add("prioMediumBtnActive");
-}
+// addActiveClass(id, className);
+// setActiveIcon(id, icon[1]);
+
+// function resetPriorityButtonsUI() {
+//   const buttons = document.querySelectorAll(".prio-button-container");
+//   buttons.forEach(btn => btn.classList.remove("active"));
+//   const mediumBtn = document.querySelector('prioButtons');
+//   mediumBtn?.classList.add("prioMediumBtnActive");
+
+// }
 
 function resetAssignedUsers() {
   const checked = document.querySelectorAll(".user-checkbox-wrapper .user-checkbox:checked");
