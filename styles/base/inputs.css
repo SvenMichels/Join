@@ -156,18 +156,6 @@ select {
   margin-bottom: 100px;
 }
 
-.categoryListBtn {
-    position: relative;
-    background: transparent;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    width: 24px;
-    height: 24px;
-}
-
 .categoryListBtn:hover {
   background: #d1d1d1;
 }

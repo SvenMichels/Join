@@ -116,6 +116,7 @@
   background: #d1d1d1;
 }
 
+.categoryListBtn,
 .assignUserListBtn {
   position: absolute;
   top: 50%;
