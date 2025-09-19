@@ -1,7 +1,7 @@
 import { showValidateBubble, setFieldValidity } from "../scripts/auth/Validation.js";
 import { getSubtaskMessage } from "../scripts/auth/validationsmessages.js";
 import { categorySave } from "../board/boardUtils.js";
-import { loadAndRenderUsers, updateSelectedUserDisplay } from "./userAssignmentHandler.js";
+import { loadAndRenderUsers, updateSelectedUserDisplay, setupUserSearch } from "./userAssignmentHandler.js";
 
 /**
  * Add Task Form Management
@@ -31,6 +31,7 @@ export function getCurrentPriority() {
  * @param {string} priority - The new priority to set.
  */
 export function setCurrentPriority(priority) {
+  if (!priority) priority = "medium";
   currentlySelectedPriority = priority;
 }
 
@@ -226,6 +227,7 @@ export function getElementConfigsForAssignedToModal() {
   const titleInput = document.querySelector("#task-title-modal");
   const dateInput = document.querySelector("#task-date-modal");
   const createButton = document.querySelector(".create-button");
+  const prioContainer = document.querySelector(".prio-category-container");
   const clearBtn = document.getElementById("clearBtn");
   return { wrapper, options, arrow, select, prioContainer, createButton, dateInput, titleInput, clearBtn };
 }
@@ -273,11 +275,17 @@ function attachCoreEvents({ wrapper, select, options, titleInput, dateInput, cre
     handleOptionClick(event, select, options, wrapper, { titleInput, dateInput, createButton }, arrow, prioContainer)
   );
 
+  setupUserSearch();
   clickOutsideToClose({ wrapper, select, options, arrow, prioContainer });
-  if (titleInput && dateInput && createButton) {
+  if (titleInput && dateInput && createButton && prioContainer && select) {
     [titleInput, dateInput].forEach((input) =>
-      input.addEventListener("input", () => updateCreateButtonState({ select, titleInput, dateInput, createButton }))
+      (input).addEventListener("input", () => updateCreateButtonState({ select, titleInput, dateInput, prioContainer, createButton }))
     );
+    console.log(select);
+
+    if (select) {
+      select.addEventListener("change", () => updateCreateButtonState({ select, titleInput, dateInput, prioContainer, createButton }));
+    }
     // dateInput.addEventListener("mousedown", (e) => {
     //   e.preventDefault();
     //   dateInput.showPicker?.();
@@ -307,8 +315,10 @@ function handleOptionClick(event, select, options, wrapper, deps, arrow, prioCon
   closeDropdown(options, wrapper, arrow, prioContainer);
 }
 
-function updateCreateButtonState({ select, titleInput, dateInput, createButton }) {
-  const valid = isFormValid({ select, titleInput, dateInput });
+function updateCreateButtonState({ select, titleInput, dateInput, prioContainer, createButton }) {
+  console.log({ select, titleInput, dateInput, prioContainer, createButton });
+
+  const valid = isFormValid({ select, titleInput, dateInput, prioContainer });
   createButton.disabled = !valid;
 }
 
@@ -321,7 +331,6 @@ function clearFormState(wrapper, select, options, titleInput, dateInput) {
   if (options) options.classList.remove("open", "visible");
   if (titleInput) titleInput.value = "";
   if (dateInput) dateInput.value = "";
-  setCurrentPriority("medium");
   resetPriorityButtonsUI();
   resetAssignedUsers();
   resetSubtasksUI();
@@ -329,10 +338,10 @@ function clearFormState(wrapper, select, options, titleInput, dateInput) {
 }
 
 function resetPriorityButtonsUI() {
-  const buttons = document.querySelectorAll(".prio-button");
+  const buttons = document.querySelectorAll(".prio-button-container");
   buttons.forEach(btn => btn.classList.remove("active"));
-  const mediumBtn = document.querySelector('[data-prio="medium"]');
-  mediumBtn?.classList.add("active");
+  const mediumBtn = document.querySelector('prioButtons');
+  mediumBtn?.classList.add("prioMediumBtnActive");
 }
 
 function resetAssignedUsers() {
@@ -376,11 +385,11 @@ function clickOutsideToClose({ wrapper, select, options, arrow }) {
     const insideTrigger = (select && (select === target || select.contains(target)));
     const insideWrapper = (wrapper && wrapper.contains(target));
 
-    console.log("click in target:", target);
-    console.log("Open", isOpen);
-    console.log("clickInsideList", insideList);
-    console.log("clickInsideTrigger", insideTrigger);
-    console.log("clickInsideWrapper", insideWrapper);
+    // console.log("click in target:", target);
+    // console.log("Open", isOpen);
+    // console.log("clickInsideList", insideList);
+    // console.log("clickInsideTrigger", insideTrigger);
+    // console.log("clickInsideWrapper", insideWrapper);
     if (!insideList && !insideTrigger && !insideWrapper) {
       closeDropdown(options, wrapper, arrow);
     }
