@@ -135,8 +135,8 @@ main {
 }
 
 .icon {
-  width: clamp(2rem, 5vw, 3.5rem);
-  height: clamp(2rem, 5vw, 3.5rem);
+  width: clamp(3rem, 5vw, 3.5rem);
+  height: clamp(3rem, 5vw, 3.5rem);
 }
 
 .info {
@@ -248,6 +248,7 @@ main {
 }
 
 .taskText {
+  display: ruby-text;
   font-size: clamp(1rem, 2vw, 1.25rem);
   color: #2a3647;
 }
@@ -257,16 +258,15 @@ main {
   flex: 1 1 auto;
   max-width: 100%;
   min-width: 0;
-  box-sizing: border-box;
-  padding: clamp(0.75rem, 2vh, 1.5rem) clamp(1rem, 3vw, 2.5rem);
+  padding: clamp(0.75rem, 2vh, 1.5rem) clamp(1rem, 2vw, 2.5rem);
   border-radius: 30px;
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.4);
 }
 
 .btn .defaultIcon,
 .btn .invertedIcon {
-  width: clamp(2rem, 5vw, 3.5rem);
-  height: clamp(2rem, 5vw, 3.5rem);
+  width: clamp(3rem, 5vw, 3.5rem);
+  height: clamp(3rem, 5vw, 3.5rem);
 }
 
 .invertedIcon {

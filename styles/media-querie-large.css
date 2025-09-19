@@ -149,6 +149,10 @@
   .space-container {
     display: none;
   }
+
+  .frontPage {
+    padding-left: 260px;
+  }
 }
 
 @media (min-width: 991px) and (max-width: 1199px) {

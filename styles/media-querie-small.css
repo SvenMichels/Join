@@ -256,8 +256,8 @@
   }
 
   #urgentIcon {
-    width: clamp(2rem, 5vw, 3.5rem);
-    height: clamp(2rem, 5vw, 3.5rem);
+    width: clamp(3rem, 5vw, 3.5rem);
+    height: clamp(3rem, 5vw, 3.5rem);
   }
 
   .subtask-wrapper {
