@@ -1,7 +1,7 @@
 import { showValidateBubble, setFieldValidity } from "../scripts/auth/Validation.js";
 import { getSubtaskMessage } from "../scripts/auth/validationsmessages.js";
 import { categorySave } from "../board/boardUtils.js";
-import { loadAndRenderUsers, updateSelectedUserDisplay, setupUserSearch } from "./userAssignmentHandler.js";
+import { loadAndRenderUsers, updateSelectedUserDisplay, setupUserSearch, clearSelectedUserNamesHandler } from "./userAssignmentHandler.js";
 
 /**
  * Add Task Form Management
@@ -353,6 +353,7 @@ function resetAssignedUsers() {
   const chipContainer = document.getElementById("selectedUser");
   if (chipContainer) chipContainer.innerHTML = "";
   updateSelectedUserDisplay?.();
+  clearSelectedUserNamesHandler();
 }
 
 function resetSubtasksUI() {
