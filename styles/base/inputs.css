@@ -174,11 +174,10 @@ select {
   transform: rotate(180deg);
 }
 
+.custom-select-wrapper { 
+  position: relative;
+}
 
-/* Basis-Layout */
-.custom-select-wrapper { position: relative; }
-
-/* Options standardmäßig verstecken */
 .custom-options {
   position: absolute;
   top: 100%; left: 0; right: 0;
@@ -192,21 +191,21 @@ select {
   z-index: 1000;
 }
 
-/* Sichtbar, wenn geöffnet */
 .custom-options.open {
-  max-height: 240px;   /* genug Platz für deine 2 LIs, auch mehr */
+  max-height: 240px;
   opacity: 1; visibility: visible;
   box-shadow: 0 8px 20px rgba(0,0,0,.08);
 }
 
-/* Einträge hübsch klickbar */
 .custom-options li {
   padding: 10px 12px;
   cursor: pointer;
 }
-.custom-options li:hover { background: #f5f5f5; }
+.custom-options li:hover { 
+  color: white;
+  background: #091931;
+}
 
-/* Pfeil-Animation, wenn Wrapper expanded */
 .prio-category-container.expanded .dropdown-arrow {
   transform: rotate(180deg);
   transition: transform .2s ease;
