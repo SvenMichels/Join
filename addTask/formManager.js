@@ -331,9 +331,8 @@ function clearFormState(wrapper, select, options, titleInput, dateInput) {
   if (wrapper) wrapper.classList.remove("expanded");
   if (options) options.classList.remove("open", "visible");
   if (titleInput) titleInput.value = "";
-  if (dateInput) dateInput.value = "";
-  addActiveClass(id, className);
-  setActiveIcon(id, icon[1]);
+  if (dateInput) dateInput.value = "";  
+  resetPriorityButtonsUI()
   resetAssignedUsers();
   resetSubtasksUI();
   clearValidationAlerts();
@@ -342,13 +341,39 @@ function clearFormState(wrapper, select, options, titleInput, dateInput) {
 // addActiveClass(id, className);
 // setActiveIcon(id, icon[1]);
 
-// function resetPriorityButtonsUI() {
+// function resetPriorityButtonsUI() {  
 //   const buttons = document.querySelectorAll(".prio-button-container");
-//   buttons.forEach(btn => btn.classList.remove("active"));
-//   const mediumBtn = document.querySelector('prioButtons');
+//   buttons.forEach(btn => btn.classList.remove("prioUrgentBtnActive", "prioMediumBtnActive", "prioLowBtnActive"));
+//   const mediumBtn = document.querySelector('#medium-task');
 //   mediumBtn?.classList.add("prioMediumBtnActive");
-
+//   mediumBtn.querySelector
+//   console.log(buttons, mediumBtn);
 // }
+function resetPriorityButtonsUI() {
+  const buttonConfigs = [
+    { id: "#urgent-task", activeClass: "prioUrgentBtnActive",  defaultIcon: "../assets/icons/urgent_red.svg",  activeIcon: "icons/prio-urgent-active.svg" },
+    { id: "#medium-task", activeClass: "prioMediumBtnActive", defaultIcon: "icons/prio-medium.svg", activeIcon: "../assets/icons/medium_white.svg" },
+    { id: "#low-task",    activeClass: "prioLowBtnActive",    defaultIcon: "../assets/icons/low_green.svg",    activeIcon: "icons/prio-low-active.svg" }
+  ];
+  // Zuerst alles zurücksetzen
+  buttonConfigs.forEach(cfg => {
+    const btn = document.querySelector(cfg.id);
+    if (!btn) return;
+    btn.classList.remove(cfg.activeClass);
+
+    const img = btn.querySelector("img");
+    if (img) img.src = cfg.defaultIcon;
+  });
+  // Medium wieder aktivieren
+  const mediumCfg = buttonConfigs.find(cfg => cfg.id === "#medium-task");
+  const mediumBtn = document.querySelector(mediumCfg.id);
+  if (mediumBtn) {
+    mediumBtn.classList.add(mediumCfg.activeClass);
+
+    const img = mediumBtn.querySelector("img");
+    if (img) img.src = mediumCfg.activeIcon;
+  }
+}
 
 function resetAssignedUsers() {
   const checked = document.querySelectorAll(".user-checkbox-wrapper .user-checkbox:checked");
