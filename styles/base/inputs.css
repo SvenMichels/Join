@@ -61,10 +61,6 @@ select {
   font-size: 16px;
 }
 
-.prio-assign-input:hover {
-  border-color: #a8a8a8;
-}
-
 .test
 
 .assignInput {
@@ -114,7 +110,7 @@ select {
   display: flex;
   justify-content: space-between;
   background: white;
-  border: 1px solid #d1d1d1;
+  border: 2px solid #d1d1d1;
   border-radius: 8px;
   padding: 11px;
   cursor: pointer;
@@ -214,4 +210,13 @@ select {
 .prio-category-container.expanded .dropdown-arrow {
   transform: rotate(180deg);
   transition: transform .2s ease;
+}
+
+.prio-subtask-input:hover,
+.prio-assign-input:hover,
+.task-dateInput:hover,
+.task-description-input:hover,
+.task-title-input:hover,
+.custom-select:hover {
+  border-color: #29abe2;
 }
