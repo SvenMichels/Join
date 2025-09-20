@@ -2,7 +2,7 @@ import { showValidateBubble, setFieldValidity } from "../scripts/auth/Validation
 import { getSubtaskMessage } from "../scripts/auth/validationsmessages.js";
 import { categorySave } from "../board/boardUtils.js";
 import { loadAndRenderUsers, updateSelectedUserDisplay, setupUserSearch, clearSelectedUserNamesHandler } from "./userAssignmentHandler.js";
-import { handleSearchInput } from "../taskFloatData/userAssignmentManager.js";
+import { handleSearchInput, loadContactData } from "../taskFloatData/userAssignmentManager.js";
 
 /**
  * Add Task Form Management
@@ -223,7 +223,7 @@ export function getElementConfigsForAssignedTo() {
 }
 
 export function getElementConfigsForAssignedToModal() {
-  const wrapper = document.getElementById(".assigned-input-wrapper");
+  const wrapper = document.querySelector(".assigned-input-wrapper");
   const options = document.getElementById("assignedUserList-modal");
   const arrow = document.getElementById("#assignedBtnImg-modal");
   const select = document.querySelector("#searchUser-modal");
@@ -258,7 +258,7 @@ function getElementConfigsForAddTask() {
   const arrow = document.getElementById("categoryBtnImg");
   const prioContainer = document.querySelector(".prio-category-container");
   const clearBtn = document.getElementById("clearBtn");
-  return { wrapper, options, arrow, select, prioContainer, createButton, dateInput, titleInput, clearBtn };
+  return { wrapper, options, arrow, select, prioContainer, createButton, dateInput, titleInput, clearBtn };  
 }
 
 function attachCoreEvents({ wrapper, select, options, titleInput, dateInput, createButton, arrow, prioContainer, clearBtn }) {
@@ -270,18 +270,21 @@ function attachCoreEvents({ wrapper, select, options, titleInput, dateInput, cre
   arrow?.addEventListener("click", async (e) => {
     e.stopPropagation();
     await ensureAssignedUsersLoaded(options);
-    toggleDropdown(options, wrapper, arrow, prioContainer);
-  });
+    toggleDropdown(options, wrapper, arrow, prioContainer);    
+  })
 
   select?.addEventListener("click", async (e) => {
     e.stopPropagation();
     await ensureAssignedUsersLoaded(options);
     toggleDropdown(options, wrapper, arrow, prioContainer);
+    console.log("1", select, options, wrapper, arrow, prioContainer);
+    
   });
 
   options?.addEventListener("click", (event) =>
     handleOptionClick(event, select, options, wrapper, { titleInput, dateInput, createButton }, arrow, prioContainer)
   );
+  
 
   if (titleInput && dateInput && createButton && prioContainer && select) {
     [titleInput, dateInput].forEach((input) =>
@@ -312,7 +315,7 @@ function setupGlobalOutsideClick(options) {
 
     const assignedWrapper = document.querySelector(".assigned-input-wrapper");
     const assignedList = document.getElementById("assignedUserList");
-    const assignedArrow = document.getElementById("#assignedBtnImg");
+    const assignedArrow = document.getElementById("assignedBtnImg");
     const assignedOpen =
       assignedList && (assignedList.classList.contains("open") || assignedList.classList.contains("visible"));
 
@@ -331,7 +334,7 @@ function setupGlobalOutsideClick(options) {
       assignedListM && (assignedListM.classList.contains("open") || assignedListM.classList.contains("visible"));
 
     if (assignedOpenM) {
-      const insideAssignedListM = assignedListM.contains(target);
+      const insideAssignedListM = assignedListM.contains(target);    
       const insideAssignedWrapperM = assignedWrapperM && assignedWrapperM.contains(target);
       if (!insideAssignedListM && !insideAssignedWrapperM) {
         closeDropdown(assignedListM, assignedWrapperM, assignedArrowM);
@@ -391,9 +394,9 @@ function handleOptionClick(event, select, options, wrapper, deps, arrow, prioCon
   const clicked = event.target.closest("li") || event.target.closest("div");
   if (!clicked) return;
   select.textContent = clicked.textContent.trim();
-  select.dataset.selected = clicked.dataset.value || clicked.textContent.trim();
+  select.dataset.selected = clicked.dataset.value || clicked.textContent.trim();  
   updateCreateButtonState({ select, ...deps });
-  closeDropdown(options, wrapper, arrow);
+  closeDropdown(options, wrapper, arrow);  
 }
 
 function updateCreateButtonState({ select, titleInput, dateInput, prioContainer, createButton }) {
@@ -466,42 +469,91 @@ function isFormValid({ select, titleInput, dateInput }) {
   return hasCategory && hasTitle && hasDate;
 }
 
-async function toggleDropdown(options, wrapper, arrow, prioContainer) {
+async function toggleDropdown(options, wrapper, arrow) {
   if (!options) return;
+  const isCategory = options.id === "categoryOptions" || options.id === "categoryOptions-modal";
+  const isAssigned = options.id === "assignedUserList" || options.id === "assignedUserList-modal";
+  
+    if (isCategory) {
+    const assignedId = options.id.includes("modal") ? "assignedUserList-modal" : "assignedUserList";
+    const assignedList = document.getElementById(assignedId);
+    const assignedWrapper = document.querySelector(".assigned-input-wrapper");
+    const assignedArrow = document.getElementById(assignedId.includes("modal") ? "assignedBtnImg-modal" : "assignedBtnImg");
+    if (assignedList && (assignedList.classList.contains("open") || assignedList.classList.contains("visible"))) {
+      closeDropdown(assignedList, assignedWrapper, assignedArrow);
+    }
+  } else if (isAssigned) {
+    const catListId = options.id.includes("modal") ? "categoryOptions-modal" : "categoryOptions";
+    const catSelectId = options.id.includes("modal") ? "category-modal" : "categorySelect";
+    const catArrowId = options.id.includes("modal") ? "categoryBtnImg-modal" : "categoryBtnImg";
+    const categoryList = document.getElementById(catListId);
+    const categorySelect = document.getElementById(catSelectId);
+    const categoryWrapper = categorySelect?.parentElement;
+    const categoryArrow = document.getElementById(catArrowId);
+    if (categoryList && (categoryList.classList.contains("open") || categoryList.classList.contains("visible"))) {
+      closeDropdown(categoryList, categoryWrapper, categoryArrow);
+    }
+  }
+
   const isOpen = options.classList.toggle("open");
   options.classList.toggle("visible", isOpen);
   arrow?.classList.toggle("rotated", isOpen);
   wrapper?.classList.toggle("expanded", isOpen);
+
   subtaskExpander(isOpen, options);
-  
   if (!isOpen) return;
-  if (options.id === "assignedUserList" && !options.dataset.usersLoaded) {
-    await loadAndRenderUsers();
-    options.dataset.usersLoaded = "true";
-  }
-  if (options.id === "assignedUserList-modal" && !options.dataset.usersLoaded) {
-    await loadContactData();
-    options.dataset.usersLoaded = "true";
+
+  const userLoadMap = {
+    "assignedUserList": loadAndRenderUsers,
+    "assignedUserList-modal": loadContactData,
+  };
+
+  const loader = userLoadMap[options.id];
+  if ( loader && !options.dataset.usersLoaded) {
+    await loader();
+    options.dataset.userLoaded = "true";
   }
 }
 
 function closeDropdown(options, wrapper, arrow) {
-  options.classList.remove("open");
-  options.classList.remove("visible");
-  arrow?.classList.remove("rotated");
+  if (!options) {
+    document.querySelectorAll(".open").forEach(dropdown => {
+      dropdown.classList.remove("open", "visible");
+    });
+    document.querySelectorAll(".expanded").forEach(wrapper => wrapper.classList.remove("expanded"));
+    ["categoryBtnImg", "categoryBtnImg-modal", "assignedBtnImg", "assignedBtnImg-modal"].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.classList.remove("rotated");
+    });
+    return;
+  }
+  options.classList.remove("open", "visible");
   wrapper?.classList.remove("expanded");
+
+  if (arrow) {
+    arrow.classList.remove("rotated");
+    return;
+  }
+
+  const possibleArrowSelectors = [
+    "#categoryBtnImg",
+    "#categoryBtnImg-modal",
+    "#assignedBtnImg",
+    "#assignedBtnImg-modal",
+  ];
+  for (const sel of possibleArrowSelectors) {
+    const el = document.querySelector(sel);
+    if (!el) continue;
+    el.classList.remove("rotated");
+  }
 }
 
 function subtaskExpander(isOpen, options) {
   const subContainer = document.querySelector(".prio-subtask-container");
+  if (!subContainer) return;
 
-  if (options?.classList.contains("container-margin")) {
-    subContainer.classList.remove("container-margin");
-  }
+  const shouldExpand = isOpen && 
+    (options.id === "categoryOptions" || options.id === "categoryOptions-modal");
 
-  if (isOpen && options.id === "categoryOptions" || isOpen && options.id === "categoryOptions-modal") {
-    subContainer.classList.add("container-margin");
-  } else {
-    subContainer.classList.remove("container-margin");
-  }
+  subContainer.classList.toggle("container-margin", shouldExpand);
 }

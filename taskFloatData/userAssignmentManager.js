@@ -48,7 +48,7 @@ export async function loadAndRenderUsersModal(preselected = []) {
  * Populates the global user array.
  * @private
  */
-async function loadContactData() {
+export async function loadContactData() {
   try {
     const contacts = await fetchContactsListForAssignment();
     allSystemUsersModal = Array.isArray(contacts) ? contacts : [];
