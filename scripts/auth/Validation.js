@@ -359,7 +359,7 @@ export function showValidateBubble(inputId, message, bubbleId, timeout = 3000) {
  * @returns {boolean} true, wenn "Looks good!" oder "Password Matches"
  * @private
  */
-function checkBubbleContext(message, bubbleElement) {
+export function checkBubbleContext(message, bubbleElement) {
   bubbleElement.textContent = message;
   const isValid = message === 'Looks good!' || message === 'Password Matches';
   return isValid;

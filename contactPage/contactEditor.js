@@ -6,7 +6,7 @@ import { getInitials } from '../scripts/utils/helpers.js';
 import { updateContact } from './contactDataService.js';
 import { setupDeleteButton } from '../contactPage/contactsMain.js';
 import { formValidation } from '../contactPage/contactsMain.js';
-import { showValidateBubble, confirmInputForFormValidation, initInputField } from '../scripts/auth/Validation.js';
+import { showValidateBubble, confirmInputForFormValidation, initInputField, setFieldValidity, checkBubbleContext } from '../scripts/auth/Validation.js';
 import { enableButton, disableButton } from '../scripts/events/loginevents.js';
 
 let editingContact = null;
@@ -48,7 +48,6 @@ export function getEditContactInput(contact) {
   };
   return userForEdit;
 }
-// ...existing code...
 
 export async function handleContactEditSubmission(e) {
   e.preventDefault();
@@ -114,6 +113,17 @@ function setupEditValidationAndButton() {
   const nameInput = document.getElementById('editContactName');
   const emailInput = document.getElementById('editContactEmail');
   const saveBtn = document.getElementById('editSubmitBtn');
+  const nameOk = confirmInputForFormValidation('editContactName', 'editNameHint');
+  const emailOk = confirmInputForFormValidation('editContactEmail', 'editEmailHint');
+  if (nameOk && emailOk) {
+    enableButton(saveBtn);
+    setFieldValidity('editContactName', true);
+    setFieldValidity('editContactEmail', true);
+  } else {
+    disableButton(saveBtn);
+    setFieldValidity('editContactName', false);
+    setFieldValidity('editContactEmail', false);
+  }
   if (!nameInput || !emailInput || !saveBtn) return;
 
   function updateState() {
@@ -144,4 +154,6 @@ function setupEditValidationAndButton() {
   emailInput.addEventListener('input', updateState);
 
   updateState();
+
+  return { updateState };
 }
