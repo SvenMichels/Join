@@ -63,10 +63,8 @@
 #task-detail-title {
   font-family: Inter;
   font-weight: 700;
-  font-style: Bold;
-  font-size: clamp(2.35rem, 4vw, 3.8rem);
+  font-size: clamp(1.35rem, 3vw, 3.8rem);
   line-height: 120%;
-  letter-spacing: 0%;
   margin: 0px;
 }
 
