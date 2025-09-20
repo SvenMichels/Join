@@ -214,7 +214,7 @@ input:valid+.error-message {
 }
 
 .assigned-user-list.visible {
-  max-height: 230px;
+  max-height: 224px;
   opacity: 1;
   visibility: visible;
 }

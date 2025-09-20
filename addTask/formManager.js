@@ -298,12 +298,12 @@ function attachCoreEvents({ wrapper, select, options, titleInput, dateInput, cre
     ensureAssignedUsersLoaded(options);
   }
 
-  setupGlobalOutsideClick();
+  setupGlobalOutsideClick(options);
 
   return { wrapper, select, options, titleInput, dateInput, createButton };
 }
 
-function setupGlobalOutsideClick() {
+function setupGlobalOutsideClick(options) {
   if (document.body.dataset.outsideGlobalBound === "true") return;
   document.body.dataset.outsideGlobalBound = "true";
 
@@ -335,6 +335,7 @@ function setupGlobalOutsideClick() {
       const insideCatTrigger = categorySelect && (categorySelect === target || categorySelect.contains(target));
       if (!insideCatList && !insideCatTrigger) {
         closeDropdown(categoryList, categorySelect?.parentElement, categoryArrow);
+        subtaskExpander(false, options);
       }
     }
 
@@ -351,6 +352,7 @@ function setupGlobalOutsideClick() {
         categorySelectModal && (categorySelectModal === target || categorySelectModal.contains(target));
       if (!insideCatListM && !insideCatTriggerM) {
         closeDropdown(categoryListModal, categorySelectModal?.parentElement, categoryArrowModal);
+        subtaskExpander(false, options);
       }
     }
   });
@@ -456,6 +458,9 @@ async function toggleDropdown(options, wrapper, arrow, prioContainer) {
   options.classList.toggle("visible", isOpen);
   arrow?.classList.toggle("rotated", isOpen);
   wrapper?.classList.toggle("expanded", isOpen);
+  subtaskExpander(isOpen, options);
+  console.log({options, wrapper, arrow, isOpen});
+  
   if (!isOpen) return;
   if (options.id === "assignedUserList" && !options.dataset.usersLoaded) {
     await loadAndRenderUsers();
@@ -472,4 +477,19 @@ function closeDropdown(options, wrapper, arrow) {
   options.classList.remove("visible");
   arrow?.classList.remove("rotated");
   wrapper?.classList.remove("expanded");
+}
+
+function subtaskExpander(isOpen, options) {
+  const subContainer = document.querySelector(".prio-subtask-container");
+  console.log({options, isOpen, subContainer});
+
+  if (options?.classList.contains("container-margin")) {
+    subContainer.classList.remove("container-margin");
+  }
+
+  if (isOpen && options.id === "categoryOptions" || isOpen && options.id === "categoryOptions-modal") {
+    subContainer.classList.add("container-margin");
+  } else {
+    subContainer.classList.remove("container-margin");
+  }
 }
