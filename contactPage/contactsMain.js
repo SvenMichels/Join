@@ -11,7 +11,7 @@ import { highlightActiveNavigationLinks, setupOpenMenuListener } from '../script
 import { updateTask } from '../board/taskManager.js';
 import { fetchAllTasks } from '../scripts/auth/login.js';
 import { initializeBackButton, initializeFabMenu } from "../scripts/ui/fabContact.js";
-import { initInputField, showValidateBubble, confirmInputForFormValidation } from "../scripts/auth/Validation.js";
+import { initInputField, showValidateBubble, confirmInputForFormValidation, validateInput } from "../scripts/auth/Validation.js";
 import { enableButton, disableButton } from '../scripts/events/loginevents.js';
 
 let contactList = [];
@@ -47,7 +47,34 @@ function setupInitInputFields() {
 
 function setupCreateContactButton() {
   const createContactBtn = document.getElementById("submitBtn");
+  const nameInput = document.getElementById("contactName");
+  const emailInput = document.getElementById("contactEmail");
+  if (!createContactBtn || !nameInput || !emailInput) return;
   disableButton(createContactBtn);
+
+  function updateButtonState() {
+    const nameVal = nameInput.value.trim();
+    const emailVal = emailInput.value.trim();
+    if (nameVal.length > 0 && nameVal.length < 4) {
+      showValidateBubble("contactName", "Use at least 4 characters.", "nameHint", 1800);
+    }
+    if (emailVal.length > 0 && emailVal.length < 6) {
+      showValidateBubble("contactEmail", "Use at least 6 characters.", "emailHint", 1800);
+    }
+    const nameValid = confirmInputForFormValidation("contactName", "nameHint");
+    const emailValid = confirmInputForFormValidation("contactEmail", "emailHint");
+
+    if (nameValid && emailValid) {
+      enableButton(createContactBtn);
+    } else {
+      disableButton(createContactBtn);
+    }
+  }
+
+  nameInput.addEventListener("input", updateButtonState);
+  emailInput.addEventListener("input", updateButtonState);
+
+  updateButtonState();
 }
 /**
  * Sets up contact form event listeners (add/edit forms)

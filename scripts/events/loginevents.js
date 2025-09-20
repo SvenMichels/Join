@@ -165,11 +165,15 @@ function bindLoginInputValidation() {
   const update = () => {
     const email = emailInput.value?.trim() || "";
     const pwd = passwordInput.value?.trim() || "";
-    if (btn && email.length >= 0) {
-      showValidateBubble("loginEmail", 'Use 6–64 characters.', "emailHint", 2000);
+    if (btn && email.length === 0) {
+      showValidateBubble("loginEmail", 'Email is required.', "emailHint", 2000);
     }
-    if (btn && pwd.length >= 0) {
-      showValidateBubble("loginPassword", "Use 6–32 characters.", "pwHint", 2000);
+    if (btn && pwd.length === 0) {
+      showValidateBubble("loginPassword", 'Password is required.', "pwHint", 2000);
+    }
+    if (btn && email.length === 0 && pwd.length === 0) {
+      showValidateBubble("loginEmail", 'Email is required.', "emailHint", 2000);
+      showValidateBubble("loginPassword", 'Password is required.', "pwHint", 2000);
     }
     const enable = email.length >= 6 && pwd.length >= 6;
     enable ? enableButton(btn) : disableButton(btn);

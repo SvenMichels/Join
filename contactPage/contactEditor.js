@@ -6,6 +6,8 @@ import { getInitials } from '../scripts/utils/helpers.js';
 import { updateContact } from './contactDataService.js';
 import { setupDeleteButton } from '../contactPage/contactsMain.js';
 import { formValidation } from '../contactPage/contactsMain.js';
+import { showValidateBubble, confirmInputForFormValidation, initInputField } from '../scripts/auth/Validation.js';
+import { enableButton, disableButton } from '../scripts/events/loginevents.js';
 
 let editingContact = null;
 
@@ -53,6 +55,17 @@ export async function handleContactEditSubmission(e) {
   const contact = editingContact;
   const updated = getEditContactInput(contact);
   if (!updated) return;
+
+  const nameValid = confirmInputForFormValidation('editContactName', 'editNameHint');
+  const emailValid = confirmInputForFormValidation('editContactEmail', 'editEmailHint');
+  if (!nameValid) {
+    showValidateBubble('editContactName', 'Name invalid or too short.', 'editNameHint', 2000);
+  }
+  if (!emailValid) {
+    showValidateBubble('editContactEmail', 'Email invalid.', 'editEmailHint', 2000);
+  }
+  if (!nameValid || !emailValid) return;
+
   const name = (updated.userFullName ?? '').toString().trim() || (contact?.userFullName ?? '');
   updated.userFullName = name;
   updated.userInitials = getInitials(name);
@@ -85,6 +98,9 @@ export function openEditDialog(contact) {
     fillEditForm(contact);
     setupDeleteButton(contact);
     setUserInitials(contact);
+    initInputField('editContactName', 'editNameHint', 'name');
+    initInputField('editContactEmail', 'editEmailHint', 'email');
+    setupEditValidationAndButton();
   }
 }
 
@@ -92,4 +108,40 @@ function setUserInitials(contact) {
   const contactInitials = document.getElementById("editInitials");
   contactInitials.textContent = contact.userInitials || getInitials(contact.userFullName);
   contactInitials.classList.add("editInitials", `${contact.userColor}`);
+}
+
+function setupEditValidationAndButton() {
+  const nameInput = document.getElementById('editContactName');
+  const emailInput = document.getElementById('editContactEmail');
+  const saveBtn = document.getElementById('editSubmitBtn');
+  if (!nameInput || !emailInput || !saveBtn) return;
+
+  function updateState() {
+    const nameVal = nameInput.value.trim();
+    const emailVal = emailInput.value.trim();
+
+    if (nameVal.length > 0 && nameVal.length < 4) {
+      showValidateBubble('editContactName', 'Use at least 4 characters.', 'editNameHint', 1800);
+    }
+    if (emailVal.length > 0 && emailVal.length < 6) {
+      showValidateBubble('editContactEmail', 'Use at least 6 characters.', 'editEmailHint', 1800);
+    }
+    if (nameVal.length === 0 && emailVal.length === 0) {
+      showValidateBubble('editContactName', 'Name is required.', 'editNameHint', 1800);
+      showValidateBubble('editContactEmail', 'Email is required.', 'editEmailHint', 1800);
+    }
+
+    const nameOk = confirmInputForFormValidation('editContactName', 'editNameHint');
+    const emailOk = confirmInputForFormValidation('editContactEmail', 'editEmailHint');
+
+    if (nameOk && emailOk) {
+      enableButton(saveBtn);
+    } else {
+      disableButton(saveBtn);
+    }
+  }
+  nameInput.addEventListener('input', updateState);
+  emailInput.addEventListener('input', updateState);
+
+  updateState();
 }
