@@ -97,7 +97,6 @@ function activateSelectedPriority(priorityLevel) {
   if (!config) return;
 
   const { id, icon, className } = config;
-  console.log(config);
 
 
   addActiveClass(id, className);

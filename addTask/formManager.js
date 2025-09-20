@@ -312,7 +312,7 @@ function setupGlobalOutsideClick(options) {
 
     const assignedWrapper = document.querySelector(".assigned-input-wrapper");
     const assignedList = document.getElementById("assignedUserList");
-    const assignedArrow = document.getElementById("assignedBtnImg");
+    const assignedArrow = document.getElementById("#assignedBtnImg");
     const assignedOpen =
       assignedList && (assignedList.classList.contains("open") || assignedList.classList.contains("visible"));
 
@@ -321,6 +321,20 @@ function setupGlobalOutsideClick(options) {
       const insideAssignedWrapper = assignedWrapper && assignedWrapper.contains(target);
       if (!insideAssignedList && !insideAssignedWrapper) {
         closeDropdown(assignedList, assignedWrapper, assignedArrow);
+      }
+    }
+
+    const assignedWrapperM = document.querySelector(".assigned-input-wrapper");
+    const assignedListM = document.getElementById("assignedUserList-modal");
+    const assignedArrowM = document.getElementById("assignedBtnImg-modal");
+    const assignedOpenM =
+      assignedListM && (assignedListM.classList.contains("open") || assignedListM.classList.contains("visible"));
+
+    if (assignedOpenM) {
+      const insideAssignedListM = assignedListM.contains(target);
+      const insideAssignedWrapperM = assignedWrapperM && assignedWrapperM.contains(target);
+      if (!insideAssignedListM && !insideAssignedWrapperM) {
+        closeDropdown(assignedListM, assignedWrapperM, assignedArrowM);
       }
     }
 
@@ -459,7 +473,6 @@ async function toggleDropdown(options, wrapper, arrow, prioContainer) {
   arrow?.classList.toggle("rotated", isOpen);
   wrapper?.classList.toggle("expanded", isOpen);
   subtaskExpander(isOpen, options);
-  console.log({options, wrapper, arrow, isOpen});
   
   if (!isOpen) return;
   if (options.id === "assignedUserList" && !options.dataset.usersLoaded) {
@@ -481,7 +494,6 @@ function closeDropdown(options, wrapper, arrow) {
 
 function subtaskExpander(isOpen, options) {
   const subContainer = document.querySelector(".prio-subtask-container");
-  console.log({options, isOpen, subContainer});
 
   if (options?.classList.contains("container-margin")) {
     subContainer.classList.remove("container-margin");

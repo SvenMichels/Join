@@ -300,7 +300,6 @@ function createContactFromForm(fullName) {
   }
 
   const { userEmailAddress, userPhoneNumber, userFullName } = result;
-  console.log(userEmailAddress, userPhoneNumber, userFullName);
 
   const normalized = {
     userFullName,

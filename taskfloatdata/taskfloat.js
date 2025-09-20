@@ -295,9 +295,6 @@ function clearSubtask() {
   Array.from(subtaskInputs).forEach(input => {
     input.value = "";
   });
-
-  console.log("[Modal] Subtask inputs cleared");
-
 }
 
 /**
