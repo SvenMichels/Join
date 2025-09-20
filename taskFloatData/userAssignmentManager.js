@@ -312,27 +312,3 @@ function setupConst(containerId, toggleElementSelector, arrowSelector, inputSele
   const input = document.querySelector(inputSelector);
   return { container, backgroundElement, toggleElement, arrow, input };
 }
-
-// function setupOutsideClickToClose(containerId, toggleElementSelector, arrowSelector, inputSelector, onClose) {
-//   document.addEventListener("click", (event) => {
-//     const { container, backgroundElement, toggleElement, arrow, input } = setupConst(containerId, toggleElementSelector, arrowSelector, inputSelector);
-//     if (!container || !toggleElement) return;
-//     if (container.classList.contains("visible") &&
-//       !container.contains(event.target) &&
-//       !toggleElement.contains(event.target) &&
-//       !backgroundElement.classList.contains("no-scroll")
-//     ) {
-//       container.classList.remove("visible");
-//       if (arrow) arrow.classList.remove("rotated");
-//       if (input) {
-//         input.value = "";
-//         if (typeof onClose === "function") {
-//           onClose();
-//         } else if (typeof loadAndRenderUsersModal === "function") {
-//           loadAndRenderUsersModal();
-//         }
-//       }
-//     }
-//   });
-// }
-
