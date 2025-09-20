@@ -273,7 +273,7 @@ export function initUserSearchEventListener() {
  * Filters and re-renders user checkboxes.
  * @private
  */
-async function handleSearchInput() {
+export async function handleSearchInput() {
   const searchBar = document.getElementById("searchUser-modal");
   const listEl = document.getElementById("assignedUserList-modal");
   const arrow = document.getElementById("assignedBtnImg-modal");
