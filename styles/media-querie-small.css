@@ -2,7 +2,7 @@
   display: none;
 }
 
-@media (max-width: 575px) {
+@media (max-width: 574px) {
   body {
     overflow: hidden;
     height: 100vh;
@@ -88,12 +88,9 @@
     position: absolute;
     top: 100px;
     bottom: 80px;
-    left: 50%;
-    transform: translateX(-50%);
     width: 100%;
-    max-width: 500px;
     overflow-y: auto;
-    padding: 0 16px;
+    padding: calc(100% - 97%);
     box-sizing: border-box;
   }
 
@@ -114,7 +111,6 @@
     gap: 16px;
     padding-bottom: 10px;
     padding-top: 50px;
-    max-width: 440px;
   }
 
   .subtask-display-text::before {
@@ -347,6 +343,7 @@
 
   .task-detail-container {
     flex-direction: column;
+    align-items: center;
   }
 
   .space-container {
