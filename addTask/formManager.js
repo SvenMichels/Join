@@ -1,9 +1,10 @@
 import { showValidateBubble, setFieldValidity } from "../scripts/auth/Validation.js";
 import { getSubtaskMessage } from "../scripts/auth/validationsmessages.js";
 import { categorySave } from "../board/boardUtils.js";
-import { loadAndRenderUsers, updateSelectedUserDisplay, setupUserSearch, clearSelectedUserNamesHandler } from "./userAssignmentHandler.js";
+import { loadAndRenderUsers, setupUserSearch } from "./userAssignmentHandler.js";
 import { handleSearchInput, loadContactData } from "../taskFloatData/userAssignmentManager.js";
-
+import { getElementConfigsForAssignedTo, getElementConfigsForAssignedToModal, getElementConfigsForAddTaskModal, getElementConfigsForAddTask } from "./formManagerConfig.js";
+import { clearFormState } from "./formManagerState.js";
 /**
  * Add Task Form Management
  * Provides functions and state management for the Add Task form.
@@ -184,126 +185,174 @@ export function getSubtasksForPayload() {
   return (items || []).map(s => (s || "").trim()).filter(Boolean);
 }
 
+function initAddTaskFlow() {
+  const elements = getElementConfigsForAddTask();
+  attachCoreEvents(elements);
+  updateCreateButtonState(elements);
+  setupUserSearch();
+}
+
+function initAddTaskModalFlow() {
+  const elements = getElementConfigsForAddTaskModal();
+  attachCoreEvents(elements);
+  updateCreateButtonState(elements);
+  handleSearchInput();
+}
+
+function initAssignedToFlow() {
+  const elements = getElementConfigsForAssignedTo();
+  ensureAssignedUsersLoaded(elements.options);
+  attachCoreEvents(elements);
+}
+
+function initAssignedToModalFlow() {
+  const elements = getElementConfigsForAssignedToModal();
+  ensureAssignedUsersLoaded(elements.options);
+  attachCoreEvents(elements);
+}
+
 export function initFormAndButtonHandlers(wrapperElementId) {
   const wrapper = document.getElementById(wrapperElementId);
   if (!wrapper) return;
 
   if (wrapper.id === "form-wrapper") {
-    const elements = getElementConfigsForAddTask();
-    attachCoreEvents(elements);
-    updateCreateButtonState(elements);
-    setupUserSearch();
+    initAddTaskFlow();
   } else if (wrapper.id === "formWrapper") {
-    const elements = getElementConfigsForAddTaskModal();
-    attachCoreEvents(elements);
-    updateCreateButtonState(elements);
-    handleSearchInput();
+    initAddTaskModalFlow();
   } else if (wrapper.id === "assignedUserList" || wrapper.id === "assignedUserList-modal") {
-    const elements = getElementConfigsForAssignedTo();
-    ensureAssignedUsersLoaded(elements.options);
-    attachCoreEvents(elements);
+    initAssignedToFlow();
   } else if (wrapper.id === "assignedUserList-modal") {
-    const elements = getElementConfigsForAssignedToModal();
-    ensureAssignedUsersLoaded(elements.options);
-    attachCoreEvents(elements);
+    initAssignedToModalFlow();
   }
 }
 
-export function getElementConfigsForAssignedTo() {
-  const wrapper = document.querySelector(".assigned-input-wrapper");
-  const options = document.getElementById("assignedUserList");
-  const arrow = document.getElementById("assignedBtnImg");
-  const select = document.getElementById("searchUser");
-  const titleInput = document.getElementById("task-title");
-  const dateInput = document.getElementById("task-date");
-  const createButton = document.querySelector(".create-button");
-  const prioContainer = document.querySelector(".prio-category-container");
-  const clearBtn = document.getElementById("clearBtn");
-  return { wrapper, options, arrow, select, prioContainer, createButton, dateInput, titleInput, clearBtn };
-}
 
-export function getElementConfigsForAssignedToModal() {
-  const wrapper = document.querySelector(".assigned-input-wrapper");
-  const options = document.getElementById("assignedUserList-modal");
-  const arrow = document.getElementById("#assignedBtnImg-modal");
-  const select = document.querySelector("#searchUser-modal");
-  const titleInput = document.querySelector("#task-title-modal");
-  const dateInput = document.querySelector("#task-date-modal");
-  const createButton = document.querySelector(".create-button");
-  const prioContainer = document.querySelector(".prio-category-container");
-  const clearBtn = document.getElementById("clearBtn");
-  return { wrapper, options, arrow, select, prioContainer, createButton, dateInput, titleInput, clearBtn };
-}
 
-function getElementConfigsForAddTaskModal() {
-  const wrapper = document.querySelector("#formWrapper");
-  const select = document.querySelector("#category-modal");
-  const options = document.querySelector("#categoryOptions-modal");
-  const titleInput = document.querySelector("#task-title-modal");
-  const dateInput = document.querySelector("#task-date-modal");
-  const createButton = document.querySelector(".create-button");
-  const arrow = document.querySelector("#categoryBtnImg-modal");
-  const prioContainer = document.querySelector(".prio-category-container");
-  const clearBtn = document.getElementById("clearBtn-modal");
-  return { wrapper, options, arrow, select, prioContainer, createButton, dateInput, titleInput, clearBtn };
-}
-
-function getElementConfigsForAddTask() {
-  const wrapper = document.querySelector(".form-wrapper");
-  const select = document.querySelector("#categorySelect");
-  const options = document.querySelector("#categoryOptions");
-  const titleInput = document.querySelector("#task-title");
-  const dateInput = document.querySelector("#task-date");
-  const createButton = document.querySelector(".create-button");
-  const arrow = document.getElementById("categoryBtnImg");
-  const prioContainer = document.querySelector(".prio-category-container");
-  const clearBtn = document.getElementById("clearBtn");
-  return { wrapper, options, arrow, select, prioContainer, createButton, dateInput, titleInput, clearBtn };  
-}
-
-function attachCoreEvents({ wrapper, select, options, titleInput, dateInput, createButton, arrow, prioContainer, clearBtn }) {
-  if (options && options.dataset.listenerBound === "true") return;
+function bindOnce(options) {
+  if (options?.dataset.listenerBound === "true") return true;
   if (options) options.dataset.listenerBound = "true";
+  return false;
+}
 
-  clearBtn?.addEventListener("click", () => clearFormState(wrapper, select, options, titleInput, dateInput, arrow));
+function attachClearHandler(clearBtn, ctx) {
+  clearBtn?.addEventListener("click", () =>
+    clearFormState(ctx.wrapper, ctx.select, ctx.options, ctx.titleInput, ctx.dateInput, ctx.arrow)
+  );
+}
 
-  arrow?.addEventListener("click", async (e) => {
-    e.stopPropagation();
-    await ensureAssignedUsersLoaded(options);
-    toggleDropdown(options, wrapper, arrow, prioContainer);    
-  })
-
-  select?.addEventListener("click", async (e) => {
+function attachToggleHandlers({ arrow, select, options, wrapper, prioContainer }) {
+  const toggle = async (e) => {
     e.stopPropagation();
     await ensureAssignedUsersLoaded(options);
     toggleDropdown(options, wrapper, arrow, prioContainer);
-    console.log("1", select, options, wrapper, arrow, prioContainer);
-    
-  });
+  };
 
+  arrow?.addEventListener("click", toggle);
+  select?.addEventListener("click", async (e) => {
+    await toggle(e);
+    console.log("1", select, options, wrapper, arrow, prioContainer);
+  });
+}
+
+function attachOptionsHandler({ options, select, wrapper, titleInput, dateInput, createButton, arrow, prioContainer }) {
   options?.addEventListener("click", (event) =>
     handleOptionClick(event, select, options, wrapper, { titleInput, dateInput, createButton }, arrow, prioContainer)
   );
-  
+}
 
-  if (titleInput && dateInput && createButton && prioContainer && select) {
-    [titleInput, dateInput].forEach((input) =>
-      input.addEventListener("input", () =>
-        updateCreateButtonState({ select, titleInput, dateInput, prioContainer, createButton })
-      )
-    );
-  }
+function attachValidationInputs({ titleInput, dateInput, createButton, prioContainer, select }) {
+  if (!(titleInput && dateInput && createButton && prioContainer && select)) return;
 
-  if (options?.id === "assignedUserList" && options.classList.contains("visible")) {
+  [titleInput, dateInput].forEach((input) =>
+    input.addEventListener("input", () =>
+      updateCreateButtonState({ select, titleInput, dateInput, prioContainer, createButton })
+    )
+  );
+}
+
+function ensureUsersIfVisible(options) {
+  const isAssignedList =
+    options?.id === "assignedUserList" || options?.id === "assignedUserList-modal";
+  if (isAssignedList && options.classList.contains("visible")) {
     ensureAssignedUsersLoaded(options);
   }
-  if (options?.id === "assignedUserList-modal" && options.classList.contains("visible")) {
-    ensureAssignedUsersLoaded(options);
-  }
+}
+
+function attachCoreEvents(ctx) {
+  const { wrapper, select, options, titleInput, dateInput, createButton, arrow, prioContainer, clearBtn } = ctx;
+  if (bindOnce(options)) return;
+
+  attachClearHandler(clearBtn, ctx);
+  attachToggleHandlers({ arrow, select, options, wrapper, prioContainer });
+  attachOptionsHandler({ options, select, wrapper, titleInput, dateInput, createButton, arrow, prioContainer });
+  attachValidationInputs({ titleInput, dateInput, createButton, prioContainer, select });
+  ensureUsersIfVisible(options);
 
   setupGlobalOutsideClick(options);
 
   return { wrapper, select, options, titleInput, dateInput, createButton };
+}
+
+function isOpen(listEl) {
+  return !!listEl && (listEl.classList.contains("open") || listEl.classList.contains("visible"));
+}
+
+function clickedInside(target, el) {
+  return !!el && (el === target || el.contains(target));
+}
+
+function handleAssignedOutside(target) {
+  const wrapper = document.querySelector(".assigned-input-wrapper");
+  const list = document.getElementById("assignedUserList");
+  const arrow = document.getElementById("assignedBtnImg");
+
+  if (!isOpen(list)) return;
+
+  const insideList = clickedInside(target, list);
+  const insideWrapper = clickedInside(target, wrapper);
+  if (!insideList && !insideWrapper) closeDropdown(list, wrapper, arrow);
+}
+
+function handleAssignedOutsideModal(target) {
+  const wrapper = document.querySelector(".assigned-input-wrapper");
+  const list = document.getElementById("assignedUserList-modal");
+  const arrow = document.getElementById("assignedBtnImg-modal");
+
+  if (!isOpen(list)) return;
+
+  const insideList = clickedInside(target, list);
+  const insideWrapper = clickedInside(target, wrapper);
+  if (!insideList && !insideWrapper) closeDropdown(list, wrapper, arrow);
+}
+
+function handleCategoryOutside(target, options) {
+  const select = document.getElementById("categorySelect");
+  const list = document.getElementById("categoryOptions");
+  const arrow = document.getElementById("categoryBtnImg");
+
+  if (!isOpen(list)) return;
+
+  const insideList = clickedInside(target, list);
+  const insideTrigger = clickedInside(target, select);
+  if (!insideList && !insideTrigger) {
+    closeDropdown(list, select?.parentElement, arrow);
+    subtaskExpander(false, options);
+  }
+}
+
+function handleCategoryOutsideModal(target, options) {
+  const select = document.getElementById("category-modal");
+  const list = document.getElementById("categoryOptions-modal");
+  const arrow = document.getElementById("categoryBtnImg-modal");
+
+  if (!isOpen(list)) return;
+
+  const insideList = clickedInside(target, list);
+  const insideTrigger = clickedInside(target, select);
+  if (!insideList && !insideTrigger) {
+    closeDropdown(list, select?.parentElement, arrow);
+    subtaskExpander(false, options);
+  }
 }
 
 function setupGlobalOutsideClick(options) {
@@ -312,66 +361,10 @@ function setupGlobalOutsideClick(options) {
 
   document.addEventListener("click", (e) => {
     const target = e.target;
-
-    const assignedWrapper = document.querySelector(".assigned-input-wrapper");
-    const assignedList = document.getElementById("assignedUserList");
-    const assignedArrow = document.getElementById("assignedBtnImg");
-    const assignedOpen =
-      assignedList && (assignedList.classList.contains("open") || assignedList.classList.contains("visible"));
-
-    if (assignedOpen) {
-      const insideAssignedList = assignedList.contains(target);
-      const insideAssignedWrapper = assignedWrapper && assignedWrapper.contains(target);
-      if (!insideAssignedList && !insideAssignedWrapper) {
-        closeDropdown(assignedList, assignedWrapper, assignedArrow);
-      }
-    }
-
-    const assignedWrapperM = document.querySelector(".assigned-input-wrapper");
-    const assignedListM = document.getElementById("assignedUserList-modal");
-    const assignedArrowM = document.getElementById("assignedBtnImg-modal");
-    const assignedOpenM =
-      assignedListM && (assignedListM.classList.contains("open") || assignedListM.classList.contains("visible"));
-
-    if (assignedOpenM) {
-      const insideAssignedListM = assignedListM.contains(target);    
-      const insideAssignedWrapperM = assignedWrapperM && assignedWrapperM.contains(target);
-      if (!insideAssignedListM && !insideAssignedWrapperM) {
-        closeDropdown(assignedListM, assignedWrapperM, assignedArrowM);
-      }
-    }
-
-    const categorySelect = document.getElementById("categorySelect");
-    const categoryList = document.getElementById("categoryOptions");
-    const categoryArrow = document.getElementById("categoryBtnImg");
-    const categoryOpen =
-      categoryList && (categoryList.classList.contains("open") || categoryList.classList.contains("visible"));
-
-    if (categoryOpen) {
-      const insideCatList = categoryList.contains(target);
-      const insideCatTrigger = categorySelect && (categorySelect === target || categorySelect.contains(target));
-      if (!insideCatList && !insideCatTrigger) {
-        closeDropdown(categoryList, categorySelect?.parentElement, categoryArrow);
-        subtaskExpander(false, options);
-      }
-    }
-
-    const categorySelectModal = document.getElementById("category-modal");
-    const categoryListModal = document.getElementById("categoryOptions-modal");
-    const categoryArrowModal = document.getElementById("categoryBtnImg-modal");
-    const categoryOpenModal =
-      categoryListModal &&
-      (categoryListModal.classList.contains("open") || categoryListModal.classList.contains("visible"));
-
-    if (categoryOpenModal) {
-      const insideCatListM = categoryListModal.contains(target);
-      const insideCatTriggerM =
-        categorySelectModal && (categorySelectModal === target || categorySelectModal.contains(target));
-      if (!insideCatListM && !insideCatTriggerM) {
-        closeDropdown(categoryListModal, categorySelectModal?.parentElement, categoryArrowModal);
-        subtaskExpander(false, options);
-      }
-    }
+    handleAssignedOutside(target);
+    handleAssignedOutsideModal(target);
+    handleCategoryOutside(target, options);
+    handleCategoryOutsideModal(target, options);
   });
 }
 
@@ -394,9 +387,9 @@ function handleOptionClick(event, select, options, wrapper, deps, arrow, prioCon
   const clicked = event.target.closest("li") || event.target.closest("div");
   if (!clicked) return;
   select.textContent = clicked.textContent.trim();
-  select.dataset.selected = clicked.dataset.value || clicked.textContent.trim();  
+  select.dataset.selected = clicked.dataset.value || clicked.textContent.trim();
   updateCreateButtonState({ select, ...deps });
-  closeDropdown(options, wrapper, arrow);  
+  closeDropdown(options, wrapper, arrow);
 }
 
 function updateCreateButtonState({ select, titleInput, dateInput, prioContainer, createButton }) {
@@ -404,63 +397,7 @@ function updateCreateButtonState({ select, titleInput, dateInput, prioContainer,
   createButton.disabled = !valid;
 }
 
-function clearFormState(wrapper, select, options, titleInput, dateInput, arrow) {
-  if (select) {
-    select.textContent = "Select a category";
-    select.dataset.selected = "";
-  }
-  if (wrapper) wrapper.classList.remove("expanded");
-  if (options) options.classList.remove("open", "visible");
-  if (titleInput) titleInput.value = "";
-  if (dateInput) dateInput.value = "";
-  resetPriorityButtonsUI();
-  resetAssignedUsers();
-  resetSubtasksUI();
-  clearValidationAlerts();
-  closeDropdown(options, wrapper, arrow);
-}
 
-function resetPriorityButtonsUI() {
-  const lowBtn = document.querySelector('#low-task') || document.querySelector('#low-task-modal');
-  lowBtn?.classList.remove("prioLowBtnActive");
-  const lowBtnImg = document.getElementById("low-task-img") || document.getElementById("low-task-img-modal");
-  lowBtnImg.src = "../assets/icons/low_green.svg";
-  const urgentBtn = document.querySelector('#urgent-task') || document.querySelector('#urgent-task-modal');
-  urgentBtn?.classList.remove("prioUrgentBtnActive");
-  const urgentBtnImg = document.getElementById("urgent-task-img") || document.getElementById("urgent-task-img-modal");
-  urgentBtnImg.src = "../assets/icons/urgent_red.svg";
-  const mediumBtn = document.querySelector('#medium-task') || document.querySelector('#medium-task-modal');
-  mediumBtn?.classList.add("prioMediumBtnActive");
-  const mediumBtnImg = document.getElementById("medium-task-img") || document.getElementById("medium-task-img-modal");
-  mediumBtnImg.src = "../assets/icons/medium_white.svg";
-}
-
-function resetAssignedUsers() {
-  const checked = document.querySelectorAll(".user-checkbox-wrapper .user-checkbox:checked");
-  checked.forEach(cb => { cb.checked = false; });
-  if (window.selectedUserNames) {
-    window.selectedUserNames.clear();
-  }
-  const chipContainer = document.getElementById("selectedUser");
-  if (chipContainer) chipContainer.innerHTML = "";
-  updateSelectedUserDisplay?.();
-  clearSelectedUserNamesHandler();
-  const clearAssignedListContainer = document.getElementById("assignedUserList-modal");
-  clearAssignedListContainer?.classList.remove("visible");
-
-}
-
-function resetSubtasksUI() {
-  if (typeof setSubtaskItems === "function") setSubtaskItems([]);
-  else if (Array.isArray(subtaskItemsList)) subtaskItemsList.length = 0;
-  const input = document.getElementById("subtaskInput")
-    || document.getElementById("subtask-input");
-  if (input) input.value = "";
-  const list =
-    document.getElementById("subtaskList")
-    || document.getElementById("subtaskList-modal");
-  if (list) list.innerHTML = "";
-}
 
 function isFormValid({ select, titleInput, dateInput }) {
   const hasCategory = Boolean(select.dataset.selected);
@@ -469,90 +406,126 @@ function isFormValid({ select, titleInput, dateInput }) {
   return hasCategory && hasTitle && hasDate;
 }
 
-async function toggleDropdown(options, wrapper, arrow) {
-  if (!options) return;
-  const isCategory = options.id === "categoryOptions" || options.id === "categoryOptions-modal";
-  const isAssigned = options.id === "assignedUserList" || options.id === "assignedUserList-modal";
-  
-    if (isCategory) {
-    const assignedId = options.id.includes("modal") ? "assignedUserList-modal" : "assignedUserList";
-    const assignedList = document.getElementById(assignedId);
-    const assignedWrapper = document.querySelector(".assigned-input-wrapper");
-    const assignedArrow = document.getElementById(assignedId.includes("modal") ? "assignedBtnImg-modal" : "assignedBtnImg");
-    if (assignedList && (assignedList.classList.contains("open") || assignedList.classList.contains("visible"))) {
-      closeDropdown(assignedList, assignedWrapper, assignedArrow);
-    }
-  } else if (isAssigned) {
-    const catListId = options.id.includes("modal") ? "categoryOptions-modal" : "categoryOptions";
-    const catSelectId = options.id.includes("modal") ? "category-modal" : "categorySelect";
-    const catArrowId = options.id.includes("modal") ? "categoryBtnImg-modal" : "categoryBtnImg";
-    const categoryList = document.getElementById(catListId);
-    const categorySelect = document.getElementById(catSelectId);
-    const categoryWrapper = categorySelect?.parentElement;
-    const categoryArrow = document.getElementById(catArrowId);
-    if (categoryList && (categoryList.classList.contains("open") || categoryList.classList.contains("visible"))) {
-      closeDropdown(categoryList, categoryWrapper, categoryArrow);
-    }
-  }
+const isOpenEl = (el) => !!el && (el.classList.contains("open") || el.classList.contains("visible"));
+const isCategoryId = (id) => id === "categoryOptions" || id === "categoryOptions-modal";
+const isAssignedId = (id) => id === "assignedUserList" || id === "assignedUserList-modal";
 
+function getAssignedFrom(idRef) {
+  const modal = idRef.includes("modal");
+  return {
+    list: document.getElementById(modal ? "assignedUserList-modal" : "assignedUserList"),
+    wrapper: document.querySelector(".assigned-input-wrapper"),
+    arrow: document.getElementById(modal ? "assignedBtnImg-modal" : "assignedBtnImg"),
+  };
+}
+
+function getCategoryFrom(idRef) {
+  const modal = idRef.includes("modal");
+  const select = document.getElementById(modal ? "category-modal" : "categorySelect");
+  return {
+    list: document.getElementById(modal ? "categoryOptions-modal" : "categoryOptions"),
+    select,
+    wrapper: select?.parentElement,
+    arrow: document.getElementById(modal ? "categoryBtnImg-modal" : "categoryBtnImg"),
+  };
+}
+
+function closeAssignedIfOpen(idRef) {
+  const { list, wrapper, arrow } = getAssignedFrom(idRef);
+  if (isOpenEl(list)) closeDropdown(list, wrapper, arrow);
+}
+
+function closeCategoryIfOpen(idRef) {
+  const { list, wrapper, arrow } = getCategoryFrom(idRef);
+  if (isOpenEl(list)) closeDropdown(list, wrapper, arrow);
+}
+
+function ensureOthersClosed(options) {
+  const id = options.id;
+  if (isCategoryId(id)) {
+    closeAssignedIfOpen(id);
+  } else if (isAssignedId(id)) {
+    closeCategoryIfOpen(id);
+  }
+}
+
+function applyToggle(options, wrapper, arrow) {
   const isOpen = options.classList.toggle("open");
   options.classList.toggle("visible", isOpen);
   arrow?.classList.toggle("rotated", isOpen);
   wrapper?.classList.toggle("expanded", isOpen);
+  return isOpen;
+}
 
-  subtaskExpander(isOpen, options);
-  if (!isOpen) return;
-
+async function lazyLoadUsers(options) {
   const userLoadMap = {
-    "assignedUserList": loadAndRenderUsers,
+    assignedUserList: loadAndRenderUsers,
     "assignedUserList-modal": loadContactData,
   };
-
   const loader = userLoadMap[options.id];
-  if ( loader && !options.dataset.usersLoaded) {
+  if (loader && !options.dataset.usersLoaded) {
     await loader();
     options.dataset.userLoaded = "true";
   }
 }
 
-function closeDropdown(options, wrapper, arrow) {
+async function toggleDropdown(options, wrapper, arrow) {
+  if (!options) return;
+
+  ensureOthersClosed(options);
+
+  const isOpen = applyToggle(options, wrapper, arrow);
+
+  subtaskExpander(isOpen, options);
+
+  if (!isOpen) return;
+  await lazyLoadUsers(options);
+}
+
+const ARROW_IDS = ["categoryBtnImg", "categoryBtnImg-modal", "assignedBtnImg", "assignedBtnImg-modal"];
+
+function removeClasses(selector, ...classes) {
+  document.querySelectorAll(selector).forEach((el) => el.classList.remove(...classes));
+}
+
+function resetArrowsById(ids) {
+  ids.forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove("rotated");
+  });
+}
+
+function resetArrowsBySelectors(selectors) {
+  selectors.forEach((sel) => {
+    const el = document.querySelector(sel);
+    if (el) el.classList.remove("rotated");
+  });
+}
+
+export function closeDropdown(options, wrapper, arrow) {
   if (!options) {
-    document.querySelectorAll(".open").forEach(dropdown => {
-      dropdown.classList.remove("open", "visible");
-    });
-    document.querySelectorAll(".expanded").forEach(wrapper => wrapper.classList.remove("expanded"));
-    ["categoryBtnImg", "categoryBtnImg-modal", "assignedBtnImg", "assignedBtnImg-modal"].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.classList.remove("rotated");
-    });
+    removeClasses(".open", "open", "visible");
+    removeClasses(".expanded", "expanded");
+    resetArrowsById(ARROW_IDS);
     return;
   }
+
   options.classList.remove("open", "visible");
   wrapper?.classList.remove("expanded");
 
   if (arrow) {
     arrow.classList.remove("rotated");
-    return;
-  }
-
-  const possibleArrowSelectors = [
-    "#categoryBtnImg",
-    "#categoryBtnImg-modal",
-    "#assignedBtnImg",
-    "#assignedBtnImg-modal",
-  ];
-  for (const sel of possibleArrowSelectors) {
-    const el = document.querySelector(sel);
-    if (!el) continue;
-    el.classList.remove("rotated");
+  } else {
+    resetArrowsBySelectors(ARROW_IDS.map((id) => `#${id}`));
   }
 }
+
 
 function subtaskExpander(isOpen, options) {
   const subContainer = document.querySelector(".prio-subtask-container");
   if (!subContainer) return;
 
-  const shouldExpand = isOpen && 
+  const shouldExpand = isOpen &&
     (options.id === "categoryOptions" || options.id === "categoryOptions-modal");
 
   subContainer.classList.toggle("container-margin", shouldExpand);

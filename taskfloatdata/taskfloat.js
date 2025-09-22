@@ -42,12 +42,11 @@ export function initTaskFloat() {
   if (!$.modal) {
     return Promise.resolve();
   }
-
   loadUserInitialsModal();
   initUserSearchEventListener();
   initPriorityEventListeners();
   initInputField("task-title-modal", 'titelModalHint', 'name');
-  initInputField("task-description-modal", 'descriptionModalHint', 'name');
+  initInputField("task-description-modal", 'descriptionModalHint', 'subtask');
   initInputField("subtask-modal", 'subtaskModalHint', 'subtask');
   initInputField("task-date-modal", 'task-date-modal-Hint', 'date');
   initFormAndButtonHandlers("formWrapper");
@@ -61,7 +60,6 @@ export function initTaskFloat() {
 function cacheDom() {
   $.modal = document.querySelector(".form-wrapper-modal");
   if (!$.modal) return;
-
   $.closeBtn = $.modal?.querySelector(".close-button-modal");
   $.clearBtn = document.getElementById("clearBtn-modal");
   $.form = document.getElementById("taskForm-modal");
@@ -69,11 +67,9 @@ function cacheDom() {
   $.subInput = document.getElementById("subtask-modal");
   $.subAddBtn = $.modal?.querySelector(".subtask-add-button-modal");
   $.assignBtn = $.modal?.querySelector(".assigned-userlist-button-modal");
-
   if ($.date) {
     $.date.min = new Date().toISOString().split("T")[0];
   }
-
   attachEventListeners();
 }
 
