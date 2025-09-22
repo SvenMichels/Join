@@ -1,10 +1,9 @@
 import { showValidateBubble, setFieldValidity } from "../scripts/auth/Validation.js";
 import { getSubtaskMessage } from "../scripts/auth/validationsmessages.js";
 import { categorySave } from "../board/boardUtils.js";
-import { loadAndRenderUsers, setupUserSearch } from "./userAssignmentHandler.js";
-import { handleSearchInput, loadContactData } from "../taskFloatData/userAssignmentManager.js";
-import { getElementConfigsForAssignedTo, getElementConfigsForAssignedToModal, getElementConfigsForAddTaskModal, getElementConfigsForAddTask } from "./formManagerConfig.js";
-import { clearFormState } from "./formManagerState.js";
+import { loadAndRenderUsers } from "./userAssignmentHandler.js";
+import { loadContactData } from "../taskFloatData/userAssignmentManager.js";
+
 /**
  * Add Task Form Management
  * Provides functions and state management for the Add Task form.
@@ -61,6 +60,13 @@ export function addSubtaskItem(item) {
   subtaskItemsList.push(item);
 }
 
+/**
+ * Validates a subtask input field before saving.
+ * Shows a temporary validation bubble if invalid.
+ * @param {HTMLInputElement} inputElment - The subtask input element.
+ * @param {string} bubbleId - The id of the bubble container element.
+ * @returns {boolean} True if the subtask value is valid; otherwise false.
+ */
 export function validateSubtaskBeforeSave(inputElment, bubbleId) {
   const input = inputElment?.value ?? "";
   const value = input.trim();
@@ -99,37 +105,7 @@ export function resetFormState() {
   subtaskItemsList = [];
 }
 
-/**
- * Collects and returns all form data in a structured object.
- * 
- * @param {HTMLFormElement} form - The form element to extract data from.
- * @returns {Object} Task data object.
- */
-export function collectTaskData(form) {
-  const id = form.getAttribute("data-task-id");
-  const title = form.taskTitle.value.trim();
-  const description = form.taskDescription.value.trim();
-  const dueDate = form.taskDate.value;
-  const categoryElement = document.getElementById("categorySelect").innerHTML;
-  const category = categorySave(categoryElement);
-  const prio = currentlySelectedPriority;
-  const assignedUsers = collectAssignedUsers();
-  const subtasks = [...subtaskItemsList];
-  const subtaskDone = Array(subtaskItemsList.length).fill(false);
 
-  return {
-    ...(id && { id }),
-    title,
-    description,
-    dueDate,
-    category,
-    prio,
-    assignedUsers,
-    subtasks,
-    subtaskDone,
-    status: "todo",
-  };
-}
 
 /**
  * Validates task data to ensure required fields are present.
@@ -185,92 +161,11 @@ export function getSubtasksForPayload() {
   return (items || []).map(s => (s || "").trim()).filter(Boolean);
 }
 
-function initAddTaskFlow() {
-  const elements = getElementConfigsForAddTask();
-  attachCoreEvents(elements);
-  updateCreateButtonState(elements);
-  setupUserSearch();
-}
-
-function initAddTaskModalFlow() {
-  const elements = getElementConfigsForAddTaskModal();
-  attachCoreEvents(elements);
-  updateCreateButtonState(elements);
-  handleSearchInput();
-}
-
-function initAssignedToFlow() {
-  const elements = getElementConfigsForAssignedTo();
-  ensureAssignedUsersLoaded(elements.options);
-  attachCoreEvents(elements);
-}
-
-function initAssignedToModalFlow() {
-  const elements = getElementConfigsForAssignedToModal();
-  ensureAssignedUsersLoaded(elements.options);
-  attachCoreEvents(elements);
-}
-
-export function initFormAndButtonHandlers(wrapperElementId) {
-  const wrapper = document.getElementById(wrapperElementId);
-  if (!wrapper) return;
-
-  if (wrapper.id === "form-wrapper") {
-    initAddTaskFlow();
-  } else if (wrapper.id === "formWrapper") {
-    initAddTaskModalFlow();
-  } else if (wrapper.id === "assignedUserList" || wrapper.id === "assignedUserList-modal") {
-    initAssignedToFlow();
-  } else if (wrapper.id === "assignedUserList-modal") {
-    initAssignedToModalFlow();
-  }
-}
-
-
-
-function bindOnce(options) {
-  if (options?.dataset.listenerBound === "true") return true;
-  if (options) options.dataset.listenerBound = "true";
-  return false;
-}
-
-function attachClearHandler(clearBtn, ctx) {
-  clearBtn?.addEventListener("click", () =>
-    clearFormState(ctx.wrapper, ctx.select, ctx.options, ctx.titleInput, ctx.dateInput, ctx.arrow)
-  );
-}
-
-function attachToggleHandlers({ arrow, select, options, wrapper, prioContainer }) {
-  const toggle = async (e) => {
-    e.stopPropagation();
-    await ensureAssignedUsersLoaded(options);
-    toggleDropdown(options, wrapper, arrow, prioContainer);
-  };
-
-  arrow?.addEventListener("click", toggle);
-  select?.addEventListener("click", async (e) => {
-    await toggle(e);
-    console.log("1", select, options, wrapper, arrow, prioContainer);
-  });
-}
-
-function attachOptionsHandler({ options, select, wrapper, titleInput, dateInput, createButton, arrow, prioContainer }) {
-  options?.addEventListener("click", (event) =>
-    handleOptionClick(event, select, options, wrapper, { titleInput, dateInput, createButton }, arrow, prioContainer)
-  );
-}
-
-function attachValidationInputs({ titleInput, dateInput, createButton, prioContainer, select }) {
-  if (!(titleInput && dateInput && createButton && prioContainer && select)) return;
-
-  [titleInput, dateInput].forEach((input) =>
-    input.addEventListener("input", () =>
-      updateCreateButtonState({ select, titleInput, dateInput, prioContainer, createButton })
-    )
-  );
-}
-
-function ensureUsersIfVisible(options) {
+/**
+ * Ensures user data is loaded when the assigned users dropdown is visible.
+ * @param {HTMLElement} options - The dropdown options container element.
+ */
+export function ensureUsersIfVisible(options) {
   const isAssignedList =
     options?.id === "assignedUserList" || options?.id === "assignedUserList-modal";
   if (isAssignedList && options.classList.contains("visible")) {
@@ -278,97 +173,12 @@ function ensureUsersIfVisible(options) {
   }
 }
 
-function attachCoreEvents(ctx) {
-  const { wrapper, select, options, titleInput, dateInput, createButton, arrow, prioContainer, clearBtn } = ctx;
-  if (bindOnce(options)) return;
-
-  attachClearHandler(clearBtn, ctx);
-  attachToggleHandlers({ arrow, select, options, wrapper, prioContainer });
-  attachOptionsHandler({ options, select, wrapper, titleInput, dateInput, createButton, arrow, prioContainer });
-  attachValidationInputs({ titleInput, dateInput, createButton, prioContainer, select });
-  ensureUsersIfVisible(options);
-
-  setupGlobalOutsideClick(options);
-
-  return { wrapper, select, options, titleInput, dateInput, createButton };
-}
-
-function isOpen(listEl) {
-  return !!listEl && (listEl.classList.contains("open") || listEl.classList.contains("visible"));
-}
-
-function clickedInside(target, el) {
-  return !!el && (el === target || el.contains(target));
-}
-
-function handleAssignedOutside(target) {
-  const wrapper = document.querySelector(".assigned-input-wrapper");
-  const list = document.getElementById("assignedUserList");
-  const arrow = document.getElementById("assignedBtnImg");
-
-  if (!isOpen(list)) return;
-
-  const insideList = clickedInside(target, list);
-  const insideWrapper = clickedInside(target, wrapper);
-  if (!insideList && !insideWrapper) closeDropdown(list, wrapper, arrow);
-}
-
-function handleAssignedOutsideModal(target) {
-  const wrapper = document.querySelector(".assigned-input-wrapper");
-  const list = document.getElementById("assignedUserList-modal");
-  const arrow = document.getElementById("assignedBtnImg-modal");
-
-  if (!isOpen(list)) return;
-
-  const insideList = clickedInside(target, list);
-  const insideWrapper = clickedInside(target, wrapper);
-  if (!insideList && !insideWrapper) closeDropdown(list, wrapper, arrow);
-}
-
-function handleCategoryOutside(target, options) {
-  const select = document.getElementById("categorySelect");
-  const list = document.getElementById("categoryOptions");
-  const arrow = document.getElementById("categoryBtnImg");
-
-  if (!isOpen(list)) return;
-
-  const insideList = clickedInside(target, list);
-  const insideTrigger = clickedInside(target, select);
-  if (!insideList && !insideTrigger) {
-    closeDropdown(list, select?.parentElement, arrow);
-    subtaskExpander(false, options);
-  }
-}
-
-function handleCategoryOutsideModal(target, options) {
-  const select = document.getElementById("category-modal");
-  const list = document.getElementById("categoryOptions-modal");
-  const arrow = document.getElementById("categoryBtnImg-modal");
-
-  if (!isOpen(list)) return;
-
-  const insideList = clickedInside(target, list);
-  const insideTrigger = clickedInside(target, select);
-  if (!insideList && !insideTrigger) {
-    closeDropdown(list, select?.parentElement, arrow);
-    subtaskExpander(false, options);
-  }
-}
-
-function setupGlobalOutsideClick(options) {
-  if (document.body.dataset.outsideGlobalBound === "true") return;
-  document.body.dataset.outsideGlobalBound = "true";
-
-  document.addEventListener("click", (e) => {
-    const target = e.target;
-    handleAssignedOutside(target);
-    handleAssignedOutsideModal(target);
-    handleCategoryOutside(target, options);
-    handleCategoryOutsideModal(target, options);
-  });
-}
-
-async function ensureAssignedUsersLoaded(optionsEl) {
+/**
+ * Lazily loads assigned users only once per dropdown element.
+ * @param {HTMLElement} optionsEl - The assigned user list element (normal or modal).
+ * @returns {Promise<void>}
+ */
+export async function ensureAssignedUsersLoaded(optionsEl) {
   if (!optionsEl) return;
   if (optionsEl.id === "assignedUserList" && optionsEl.dataset.usersLoaded !== "true") {
     await loadAndRenderUsers();
@@ -380,7 +190,18 @@ async function ensureAssignedUsersLoaded(optionsEl) {
   }
 }
 
-function handleOptionClick(event, select, options, wrapper, deps, arrow, prioContainer) {
+/**
+ * Handles a click on a generic dropdown option (excludes assigned users list).
+ * Sets selected value, updates button state, and closes the dropdown.
+ * @param {MouseEvent} event - The click event.
+ * @param {HTMLElement} select - The visible select element showing the picked value.
+ * @param {HTMLElement} options - The options container.
+ * @param {HTMLElement} wrapper - Wrapper used for styling / expansion.
+ * @param {Object} deps - Additional dependencies (titleInput, dateInput, createButton, etc.).
+ * @param {HTMLElement} arrow - The arrow icon element.
+ * @param {HTMLElement} prioContainer - Priority container (currently not used directly).
+ */
+export function handleOptionClick(event, select, options, wrapper, deps, arrow, prioContainer) {
   if (options && options.id === "assignedUserList") {
     return;
   }
@@ -392,24 +213,61 @@ function handleOptionClick(event, select, options, wrapper, deps, arrow, prioCon
   closeDropdown(options, wrapper, arrow);
 }
 
-function updateCreateButtonState({ select, titleInput, dateInput, prioContainer, createButton }) {
+/**
+ * Enables or disables the create button based on current form validity.
+ * @param {Object} ctx - Context object.
+ * @param {HTMLElement} ctx.select - Category select element.
+ * @param {HTMLInputElement} ctx.titleInput - Title input field.
+ * @param {HTMLInputElement} ctx.dateInput - Due date input field.
+ * @param {HTMLElement} ctx.prioContainer - Priority container element.
+ * @param {HTMLButtonElement} ctx.createButton - The submit/create button.
+ */
+export function updateCreateButtonState({ select, titleInput, dateInput, prioContainer, createButton }) {
   const valid = isFormValid({ select, titleInput, dateInput, prioContainer });
   createButton.disabled = !valid;
 }
 
-
-
-function isFormValid({ select, titleInput, dateInput }) {
+/**
+ * Checks whether the minimal required form fields are valid.
+ * @param {Object} params - Parameter bundle.
+ * @param {HTMLElement} params.select - Category select element (dataset.selected required).
+ * @param {HTMLInputElement} params.titleInput - Title input field.
+ * @param {HTMLInputElement} params.dateInput - Date input field.
+ * @returns {boolean} True if form is valid.
+ */
+export function isFormValid({ select, titleInput, dateInput }) {
   const hasCategory = Boolean(select.dataset.selected);
   const hasTitle = titleInput.value.trim().length > 3;
   const hasDate = Boolean(dateInput.value.trim());
   return hasCategory && hasTitle && hasDate;
 }
 
+/**
+ * Determines whether an element is currently considered "open".
+ * @param {HTMLElement|null} el - Element to test.
+ * @returns {boolean} True if element has open/visible state.
+ */
 const isOpenEl = (el) => !!el && (el.classList.contains("open") || el.classList.contains("visible"));
+
+/**
+ * Checks if an id refers to a category options dropdown.
+ * @param {string} id - Element id.
+ * @returns {boolean} True if category options id.
+ */
 const isCategoryId = (id) => id === "categoryOptions" || id === "categoryOptions-modal";
+
+/**
+ * Checks if an id refers to an assigned user list dropdown.
+ * @param {string} id - Element id.
+ * @returns {boolean} True if assigned user list id.
+ */
 const isAssignedId = (id) => id === "assignedUserList" || id === "assignedUserList-modal";
 
+/**
+ * Resolves assigned users dropdown related elements based on context.
+ * @param {string} idRef - Id indicating normal or modal context.
+ * @returns {{list: HTMLElement|null, wrapper: HTMLElement|null, arrow: HTMLElement|null}}
+ */
 function getAssignedFrom(idRef) {
   const modal = idRef.includes("modal");
   return {
@@ -419,6 +277,11 @@ function getAssignedFrom(idRef) {
   };
 }
 
+/**
+ * Resolves category dropdown related elements based on context.
+ * @param {string} idRef - Id indicating normal or modal context.
+ * @returns {{list: HTMLElement|null, select: HTMLElement|null, wrapper: HTMLElement|null, arrow: HTMLElement|null}}
+ */
 function getCategoryFrom(idRef) {
   const modal = idRef.includes("modal");
   const select = document.getElementById(modal ? "category-modal" : "categorySelect");
@@ -430,16 +293,28 @@ function getCategoryFrom(idRef) {
   };
 }
 
+/**
+ * Closes assigned users dropdown if currently open.
+ * @param {string} idRef - Context id.
+ */
 function closeAssignedIfOpen(idRef) {
   const { list, wrapper, arrow } = getAssignedFrom(idRef);
   if (isOpenEl(list)) closeDropdown(list, wrapper, arrow);
 }
 
+/**
+ * Closes category dropdown if currently open.
+ * @param {string} idRef - Context id.
+ */
 function closeCategoryIfOpen(idRef) {
   const { list, wrapper, arrow } = getCategoryFrom(idRef);
   if (isOpenEl(list)) closeDropdown(list, wrapper, arrow);
 }
 
+/**
+ * Ensures only one dropdown group (category vs assigned) remains open.
+ * @param {HTMLElement} options - The options container interacted with.
+ */
 function ensureOthersClosed(options) {
   const id = options.id;
   if (isCategoryId(id)) {
@@ -449,6 +324,13 @@ function ensureOthersClosed(options) {
   }
 }
 
+/**
+ * Toggles dropdown state classes and returns new open state.
+ * @param {HTMLElement} options - Options list element.
+ * @param {HTMLElement} wrapper - Wrapper element for styling.
+ * @param {HTMLElement} arrow - Arrow icon element.
+ * @returns {boolean} True if now open.
+ */
 function applyToggle(options, wrapper, arrow) {
   const isOpen = options.classList.toggle("open");
   options.classList.toggle("visible", isOpen);
@@ -457,9 +339,14 @@ function applyToggle(options, wrapper, arrow) {
   return isOpen;
 }
 
+/**
+ * Lazily loads user data depending on dropdown id (normal vs modal).
+ * @param {HTMLElement} options - Options list element.
+ * @returns {Promise<void>}
+ */
 async function lazyLoadUsers(options) {
   const userLoadMap = {
-    assignedUserList: loadAndRenderUsers,
+    "assignedUserList": loadAndRenderUsers,
     "assignedUserList-modal": loadContactData,
   };
   const loader = userLoadMap[options.id];
@@ -469,7 +356,14 @@ async function lazyLoadUsers(options) {
   }
 }
 
-async function toggleDropdown(options, wrapper, arrow) {
+/**
+ * Toggles a dropdown (category or assigned), ensures exclusivity, lazy loads users when needed.
+ * @param {HTMLElement} options - Options list element.
+ * @param {HTMLElement} wrapper - Wrapper element.
+ * @param {HTMLElement} arrow - Arrow icon.
+ * @returns {Promise<void>}
+ */
+export async function toggleDropdown(options, wrapper, arrow) {
   if (!options) return;
 
   ensureOthersClosed(options);
@@ -482,26 +376,12 @@ async function toggleDropdown(options, wrapper, arrow) {
   await lazyLoadUsers(options);
 }
 
-const ARROW_IDS = ["categoryBtnImg", "categoryBtnImg-modal", "assignedBtnImg", "assignedBtnImg-modal"];
-
-function removeClasses(selector, ...classes) {
-  document.querySelectorAll(selector).forEach((el) => el.classList.remove(...classes));
-}
-
-function resetArrowsById(ids) {
-  ids.forEach((id) => {
-    const el = document.getElementById(id);
-    if (el) el.classList.remove("rotated");
-  });
-}
-
-function resetArrowsBySelectors(selectors) {
-  selectors.forEach((sel) => {
-    const el = document.querySelector(sel);
-    if (el) el.classList.remove("rotated");
-  });
-}
-
+/**
+ * Closes a specific dropdown or all open dropdowns if none provided.
+ * @param {HTMLElement} [options] - Specific options element to close.
+ * @param {HTMLElement} [wrapper] - Related wrapper element.
+ * @param {HTMLElement} [arrow] - Related arrow element.
+ */
 export function closeDropdown(options, wrapper, arrow) {
   if (!options) {
     removeClasses(".open", "open", "visible");
@@ -520,8 +400,13 @@ export function closeDropdown(options, wrapper, arrow) {
   }
 }
 
-
-function subtaskExpander(isOpen, options) {
+/**
+ * Adds or removes an additional margin class to the priority/subtask container
+ * when the category dropdown is expanded to prevent layout shift.
+ * @param {boolean} isOpen - Whether the dropdown is open.
+ * @param {HTMLElement} options - Options element triggering the expansion.
+ */
+export function subtaskExpander(isOpen, options) {
   const subContainer = document.querySelector(".prio-subtask-container");
   if (!subContainer) return;
 
@@ -529,4 +414,35 @@ function subtaskExpander(isOpen, options) {
     (options.id === "categoryOptions" || options.id === "categoryOptions-modal");
 
   subContainer.classList.toggle("container-margin", shouldExpand);
+}
+
+/**
+ * Removes provided classes from all nodes matching the selector.
+ * @param {string} selector - CSS selector.
+ * @param {...string} classes - Class names to remove.
+ */
+function removeClasses(selector, ...classes) {
+  document.querySelectorAll(selector).forEach((el) => el.classList.remove(...classes));
+}
+
+/**
+ * Removes 'rotated' class from all arrow elements by id list.
+ * @param {string[]} ids - Array of element ids.
+ */
+function resetArrowsById(ids) {
+  ids.forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove("rotated");
+  });
+}
+
+/**
+ * Removes 'rotated' class from elements resolved by given selectors.
+ * @param {string[]} selectors - CSS selectors.
+ */
+function resetArrowsBySelectors(selectors) {
+  selectors.forEach((sel) => {
+    const el = document.querySelector(sel);
+    if (el) el.classList.remove("rotated");
+  });
 }

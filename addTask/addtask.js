@@ -11,12 +11,14 @@ import { setupDropdown } from "../scripts/ui/dropdown.js";
 import { highlightActiveNavigationLinks } from "../scripts/utils/navUtils.js";
 import { getInitials } from "../scripts/utils/helpers.js";
 import { setupMobileDeviceListeners } from "../scripts/utils/mobileUtils.js";
-import { collectTaskData, validateTask, resetFormState, clearValidationAlerts, initFormAndButtonHandlers } from "./formManager.js";
+import { validateTask, resetFormState, clearValidationAlerts } from "./formManager.js";
+import { initFormAndButtonHandlers } from "./formManagerInit.js";
 import { selectPriority, initPriorityEventListeners } from "./priorityHandler.js";
 import { loadAndRenderUsers, initUserAssignmentList, setupUserSearch, clearSelectedUsers } from "./userAssignmentHandler.js";
 import { loadAndRenderUsersModal, initUserSearchEventListener } from "../taskFloatData/userAssignmentManager.js";
 import { addNewSubtask, addSubtaskOnEnterKey, renderSubtasks } from "./subtaskHandler.js";
 import { initInputField } from "../scripts/auth/Validation.js";
+import { collectTaskData } from "./formManagerState.js";
 
 /** @type {Object<string, HTMLElement>} */
 const domCache = {};

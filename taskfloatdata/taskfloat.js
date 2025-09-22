@@ -28,7 +28,7 @@ import {
 } from "./subtaskManager.js";
 import { setupOutsideClickHandler, removeNoScroll } from "../board/taskDetails.js";
 import { initInputField } from "../scripts/auth/Validation.js";
-import { initFormAndButtonHandlers } from "../addTask/formManager.js";
+import { initFormAndButtonHandlers } from "../addTask/formManagerInit.js";
 import { categorySave, categoryLoad } from "../board/boardUtils.js";
 
 const $ = {};

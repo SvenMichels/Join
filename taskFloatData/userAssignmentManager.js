@@ -8,7 +8,7 @@ import { getUserCheckboxHTML } from "./taskfloatHTML.js";
 import { createRemainingChip } from "../board/boardUtils.js";
 import { getInitials } from "../scripts/utils/helpers.js";
 import { fetchContactsListForAssignment } from "../scripts/firebase.js";
-import { initFormAndButtonHandlers } from "../addTask/formManager.js";
+import { initFormAndButtonHandlers } from "../addTask/formManagerInit.js";
 
 let allSystemUsersModal = [];
 const selectedUserNamesModal = new Set();
