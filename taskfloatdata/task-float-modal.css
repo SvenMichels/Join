@@ -331,14 +331,14 @@
 }
 
 .user-checkbox-wrapper-modal.active {
-  background: #2a3647;
+  background: #091931;
   color: #fff;
   border-radius: 10px;
   cursor: pointer;
 }
 
 .user-checkbox-wrapper-modal:hover {
-  background-color: rgb(42, 54, 71, 0.5);
+  background-color: #2a3647;
   color: #fff;
   border-radius: 10px;
 }
