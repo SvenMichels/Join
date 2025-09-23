@@ -6,6 +6,12 @@ import {
 } from "./boardUtils.js";
 import { deleteTask, updateTask } from "./taskManager.js";
 
+/**
+ * Renders task detail data including icon, text, priority, assignees, and subtasks
+ * @param {Object} task - Task object containing all task data
+ * @param {Array} allUsers - Array of all users for assignee rendering
+ * @returns {Promise<void>} Promise that resolves when rendering is complete
+ */
 export async function renderTaskDetailData(task, allUsers) {
   renderTaskDetailIcon(task.category);
   renderTaskDetailText(task);
@@ -106,6 +112,12 @@ function setupEditAndDelete(task) {
   setupDeleteButton(deleteBtn, task);
 }
 
+/**
+ * Sets up edit button functionality
+ * @param {HTMLElement} button - Edit button element
+ * @param {Object} task - Task object
+ * @returns {void}
+ */
 function setupEditButton(button, task) {
   if (!button || !window.openTaskModal) return;
 
@@ -114,6 +126,12 @@ function setupEditButton(button, task) {
   });
 }
 
+/**
+ * Sets up delete button functionality
+ * @param {HTMLElement} button - Delete button element
+ * @param {Object} task - Task object
+ * @returns {void}
+ */
 function setupDeleteButton(button, task) {
   if (!button) return;
 
@@ -154,6 +172,11 @@ export async function openTaskDetails(task) {
   setupOutsideClickHandler(modal, overlay);
 }
 
+/**
+ * Adds no-scroll class to body when modal is open, removes it when closed
+ * @param {HTMLElement} modal - Modal element to check for presence
+ * @returns {void}
+ */
 export function noScrollTaskDetails(modal) {
   if (modal) {
     document.body.classList.add("no-scroll");
@@ -161,6 +184,14 @@ export function noScrollTaskDetails(modal) {
     removeNoScroll();
   }
 
+}
+
+/**
+ * Removes no-scroll class from document body
+ * @returns {void}
+ */
+export function removeNoScroll() {
+  document.body.classList.remove("no-scroll");
 }
 
 /**
@@ -196,10 +227,6 @@ function setupCloseButton(modal, overlay) {
   });
 }
 
-export function removeNoScroll() {
-  document.body.classList.remove("no-scroll");
-}
-
 /**
  * Sets up outside click handler
  * @param {HTMLElement} modal - Modal element
@@ -232,6 +259,12 @@ function initSwitchButtonHandlers() {
   document.addEventListener("click", closeDropdownOnOutsideClick);
 }
 
+/**
+ * Handles switch button click events in capture phase
+ * Prevents modal opening and toggles associated dropdown
+ * @param {Event} e - Click event
+ * @returns {void}
+ */
 function handleSwitchBtnClick(e) {
   const btn = e.target.closest(".switchPositionBtn");
   if (!btn) return;
@@ -244,19 +277,31 @@ function handleSwitchBtnClick(e) {
   dropdown.classList.toggle("dp-none");
 }
 
+/**
+ * Blocks event propagation for dropdown clicks in capture phase
+ * @param {Event} e - Click event
+ * @returns {void}
+ */
 function blockDropdownPropagation(e) {
   if (e.target.closest(".MoveDropdown")) e.stopPropagation();
 }
 
+/**
+ * Closes all move dropdowns when clicking outside them
+ * @param {Event} e - Click event
+ * @returns {void}
+ */
 function closeDropdownOnOutsideClick(e) {
   if (!e.target.closest(".MoveDropdown") && !e.target.closest(".switchPositionBtn")) {
     closeAllMoveDropdowns();
   }
 }
 
-
-window.addEventListener("DOMContentLoaded", () => {
-});
+/**
+ * Closes all move dropdown elements except the specified one
+ * @param {HTMLElement|null} [except=null] - Dropdown element to keep open
+ * @returns {void}
+ */
 function closeAllMoveDropdowns(except = null) {
   document.querySelectorAll(".MoveDropdown").forEach(d => {
     if (d !== except) d.classList.add("dp-none");
@@ -264,12 +309,44 @@ function closeAllMoveDropdowns(except = null) {
 }
 
 /**
- * Closes overlay
- * @param {HTMLElement} overlay - Overlay element
+ * Closes overlay and removes no-scroll class
+ * @param {HTMLElement} overlay - Overlay element to close
+ * @returns {void}
  */
 function closeOverlay(overlay) {
   overlay.classList.add("d_none");
   removeNoScroll();
+}
+
+/**
+ * Attaches a global click listener to close a container element when clicking outside of it.
+ *
+ * - Prevents multiple bindings by checking `outsideClickHandlerBound`.
+ * - Adds a `click` listener to the `document` that checks
+ *   whether the click happened outside the given container.
+ * - If the click is outside, the `"open"` CSS class
+ *   is removed from the container, effectively closing it.
+ *
+ * Requirements:
+ * - A global variable `outsideClickHandlerBound` must exist
+ *   to prevent multiple listener registrations.
+ *
+ * @function bindOutsideClickToClose
+ * @param {HTMLElement} container - The container element to be closed when clicking outside of it.
+ * @returns {void} This function does not return a value.
+ */
+export function bindOutsideClickToClose(container) {
+  if (window.outsideClickHandlerBound) {
+    return;
+  }
+
+  window.outsideClickHandlerBound = true;
+  
+  document.addEventListener('click', (event) => {
+    if (!container.contains(event.target)) {
+      container.classList.remove('open');
+    }
+  });
 }
 
 // Make function globally available

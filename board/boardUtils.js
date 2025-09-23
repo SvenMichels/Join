@@ -206,3 +206,32 @@ function removeUserFromTask(task, deletedUserName) {
 function isSameUser(user, nameToCompare) {
   return extractUserName(user) === nameToCompare;
 }
+
+/**
+ * Attaches a global click listener to close a container element when clicking outside of it.
+ *
+ * - Prevents multiple bindings by checking `outsideClickHandlerBound`.
+ * - Adds a `click` listener to the `document` that checks
+ *   whether the click happened outside the given container.
+ * - If the click is outside, the `"open"` CSS class
+ *   is removed from the container, effectively closing it.
+ *
+ * Requirements:
+ * - A global variable `outsideClickHandlerBound` must exist
+ *   to prevent multiple listener registrations.
+ *
+ * @function bindOutsideClickToClose
+ * @param {HTMLElement} container - The container element to be closed when clicking outside of it.
+ * @returns {void} This function does not return a value.
+ */
+export function bindOutsideClickToClose(container) {
+  if (window.outsideClickHandlerBound) return;
+  
+  window.outsideClickHandlerBound = true;
+  
+  document.addEventListener('click', function(event) {
+    if (!container.contains(event.target)) {
+      container.classList.remove('open');
+    }
+  });
+}
