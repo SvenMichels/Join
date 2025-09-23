@@ -242,7 +242,7 @@
   }
 
   .stats>div .counter {
-    font-size: clamp(3rem, 5vw, 4rem);
+    font-size: clamp(2rem, 5vw, 4rem);
   }
 
   .counter {

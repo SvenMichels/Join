@@ -131,4 +131,8 @@
     word-break: break-word;
     text-align: center;
   }
+
+  .btn {
+  max-height: 116px;
+}
 }
