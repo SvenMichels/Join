@@ -1,21 +1,21 @@
 /**
- * @fileoverview Zentrale Eingabe-Validierung und Validierungs-Bubbles.
- * Unterstützt u. a. E-Mail, Passwort, Name, Telefon, Subtask-Text und Datum.
- * Enthält Initialisierer für Input-Felder inkl. Live-Feedback.
+ * @fileoverview Central input validation and validation bubbles.
+ * Supports email, password, name, phone, subtask text, and date validation.
+ * Contains initializers for input fields including live feedback.
  * @module Validation
  */
 
 /**
- * Funktions-Typ für Validierungs-Meldungen.
+ * Function type for validation messages.
  * @callback ValidationMessageFn
- * @param {string} userInput - Rohwert aus dem Eingabefeld
- * @returns {string} Validierungsnachricht (leer oder "Looks good!" bei Erfolg)
+ * @param {string} userInput - Raw value from the input field
+ * @returns {string} Validation message (empty or "Looks good!" on success)
  */
 
 /**
- * Importiert reine Message-Generatoren für die Validierung.
- * Jede Funktion entspricht dem Typ {@link ValidationMessageFn}.
- * Quelle/Implementierung: ./validationsmessages.js
+ * Imports pure message generators for validation.
+ * Each function corresponds to the type {@link ValidationMessageFn}.
+ * Source/Implementation: ./validationsmessages.js
  * - getEmailMessage(userInput): string
  * - getPasswordMessage(userInput): string
  * - getNameMessage(userInput): string
@@ -27,7 +27,7 @@
 import { getEmailMessage, getPasswordMessage, getNameMessage, getPhoneMessage, getSubtaskMessage, getDateMessage } from "./validationsmessages.js";
 
 /**
- * Interner Speicher der Feld-Gültigkeit pro Input-ID.
+ * Internal storage of field validity per input ID.
  * @type {Record<string, boolean>}
  */
 const fieldValidityState = Object.create(null);
@@ -36,11 +36,11 @@ initInputField('loginEmail', 'emailHint', 'email');
 initInputField('loginPassword', 'pwHint', 'password');
 
 /**
- * Initialisiert ein Eingabefeld mit Validierung und Validierungs-Bubble.
- * Bindet Input-/Focus-/Blur-Handler und setzt Startzustand.
- * @param {string} inputId - ID des Input-Elements
- * @param {string} bubbleId - ID des Bubble-Elements für Meldungen
- * @param {'email'|'password'|'name'|'phone'|'subtask'|'date'} inputType - Typ der Validierung
+ * Initializes an input field with validation and validation bubble.
+ * @description Binds input/focus/blur handlers and sets initial state
+ * @param {string} inputId - ID of the input element
+ * @param {string} bubbleId - ID of the bubble element for messages
+ * @param {'email'|'password'|'name'|'phone'|'subtask'|'date'} inputType - Type of validation
  * @returns {void}
  */
 export function initInputField(inputId, bubbleId, inputType) {
@@ -61,8 +61,9 @@ export function initInputField(inputId, bubbleId, inputType) {
 }
 
 /**
- * Schneidet führende und nachgestellte Leerzeichen vom aktuellen Input-Wert.
- * @param {HTMLInputElement} input - Das Eingabefeld
+ * Trims leading and trailing whitespace from the current input value.
+ * @description Removes whitespace from input field value if present
+ * @param {HTMLInputElement} input - The input field
  * @returns {void}
  * @private
  */
@@ -74,12 +75,12 @@ function inputTrimmer(input) {
 }
 
 /**
- * Focus-Handler: zeigt kontextbasierte Validierungsnachricht.
- * Handhabt Sonderfall "Confirm Password".
- * @param {string} inputId
- * @param {string} bubbleId
- * @param {Event} e
- * @param {'email'|'password'|'name'|'phone'|'subtask'|'date'} inputType
+ * Focus handler: shows context-based validation message.
+ * @description Handles special case "Confirm Password" and displays validation feedback
+ * @param {string} inputId - ID of the input element
+ * @param {string} bubbleId - ID of the bubble element
+ * @param {Event} e - Focus event
+ * @param {'email'|'password'|'name'|'phone'|'subtask'|'date'} inputType - Type of validation
  * @returns {void}
  */
 export function focusEventlistener(inputId, bubbleId, e, inputType) {
@@ -101,12 +102,13 @@ export function focusEventlistener(inputId, bubbleId, e, inputType) {
 }
 
 /**
- * Liefert eine Validierungsnachricht abhängig vom Eingabetyp.
- * @param {'email'|'password'|'name'|'phone'|'subtask'|'date'} inputType
- * @param {string} inputId
- * @param {string} bubbleId
- * @param {Event} e
- * @returns {string} Meldungstext
+ * Returns a validation message based on input type.
+ * @description Generates appropriate validation message for the specified input type
+ * @param {'email'|'password'|'name'|'phone'|'subtask'|'date'} inputType - Type of validation
+ * @param {string} inputId - ID of the input element
+ * @param {string} bubbleId - ID of the bubble element
+ * @param {Event} e - Input event
+ * @returns {string} Message text
  * @private
  */
 function getMessage(inputType, inputId, bubbleId, e) {
@@ -122,9 +124,10 @@ function getMessage(inputType, inputId, bubbleId, e) {
 }
 
 /**
- * Liest Vergleichswerte für Passwort/Bestätigung aus dem DOM.
- * @param {Event} e
- * @returns {{ passwordInput: string, currentValue: string, matchedValues: boolean }}
+ * Reads comparison values for password/confirmation from the DOM.
+ * @description Extracts password and confirmation values for comparison validation
+ * @param {Event} e - Input event
+ * @returns {{ passwordInput: string, currentValue: string, matchedValues: boolean }} Comparison data
  * @private
  */
 function getListenerConfig(e) {
@@ -135,12 +138,12 @@ function getListenerConfig(e) {
 }
 
 /**
- * Input-Handler: live Validieren und Bubble aktualisieren.
- * Handhabt Sonderfall "Confirm Password".
- * @param {string} inputId
- * @param {string} bubbleId
- * @param {Event} e
- * @param {'email'|'password'|'name'|'phone'|'subtask'|'date'} inputType
+ * Input handler: live validate and update bubble.
+ * @description Handles special case "Confirm Password" and provides real-time validation feedback
+ * @param {string} inputId - ID of the input element
+ * @param {string} bubbleId - ID of the bubble element
+ * @param {Event} e - Input event
+ * @param {'email'|'password'|'name'|'phone'|'subtask'|'date'} inputType - Type of validation
  * @returns {void}
  */
 export function inputEventlistener(inputId, bubbleId, e, inputType) {
@@ -164,10 +167,11 @@ export function inputEventlistener(inputId, bubbleId, e, inputType) {
 }
 
 /**
- * Hängt Validierungsregeln und Tastatur-Guards an ein Eingabefeld.
- * @param {HTMLInputElement} input
- * @param {string} bubbleId
- * @param {{ allowInnerSpaces?: boolean, subtaskAllowed?: boolean, phoneMode?: boolean, dateMode?: boolean }} [options]
+ * Attaches validation rules and keyboard guards to an input field.
+ * @description Applies input restrictions and validation logic based on field type
+ * @param {HTMLInputElement} input - Input element to validate
+ * @param {string} bubbleId - ID of the validation bubble
+ * @param {{ allowInnerSpaces?: boolean, subtaskAllowed?: boolean, phoneMode?: boolean, dateMode?: boolean }} [options] - Validation options
  * @returns {void}
  */
 export function validateInput(input, bubbleId, options = {}) {
@@ -185,10 +189,11 @@ export function validateInput(input, bubbleId, options = {}) {
 }
 
 /**
- * Verhindert unzulässige Leerzeichen (führend/innen) per Tastatur.
- * @param {HTMLInputElement} input
- * @param {string} bubbleId
- * @param {boolean} allowInnerSpaces - Erlaubt einfache Innen-Leerzeichen
+ * Prevents invalid spaces (leading/internal) via keyboard.
+ * @description Blocks space key input based on position and settings
+ * @param {HTMLInputElement} input - Input element
+ * @param {string} bubbleId - ID of the validation bubble
+ * @param {boolean} allowInnerSpaces - Allows single internal spaces
  * @returns {void}
  * @private
  */
@@ -208,10 +213,10 @@ function attachSpaceKeydownBlocker(input, bubbleId, allowInnerSpaces) {
 }
 
 /**
- * Subtask-spezifische Leerzeichen-Logik:
- * verbietet führende und unselektierte End-Leerzeichen.
- * @param {HTMLInputElement} input
- * @param {string} bubbleId
+ * Subtask-specific space logic: prevents leading and unselected end spaces.
+ * @description Implements specialized space handling for subtask input fields
+ * @param {HTMLInputElement} input - Input element
+ * @param {string} bubbleId - ID of the validation bubble
  * @returns {void}
  * @private
  */
@@ -232,9 +237,10 @@ function attachSubtaskSpaceHandler(input, bubbleId) {
 }
 
 /**
- * Liefert Cursor-Positionen für Subtask-Leerzeichenprüfung.
- * @param {HTMLInputElement} input
- * @returns {{ atStart: boolean, atEndUnselected: boolean }}
+ * Returns cursor positions for subtask space checking.
+ * @description Calculates cursor position data for space validation logic
+ * @param {HTMLInputElement} input - Input element
+ * @returns {{ atStart: boolean, atEndUnselected: boolean }} Position data
  * @private
  */
 function getSubtaskPositions(input) {
@@ -247,9 +253,10 @@ function getSubtaskPositions(input) {
 }
 
 /**
- * Beschränkt erlaubte Zeichen für Telefonnummern (Ziffern, führendes +, / als Trenner).
- * @param {HTMLInputElement} input
- * @param {string} bubbleId
+ * Restricts allowed characters for phone numbers (digits, leading +, / as separator).
+ * @description Implements phone number input restrictions and validation
+ * @param {HTMLInputElement} input - Input element
+ * @param {string} bubbleId - ID of the validation bubble
  * @returns {void}
  * @private
  */
@@ -273,9 +280,10 @@ function attachPhoneCharBlocker(input, bubbleId) {
 };
 
 /**
- * Erlaubt Navigations-/Editiertasten in Keydown-Handlern.
- * @param {KeyboardEvent} event
- * @returns {boolean} true, wenn Taste erlaubt ist
+ * Allows navigation/editing keys in keydown handlers.
+ * @description Checks if a key should be allowed for navigation and editing
+ * @param {KeyboardEvent} event - Keyboard event
+ * @returns {boolean} true if key is allowed
  * @private
  */
 function allowedInputBtn(event) {
@@ -287,9 +295,10 @@ function allowedInputBtn(event) {
 }
 
 /**
- * Entfernt führende Leerzeichen live beim Tippen (Name-Felder).
- * @param {HTMLInputElement} input
- * @param {string} bubbleId
+ * Removes leading spaces live while typing (name fields).
+ * @description Automatically strips leading whitespace from name input fields
+ * @param {HTMLInputElement} input - Input element
+ * @param {string} bubbleId - ID of the validation bubble
  * @returns {void}
  * @private
  */
@@ -303,9 +312,10 @@ function attachLeadingSpaceNormalizer(input, bubbleId) {
 }
 
 /**
- * Prüft, ob Cursor an führender Leerzeichenposition steht.
- * @param {HTMLInputElement} input
- * @returns {boolean}
+ * Checks if cursor is at leading space position.
+ * @description Determines if the cursor is positioned at a leading whitespace location
+ * @param {HTMLInputElement} input - Input element
+ * @returns {boolean} true if at leading space position
  * @private
  */
 function isLeadingSpacePosition(input) {
@@ -316,18 +326,20 @@ function isLeadingSpacePosition(input) {
 }
 
 /**
- * Liefert die aktuelle Gültigkeit eines Felds.
- * @param {string} inputId
- * @returns {boolean}
+ * Returns the current validity of a field.
+ * @description Retrieves the stored validation state for the specified field
+ * @param {string} inputId - ID of the input field
+ * @returns {boolean} Current validity state
  */
 export function isFieldValid(inputId) {
   return fieldValidityState[inputId] === true;
 }
 
 /**
- * Setzt die Gültigkeit eines Felds.
- * @param {string} inputId
- * @param {boolean} isValid
+ * Sets the validity of a field.
+ * @description Updates the stored validation state for the specified field
+ * @param {string} inputId - ID of the input field
+ * @param {boolean} isValid - Validity state to set
  * @returns {void}
  */
 export function setFieldValidity(inputId, isValid) {
@@ -335,15 +347,25 @@ export function setFieldValidity(inputId, isValid) {
 }
 
 /**
- * Wrapper für Formularvalidierung (nutzt gespeicherten Zustand).
- * @param {string} inputId
- * @param {string} _bubbleId
- * @returns {boolean}
+ * Wrapper for form validation (uses stored state).
+ * @description Provides form validation interface using cached validity state
+ * @param {string} inputId - ID of the input field
+ * @param {string} _bubbleId - ID of the validation bubble (unused)
+ * @returns {boolean} Current validity state
  */
 export function confirmInputForFormValidation(inputId, _bubbleId) {
   return isFieldValid(inputId);
 }
 
+/**
+ * Shows validation bubble with message and styling.
+ * @description Displays validation feedback bubble with appropriate styling and timeout
+ * @param {string} inputId - ID of the input field
+ * @param {string} message - Validation message to display
+ * @param {string} bubbleId - ID of the validation bubble
+ * @param {number} [timeout=3000] - Display timeout in milliseconds
+ * @returns {void}
+ */
 export function showValidateBubble(inputId, message, bubbleId, timeout = 3000) {
   const { inputIdElement, bubbleElement } = getBubbleElements(inputId, bubbleId);
   if (!inputIdElement || !bubbleElement) return;
@@ -353,10 +375,11 @@ export function showValidateBubble(inputId, message, bubbleId, timeout = 3000) {
 }
 
 /**
- * Schreibt Nachricht in die Bubble und liefert Validitätsstatus.
- * @param {string} message
- * @param {HTMLElement} bubbleElement
- * @returns {boolean} true, wenn "Looks good!" oder "Password Matches"
+ * Writes message to bubble and returns validity status.
+ * @description Sets bubble content and determines if message indicates valid input
+ * @param {string} message - Validation message
+ * @param {HTMLElement} bubbleElement - Bubble DOM element
+ * @returns {boolean} true if "Looks good!" or "Password Matches"
  * @private
  */
 export function checkBubbleContext(message, bubbleElement) {
@@ -366,9 +389,10 @@ export function checkBubbleContext(message, bubbleElement) {
 }
 
 /**
- * Steuert Ein-/Ausblenden der Bubble via Timeout.
- * @param {HTMLElement} bubbleElement
- * @param {number} timeout
+ * Controls showing/hiding bubble via timeout.
+ * @description Manages bubble visibility with automatic timeout handling
+ * @param {HTMLElement} bubbleElement - Bubble DOM element
+ * @param {number} timeout - Timeout duration in milliseconds
  * @returns {void}
  * @private
  */
@@ -379,9 +403,10 @@ function setBubbleTimeout(bubbleElement, timeout) {
 }
 
 /**
- * Toggelt Validierungs-Border-Farben am Eingabefeld.
- * @param {HTMLElement} inputIdElement
- * @param {boolean} isValid
+ * Toggles validation border colors on input field.
+ * @description Applies visual feedback styling to input field based on validation state
+ * @param {HTMLElement} inputIdElement - Input DOM element
+ * @param {boolean} isValid - Validation state
  * @returns {void}
  * @private
  */
@@ -391,10 +416,11 @@ function toggleBubbleColor(inputIdElement, isValid) {
 }
 
 /**
- * Liefert Referenzen auf Input- und Bubble-Element.
- * @param {string} inputId
- * @param {string} bubbleId
- * @returns {{ inputIdElement: HTMLElement|null, bubbleElement: HTMLElement|null }}
+ * Returns references to input and bubble elements.
+ * @description Retrieves DOM element references for input field and validation bubble
+ * @param {string} inputId - ID of the input field
+ * @param {string} bubbleId - ID of the validation bubble
+ * @returns {{ inputIdElement: HTMLElement|null, bubbleElement: HTMLElement|null }} Element references
  * @private
  */
 function getBubbleElements(inputId, bubbleId) {
@@ -404,8 +430,9 @@ function getBubbleElements(inputId, bubbleId) {
 }
 
 /**
- * Blendet die Validierungs-Bubble aus.
- * @param {string} bubbleId
+ * Hides the validation bubble.
+ * @description Removes the validation bubble from display
+ * @param {string} bubbleId - ID of the validation bubble
  * @returns {void}
  */
 export function hideValidateBubble(bubbleId) {

@@ -102,6 +102,11 @@ export function configureForm() {
   updateSubmitState(els);
 }
 
+/**
+ * Gets form elements for validation and configuration.
+ * @param {Document} [doc=document] - Document context to search in.
+ * @returns {Object} Object containing form element references.
+ */
 function getFormEls(doc = document) {
   return {
     categorySelect: doc.getElementById("category"),
@@ -110,21 +115,45 @@ function getFormEls(doc = document) {
   };
 }
 
+/**
+ * Initializes form with default settings and disabled submit button.
+ * @param {Object} params - Parameter object.
+ * @param {HTMLInputElement} params.taskDateInput - Date input element.
+ * @param {HTMLButtonElement} params.submitButton - Submit button element.
+ */
 function primeForm({ taskDateInput, submitButton }) {
   setMinDate(taskDateInput);
   submitButton.disabled = true;
 }
 
+/**
+ * Sets minimum date constraint on date input to today's date.
+ * @param {HTMLInputElement} input - Date input element.
+ */
 function setMinDate(input) {
   if (input) input.min = new Date().toISOString().split("T")[0];
 }
 
+/**
+ * Attaches event listeners to form elements for validation.
+ * @param {Object} params - Parameter object.
+ * @param {HTMLSelectElement} params.categorySelect - Category select element.
+ * @param {HTMLInputElement} params.taskDateInput - Date input element.
+ * @param {Function} handler - Event handler function.
+ */
 function attachListeners({ categorySelect, taskDateInput }, handler) {
   categorySelect?.addEventListener("change", handler);
   taskDateInput?.addEventListener("change", handler);
   taskDateInput?.addEventListener("input", handler);
 }
 
+/**
+ * Updates submit button state based on form validity.
+ * @param {Object} params - Parameter object.
+ * @param {HTMLSelectElement} params.categorySelect - Category select element.
+ * @param {HTMLInputElement} params.taskDateInput - Date input element.
+ * @param {HTMLButtonElement} params.submitButton - Submit button element.
+ */
 function updateSubmitState({ categorySelect, taskDateInput, submitButton }) {
   const categoryOk = !!categorySelect?.value?.trim();
   const dateOk = !!taskDateInput?.value;
@@ -146,10 +175,10 @@ async function handleFormSubmission(event) {
     showUserFeedback();
     clearAllFormData();
   }, 100);
-  // setTimeout(() => {
-  //   if (window.location.href.includes("board.html")) return;
-  //   window.location.href = "../board/board.html";
-  // }, 1250);
+  setTimeout(() => {
+    if (window.location.href.includes("board.html")) return;
+    window.location.href = "../board/board.html";
+  }, 1250);
 }
 
 /**

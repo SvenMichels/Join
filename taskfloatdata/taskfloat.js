@@ -1,6 +1,7 @@
 /**
  * Task Modal Main Controller
- * Hauptsteuerung für das Task Modal
+ * Main control for the Task Modal functionality.
+ * @module taskfloat
  */
 import { requestData } from "../scripts/firebase.js";
 import { getInitials } from "../scripts/utils/helpers.js";
@@ -34,8 +35,8 @@ import { categorySave, categoryLoad } from "../board/boardUtils.js";
 const $ = {};
 
 /**
- * Initialisiert das Task-Modal
- * @returns {Promise} Promise für die Initialisierung
+ * Initializes the Task Modal.
+ * @returns {Promise<void>} Promise for the initialization.
  */
 export function initTaskFloat() {
   cacheDom();
@@ -55,7 +56,8 @@ export function initTaskFloat() {
 }
 
 /**
- * Cached DOM-Elemente für bessere Performance
+ * Caches DOM elements for better performance.
+ * @returns {void}
  */
 function cacheDom() {
   $.modal = document.querySelector(".form-wrapper-modal");
@@ -74,7 +76,8 @@ function cacheDom() {
 }
 
 /**
- * Binds event listeners to DOM elements
+ * Binds event listeners to DOM elements.
+ * @returns {void}
  */
 function attachEventListeners() {
   bindCloseButton();
@@ -85,34 +88,57 @@ function attachEventListeners() {
   bindClearButton();
 }
 
+/**
+ * Binds close button event listener.
+ * @returns {void}
+ */
 function bindCloseButton() {
   $.closeBtn?.addEventListener("click", closeModal);
 }
 
+/**
+ * Binds form submit event listener.
+ * @returns {void}
+ */
 function bindFormSubmit() {
   $.form?.addEventListener("submit", handleSubmitModal);
 }
 
+/**
+ * Binds subtask add button event listener.
+ * @returns {void}
+ */
 function bindSubtaskAdd() {
   $.subAddBtn?.addEventListener("click", addSubtaskModal);
 }
 
+/**
+ * Binds subtask enter key event listener.
+ * @returns {void}
+ */
 function bindSubtaskEnter() {
   $.subInput?.addEventListener("keydown", addSubtaskOnEnterModal);
 }
 
+/**
+ * Binds assign toggle button event listener.
+ * @returns {void}
+ */
 function bindAssignToggle() {
   $.assignBtn?.addEventListener("click", toggleUserListModal);
 }
 
+/**
+ * Binds clear button event listener.
+ * @returns {void}
+ */
 function bindClearButton() {
   $.clearBtn?.addEventListener("click", clearSelectedUserNamesModal);
 }
 
-
 /**
- * Initialisiert das Modal-Formular
- * @returns {Promise} Promise für die Initialisierung
+ * Initializes the modal form.
+ * @returns {Promise<void>} Promise for the initialization.
  */
 export async function initFormModal() {
   initializeSubtasks();
@@ -123,7 +149,8 @@ export async function initFormModal() {
 }
 
 /**
- * Initialisiert Subtasks
+ * Initializes subtasks.
+ * @returns {void}
  */
 function initializeSubtasks() {
   resetSubtasks();
@@ -131,22 +158,24 @@ function initializeSubtasks() {
 }
 
 /**
- * Initialisiert das User-System
- * @returns {Promise} Promise für das Laden der User
+ * Initializes the user system.
+ * @returns {Promise<void>} Promise for loading users.
  */
 async function initializeUsers() {
   await loadAndRenderUsersModal();
 }
 
 /**
- * Initialisiert die Standard-Priorität
+ * Initializes the default priority.
+ * @returns {void}
  */
 function initializePriority() {
   selectPriorityModal("medium");
 }
 
 /**
- * Initialisiert die Kategorie-Validierung
+ * Initializes category validation.
+ * @returns {void}
  */
 function initializeCategoryValidation() {
   const category = document.getElementById("category-modal");
@@ -162,8 +191,9 @@ function initializeCategoryValidation() {
 }
 
 /**
- * Behandelt das Absenden des Modal-Formulars
- * @param {Event} event - Submit-Event
+ * Handles the modal form submission.
+ * @param {Event} event - Submit event.
+ * @returns {Promise<void>}
  */
 async function handleSubmitModal(event) {
   event.preventDefault();
@@ -174,9 +204,9 @@ async function handleSubmitModal(event) {
 }
 
 /**
- * Sammelt Task-Daten aus dem Modal-Formular
- * @param {HTMLFormElement} form - Das Formular-Element
- * @returns {Object} Task-Objekt mit allen gesammelten Daten
+ * Collects task data from the modal form.
+ * @param {HTMLFormElement} form - The form element.
+ * @returns {Object} Task object with all collected data.
  */
 function collectTaskDataModal(form) {
   const id = form.dataset.taskId || crypto.randomUUID();
@@ -202,9 +232,9 @@ function collectTaskDataModal(form) {
 }
 
 /**
- * Validiert Task-Daten
- * @param {Object} task - Task-Objekt zum Validieren
- * @returns {boolean} True wenn valid, false wenn invalid
+ * Validates task data.
+ * @param {Object} task - Task object to validate.
+ * @returns {boolean} True if valid, false if invalid.
  */
 function validateTaskModal(task) {
   const isValidTitle = validateField("titleAlert-modal", task.title);
@@ -215,10 +245,10 @@ function validateTaskModal(task) {
 }
 
 /**
- * Validiert ein einzelnes Feld
- * @param {string} alertId - ID des Alert-Elements
- * @param {*} value - Zu validierender Wert
- * @returns {boolean} True wenn valid, false wenn invalid
+ * Validates a single field.
+ * @param {string} alertId - ID of the alert element.
+ * @param {*} value - Value to validate.
+ * @returns {boolean} True if valid, false if invalid.
  */
 function validateField(alertId, value) {
   const isValid = !!value;
@@ -232,15 +262,16 @@ function validateField(alertId, value) {
 }
 
 /**
- * Speichert einen Task über die API
- * @param {Object} task - Task-Objekt zum Speichern
- * @returns {Promise} Promise für die API-Anfrage
+ * Saves a task via the API.
+ * @param {Object} task - Task object to save.
+ * @returns {Promise<any>} Promise for the API request.
  */
 const saveTaskModal = (task) => requestData("PUT", `/tasks/${task.id}`, task);
 
 /**
- * Setzt den Formular-Zustand nach dem Speichern zurück
- * @param {Object} task - Gespeicherter Task
+ * Resets the form state after saving.
+ * @param {Object} task - Saved task.
+ * @returns {void}
  */
 function resetFormState(task) {
   clearFormAttributes();
@@ -252,7 +283,8 @@ function resetFormState(task) {
 }
 
 /**
- * Entfernt Formular-Attribute
+ * Removes form attributes.
+ * @returns {void}
  */
 function clearFormAttributes() {
   if ($.form) {
@@ -262,8 +294,9 @@ function clearFormAttributes() {
 }
 
 /**
- * Sendet Task-Event
- * @param {Object} task - Task-Objekt für Event
+ * Dispatches task event.
+ * @param {Object} task - Task object for event.
+ * @returns {void}
  */
 function dispatchTaskEvent(task) {
   const eventType = window.isEditMode ? "taskUpdated" : "taskCreated";
@@ -271,7 +304,8 @@ function dispatchTaskEvent(task) {
 }
 
 /**
- * Setzt den Modal-Zustand zurück
+ * Resets the modal state.
+ * @returns {void}
  */
 function resetModalState() {
   window.editingTaskId = null;
@@ -286,6 +320,10 @@ function resetModalState() {
   selectPriorityModal("medium");
 }
 
+/**
+ * Clears subtask inputs.
+ * @returns {void}
+ */
 function clearSubtask() {
   const subtaskInputs = document.getElementsByClassName("subtask-display-text-modal");
   Array.from(subtaskInputs).forEach(input => {
@@ -294,8 +332,9 @@ function clearSubtask() {
 }
 
 /**
- * Befüllt das Modal mit Task-Daten für die Bearbeitung
- * @param {Object} task - Task-Objekt zum Befüllen
+ * Fills the modal with task data for editing.
+ * @param {Object} task - Task object to fill with.
+ * @returns {Promise<void>}
  */
 async function prefillModalWithTaskData(task) {
   fillBasicFields(task);
@@ -310,8 +349,9 @@ async function prefillModalWithTaskData(task) {
 }
 
 /**
- * Befüllt die Basis-Formularfelder
- * @param {Object} task - Task-Objekt mit Daten
+ * Fills the basic form fields with task data.
+ * @param {Object} task - Task object with data.
+ * @returns {void}
  */
 function fillBasicFields(task) {
   document.getElementById("task-title-modal").value = task.title || "";
@@ -322,7 +362,8 @@ function fillBasicFields(task) {
 }
 
 /**
- * Lädt und zeigt Benutzer-Initialen im Modal
+ * Loads and displays user initials in the modal.
+ * @returns {void}
  */
 function loadUserInitialsModal() {
   const user = JSON.parse(localStorage.getItem("currentUser") || "{}");
@@ -332,7 +373,8 @@ function loadUserInitialsModal() {
 }
 
 /**
- * Schließt das Modal und räumt auf
+ * Closes the modal and cleans up.
+ * @returns {void}
  */
 export function closeModal() {
   const overlay = document.getElementById("modal-overlay");
@@ -344,7 +386,8 @@ export function closeModal() {
 }
 
 /**
- * Setzt das Modal-Formular komplett zurück (für externe Nutzung)
+ * Completely resets the modal form (for external use).
+ * @returns {void}
  */
 function resetModalFormState() {
   if (!$.form) {

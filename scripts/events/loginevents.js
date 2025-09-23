@@ -11,7 +11,8 @@ initInputField("loginPassword", "pwHint", "password");
 
 /**
  * Initializes login event listeners.
- * Binds login form, guest login, and policy links.
+ * @description Binds login form, guest login, and policy links with validation
+ * @returns {Promise<void>}
  */
 export async function loginListeners() {
   const loginFormElement = document.getElementById("loginForm");
@@ -31,6 +32,9 @@ export async function loginListeners() {
 
 /**
  * Binds the standard user login button click event.
+ * @description Attaches click event handler to the main login button
+ * @returns {void}
+ * @private
  */
 function bindUserLoginButton() {
   const loginButton = getLoginButton();
@@ -38,6 +42,13 @@ function bindUserLoginButton() {
   loginButton.addEventListener("click", handleUserLogin);
 }
 
+/**
+ * Toggles password visibility with icon change.
+ * @description Shows/hides password field content and updates the visibility icon
+ * @param {string} elementId - ID of the password input element
+ * @param {string} iconId - ID of the toggle icon element
+ * @returns {void}
+ */
 export function togglePassword(elementId, iconId) {
   const pw = document.getElementById(elementId);
   const icon = document.getElementById(iconId);
@@ -53,6 +64,9 @@ export function togglePassword(elementId, iconId) {
 
 /**
  * Binds the guest login button click event.
+ * @description Attaches click event handler for guest login functionality
+ * @returns {void}
+ * @private
  */
 function bindGuestLoginButton() {
   const guestButton = document.querySelector(".button-guest-login");
@@ -62,6 +76,10 @@ function bindGuestLoginButton() {
 
 /**
  * Handles user login submission including validation.
+ * @description Processes login attempt for regular users or guest users
+ * @param {boolean} [isGuest=false] - Whether this is a guest login attempt
+ * @returns {Promise<void>}
+ * @private
  */
 async function handleUserLogin(isGuest = false) {
   if (isGuest == true) {
@@ -76,6 +94,11 @@ async function handleUserLogin(isGuest = false) {
   }
 }
 
+/**
+ * Gets form validation state for email and password fields.
+ * @description Validates email and password inputs for form submission
+ * @returns {boolean|undefined} Validation state or undefined if fields are empty
+ */
 export function getFormValidation() {
   const isEmailValid = confirmInputForFormValidation('inputEmail', 'emailHint');
   const isPasswordValid = confirmInputForFormValidation('inputPassword', 'pwHint');
@@ -86,6 +109,15 @@ export function getFormValidation() {
   if (passwordValue && emailValue) return isEmailValid, isPasswordValid;
 }
 
+/**
+ * Handles user authentication with provided credentials.
+ * @description Validates credentials and attempts user login
+ * @param {Object} credentials - User login credentials
+ * @param {string} credentials.email - User email address
+ * @param {string} credentials.password - User password
+ * @returns {Promise<void>}
+ * @private
+ */
 async function handleUser(credentials) {
   const loginBtn = document.querySelector(".btn");
   let emailOk = credentials.email;
@@ -100,6 +132,12 @@ async function handleUser(credentials) {
   await attemptUserLogin(credentials);
 }
 
+/**
+ * Enables a button by removing disabled state and restoring styling.
+ * @description Activates button and restores normal appearance
+ * @param {HTMLElement} btn - Button element to enable
+ * @returns {void}
+ */
 export function enableButton(btn) {
   if (!btn) return;
   btn.classList.remove("disabled");
@@ -107,6 +145,12 @@ export function enableButton(btn) {
   btn.style.backgroundColor = "";
 }
 
+/**
+ * Disables a button by adding disabled state and updating styling.
+ * @description Deactivates button and applies disabled appearance
+ * @param {HTMLElement} btn - Button element to disable
+ * @returns {void}
+ */
 export function disableButton(btn) {
   if (!btn) return;
   btn.classList.add("disabled");
@@ -116,8 +160,9 @@ export function disableButton(btn) {
 
 /**
  * Collects login credentials from input fields.
- * 
- * @returns {{ email: string, password: string }}
+ * @description Extracts email and password values from login form inputs
+ * @returns {{ email: string, password: string }} Login credentials object
+ * @private
  */
 function collectLoginCredentials() {
   const passwordValue = document.getElementById('loginPassword')?.value;
@@ -130,11 +175,20 @@ function collectLoginCredentials() {
 
 /**
  * Returns the login button element used for enabling/disabling.
+ * @description Finds and returns the main login button element
+ * @returns {HTMLElement|null} Login button element or null if not found
+ * @private
  */
 function getLoginButton() {
   return document.querySelector(".logIn") || document.querySelector(".btn") || null;
 }
 
+/**
+ * Gets all login-related DOM elements.
+ * @description Retrieves button and input elements needed for login functionality
+ * @returns {Object} Object containing login form elements
+ * @private
+ */
 function getLoginElements() {
   return {
     btn: getLoginButton(),
@@ -143,10 +197,27 @@ function getLoginElements() {
   };
 }
 
+/**
+ * Validates if email and password meet minimum length requirements.
+ * @description Checks if both email and password have at least 6 characters
+ * @param {string} email - Email value to validate
+ * @param {string} pwd - Password value to validate
+ * @returns {boolean} True if both inputs meet minimum requirements
+ * @private
+ */
 function areInputsValid(email, pwd) {
   return email.length >= 6 && pwd.length >= 6;
 }
 
+/**
+ * Creates email input event handler.
+ * @description Returns function to handle email input validation and button state
+ * @param {HTMLElement} emailInput - Email input element
+ * @param {HTMLElement} passwordInput - Password input element
+ * @param {HTMLElement} btn - Login button element
+ * @returns {Function} Email input event handler
+ * @private
+ */
 function handleEmailInput(emailInput, passwordInput, btn) {
   return () => {
     const email = emailInput.value?.trim() || "";
@@ -160,6 +231,15 @@ function handleEmailInput(emailInput, passwordInput, btn) {
   };
 }
 
+/**
+ * Creates password input event handler.
+ * @description Returns function to handle password input validation and button state
+ * @param {HTMLElement} emailInput - Email input element
+ * @param {HTMLElement} passwordInput - Password input element
+ * @param {HTMLElement} btn - Login button element
+ * @returns {Function} Password input event handler
+ * @private
+ */
 function handlePasswordInput(emailInput, passwordInput, btn) {
   return () => {
     const email = emailInput.value?.trim() || "";
@@ -173,6 +253,15 @@ function handlePasswordInput(emailInput, passwordInput, btn) {
   };
 }
 
+/**
+ * Creates button click event handler.
+ * @description Returns function to handle login button click validation
+ * @param {HTMLElement} emailInput - Email input element
+ * @param {HTMLElement} passwordInput - Password input element
+ * @param {HTMLElement} btn - Login button element
+ * @returns {Function} Button click event handler
+ * @private
+ */
 function handleButtonClick(emailInput, passwordInput, btn) {
   return () => {
     const email = emailInput.value?.trim() || "";
@@ -193,6 +282,12 @@ function handleButtonClick(emailInput, passwordInput, btn) {
   };
 }
 
+/**
+ * Binds input validation listeners to login form elements.
+ * @description Sets up real-time validation for email and password inputs
+ * @returns {void}
+ * @private
+ */
 function bindLoginInputValidation() {
   const { btn, emailInput, passwordInput } = getLoginElements();
   if (!btn || !emailInput || !passwordInput) return;
@@ -211,8 +306,10 @@ function bindLoginInputValidation() {
 
 /**
  * Attempts to log in the user and redirects on success.
- * 
- * @param {{ email: string, password: string }} credentials
+ * @description Performs user authentication and handles success/failure
+ * @param {{ email: string, password: string }} credentials - User login credentials
+ * @returns {Promise<void>}
+ * @private
  */
 async function attemptUserLogin(credentials) {
   try {
@@ -225,6 +322,9 @@ async function attemptUserLogin(credentials) {
 
 /**
  * Redirects to the application start page.
+ * @description Navigates user to the main application page after successful login
+ * @returns {void}
+ * @private
  */
 function redirectToStartpage() {
   window.location.href = "../../startpage/startpage.html";
@@ -232,6 +332,8 @@ function redirectToStartpage() {
 
 /**
  * Binds listeners for policy and legal notice links.
+ * @description Sets up click handlers for privacy policy and legal notice links
+ * @returns {void}
  */
 export function bindPolicyLinks() {
   const policyLinks = getAllPolicyLinks();
@@ -240,8 +342,8 @@ export function bindPolicyLinks() {
 
 /**
  * Selects all policy-related anchor elements.
- * 
- * @returns {NodeListOf<HTMLAnchorElement>}
+ * @description Finds all links pointing to privacy policy and legal notice pages
+ * @returns {NodeListOf<HTMLAnchorElement>} Collection of policy link elements
  */
 export function getAllPolicyLinks() {
   const linkSelectors = [
@@ -255,8 +357,10 @@ export function getAllPolicyLinks() {
 
 /**
  * Attaches click handlers to policy links.
- * 
- * @param {NodeListOf<HTMLAnchorElement>} policyLinks
+ * @description Adds authentication-aware click handlers to policy links
+ * @param {NodeListOf<HTMLAnchorElement>} policyLinks - Collection of policy link elements
+ * @returns {void}
+ * @private
  */
 function attachPolicyListeners(policyLinks) {
   for (let linkIndex = 0; linkIndex < policyLinks.length; linkIndex++) {
@@ -269,10 +373,11 @@ function attachPolicyListeners(policyLinks) {
 
 /**
  * Handles click on protected policy links.
- * If user is not authenticated, log in as guest.
- * 
- * @param {MouseEvent} event
- * @param {HTMLAnchorElement} linkElement
+ * @description If user is not authenticated, log in as guest before accessing policy pages
+ * @param {MouseEvent} event - Click event object
+ * @param {HTMLAnchorElement} linkElement - Clicked link element
+ * @returns {Promise<void>}
+ * @private
  */
 async function handlePolicyClick(event, linkElement) {
   if (userNeedsAuthentication()) {
@@ -283,8 +388,9 @@ async function handlePolicyClick(event, linkElement) {
 
 /**
  * Checks whether user is authenticated.
- * 
- * @returns {boolean}
+ * @description Determines if user has valid authentication token
+ * @returns {boolean} True if user needs authentication
+ * @private
  */
 function userNeedsAuthentication() {
   return !localStorage.getItem("token");
@@ -292,8 +398,10 @@ function userNeedsAuthentication() {
 
 /**
  * Authenticates as guest and redirects to requested page.
- * 
- * @param {string} targetUrl
+ * @description Performs guest login and navigates to target URL
+ * @param {string} targetUrl - URL to redirect to after authentication
+ * @returns {Promise<void>}
+ * @private
  */
 async function authenticateAndRedirect(targetUrl) {
   await loginUser();
@@ -302,6 +410,8 @@ async function authenticateAndRedirect(targetUrl) {
 
 /**
  * Initializes event listeners for signup form.
+ * @description Sets up signup form validation and submission handlers
+ * @returns {Promise<void>}
  */
 export async function signupListeners() {
   const signupFormElement = document.getElementById("signUpForm");
@@ -314,8 +424,9 @@ export async function signupListeners() {
 
 /**
  * Binds submit event to signup form.
- * 
- * @param {HTMLFormElement} formElement
+ * @description Attaches form submission handler to signup form
+ * @param {HTMLFormElement} formElement - Signup form element
+ * @returns {void}
  */
 export function bindSignupForm(formElement) {
   formElement.addEventListener("submit", handleSignupSubmission);
@@ -323,6 +434,8 @@ export function bindSignupForm(formElement) {
 
 /**
  * Binds change event to privacy checkbox to enable/disable signup button.
+ * @description Sets up privacy checkbox validation for signup form
+ * @returns {void}
  */
 export function bindPrivacyCheckbox() {
   const checkbox = document.getElementById("checkBox");
@@ -335,8 +448,10 @@ export function bindPrivacyCheckbox() {
 
 /**
  * Handles signup form submission.
- * 
- * @param {SubmitEvent} event
+ * @description Processes user registration form data and submits to server
+ * @param {SubmitEvent} event - Form submission event
+ * @returns {Promise<void>}
+ * @private
  */
 async function handleSignupSubmission(event) {
   event.preventDefault();
@@ -345,6 +460,11 @@ async function handleSignupSubmission(event) {
   submitUser();
 }
 
+/**
+ * Shows login failure feedback animation.
+ * @description Displays animated feedback message when login fails
+ * @returns {Promise<void>} Promise that resolves when animation completes
+ */
 export function loginFailFeedback() {
   return new Promise((resolve) => {
     const LoginFeedback = document.getElementById("failLoginFeedback");

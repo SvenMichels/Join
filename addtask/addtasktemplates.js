@@ -1,6 +1,7 @@
 /**
- * @module templates/userCheckbox
- * Contains template generators for user checkboxes and subtask control groups.
+ * Template generators for user checkboxes and subtask control groups.
+ * Contains reusable HTML template functions for the Add Task form components.
+ * @module addtasktemplates
  */
 
 import { getInitials } from "../scripts/utils/helpers.js";

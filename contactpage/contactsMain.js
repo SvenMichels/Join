@@ -23,9 +23,8 @@ window.contactList = contactList;
 
 /**
  * Sets up all contact-related event listeners
- */
-/**
- * Sets up all contact-related event listeners
+ * @description Initializes all event handlers for the contact management interface
+ * @returns {void}
  */
 function setupEventListeners() {
   setupProfileButton();
@@ -37,6 +36,12 @@ function setupEventListeners() {
   setupCreateContactButton()
 }
 
+/**
+ * Sets up input field initialization with validation
+ * @description Initializes input fields with their corresponding validation hints
+ * @returns {void}
+ * @private
+ */
 function setupInitInputFields() {
   initInputField('contactEmail', 'emailHint', 'email');
   initInputField('contactName', 'nameHint', 'name');
@@ -46,6 +51,12 @@ function setupInitInputFields() {
   initInputField('editContactPhone', 'editPhoneHint', 'phone');
 }
 
+/**
+ * Sets up the create contact button with validation
+ * @description Configures the submit button state based on form validation
+ * @returns {void}
+ * @private
+ */
 function setupCreateContactButton() {
   const createContactBtn = document.getElementById("submitBtn");
   const nameInput = document.getElementById("contactName");
@@ -77,8 +88,12 @@ function setupCreateContactButton() {
 
   updateButtonState();
 }
+
 /**
  * Sets up contact form event listeners (add/edit forms)
+ * @description Attaches event handlers to contact form elements for add and edit operations
+ * @returns {void}
+ * @private
  */
 function setupContactFormListeners() {
   const addBtn = document.getElementById("addBtn");
@@ -93,6 +108,9 @@ function setupContactFormListeners() {
 
 /**
  * Sets up modal-related event listeners (close buttons, outside clicks)
+ * @description Initializes event handlers for modal interactions
+ * @returns {void}
+ * @private
  */
 function setupModalListeners() {
   setupCloseButtons();
@@ -101,6 +119,9 @@ function setupModalListeners() {
 
 /**
  * Sets up close button event listeners
+ * @description Attaches click handlers to all close buttons in the interface
+ * @returns {void}
+ * @private
  */
 function setupCloseButtons() {
   document.querySelectorAll(".closeBtn").forEach(btn => {
@@ -109,7 +130,10 @@ function setupCloseButtons() {
 }
 
 /**
- * Sets up cancel button event listeners
+ * Sets up delete button event listeners for a specific contact
+ * @description Configures delete button functionality for contact removal
+ * @param {Object} contact - Contact object containing user information
+ * @returns {void}
  */
 export function setupDeleteButton(contact) {
   if (!contact || !contact.userId) return;
@@ -129,6 +153,9 @@ export function setupDeleteButton(contact) {
 
 /**
  * Sets up outside click handlers for modals
+ * @description Enables closing modals by clicking outside their content area
+ * @returns {void}
+ * @private
  */
 function setupOutsideClickHandlers() {
   const addWindow = document.getElementById("addWindow");
@@ -143,6 +170,9 @@ function setupOutsideClickHandlers() {
 
 /**
  * Sets up keyboard event listeners (ESC key)
+ * @description Enables closing modals with the Escape key
+ * @returns {void}
+ * @private
  */
 function setupKeyboardListeners() {
   document.addEventListener("keydown", handleKeyPress);
@@ -150,7 +180,10 @@ function setupKeyboardListeners() {
 
 /**
  * Handles outside click events on modals
+ * @description Closes modals when clicking outside their content area
  * @param {Event} e - Click event
+ * @returns {void}
+ * @private
  */
 function handleOutsideClick(e) {
   if (e.target === e.currentTarget) {
@@ -160,7 +193,10 @@ function handleOutsideClick(e) {
 
 /**
  * Handles keyboard events (ESC key)
+ * @description Processes keyboard input for modal control
  * @param {Event} e - Keyboard event
+ * @returns {void}
+ * @private
  */
 function handleKeyPress(e) {
   if (e.key === "Escape") {
@@ -170,6 +206,9 @@ function handleKeyPress(e) {
 
 /**
  * Closes all open modals
+ * @description Closes both add and edit contact modals
+ * @returns {void}
+ * @private
  */
 function closeAllModals() {
   closeAddWindow();
@@ -178,13 +217,15 @@ function closeAllModals() {
 
 /**
  * Displays a contact in detail view or opens edit view on mobile
- * 
+ * @description Renders a single contact's detailed information and sets up actions
  * @param {string} name - Contact's full name
  * @param {string} email - Contact email
  * @param {string} phone - Contact phone number
  * @param {string} initials - Contact initials
  * @param {string} id - Contact ID
  * @param {string} color - Assigned color
+ * @returns {void}
+ * @private
  */
 function renderSingleContact(name, email, phone, initials, id, color) {
   const contact = contactList.find(c => c.userId === id);
@@ -199,6 +240,12 @@ function renderSingleContact(name, email, phone, initials, id, color) {
   loadAndShowContactDetails();
 }
 
+/**
+ * Clears active state from all contact elements
+ * @description Removes active styling from previously selected contacts
+ * @returns {void}
+ * @private
+ */
 function clearActiveContactState() {
   document.querySelectorAll(
     '.contact-item.active, [data-contact-id].active, [onclick*="renderSingleContact"].active'
@@ -207,7 +254,10 @@ function clearActiveContactState() {
 
 /**
  * Sets the active class for the specified contact
- * @param {string} contactId
+ * @description Adds active styling to the selected contact element
+ * @param {string} contactId - ID of the contact to activate
+ * @returns {void}
+ * @private
  */
 function setActiveContactState(contactId) {
   const candidate =
@@ -221,8 +271,14 @@ function setActiveContactState(contactId) {
 
 window.renderSingleContact = renderSingleContact;
 
-
-
+/**
+ * Validates contact form input fields
+ * @description Performs comprehensive validation on contact form data
+ * @param {string} fullName - Full name input value
+ * @param {string} userEmailElement - Email input element ID
+ * @param {string} userPhoneElement - Phone input element ID
+ * @returns {Object|null} Validated contact data or null if validation fails
+ */
 export function formValidation(fullName, userEmailElement, userPhoneElement) {
   const userEmailAddress = document.getElementById(userEmailElement).value.trim();
   let userPhoneNumber = document.getElementById(userPhoneElement).value.trim();
@@ -258,12 +314,12 @@ export function formValidation(fullName, userEmailElement, userPhoneElement) {
   };
 }
 
-
 /**
  * Creates a contact object from input form
- * 
+ * @description Constructs a normalized contact object from form input data
  * @param {string} fullName - Full name from input
- * @returns {Object} contact - Contact object
+ * @returns {Object|null} Contact object or null if validation fails
+ * @private
  */
 function createContactFromForm(fullName) {
   const userFullNameElement = document.getElementById("contactName");
@@ -296,11 +352,12 @@ function createContactFromForm(fullName) {
   return normalized;
 }
 
-
 /**
  * Adds a new contact to Firebase and updates UI
- * 
+ * @description Handles the form submission for creating a new contact
  * @param {Event} e - Submit event
+ * @returns {Promise<void>}
+ * @private
  */
 async function addNewContactToDatabase(e) {
   e.preventDefault();
@@ -312,8 +369,10 @@ async function addNewContactToDatabase(e) {
 
 /**
  * Saves contact to Firebase
- * 
+ * @description Persists contact data to the Firebase database
  * @param {Object} contact - Contact object
+ * @returns {Promise<void>}
+ * @private
  */
 async function saveNewContact(contact) {
   const result = await createContact(contact);
@@ -326,6 +385,9 @@ async function saveNewContact(contact) {
 
 /**
  * Updates UI after contact creation
+ * @description Refreshes the contact list display and closes forms after successful creation
+ * @returns {void}
+ * @private
  */
 function updateUIAfterContactCreation() {
   clearContactListUI();
@@ -338,8 +400,10 @@ function updateUIAfterContactCreation() {
 
 /**
  * Tries to save contact and update UI
- * 
+ * @description Orchestrates the contact creation process with error handling
  * @param {Object} contact - Contact object
+ * @returns {Promise<void>}
+ * @private
  */
 async function addContactTry(contact) {
   await saveNewContact(contact);
@@ -348,10 +412,12 @@ async function addContactTry(contact) {
 
 /**
  * Binds actions to the big contact view buttons
- * 
+ * @description Attaches event handlers to contact detail view action buttons
  * @param {string} id - Contact ID
  * @param {string} name - Contact name
  * @param {Object} contact - Contact object
+ * @returns {void}
+ * @private
  */
 function bindContactActions(id, name, contact) {
   const container = document.getElementById("bigContact");
@@ -361,10 +427,11 @@ function bindContactActions(id, name, contact) {
 
 /**
  * Filters tasks assigned to a deleted user
- * 
+ * @description Finds all tasks that include the specified user in their assignments
  * @param {Array} tasks - All tasks
  * @param {string} userName - Name of the deleted user
- * @returns {Array} Filtered tasks
+ * @returns {Array} Filtered tasks containing the user
+ * @private
  */
 function filterTasksByUser(tasks, userName) {
   const filtered = tasks.filter(task =>
@@ -374,10 +441,10 @@ function filterTasksByUser(tasks, userName) {
 
 /**
  * Removes user from assigned task and updates task
- * 
+ * @description Removes a user from a task's assignment list and saves the changes
  * @param {Object} task - Task object
  * @param {string} userName - Username to remove
- * @returns {Promise}
+ * @returns {Promise} Promise resolving to the update result
  */
 export function updateTaskWithoutUser(task, userName) {
   task.assignedUsers = task.assignedUsers.filter(user => user !== userName);
@@ -386,8 +453,9 @@ export function updateTaskWithoutUser(task, userName) {
 
 /**
  * Removes a deleted user from all tasks
- * 
+ * @description Cleans up task assignments when a user is deleted from the system
  * @param {string} deletedUserName - Name of the deleted user
+ * @returns {Promise<void>}
  */
 export async function removeUserFromAllTasks(deletedUserName) {
   const allTasks = await fetchAllTasks();
@@ -398,6 +466,9 @@ export async function removeUserFromAllTasks(deletedUserName) {
 
 /**
  * Initializes the contact page
+ * @description Sets up the contact page by loading data and initializing event listeners
+ * @returns {Promise<void>}
+ * @private
  */
 async function init() {
   const loadedContacts = await loadAllContactsFromFirebaseDatabase();
@@ -409,6 +480,9 @@ async function init() {
 
 /**
  * Sets initials into the profile button
+ * @description Updates the profile button with the current user's initials
+ * @returns {void}
+ * @private
  */
 function setupProfileButton() {
   const userData = getUserFromStorage();
@@ -423,8 +497,9 @@ function setupProfileButton() {
 
 /**
  * Loads user data from localStorage
- * 
- * @returns {object|null} User data or null
+ * @description Retrieves the current user's information from local storage
+ * @returns {Object|null} User data or null if not found
+ * @private
  */
 function getUserFromStorage() {
   const currentUserString = LocalStorageService.getItem("currentUser");

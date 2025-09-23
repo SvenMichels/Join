@@ -1,5 +1,5 @@
 import { requestData } from "../firebase.js";
-import { updateTaskWithoutUser } from "../../contactPage/contactsMain.js";
+import { updateTaskWithoutUser } from "../../contactpage/contactsMain.js";
 
 /**
  * Sends a POST request to create a new user in the database.

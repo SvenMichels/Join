@@ -1,6 +1,5 @@
-
 /**
- * Zulässige Top-Level-Domains für E-Mail-Validierung.
+ * Allowed top-level domains for email validation.
  * @type {string[]}
  */
 const allowedTlds = [
@@ -15,9 +14,10 @@ const allowedTlds = [
 ];
 
 /**
- * E-Mail-Validierung inkl. TLD-Prüfung und diversen RFC-nahen Checks.
- * @param {string} userInput
- * @returns {string} Validierungsnachricht
+ * Email validation including TLD checking and various RFC-compliant checks.
+ * @description Validates email addresses with comprehensive format, domain, and TLD verification
+ * @param {string} userInput - Email address to validate
+ * @returns {string} Validation message (empty or "Looks good!" on success)
  */
 export function getEmailMessage(userInput) {
     let message = '';
@@ -35,9 +35,10 @@ export function getEmailMessage(userInput) {
 }
 
 /**
- * Passwort-Validierung (Länge, Groß-/Kleinbuchstaben, Zahl, Symbol).
- * @param {string} userInput
- * @returns {string} Validierungsnachricht
+ * Password validation (length, upper/lowercase letters, number, symbol).
+ * @description Validates password strength requirements including character diversity
+ * @param {string} userInput - Password to validate
+ * @returns {string} Validation message (empty or "Looks good!" on success)
  */
 export function getPasswordMessage(userInput) {
     let message = '';
@@ -51,9 +52,10 @@ export function getPasswordMessage(userInput) {
 }
 
 /**
- * Name-Validierung (Mehrteilig, Akzente, Bindestriche, einfache Innen-Leerzeichen).
- * @param {string} userInput
- * @returns {string} Validierungsnachricht
+ * Name validation (multi-part, accents, hyphens, single internal spaces).
+ * @description Validates names allowing letters, accents, hyphens, apostrophes with proper spacing
+ * @param {string} userInput - Name to validate
+ * @returns {string} Validation message (empty or "Looks good!" on success)
  */
 export function getNameMessage(userInput) {
     let message = '';
@@ -69,9 +71,10 @@ export function getNameMessage(userInput) {
 }
 
 /**
- * Subtask-Text-Validierung (Zeichenumfang, Interpunktion, Leerzeichenregeln).
- * @param {string} userInput
- * @returns {string} Validierungsnachricht
+ * Subtask text validation (character range, punctuation, spacing rules).
+ * @description Validates subtask text allowing letters, numbers, common punctuation with proper spacing
+ * @param {string} userInput - Subtask text to validate
+ * @returns {string} Validation message (empty or "Looks good!" on success)
  */
 export function getSubtaskMessage(userInput) {
     let message = '';
@@ -87,9 +90,10 @@ export function getSubtaskMessage(userInput) {
 }
 
 /**
- * Telefonnummer-Validierung (Ziffern, optional führendes +, / als Trenner).
- * @param {string} userInput
- * @returns {string} Validierungsnachricht
+ * Phone number validation (digits, optional leading +, / as separator).
+ * @description Validates phone numbers with international format support
+ * @param {string} userInput - Phone number to validate
+ * @returns {string} Validation message (empty or "Looks good!" on success)
  */
 export function getPhoneMessage(userInput) {
     const pattern = /^\+?[0-9]+(?:\/[0-9]+)*$/;
@@ -101,9 +105,10 @@ export function getPhoneMessage(userInput) {
 }
 
 /**
- * Datum-Validierung für <input type="date"> (YYYY-MM-DD, echter Kalendertag, nicht in der Vergangenheit).
- * @param {string} userInput - Erwartet ISO-Format YYYY-MM-DD
- * @returns {string} Validierungsnachricht
+ * Date validation for <input type="date"> (YYYY-MM-DD, valid calendar date, not in the past).
+ * @description Validates date input in ISO format ensuring it's a valid future or current date
+ * @param {string} userInput - Expected ISO format YYYY-MM-DD
+ * @returns {string} Validation message (empty or "Looks good!" on success)
  */
 export function getDateMessage(userInput) {
     const value = String(userInput ?? '').trim();

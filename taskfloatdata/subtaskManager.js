@@ -9,24 +9,24 @@ let currentEditIndex = -1;
 let outsideClickHandlerBound = false;
 
 /**
- * Gibt die aktuelle Subtaskliste (Texte) zurück.
- * @returns {string[]} Array der Subtask-Texte
+ * Returns the current subtask list (texts).
+ * @returns {string[]} Array of subtask texts
  */
 export function getSubtaskItems() {
   return subtaskItemsListModal;
 }
 
 /**
- * Gibt die aktuelle Liste der Erledigt-Flags zurück.
- * @returns {boolean[]} Array der Erledigt-Zustände (parallel zur Subtaskliste)
+ * Returns the current list of completion flags.
+ * @returns {boolean[]} Array of completion states (parallel to subtask list)
  */
 export function getCompletedSubtasks() {
   return completedSubtasksModal;
 }
 
 /**
- * Setzt die Subtaskliste (Texte).
- * @param {string[]} items - Neue Subtask-Texte
+ * Sets the subtask list (texts).
+ * @param {string[]} items - New subtask texts
  * @returns {void}
  */
 export function setSubtaskItems(items) {
@@ -34,8 +34,8 @@ export function setSubtaskItems(items) {
 }
 
 /**
- * Setzt die Erledigt-Liste.
- * @param {boolean[]} completed - Erledigt-Zustände (parallel zur Subtaskliste)
+ * Sets the completion list.
+ * @param {boolean[]} completed - Completion states (parallel to subtask list)
  * @returns {void}
  */
 export function setCompletedSubtasks(completed) {
@@ -43,7 +43,7 @@ export function setCompletedSubtasks(completed) {
 }
 
 /**
- * Setzt alle Subtasks (Texte und Erledigt) zurück.
+ * Resets all subtasks (texts and completion states).
  * @returns {void}
  */
 export function resetSubtasks() {
@@ -52,7 +52,7 @@ export function resetSubtasks() {
 }
 
 /**
- * Löscht das Eingabefeld für neue Subtasks (Modal).
+ * Clears the input field for new subtasks (Modal).
  * @returns {void}
  * @private
  */
@@ -62,9 +62,9 @@ function clearSubtaskInput() {
 }
 
 /**
- * Fügt über den Plus-Button einen neuen Subtask hinzu (Modal).
- * Verhindert Formular-Submit, validiert und rendert anschließend neu.
- * @param {Event} event - Klick-Event
+ * Adds a new subtask via the plus button (modal).
+ * Prevents form submit, validates, and then re-renders.
+ * @param {Event} event - Click event
  * @returns {void}
  */
 export function addSubtaskModal(event) {
@@ -79,9 +79,9 @@ export function addSubtaskModal(event) {
 }
 
 /**
- * Fügt bei Enter-Taste im Eingabefeld einen Subtask hinzu (Modal).
- * Verhindert Formular-Submit.
- * @param {KeyboardEvent} event - Keydown-Event
+ * Adds a subtask on Enter key press in the input field (modal).
+ * Prevents form submit.
+ * @param {KeyboardEvent} event - Keydown event
  * @returns {void}
  */
 export function addSubtaskOnEnterModal(event) {
@@ -93,8 +93,8 @@ export function addSubtaskOnEnterModal(event) {
 }
 
 /**
- * Fügt der internen Liste einen Subtask hinzu und setzt das Erledigt-Flag auf false.
- * @param {string} value - Subtask-Text (getrimmt)
+ * Adds a subtask to the internal list and sets completion flag to false.
+ * @param {string} value - Subtask text (trimmed)
  * @returns {void}
  * @private
  */
@@ -104,7 +104,7 @@ function addSubtaskToList(value) {
 }
 
 /**
- * Rendert alle Subtasks im Modal (inkl. Events).
+ * Renders all subtasks in the modal (including events).
  * @returns {void}
  */
 export function renderSubtasksModal() {
@@ -118,8 +118,8 @@ export function renderSubtasksModal() {
 }
 
 /**
- * Leert die Subtask-Containerliste.
- * @param {HTMLElement} list - Container-Element
+ * Clears the subtask container list.
+ * @param {HTMLElement} list - Container element
  * @returns {void}
  * @private
  */
@@ -128,7 +128,7 @@ function clearSubtaskList(list) {
 }
 
 /**
- * Leert die zugewiesenen User-Listen (Modal und evtl. Hauptansicht).
+ * Clears the assigned user lists (modal and potentially main view).
  * @returns {void}
  * @private
  */
@@ -145,8 +145,8 @@ function clearAssignedList() {
 }
 
 /**
- * Rendert alle Subtask-Items in den Container.
- * @param {HTMLElement} list - Container-Element
+ * Renders all subtask items in the container.
+ * @param {HTMLElement} list - Container element
  * @returns {void}
  * @private
  */
@@ -158,10 +158,10 @@ function renderSubtaskItems(list) {
 }
 
 /**
- * Baut das DOM-Element für einen Subtask.
- * @param {string} text - Subtask-Text
- * @param {number} index - Index des Subtasks
- * @returns {HTMLElement} Subtask-Element
+ * Builds the DOM element for a subtask.
+ * @param {string} text - Subtask text
+ * @param {number} index - Index of the subtask
+ * @returns {HTMLElement} Subtask element
  * @private
  */
 function createSubtaskElement(text, index) {
@@ -171,8 +171,8 @@ function createSubtaskElement(text, index) {
 }
 
 /**
- * Bindet alle erforderlichen Event-Listener an die Liste (Delete, Edit, Checkbox).
- * @param {HTMLElement} list - Container-Element
+ * Binds all necessary event listeners to the list (Delete, Edit, Checkbox).
+ * @param {HTMLElement} list - Container element
  * @returns {void}
  * @private
  */
@@ -183,8 +183,8 @@ function attachAllEventListeners(list) {
 }
 
 /**
- * Bindet Delete-Button-Listener.
- * @param {HTMLElement} list - Container-Element
+ * Binds delete button listener.
+ * @param {HTMLElement} list - Container element
  * @returns {void}
  * @private
  */
@@ -202,8 +202,8 @@ function attachDeleteListeners(list) {
 }
 
 /**
- * Löscht einen Subtask aus den Listen und rendert neu.
- * @param {number} index - Index des zu löschenden Subtasks
+ * Deletes a subtask from the lists and re-renders.
+ * @param {number} index - Index of the subtask to be deleted
  * @returns {void}
  * @private
  */
@@ -218,8 +218,8 @@ function deleteSubtask(index) {
 }
 
 /**
- * Bindet Edit-Button-Listener und stellt sicher, dass nur ein Subtask gleichzeitig editierbar ist.
- * @param {HTMLElement} list - Container-Element
+ * Binds edit button listener and ensures that only one subtask is editable at a time.
+ * @param {HTMLElement} list - Container element
  * @returns {void}
  * @private
  */
@@ -244,8 +244,8 @@ function attachEditListeners(list) {
 }
 
 /**
- * Bindet Checkbox-Change-Listener für Erledigt-Status.
- * @param {HTMLElement} list - Container-Element
+ * Binds checkbox change listener for completion status.
+ * @param {HTMLElement} list - Container element
  * @returns {void}
  * @private
  */
@@ -260,8 +260,8 @@ function attachCheckboxListeners(list) {
 }
 
 /**
- * Wechselt einen Subtask in den Edit-Modus.
- * @param {number} index - Index des Subtasks
+ * Switches a subtask to edit mode.
+ * @param {number} index - Index of the subtask
  * @returns {void}
  * @private
  */
@@ -276,9 +276,9 @@ function makeSubtaskEditableModal(index) {
 }
 
 /**
- * Liefert das DOM-Element eines Subtasks per Index.
- * @param {number} index - Index des Subtasks
- * @returns {HTMLElement|null} Subtask-Element oder null
+ * Delivers the DOM element of a subtask by index.
+ * @param {number} index - Index of the subtask
+ * @returns {HTMLElement|null} Subtask element or null
  * @private
  */
 function getSubtaskElement(index) {
@@ -287,9 +287,9 @@ function getSubtaskElement(index) {
 }
 
 /**
- * Ersetzt ein Subtask-Element durch die Edit-Vorlage.
- * @param {HTMLElement} item - Zu ersetzendes DOM-Element
- * @param {number} index - Index des Subtasks
+ * Replaces a subtask element with the edit template.
+ * @param {HTMLElement} item - DOM element to be replaced
+ * @param {number} index - Index of the subtask
  * @returns {void}
  * @private
  */
@@ -299,11 +299,11 @@ function replaceWithEditTemplate(item, index) {
 }
 
 /**
- * Bindet Outside-Click, um den aktuellen Edit sauber zu speichern/verlassen.
- * Speichert nur den aktuellen Subtask (keinen Formular-Submit).
- * @param {HTMLElement} containerEl - Container des editierbaren Subtasks
- * @param {HTMLInputElement} inputEl - Edit-Input
- * @param {number} index - Index des Subtasks
+ * Binds outside click to cleanly save/exit the current edit.
+ * Only saves the current subtask (no form submit).
+ * @param {HTMLElement} containerEl - Container of the editable subtask
+ * @param {HTMLInputElement} inputEl - Edit input
+ * @param {number} index - Index of the subtask
  * @returns {void}
  * @private
  */
@@ -333,9 +333,9 @@ function bindOutsideClickToClose(containerEl, inputEl, index) {
 }
 
 /**
- * Bindet Listener und Tastensteuerung im Edit-Modus (Enter speichert, Escape verwirft).
- * @param {HTMLElement} container - Container des editierbaren Subtasks
- * @param {number} index - Index des Subtasks
+ * Binds listener and key control in edit mode (Enter saves, Escape discards).
+ * @param {HTMLElement} container - Container of the editable subtask
+ * @param {number} index - Index of the subtask
  * @returns {void}
  * @private
  */
@@ -363,10 +363,10 @@ function attachEditModeListeners(container, index) {
 }
 
 /**
- * Bindet den Save-Button im Edit-Modus.
- * @param {HTMLElement|null} saveBtn - Save-Button
- * @param {HTMLInputElement|null} input - Edit-Input
- * @param {number} index - Index des Subtasks
+ * Binds the save button in edit mode.
+ * @param {HTMLElement|null} saveBtn - Save button
+ * @param {HTMLInputElement|null} input - Edit input
+ * @param {number} index - Index of the subtask
  * @returns {void}
  * @private
  */
@@ -380,9 +380,9 @@ function attachSaveListener(saveBtn, input, index) {
 }
 
 /**
- * Speichert den editierten Subtask (mit Validierung) und verlässt den Edit-Modus.
- * @param {HTMLInputElement|null} input - Edit-Input
- * @param {number} index - Index des Subtasks
+ * Saves the edited subtask (with validation) and exits edit mode.
+ * @param {HTMLInputElement|null} input - Edit input
+ * @param {number} index - Index of the subtask
  * @returns {void}
  * @private
  */
@@ -395,9 +395,9 @@ function saveSubtaskEdit(input, index) {
 }
 
 /**
- * Bindet den Delete-Button im Edit-Modus.
- * @param {HTMLElement|null} deleteBtn - Delete-Button
- * @param {number} index - Index des Subtasks
+ * Binds the delete button in edit mode.
+ * @param {HTMLElement|null} deleteBtn - Delete button
+ * @param {number} index - Index of the subtask
  * @returns {void}
  * @private
  */
@@ -411,9 +411,9 @@ function attachDeleteListener(deleteBtn, index) {
 }
 
 /**
- * Aktualisiert die Subtasks im Modal mit externen Daten.
- * @param {string[]} [subtasks=[]] - Subtask-Texte
- * @param {boolean[]} [subtaskDone=[]] - Erledigt-Zustände
+ * Updates the subtasks in the modal with external data.
+ * @param {string[]} [subtasks=[]] - Subtask texts
+ * @param {boolean[]} [subtaskDone=[]] - Completion states
  * @returns {void}
  */
 export function updateSubtasks(subtasks = [], subtaskDone = []) {
@@ -421,14 +421,14 @@ export function updateSubtasks(subtasks = [], subtaskDone = []) {
   completedSubtasksModal = createCompletedArray(subtasks, subtaskDone);
 }
 
-/** Funktion zum Abhängen des Outside-Click-Handlers (wird dynamisch gesetzt). */
+/** Function to unbind the outside click handler (set dynamically). */
 let unbindOutsideClick = () => {};
 
 /**
- * Erzeugt die Erledigt-Liste in korrekter Länge (Fallback: false).
- * @param {string[]} subtasks - Subtask-Texte
- * @param {boolean[]} subtaskDone - Erledigt-Zustände
- * @returns {boolean[]} Erledigt-Liste in Subtask-Länge
+ * Creates the completion list in correct length (fallback: false).
+ * @param {string[]} subtasks - Subtask texts
+ * @param {boolean[]} subtaskDone - Completion states
+ * @returns {boolean[]} Completion list in subtask length
  * @private
  */
 function createCompletedArray(subtasks, subtaskDone) {
@@ -437,7 +437,7 @@ function createCompletedArray(subtasks, subtaskDone) {
 }
 
 /**
- * Verlässt den Edit-Modus, setzt Status zurück und hängt Outside-Click ab.
+ * Exits the edit mode, resets status, and unbinds outside click.
  * @returns {void}
  * @private
  */

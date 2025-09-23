@@ -28,16 +28,35 @@ export function fillEditForm(contact) {
  * @returns {Object} Form input values (name, email, phone)
  */
 // --- helpers ---
+/**
+ * Safely trims string values or returns original value if not a string.
+ * @param {*} value - Value to trim.
+ * @returns {*} Trimmed string or original value.
+ */
 function safeTrim(value) {
   return typeof value === "string" ? value.trim() : value;
 }
 
+/**
+ * Resolves and validates the full name from input or contact object.
+ * @param {string} userFullName - Full name from form input.
+ * @returns {string} Trimmed and validated full name.
+ */
 function resolveName(userFullName) {
   if (typeof userFullName === "string") return userFullName.trim();
   const inputVal = document.getElementById("editContactName")?.value ?? "";
   return inputVal.toString().trim();
 }
 
+/**
+ * Builds updated user object for editing with sanitized values.
+ * @param {Object} contact - Original contact object.
+ * @param {Object} updates - Object containing updated field values.
+ * @param {string} updates.userFullName - Updated full name.
+ * @param {string} updates.userEmailAddress - Updated email address.
+ * @param {string} updates.userPhoneNumber - Updated phone number.
+ * @returns {Object} Updated contact object.
+ */
 function buildUserForEdit(contact, { userFullName, userEmailAddress, userPhoneNumber }) {
   return {
     userFullName: resolveName(userFullName),
@@ -55,6 +74,12 @@ export function getEditContactInput(contact) {
 }
 
 
+/**
+ * Validates edit form inputs and shows validation messages.
+ * @returns {Object} Object containing validation results for name and email.
+ * @returns {boolean} returns.nameValid - Whether name field is valid.
+ * @returns {boolean} returns.emailValid - Whether email field is valid.
+ */
 function validateEditInputs() {
   const nameValid = confirmInputForFormValidation("editContactName", "editNameHint");
   const emailValid = confirmInputForFormValidation("editContactEmail", "editEmailHint");
@@ -69,6 +94,12 @@ function validateEditInputs() {
   return { nameValid, emailValid };
 }
 
+/**
+ * Normalizes contact data and enriches it with computed properties.
+ * @param {Object} updated - Updated contact data.
+ * @param {Object} contact - Original contact object for fallback values.
+ * @returns {Object} Enriched contact object with initials and first character.
+ */
 function normalizeAndEnrichContact(updated, contact) {
   const name =
     (updated.userFullName ?? "").toString().trim() ||
@@ -81,10 +112,21 @@ function normalizeAndEnrichContact(updated, contact) {
   return updated;
 }
 
+/**
+ * Persists the contact update to the data store.
+ * @param {Object} contact - Original contact object.
+ * @param {Object} updated - Updated contact data.
+ * @returns {Promise<void>}
+ */
 async function persistContactUpdate(contact, updated) {
   await updateContact(contact, updated);
 }
 
+/**
+ * Handles the submission of the contact edit form.
+ * 
+ * @param {Event} e - Submit event
+ */
 export async function handleContactEditSubmission(e) {
   e.preventDefault();
 
@@ -128,6 +170,10 @@ export function openEditDialog(contact) {
   }
 }
 
+/**
+ * Sets user initials and color styling for the edit dialog.
+ * @param {Object} contact - Contact object containing user data and styling info.
+ */
 function setUserInitials(contact) {
   const contactInitials = document.getElementById("editInitials");
   contactInitials.textContent = contact.userInitials || getInitials(contact.userFullName);
@@ -135,6 +181,13 @@ function setUserInitials(contact) {
   contactInitials.classList.add("editInitials", `${contact.userColor}`);
 }
 
+/**
+ * Gets DOM element references for the edit form.
+ * @returns {Object} Object containing form element references.
+ * @returns {HTMLInputElement} returns.nameInput - Name input element.
+ * @returns {HTMLInputElement} returns.emailInput - Email input element.
+ * @returns {HTMLButtonElement} returns.saveBtn - Save button element.
+ */
 function getEditEls() {
   return {
     nameInput: document.getElementById("editContactName"),
@@ -143,27 +196,43 @@ function getEditEls() {
   };
 }
 
+/**
+ * Computes validity state of form fields.
+ * @returns {Object} Object containing validity flags.
+ * @returns {boolean} returns.nameOk - Whether name field is valid.
+ * @returns {boolean} returns.emailOk - Whether email field is valid.
+ */
 function computeValidity() {
   const nameOk = confirmInputForFormValidation("editContactName", "editNameHint");
   const emailOk = confirmInputForFormValidation("editContactEmail", "editEmailHint");
   return { nameOk, emailOk };
 }
 
+/**
+ * Applies initial validity state to the save button and form fields.
+ * @param {HTMLButtonElement} saveBtn - Save button element.
+ * @param {Object} validity - Object containing validity flags.
+ * @param {boolean} validity.nameOk - Whether name field is valid.
+ * @param {boolean} validity.emailOk - Whether email field is valid.
+ */
 function applyInitialValidity(saveBtn, { nameOk, emailOk }) {
 
   if (nameOk && emailOk) {
-    console.log("initial valid", nameOk, emailOk);
     enableButton(saveBtn);
     setFieldValidity("editContactName", true);
     setFieldValidity("editContactEmail", true);
   } else {
-    console.log("initial invalid", nameOk, emailOk);
     disableButton(saveBtn);
     setFieldValidity("editContactName", false);
     setFieldValidity("editContactEmail", false);
   }
 }
 
+/**
+ * Shows validation hints for field length and required field validation.
+ * @param {string} nameVal - Current name input value.
+ * @param {string} emailVal - Current email input value.
+ */
 function showLengthAndRequiredHints(nameVal, emailVal) {
   if (nameVal.length > 0 && nameVal.length < 4) {
     showValidateBubble("editContactName", "Use at least 4 characters.", "editNameHint", 1800);
@@ -177,6 +246,13 @@ function showLengthAndRequiredHints(nameVal, emailVal) {
   }
 }
 
+/**
+ * Creates a state update function for form validation and button management.
+ * @param {HTMLInputElement} nameInput - Name input element.
+ * @param {HTMLInputElement} emailInput - Email input element.
+ * @param {HTMLButtonElement} saveBtn - Save button element.
+ * @returns {Function} Update state function to be called on input changes.
+ */
 function makeUpdateState(nameInput, emailInput, saveBtn) {
   return function updateState() {
     const nameVal = nameInput.value.trim();
@@ -185,7 +261,6 @@ function makeUpdateState(nameInput, emailInput, saveBtn) {
     showLengthAndRequiredHints(nameVal, emailVal);
 
     const { nameOk, emailOk } = computeValidity();
-    console.log("validity", { nameOk, emailOk });
     if (nameOk && emailOk) {
       enableButton(saveBtn);
     } else {
@@ -194,6 +269,11 @@ function makeUpdateState(nameInput, emailInput, saveBtn) {
   };
 }
 
+/**
+ * Sets up validation and button state management for the edit form.
+ * @returns {Object|undefined} Object containing the update state function, or undefined if elements not found.
+ * @returns {Function} returns.updateState - Function to update validation state.
+ */
 function setupEditValidationAndButton() {
   const { nameInput, emailInput, saveBtn } = getEditEls();
   if (!nameInput || !emailInput || !saveBtn) return;

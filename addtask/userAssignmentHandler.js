@@ -17,17 +17,27 @@ const selectedUserNames = new Set();
 
 /**
  * Returns the list of all loaded system users.
- *
+ * @description Provides access to the cached system users array
  * @returns {Array<Object>} List of users
  */
 export function getAllSystemUsers() {
   return allSystemUsers;
 }
 
+/**
+ * Clears the selected user names from the handler's internal set.
+ * @description Removes all selected user names from the internal selection state
+ * @returns {void}
+ */
 export function clearSelectedUserNamesHandler() {
   selectedUserNames.clear();
 }
 
+/**
+ * Clears selected user names from both handler and modal contexts.
+ * @description Resets user selection state in both add task handler and modal
+ * @returns {void}
+ */
 export function clearBothSelectedUserNames() {
   clearSelectedUserNamesHandler();
   clearSelectedUserNamesModal();
@@ -35,7 +45,7 @@ export function clearBothSelectedUserNames() {
 
 /**
  * Loads users from backend and renders them in the checkbox list.
- *
+ * @description Fetches user data from the backend and displays checkboxes for user selection
  * @async
  * @returns {Promise<void>}
  */
@@ -53,9 +63,10 @@ export async function loadAndRenderUsers() {
 
 /**
  * Renders user checkboxes inside the DOM container.
- *
+ * @description Creates and displays checkbox elements for user selection
  * @param {Array<Object>} users - User data list
  * @param {Array<string>} [preselected=[]] - Optional list of preselected usernames
+ * @returns {void}
  */
 export function renderUserCheckboxes(users, preselected = []) {
   const container = clearAndPrepareContainer("assignedUserList");
@@ -67,9 +78,10 @@ export function renderUserCheckboxes(users, preselected = []) {
 
 /**
  * Clears and returns the checkbox container element.
- *
- * @param {string} id
- * @returns {HTMLElement|null}
+ * @description Empties the specified container and returns it for further use
+ * @param {string} id - Element ID of the container
+ * @returns {HTMLElement|null} The cleared container element or null if not found
+ * @private
  */
 function clearAndPrepareContainer(id) {
   const container = document.getElementById(id);
@@ -80,10 +92,12 @@ function clearAndPrepareContainer(id) {
 
 /**
  * Adds unique checkbox elements for users.
- *
+ * @description Creates checkbox elements for each unique user and adds them to the container
  * @param {Array<Object>} users - All users
  * @param {Array<string>} preSelected - Preselected users
  * @param {HTMLElement} container - Parent DOM node
+ * @returns {void}
+ * @private
  */
 function addUniqueCheckboxes(users, preSelected, container) {
   const uniqueNames = new Set();
@@ -100,10 +114,11 @@ function addUniqueCheckboxes(users, preSelected, container) {
 
 /**
  * Creates a checkbox HTML element for a user.
- *
+ * @description Constructs a complete checkbox wrapper with event listeners for a user
  * @param {Object} user - User object
  * @param {boolean} isChecked - Whether the checkbox should be checked
  * @returns {HTMLElement} Checkbox element wrapper
+ * @private
  */
 function createUserCheckboxElement(user, isChecked) {
   const wrapper = document.createElement("div");
@@ -116,8 +131,10 @@ function createUserCheckboxElement(user, isChecked) {
 
 /**
  * Adds click listener to checkbox wrapper.
- *
+ * @description Attaches event handlers for checkbox interaction and wrapper clicks
  * @param {HTMLElement} wrapper - Wrapper element
+ * @returns {void}
+ * @private
  */
 function attachCheckboxListener(wrapper) {
   const checkbox = wrapper.querySelector('input[type="checkbox"]');
@@ -141,8 +158,9 @@ function attachCheckboxListener(wrapper) {
 
 /**
  * Updates the visual display of selected user chips.
+ * @description Refreshes the display of selected users as visual chips with overflow handling
+ * @returns {void}
  */
-
 export function updateSelectedUserDisplay() {
   const container = document.getElementById("selectedUser");
   if (!container) return;
@@ -159,12 +177,12 @@ export function updateSelectedUserDisplay() {
 
 /**
  * Creates a visual chip element for a user.
- *
+ * @description Generates a styled chip element representing a selected user
  * @param {Object} user - User object
  * @param {string} name - Username fallback
  * @returns {HTMLElement} Chip element
+ * @private
  */
-
 function createUserChip(user, name) {
   const chip = document.createElement("div");
   chip.className = `selected-contact-chip ${user?.userColor || "color-1"}`;
@@ -172,6 +190,14 @@ function createUserChip(user, name) {
   return chip;
 }
 
+/**
+ * Renders user chips in a container with overflow handling.
+ * @description Creates visual chips for users with support for showing overflow count
+ * @param {Array<Object>} users - Array of user objects to render.
+ * @param {HTMLElement} container - Container element to render chips into.
+ * @param {number} [maxVisible=5] - Maximum number of visible chips before showing overflow.
+ * @returns {void}
+ */
 export function renderUserChips(users, container, maxVisible = 5) {
   if (!Array.isArray(users) || !container) return;
   container.innerHTML = "";
@@ -189,7 +215,7 @@ export function renderUserChips(users, container, maxVisible = 5) {
 
 /**
  * Returns a list of currently assigned users.
- *
+ * @description Provides access to the current selection of assigned user names
  * @returns {Array<string>} List of usernames
  */
 export function collectAssignedUsers() {
@@ -198,6 +224,8 @@ export function collectAssignedUsers() {
 
 /**
  * Clears all selected user checkboxes and chips.
+ * @description Resets the entire user selection interface to its initial state
+ * @returns {void}
  */
 export function clearSelectedUsers() {
   const selectedUserContainer = document.getElementById("selectedUser");
@@ -214,8 +242,8 @@ export function clearSelectedUsers() {
 
 /**
  * Toggles the visibility of the user assignment list.
- *
- * @param {Event} clickEvent - Button click event
+ * @description Initializes event listeners for showing/hiding the user assignment dropdown
+ * @returns {void}
  */
 export function initUserAssignmentList() {
   const assignBtn = document.querySelector(".assignUserListBtn");
@@ -232,6 +260,9 @@ export function initUserAssignmentList() {
 
 /**
  * Sets up the user search input and filters the user list.
+ * @description Initializes search functionality for filtering users in the assignment list
+ * @async
+ * @returns {Promise<void>}
  */
 export async function setupUserSearch() {
   const searchBar = document.getElementById("searchUser");

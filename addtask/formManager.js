@@ -1,6 +1,6 @@
 import { showValidateBubble, setFieldValidity } from "../scripts/auth/Validation.js";
 import { getSubtaskMessage } from "../scripts/auth/validationsmessages.js";
-import { categorySave } from "../board/boardUtils.js";
+
 import { loadAndRenderUsers } from "./userAssignmentHandler.js";
 import { loadContactData } from "../taskfloatdata/userAssignmentManager.js";
 

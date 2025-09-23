@@ -1,5 +1,7 @@
 import { updateSelectedUserDisplay, clearSelectedUserNamesHandler } from "./userAssignmentHandler.js";
 import { subtaskItemsList, clearValidationAlerts, closeDropdown } from "./formManager.js";
+import { categorySave } from "../board/boardUtils.js";
+import { collectAssignedUsers, currentlySelectedPriority } from "./formManager.js";
 
 /**
  * Resets the visual state of all priority buttons to the default (medium active).
@@ -46,6 +48,18 @@ export function clearFormState(wrapper, select, options, titleInput, dateInput, 
   resetSubtasksUI();
   clearValidationAlerts();
   closeDropdown(options, wrapper, arrow);
+  clearSubmitButtonState();
+}
+
+/**
+ * Disables all submit/create buttons in the form.
+ * @returns {void}
+ */
+function clearSubmitButtonState() {
+  const submitButtons = document.querySelectorAll(".create-button");
+  submitButtons.forEach(submitButton => {
+    submitButton.disabled = true;
+  });
 }
 
 /**
