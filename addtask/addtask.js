@@ -214,7 +214,3 @@ function clearAllFormData() {
   setupMobileDeviceListeners();
   configureForm();
 }
-
-// HINWEIS: Sicherstellen, dass der Ordnername wirklich komplett klein ist: 'addtask'.
-// Unter Linux sonst Import-Fehler bei: ./formManagerInit.js
-// Nach git mv addTask tmp && git mv tmp addtask diesen Datei-Pfad auch angleichen.

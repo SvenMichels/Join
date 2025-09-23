@@ -25,10 +25,10 @@ import {
   getSubtaskItems,
   getCompletedSubtasks,
   updateSubtasks
-} from "./subtaskManager.js";
+} from "../taskfloatdata/subtaskManager.js";
 import { setupOutsideClickHandler, removeNoScroll } from "../board/taskDetails.js";
 import { initInputField } from "../scripts/auth/Validation.js";
-import { initFormAndButtonHandlers } from "../addTask/formManagerInit.js";
+import { initFormAndButtonHandlers } from "../addtask/formManagerInit.js";
 import { categorySave, categoryLoad } from "../board/boardUtils.js";
 
 const $ = {};

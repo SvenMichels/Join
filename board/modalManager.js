@@ -115,7 +115,7 @@ export function openTaskModal(isEdit = false, task = null) {
   const overlay = document.getElementById("modal-overlay");
   noScrollTaskDetails(overlay);
 
-  fetch("../taskFloatData/taskfloat.html")
+  fetch("../taskfloatdata/taskfloat.html")
     .then((res) => res.text())
     .then((html) => {
       overlay.innerHTML = html;
