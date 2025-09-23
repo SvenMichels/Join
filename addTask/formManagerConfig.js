@@ -1,3 +1,10 @@
+/**
+ * Retrieves DOM element references needed to configure the "Assigned To" dropdown
+ * in the non‑modal (main) add task context.
+ * @returns {{wrapper: HTMLElement|null, options: HTMLElement|null, arrow: HTMLElement|null, select: HTMLElement|null,
+ *           prioContainer: HTMLElement|null, createButton: HTMLElement|null, dateInput: HTMLInputElement|null,
+ *           titleInput: HTMLInputElement|null, clearBtn: HTMLElement|null}}
+ */
 export function getElementConfigsForAssignedTo() {
     const wrapper = document.querySelector(".assigned-input-wrapper");
     const options = document.getElementById("assignedUserList");
@@ -11,6 +18,14 @@ export function getElementConfigsForAssignedTo() {
     return { wrapper, options, arrow, select, prioContainer, createButton, dateInput, titleInput, clearBtn };
 }
 
+/**
+ * Retrieves DOM element references for the "Assigned To" dropdown
+ * inside the modal context.
+ * NOTE: The arrow selector likely should not include '#'; currently uses getElementById("#assignedBtnImg-modal").
+ * @returns {{wrapper: HTMLElement|null, options: HTMLElement|null, arrow: HTMLElement|null, select: HTMLElement|null,
+ *           prioContainer: HTMLElement|null, createButton: HTMLElement|null, dateInput: HTMLInputElement|null,
+ *           titleInput: HTMLInputElement|null, clearBtn: HTMLElement|null}}
+ */
 export function getElementConfigsForAssignedToModal() {
     const wrapper = document.querySelector(".assigned-input-wrapper");
     const options = document.getElementById("assignedUserList-modal");
@@ -24,6 +39,13 @@ export function getElementConfigsForAssignedToModal() {
     return { wrapper, options, arrow, select, prioContainer, createButton, dateInput, titleInput, clearBtn };
 }
 
+/**
+ * Retrieves DOM element references for the add task modal
+ * (category selection, inputs, priority container, clear button).
+ * @returns {{wrapper: HTMLElement|null, options: HTMLElement|null, arrow: HTMLElement|null, select: HTMLElement|null,
+ *           prioContainer: HTMLElement|null, createButton: HTMLElement|null, dateInput: HTMLInputElement|null,
+ *           titleInput: HTMLInputElement|null, clearBtn: HTMLElement|null}}
+ */
 export function getElementConfigsForAddTaskModal() {
     const wrapper = document.querySelector("#formWrapper");
     const select = document.querySelector("#category-modal");
@@ -37,6 +59,12 @@ export function getElementConfigsForAddTaskModal() {
     return { wrapper, options, arrow, select, prioContainer, createButton, dateInput, titleInput, clearBtn };
 }
 
+/**
+ * Retrieves DOM element references for the main (non‑modal) add task form.
+ * @returns {{wrapper: HTMLElement|null, options: HTMLElement|null, arrow: HTMLElement|null, select: HTMLElement|null,
+ *           prioContainer: HTMLElement|null, createButton: HTMLElement|null, dateInput: HTMLInputElement|null,
+ *           titleInput: HTMLInputElement|null, clearBtn: HTMLElement|null}}
+ */
 export function getElementConfigsForAddTask() {
     const wrapper = document.querySelector(".form-wrapper");
     const select = document.querySelector("#categorySelect");

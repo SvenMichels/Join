@@ -2,7 +2,7 @@ import { showValidateBubble, setFieldValidity } from "../scripts/auth/Validation
 import { getSubtaskMessage } from "../scripts/auth/validationsmessages.js";
 import { categorySave } from "../board/boardUtils.js";
 import { loadAndRenderUsers } from "./userAssignmentHandler.js";
-import { loadContactData } from "../taskFloatData/userAssignmentManager.js";
+import { loadContactData } from "../taskfloatdata/userAssignmentManager.js";
 
 /**
  * Add Task Form Management
@@ -381,6 +381,7 @@ export async function toggleDropdown(options, wrapper, arrow) {
  * @param {HTMLElement} [options] - Specific options element to close.
  * @param {HTMLElement} [wrapper] - Related wrapper element.
  * @param {HTMLElement} [arrow] - Related arrow element.
+ * @param {HTMLElement} [options] - Specific options element to close.
  */
 export function closeDropdown(options, wrapper, arrow) {
   if (!options) {
@@ -397,6 +398,10 @@ export function closeDropdown(options, wrapper, arrow) {
     arrow.classList.remove("rotated");
   } else {
     resetArrowsBySelectors(ARROW_IDS.map((id) => `#${id}`));
+  }
+
+  if (options.id === "categoryOptions" || options.id === "categoryOptions-modal") {
+    subtaskExpander(false, options);
   }
 }
 

@@ -135,54 +135,76 @@ function getLoginButton() {
   return document.querySelector(".logIn") || document.querySelector(".btn") || null;
 }
 
-function bindLoginInputValidation() {
-  const btn = getLoginButton();
-  const emailInput = document.getElementById("loginEmail");
-  const passwordInput = document.getElementById("loginPassword");
-  if (!btn || !emailInput || !passwordInput) return;
-
-  const updateEmailListener = () => {
-    const pwd = passwordInput.value?.trim() || "";
-    const email = emailInput.value?.trim() || "";
-    if (email.length < 6 && email.length > 0) {
-      showValidateBubble("loginEmail", 'Use 6–64 characters.', "emailHint", 2000);
-    }
-    const enable = email.length >= 6 && pwd.length >= 6;
-    enable ? enableButton(btn) : disableButton(btn);
+function getLoginElements() {
+  return {
+    btn: getLoginButton(),
+    emailInput: document.getElementById("loginEmail"),
+    passwordInput: document.getElementById("loginPassword"),
   };
+}
 
-  const updatePasswordListener = () => {
+function areInputsValid(email, pwd) {
+  return email.length >= 6 && pwd.length >= 6;
+}
 
+function handleEmailInput(emailInput, passwordInput, btn) {
+  return () => {
     const email = emailInput.value?.trim() || "";
     const pwd = passwordInput.value?.trim() || "";
+
+    if (email.length < 6 && email.length > 0) {
+      showValidateBubble("loginEmail", "Use 6–64 characters.", "emailHint", 2000);
+    }
+
+    areInputsValid(email, pwd) ? enableButton(btn) : disableButton(btn);
+  };
+}
+
+function handlePasswordInput(emailInput, passwordInput, btn) {
+  return () => {
+    const email = emailInput.value?.trim() || "";
+    const pwd = passwordInput.value?.trim() || "";
+
     if (pwd.length < 6 && pwd.length > 0) {
       showValidateBubble("loginPassword", "Use 6–32 characters.", "pwHint", 2000);
     }
-    const enable = email.length >= 6 && pwd.length >= 6;
-    enable ? enableButton(btn) : disableButton(btn);
-  };
 
-  const update = () => {
+    areInputsValid(email, pwd) ? enableButton(btn) : disableButton(btn);
+  };
+}
+
+function handleButtonClick(emailInput, passwordInput, btn) {
+  return () => {
     const email = emailInput.value?.trim() || "";
     const pwd = passwordInput.value?.trim() || "";
-    if (btn && email.length === 0) {
-      showValidateBubble("loginEmail", 'Email is required.', "emailHint", 2000);
+
+    if (email.length === 0) {
+      showValidateBubble("loginEmail", "Email is required.", "emailHint", 2000);
     }
-    if (btn && pwd.length === 0) {
-      showValidateBubble("loginPassword", 'Password is required.', "pwHint", 2000);
+    if (pwd.length === 0) {
+      showValidateBubble("loginPassword", "Password is required.", "pwHint", 2000);
     }
-    if (btn && email.length === 0 && pwd.length === 0) {
-      showValidateBubble("loginEmail", 'Email is required.', "emailHint", 2000);
-      showValidateBubble("loginPassword", 'Password is required.', "pwHint", 2000);
+    if (email.length === 0 && pwd.length === 0) {
+      showValidateBubble("loginEmail", "Email is required.", "emailHint", 2000);
+      showValidateBubble("loginPassword", "Password is required.", "pwHint", 2000);
     }
-    const enable = email.length >= 6 && pwd.length >= 6;
-    enable ? enableButton(btn) : disableButton(btn);
+
+    areInputsValid(email, pwd) ? enableButton(btn) : disableButton(btn);
   };
+}
 
+function bindLoginInputValidation() {
+  const { btn, emailInput, passwordInput } = getLoginElements();
+  if (!btn || !emailInput || !passwordInput) return;
 
-  btn.addEventListener("click", update);
+  const updateEmailListener = handleEmailInput(emailInput, passwordInput, btn);
+  const updatePasswordListener = handlePasswordInput(emailInput, passwordInput, btn);
+  const updateOnClick = handleButtonClick(emailInput, passwordInput, btn);
+
+  btn.addEventListener("click", updateOnClick);
   emailInput.addEventListener("input", updateEmailListener);
   passwordInput.addEventListener("input", updatePasswordListener);
+
   updateEmailListener();
   updatePasswordListener();
 }

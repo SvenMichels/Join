@@ -13,7 +13,7 @@ import { getInitials } from "../scripts/utils/helpers.js";
 import { renderTasks } from "./taskRenderer.js";
 import { fetchTasksAndUsers, normalizeTasks,} from "./taskManager.js";
 import { openTaskModal } from "./modalManager.js";
-import { loadContactsForTaskAssignment } from "../contactPage/contactService.js";
+import { loadContactsForTaskAssignment } from "../contactpage/contactService.js";
 import { setupDragAndDrop } from "./dragDropManager.js";
 import { setupSearch } from "./searchManager.js";
 import "./taskDetails.js";

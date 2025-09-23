@@ -15,7 +15,7 @@ import { validateTask, resetFormState, clearValidationAlerts } from "./formManag
 import { initFormAndButtonHandlers } from "./formManagerInit.js";
 import { selectPriority, initPriorityEventListeners } from "./priorityHandler.js";
 import { loadAndRenderUsers, initUserAssignmentList, setupUserSearch, clearSelectedUsers } from "./userAssignmentHandler.js";
-import { loadAndRenderUsersModal, initUserSearchEventListener } from "../taskFloatData/userAssignmentManager.js";
+import { loadAndRenderUsersModal, initUserSearchEventListener } from "../taskfloatdata/userAssignmentManager.js";
 import { addNewSubtask, addSubtaskOnEnterKey, renderSubtasks } from "./subtaskHandler.js";
 import { initInputField } from "../scripts/auth/Validation.js";
 import { collectTaskData } from "./formManagerState.js";
@@ -214,3 +214,7 @@ function clearAllFormData() {
   setupMobileDeviceListeners();
   configureForm();
 }
+
+// HINWEIS: Sicherstellen, dass der Ordnername wirklich komplett klein ist: 'addtask'.
+// Unter Linux sonst Import-Fehler bei: ./formManagerInit.js
+// Nach git mv addTask tmp && git mv tmp addtask diesen Datei-Pfad auch angleichen.

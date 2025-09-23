@@ -1,18 +1,33 @@
+import { loginAsGuest } from "../scripts/auth/login.js";
 import { closeDropdown, subtaskExpander } from "./formManager.js";
 
 /**
- * Expands or collapses the subtask input area
- * @param {boolean} expand - Whether to expand (true) or collapse (false)
- * @param {HTMLElement|null} options - The subtask options element to toggle
-*/
+ * Determines if a dropdown/list element is currently open/visible.
+ * @param {HTMLElement|null} listEl - The element to test.
+ * @returns {boolean} True if open or visible.
+ */
 
 function isOpen(listEl) {
     return !!listEl && (listEl.classList.contains("open") || listEl.classList.contains("visible"));
 }
 
+/**
+ * Checks whether a click target is inside a given element (or the element itself).
+ * @param {EventTarget} target - The click target.
+ * @param {HTMLElement|null} el - The element to test.
+ * @returns {boolean} True if target is the element or contained within it.
+ */
+
 function clickedInside(target, el) {
     return !!el && (el === target || el.contains(target));
 }
+
+/**
+ * Handles outside clicks for the non-modal "Assigned To" dropdown.
+ * Closes the dropdown if the click is outside both the list and its wrapper.
+ * @param {EventTarget} target - The click target.
+ * @returns {void}
+ */
 
 function handleAssignedOutside(target) {
     const wrapper = document.querySelector(".assigned-input-wrapper");
@@ -26,6 +41,13 @@ function handleAssignedOutside(target) {
     if (!insideList && !insideWrapper) closeDropdown(list, wrapper, arrow);
 }
 
+/**
+ * Handles outside clicks for the modal "Assigned To" dropdown.
+ * Closes the dropdown if the click is outside both the list and its wrapper.
+ * @param {EventTarget} target - The click target.
+ * @returns {void}
+ */
+
 function handleAssignedOutsideModal(target) {
     const wrapper = document.querySelector(".assigned-input-wrapper");
     const list = document.getElementById("assignedUserList-modal");
@@ -37,6 +59,14 @@ function handleAssignedOutsideModal(target) {
     const insideWrapper = clickedInside(target, wrapper);
     if (!insideList && !insideWrapper) closeDropdown(list, wrapper, arrow);
 }
+
+/**
+ * Handles outside clicks for the non-modal category dropdown.
+ * Closes and collapses related layout adjustments if click is outside trigger and list.
+ * @param {EventTarget} target - The click target.
+ * @param {HTMLElement} options - Reference options element for layout rollback.
+ * @returns {void}
+ */
 
 function handleCategoryOutside(target, options) {
     const select = document.getElementById("categorySelect");
@@ -53,6 +83,14 @@ function handleCategoryOutside(target, options) {
     }
 }
 
+/**
+ * Handles outside clicks for the modal category dropdown.
+ * Closes and collapses related layout adjustments if click is outside trigger and list.
+ * @param {EventTarget} target - The click target.
+ * @param {HTMLElement} options - Reference options element for layout rollback.
+ * @returns {void}
+ */
+
 function handleCategoryOutsideModal(target, options) {
     const select = document.getElementById("category-modal");
     const list = document.getElementById("categoryOptions-modal");
@@ -67,6 +105,13 @@ function handleCategoryOutsideModal(target, options) {
         subtaskExpander(false, options);
     }
 }
+
+/**
+ * Sets up a single global outside-click listener (idempotent)
+ * that closes any open category or assigned-user dropdowns (modal and non-modal).
+ * @param {HTMLElement} options - The options element used for subtask expander rollback.
+ * @returns {void}
+ */
 
 export function setupGlobalOutsideClick(options) {
     if (document.body.dataset.outsideGlobalBound === "true") return;

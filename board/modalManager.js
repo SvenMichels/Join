@@ -129,5 +129,4 @@ export function openTaskModal(isEdit = false, task = null) {
     });
 }
 
-// Make function globally available
 window.openTaskModal = openTaskModal;

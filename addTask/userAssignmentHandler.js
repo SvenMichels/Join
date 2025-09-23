@@ -7,7 +7,7 @@
 import { getUserCheckboxTemplate } from "./addtasktemplates.js";
 import { getInitials } from "../scripts/utils/helpers.js";
 import { createRemainingChip } from "../board/boardUtils.js";
-import { clearSelectedUserNamesModal } from "../taskFloatData/userAssignmentManager.js";
+import { clearSelectedUserNamesModal } from "../taskfloatdata/userAssignmentManager.js";
 import { fetchContactsListForAssignment } from "../scripts/firebase.js";
 
 let allSystemUsers = [];

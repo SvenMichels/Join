@@ -1,6 +1,6 @@
 import { getSubtaskHTML, getEditableSubtaskTemplate } from "./taskfloatHTML.js";
 import { initInputField } from "../scripts/auth/Validation.js";
-import { validateSubtaskBeforeSave } from "../addTask/formManager.js";
+import { validateSubtaskBeforeSave } from "../addtask/formManager.js";
 
 let subtaskItemsListModal = [];
 let completedSubtasksModal = [];

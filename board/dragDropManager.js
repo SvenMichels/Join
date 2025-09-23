@@ -308,14 +308,13 @@ function initializationDropdownButton() {
     const match = btn.id && btn.id.match(/^moveDropdownBtn-(.+)$/);
     if (match) {
       const taskId = match[1];
-      // Fix: richtige ID (kleines m)
       const dropdown = document.getElementById(`moveDropdown-${taskId}`);
       if (dropdown) {
         btn.addEventListener("click", (e) => {
           e.preventDefault();
           e.stopPropagation();
           toggleDropdown(e, dropdown);
-        }, { once: true }); // doppelte Bindung vermeiden
+        }, { once: true });
       }
     }
   });
