@@ -249,3 +249,11 @@ select {
 .expender {
   margin-bottom: 100px;
 }
+
+.expender-container-assigned {
+  margin-top: 100px;
+}
+
+.expender-container-category {
+  margin-top: 100px;
+}

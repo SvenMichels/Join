@@ -37,13 +37,32 @@ export function getCategoryIcon(categoryType) {
   return `../assets/icons/${iconFileName}`;
 }
 
+/**
+ * Converts a stored category key into a readable string.
+ *
+ * @description
+ * Takes a category key (e.g. "to_do") and transforms it into a 
+ * human-readable string (e.g. "to do").
+ *
+ * @param {string} key - The category key to format.
+ * @returns {string} A trimmed, readable version of the category.
+ */
 export function categoryLoad(key) {
   return String(key)
     .trim()
     .replace(/_/g, " ");
 }
 
-
+/**
+ * Converts a category string into a storable key.
+ *
+ * @description
+ * Takes a category name (e.g. "to do") and transforms it into a 
+ * normalized key format (e.g. "to_do").
+ *
+ * @param {string} key - The category name to convert.
+ * @returns {string} A trimmed, normalized category key.
+ */
 export function categorySave(key) {
   return String(key)
     .trim()
@@ -194,6 +213,13 @@ export function removeUserFromTaskAssignments(tasks, deletedUserName) {
   return updatedTasks;
 }
 
+/**
+ * Removes a specific user from the assigned users of a task.
+ *
+ * @param {Object} task - The task object containing assigned users.
+ * @param {string} deletedUserName - The name of the user to remove.
+ * @returns {Object} A new task object with the updated assigned users list.
+ */
 function removeUserFromTask(task, deletedUserName) {
   const users = toArray(task.assignedUsers || []);
   const filteredUsers = users.filter(user => !isSameUser(user, deletedUserName));
@@ -203,6 +229,13 @@ function removeUserFromTask(task, deletedUserName) {
   };
 }
 
+/**
+ * Checks if a given user matches the provided name.
+ *
+ * @param {any} user - The user entry to check.
+ * @param {string} nameToCompare - The name to compare against.
+ * @returns {boolean} True if the user matches the given name, otherwise false.
+ */
 function isSameUser(user, nameToCompare) {
   return extractUserName(user) === nameToCompare;
 }
@@ -226,10 +259,10 @@ function isSameUser(user, nameToCompare) {
  */
 export function bindOutsideClickToClose(container) {
   if (window.outsideClickHandlerBound) return;
-  
+
   window.outsideClickHandlerBound = true;
-  
-  document.addEventListener('click', function(event) {
+
+  document.addEventListener('click', function (event) {
     if (!container.contains(event.target)) {
       container.classList.remove('open');
     }

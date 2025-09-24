@@ -101,9 +101,7 @@ export async function fetchContactsListForAssignment() {
     userInitials: u.userInitials || (u.userFullName ? u.userFullName.split(" ").map(p => p[0]).join("").toUpperCase() : ""),
     firstCharacter: (u.userFullName || "?").charAt(0).toUpperCase(),
     userColor: u.userColor || "color-1",
-    // userPassword bewusst nicht benötigt für AssignedTo
   }));
-  // Nach Name sortieren
   list.sort((a, b) => a.userFullName.localeCompare(b.userFullName));
   return list;
 }

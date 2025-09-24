@@ -303,17 +303,28 @@ export function updateSwitchButtonVisibility() {
   });
 }
 
+/**
+ * Initializes dropdown toggle buttons for task movement.
+ * 
+ * @description 
+ * Searches for all elements with the class `.switchPositionBtn`, extracts their
+ * associated task ID from the button ID (`moveDropdownBtn-{taskId}`), and binds
+ * a click event listener to toggle the corresponding dropdown menu.
+ * 
+ * @function initializationDropdownButton
+ * @returns {void} Nothing is returned.
+ */
 function initializationDropdownButton() {
-  document.querySelectorAll(".switchPositionBtn").forEach(btn => {
-    const match = btn.id && btn.id.match(/^moveDropdownBtn-(.+)$/);
+  document.querySelectorAll(".switchPositionBtn").forEach(button => {
+    const match = button.id && button.id.match(/^moveDropdownBtn-(.+)$/);
     if (match) {
       const taskId = match[1];
       const dropdown = document.getElementById(`moveDropdown-${taskId}`);
       if (dropdown) {
-        btn.addEventListener("click", (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          toggleDropdown(e, dropdown);
+        button.addEventListener("click", (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          toggleDropdown(event, dropdown);
         }, { once: true });
       }
     }

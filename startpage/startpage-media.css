@@ -8,7 +8,7 @@
   }
 
   .mainContent {
-    gap: 40px;
+    gap: 1.5rem;
   }
 
   .last-name {
@@ -29,7 +29,7 @@
     text-align: center;
   }
 
-    .mainContent {
+  .mainContent {
     gap: 20px;
   }
 }
@@ -133,6 +133,6 @@
   }
 
   .btn {
-  max-height: 116px;
-}
+    max-height: 116px;
+  }
 }

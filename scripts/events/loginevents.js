@@ -266,7 +266,6 @@ function handleButtonClick(emailInput, passwordInput, btn) {
   return () => {
     const email = emailInput.value?.trim() || "";
     const pwd = passwordInput.value?.trim() || "";
-
     if (email.length === 0) {
       showValidateBubble("loginEmail", "Email is required.", "emailHint", 2000);
     }
@@ -277,7 +276,6 @@ function handleButtonClick(emailInput, passwordInput, btn) {
       showValidateBubble("loginEmail", "Email is required.", "emailHint", 2000);
       showValidateBubble("loginPassword", "Password is required.", "pwHint", 2000);
     }
-
     areInputsValid(email, pwd) ? enableButton(btn) : disableButton(btn);
   };
 }

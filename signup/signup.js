@@ -15,6 +15,10 @@ if (window.location.pathname.endsWith("signup.html")) {
   }
 }
 
+/**
+ * Initializes the signup page functionality
+ * @returns {void}
+ */
 function initSignup() {
   cacheDom();
   initFields();
@@ -22,11 +26,19 @@ function initSignup() {
   checkFormValidity();
 }
 
+/**
+ * Caches DOM elements for later use
+ * @returns {void}
+ */
 function cacheDom() {
   signUpSubmitButton = document.getElementById("signUpBtn");
   privacyPolicyCheckbox = document.getElementById("checkBox");
 }
 
+/**
+ * Initializes input field validation and event listeners
+ * @returns {void}
+ */
 function initFields() {
   initInputField("inputName", "nameHint", "name");
   initInputField("inputEmail", "emailHint", "email");
@@ -40,6 +52,10 @@ function initFields() {
   privacyPolicyCheckbox?.addEventListener("change", checkFormValidity);
 }
 
+/**
+ * Sets up event listeners for the signup form
+ * @returns {Promise<void>} Promise that resolves when listeners are bound
+ */
 export async function signupListeners() {
   const form = document.getElementById("signUpForm");
   if (!form) return;
@@ -54,6 +70,12 @@ export async function signupListeners() {
   checkFormValidity();
 }
 
+/**
+ * Toggles password visibility for a given input field
+ * @param {string} inputId - ID of the password input field
+ * @param {string} iconId - ID of the toggle icon element
+ * @returns {void}
+ */
 export function togglePassword(inputId, iconId) {
   const hiddenPassword = document.getElementById(inputId);
   const toggleHiddenIcon = document.getElementById(iconId);
@@ -69,6 +91,13 @@ export function togglePassword(inputId, iconId) {
   toggleHiddenIcon.dataset.toggleBound = "true";
 }
 
+/**
+ * Handles the actual password type toggle functionality
+ * @param {Event} e - Click event
+ * @param {HTMLInputElement} hiddenPassword - Password input element
+ * @param {HTMLElement} toggleHiddenIcon - Toggle icon element
+ * @returns {void}
+ */
 function hidePasswordType(e, hiddenPassword, toggleHiddenIcon) {
   e.preventDefault();
   const hidden = hiddenPassword.type === "password";
@@ -78,6 +107,11 @@ function hidePasswordType(e, hiddenPassword, toggleHiddenIcon) {
     : "../assets/icons/visibility_off.svg";
 }
 
+/**
+ * Handles form submission for user signup
+ * @param {Event} event - Form submission event
+ * @returns {Promise<void>} Promise that resolves when submission is complete
+ */
 export async function handleSignupSubmission(event) {
   event?.preventDefault();
   if (signUpSubmitButton?.disabled) return;
@@ -89,6 +123,10 @@ export async function handleSignupSubmission(event) {
   await submitUser();
 }
 
+/**
+ * Collects and validates user input from the form
+ * @returns {Promise<Object>} Promise that resolves to user data object
+ */
 export async function collectUserInput() {
   const userFullName = getTrimmedInputValue("inputName");
   const userEmail = getTrimmedInputValue("inputEmail");
@@ -106,14 +144,28 @@ export async function collectUserInput() {
   };
 }
 
+/**
+ * Gets trimmed value from an input element by ID
+ * @param {string} id - Element ID
+ * @returns {string} Trimmed input value or empty string
+ */
 export function getTrimmedInputValue(id) {
   return document.getElementById(id)?.value.trim() || "";
 }
 
+/**
+ * Gets the first character of a name, capitalized
+ * @param {string} name - Name to extract first character from
+ * @returns {string} First character capitalized or "?" if empty
+ */
 export function getFirstCharacter(name) {
   return name ? name.charAt(0).toUpperCase() : "?";
 }
 
+/**
+ * Submits user data and shows success feedback
+ * @returns {Promise<void>} Promise that resolves when submission is complete
+ */
 export async function submitUser() {
   const feedback = document.getElementById("userFeedback");
   if (!feedback) return;
@@ -129,6 +181,10 @@ export async function submitUser() {
   }, { once: true });
 }
 
+/**
+ * Gets validation status for all form input fields
+ * @returns {Object} Object containing validation states for all inputs
+ */
 function getFormValidationInputs() {
   const isNameValid = confirmInputForFormValidation("inputName", "nameHint");
   const isEmailValid = confirmInputForFormValidation("inputEmail", "emailHint");
@@ -148,6 +204,10 @@ function getFormValidationInputs() {
   };
 }
 
+/**
+ * Validates the entire form including password matching
+ * @returns {Object} Object containing overall form validation state
+ */
 function getFormValidation() {
   const { isNameValid, isEmailValid, isPasswordValid, isPasswordConfirmValid, isPrivacyChecked, passwordValue, passwordConfirmValue } = getFormValidationInputs();
   const doPasswordsMatch = checkPasswordForMatch("pwCheckHint", passwordValue, passwordConfirmValue, isPrivacyChecked);
@@ -161,6 +221,11 @@ function getFormValidation() {
   };
 }
 
+/**
+ * Updates submit button state based on form validity
+ * @param {boolean} isFormValid - Whether the form is valid
+ * @returns {void}
+ */
 function updateSubmitButton(isFormValid) {
   if (!signUpSubmitButton) return;
   signUpSubmitButton.disabled = !isFormValid;
@@ -169,6 +234,10 @@ function updateSubmitButton(isFormValid) {
   signUpSubmitButton.style.cursor = isFormValid ? "pointer" : "not-allowed";
 }
 
+/**
+ * Checks overall form validity and updates UI accordingly
+ * @returns {boolean} True if form is valid, false otherwise
+ */
 export function checkFormValidity() {
   const state = getFormValidation();
   const isFormValid =
@@ -183,6 +252,10 @@ export function checkFormValidity() {
   return isFormValid;
 }
 
+/**
+ * Gets password and confirmation password elements
+ * @returns {Object} Object containing password elements
+ */
 function getPasswordElements() {
   return {
     passwordEl: document.getElementById("inputPassword"),
@@ -190,6 +263,13 @@ function getPasswordElements() {
   };
 }
 
+/**
+ * Handles UI when password is too short
+ * @param {boolean} isPrivacyChecked - Whether privacy checkbox is checked
+ * @param {string} bubbleId - ID of validation bubble
+ * @param {HTMLElement} confirmEl - Password confirmation element
+ * @returns {boolean} Always returns false
+ */
 function handleTooShort(isPrivacyChecked, bubbleId, confirmEl) {
   setFieldValidity("inputConfirmPassword", false);
   if (!isPrivacyChecked && confirmEl) {
@@ -200,6 +280,14 @@ function handleTooShort(isPrivacyChecked, bubbleId, confirmEl) {
   return false;
 }
 
+/**
+ * Applies UI changes when privacy checkbox is checked
+ * @param {HTMLElement} passwordEl - Password input element
+ * @param {HTMLElement} confirmEl - Password confirmation element
+ * @param {boolean} match - Whether passwords match
+ * @param {string} bubbleId - ID of validation bubble
+ * @returns {boolean} Whether passwords match
+ */
 function applyPrivacyCheckedUI(passwordEl, confirmEl, match, bubbleId) {
   hideValidateBubble(bubbleId);
   setFieldClass(passwordEl, true);
@@ -207,18 +295,40 @@ function applyPrivacyCheckedUI(passwordEl, confirmEl, match, bubbleId) {
   return match;
 }
 
+/**
+ * Shows UI feedback when passwords match
+ * @param {HTMLElement} passwordEl - Password input element
+ * @param {HTMLElement} confirmEl - Password confirmation element
+ * @param {string} bubbleId - ID of validation bubble
+ * @returns {void}
+ */
 function showMatchFlow(passwordEl, confirmEl, bubbleId) {
   showValidateBubble("inputConfirmPassword", "Password Matches", bubbleId, 3000);
   setFieldClass(passwordEl, true);
   setFieldClass(confirmEl, true);
 }
 
+/**
+ * Shows UI feedback when passwords don't match
+ * @param {HTMLElement} passwordEl - Password input element
+ * @param {HTMLElement} confirmEl - Password confirmation element
+ * @param {string} bubbleId - ID of validation bubble
+ * @returns {void}
+ */
 function showMismatchFlow(passwordEl, confirmEl, bubbleId) {
   showValidateBubble("inputConfirmPassword", "Passwords do not match", bubbleId, 3000);
   setFieldClass(passwordEl, true);
   setFieldClass(confirmEl, false);
 }
 
+/**
+ * Checks if passwords match and updates UI accordingly
+ * @param {string} bubbleId - ID of validation bubble
+ * @param {string} passwordValue - Password value
+ * @param {string} passwordConfirmValue - Password confirmation value
+ * @param {boolean} isPrivacyChecked - Whether privacy checkbox is checked
+ * @returns {boolean} Whether passwords match
+ */
 function checkPasswordForMatch(bubbleId, passwordValue, passwordConfirmValue, isPrivacyChecked) {
   const { passwordEl, confirmEl } = getPasswordElements();
   const okLength = passwordValue.length >= 6 && passwordConfirmValue.length >= 6;
@@ -238,7 +348,12 @@ function checkPasswordForMatch(bubbleId, passwordValue, passwordConfirmValue, is
   return match;
 }
 
-
+/**
+ * Sets CSS classes for field validation styling
+ * @param {HTMLElement} el - Element to style
+ * @param {boolean} isValid - Whether field is valid
+ * @returns {void}
+ */
 function setFieldClass(el, isValid) {
   if (!el) return;
   el.classList.toggle("validate-border-blue", !!isValid);

@@ -105,8 +105,6 @@ export function resetFormState() {
   subtaskItemsList = [];
 }
 
-
-
 /**
  * Validates task data to ensure required fields are present.
  *
@@ -307,6 +305,7 @@ function closeAssignedIfOpen(idRef) {
  * @param {string} idRef - Context id.
  */
 function closeCategoryIfOpen(idRef) {
+  console.log("closeCategoryIfOpen", idRef);
   const { list, wrapper, arrow } = getCategoryFrom(idRef);
   if (isOpenEl(list)) closeDropdown(list, wrapper, arrow);
 }
@@ -339,6 +338,11 @@ function applyToggle(options, wrapper, arrow) {
   return isOpen;
 }
 
+function toggleExpender() {
+  document.querySelector(".create-container-modal").classList.toggle("expender-container-assigned");
+}
+
+
 /**
  * Lazily loads user data depending on dropdown id (normal vs modal).
  * @param {HTMLElement} options - Options list element.
@@ -365,13 +369,9 @@ async function lazyLoadUsers(options) {
  */
 export async function toggleDropdown(options, wrapper, arrow) {
   if (!options) return;
-
   ensureOthersClosed(options);
-
   const isOpen = applyToggle(options, wrapper, arrow);
-
   subtaskExpander(isOpen, options);
-
   if (!isOpen) return;
   await lazyLoadUsers(options);
 }
@@ -390,16 +390,13 @@ export function closeDropdown(options, wrapper, arrow) {
     resetArrowsById(ARROW_IDS);
     return;
   }
-
   options.classList.remove("open", "visible");
   wrapper?.classList.remove("expanded");
-
   if (arrow) {
     arrow.classList.remove("rotated");
   } else {
     resetArrowsBySelectors(ARROW_IDS.map((id) => `#${id}`));
   }
-
   if (options.id === "categoryOptions" || options.id === "categoryOptions-modal") {
     subtaskExpander(false, options);
   }
