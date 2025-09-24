@@ -94,7 +94,7 @@ let hasFadedGreeting = false;
 export function handleMobileGreetingFadeEffect() {
   if (hasFadedGreeting) return;
 
-  if (window.innerWidth < 767) {
+  if (window.innerWidth < 768) {
     const greetings = document.querySelector(".greetings");
     if (greetings) {
       setTimeout(() => {
@@ -104,3 +104,7 @@ export function handleMobileGreetingFadeEffect() {
     }
   }
 }
+
+document.addEventListener("resize", () => {
+  handleMobileGreetingFadeEffect();
+});

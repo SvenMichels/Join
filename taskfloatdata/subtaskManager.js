@@ -309,26 +309,23 @@ function replaceWithEditTemplate(item, index) {
  */
 function bindOutsideClickToClose(containerEl, inputEl, index) {
   if (outsideClickHandlerBound) return;
-
   const onDocClick = (e) => {
     if (containerEl.contains(e.target)) return;
-
     const val = inputEl?.value?.trim() || "";
     if (val && validateSubtaskBeforeSave(inputEl, "subtaskEditModalHint")) {
       subtaskItemsListModal[index] = val;
     }
-
     exitEditMode();
     document.removeEventListener("click", onDocClick, true);
     outsideClickHandlerBound = false;
     renderSubtasksModal();
   };
-  setTimeout(() => document.addEventListener("click", onDocClick, true), 0);
+  setTimeout(() => document.addEventListener("click", onDocClick, true), 100);
   outsideClickHandlerBound = true;
   unbindOutsideClick = () => {
     document.removeEventListener("click", onDocClick, true);
     outsideClickHandlerBound = false;
-    unbindOutsideClick = () => {};
+    unbindOutsideClick = () => { };
   };
 }
 
@@ -422,7 +419,7 @@ export function updateSubtasks(subtasks = [], subtaskDone = []) {
 }
 
 /** Function to unbind the outside click handler (set dynamically). */
-let unbindOutsideClick = () => {};
+let unbindOutsideClick = () => { };
 
 /**
  * Creates the completion list in correct length (fallback: false).

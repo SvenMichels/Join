@@ -57,7 +57,10 @@ function handleAssignedOutsideModal(target) {
 
     const insideList = clickedInside(target, list);
     const insideWrapper = clickedInside(target, wrapper);
-    if (!insideList && !insideWrapper) closeDropdown(list, wrapper, arrow);
+    if (!insideList && !insideWrapper) {
+        closeDropdown(list, wrapper, arrow)
+        document.querySelector(".required-container-modal").classList.toggle("d-none");
+    }
 }
 
 /**

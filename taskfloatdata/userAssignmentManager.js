@@ -250,6 +250,15 @@ function createUserChip(userOrName) {
   return chip;
 }
 
+function toggleExpender(list) {
+  if (!list) {
+    document.querySelector(".required-container-modal").classList.toggle("expender-container-assigned");
+  } else {
+    document.querySelector(".required-container-modal").classList.toggle("d-none");
+  }
+}
+
+
 /**
  * Toggles the visibility of the user selection list and rotates the dropdown icon.
  * @description Shows or hides the user assignment dropdown and updates the arrow icon state
@@ -260,7 +269,7 @@ export function toggleUserListModal(event) {
   event.preventDefault();
   const list = document.getElementById("assignedUserList-modal");
   const assignImg = document.getElementById("assignedBtnImg-modal");
-
+  toggleExpender(list);
   toggleListVisibility(list, assignImg);
 }
 

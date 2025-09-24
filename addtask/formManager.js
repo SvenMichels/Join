@@ -305,7 +305,6 @@ function closeAssignedIfOpen(idRef) {
  * @param {string} idRef - Context id.
  */
 function closeCategoryIfOpen(idRef) {
-  console.log("closeCategoryIfOpen", idRef);
   const { list, wrapper, arrow } = getCategoryFrom(idRef);
   if (isOpenEl(list)) closeDropdown(list, wrapper, arrow);
 }
@@ -337,11 +336,6 @@ function applyToggle(options, wrapper, arrow) {
   wrapper?.classList.toggle("expanded", isOpen);
   return isOpen;
 }
-
-function toggleExpender() {
-  document.querySelector(".create-container-modal").classList.toggle("expender-container-assigned");
-}
-
 
 /**
  * Lazily loads user data depending on dropdown id (normal vs modal).

@@ -4,6 +4,7 @@
     width: 100%;
     align-items: center;
   }
+
   .task-container-modal {
     width: 100%;
     display: flex;
@@ -63,6 +64,7 @@
     margin-top: 50px;
   }
 }
+
 @media (min-width: 992px) and (max-width: 1199px) {
   .form-wrapper-modal {
     max-width: 960px;
@@ -105,6 +107,7 @@
     width: 90%;
   }
 }
+
 @media (min-width: 1200px) {
   .form-wrapper-modal {
     max-width: 960px;
@@ -147,4 +150,8 @@
     left: 50px;
     width: 90%;
   }
+}
+
+.expender-container-assigned {
+  margin-top: 224px;
 }
