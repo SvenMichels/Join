@@ -68,7 +68,10 @@
     background: white;
     z-index: 9999;
     will-change: opacity, transform;
-    transition: opacity 1s ease-out, transform 1s ease-out;
+    transition-property: opacity, transform;
+    transition-duration: 1.2s, 1.5s;
+    transition-timing-function: ease-out, ease-out;
+    transition-delay: 1s, 1s;
     transform: translateY(0);
   }
 
