@@ -405,16 +405,18 @@ export function closeDropdown(options, wrapper, arrow) {
 export function subtaskExpander(isOpen, options) {
   const buttonContainer = document.querySelector(".required-container-modal");
   const subContainer = document.querySelector(".prio-subtask-container");
+  
+  if (!isOpen) {
+    buttonContainer.classList.remove("d-none");
+  } else {
+    buttonContainer.classList.add("d-none");
+  }
   if (!subContainer) return;
 
   const shouldExpand = isOpen &&
     (options.id === "categoryOptions" || options.id === "categoryOptions-modal");
 
   subContainer.classList.toggle("container-margin", shouldExpand);
-  
-  if (window.matchMedia("(min-width: 991px)").matches) {
-    buttonContainer.classList.toggle("d-none");
-  }
 }
 
 /**

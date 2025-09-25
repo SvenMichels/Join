@@ -23,15 +23,15 @@
 
 <body>
   <div id="formWrapper" class="form-wrapper-modal">
-    <div class="task-h1-container-modal">
+    <div class="form-container-modal">
+      <form class="task-container-modal" id="taskForm-modal">
+            <div class="task-h1-container-modal">
       <h1 id="modalTitle">Edit Task</h1>
       <button class="close-button-modal" aria-label="Close">
         <img class="icon" src="../assets/icons/close.svg" alt="Close icon" />
       </button>
     </div>
-
-    <div class="form-container-modal">
-      <form class="task-container-modal" id="taskForm-modal">
+    <div class="modal-content">
         <div class="task-wrapper-modal">
           <div class="task-title">
             <label for="task-title-modal">Title <span class="color-red">*</span></label>
@@ -40,7 +40,6 @@
             <div style="position: relative; display: flex;">
               <div id="titelModalHint" class="hint-bubble"></div>
             </div>
-
           </div>
 
 
@@ -53,8 +52,6 @@
             </div>
           </div>
 
-
-
           <div class="task-date">
             <label for="task-date-modal">Due Date <span class="color-red">*</span></label>
             <input class="task-dateInput" name="taskDate" id="task-date-modal" placeholder="dd/mm/yyyy" type="date" />
@@ -62,15 +59,14 @@
               <div id="task-date-modal-Hint" class="hint-bubble"></div>
             </div>
           </div>
-
-
         </div>
 
         <div class="space-container"></div>
 
         <div class="prio-container-modal">
           <div class="prio-content">
-            <div id="taskPriorityButtons">Priority
+            <p>Priority</p>
+            <div id="taskPriorityButtons">
               <div class="prio-button-container">
                 <button type="button" id="urgent-task-modal" class="prioButtons">
                   Urgent
@@ -141,24 +137,25 @@
                 <div id="subtaskEditModalHint" class="hint-bubble"></div>
               </div>
             </div>
-            <div class="required-container-modal">
-              <div>
-                <span class="color-red">*</span>
+          </div>
+          </div>
+        </div>
+        <div class="required-wrapper-modal">
+          <div class="required-container-modal">
+            <div>
+              <span class="color-red">*</span>
                 <span>This field is required</span>
-              </div>
-              <div class="create-container-modal">
-                <button class="clear-button" id="clearBtn-modal" type="reset">
-                  Clear <img alt="Clear icon" src="../assets/icons/iconoir_cancel.svg" />
-                </button>
-                <button class="create-button" type="submit">
-                  Create Task <img alt="Create icon" src="../assets/icons/create_check.svg" />
-                </button>
-              </div>
+            </div>
+            <div class="create-container-modal">
+              <button class="clear-button" id="clearBtn-modal" type="reset">
+                Clear <img alt="Clear icon" src="../assets/icons/iconoir_cancel.svg" />
+              </button>
+              <button class="create-button" type="submit">
+                Create Task <img alt="Create icon" src="../assets/icons/create_check.svg" />
+              </button>
             </div>
           </div>
-
         </div>
-
       </form>
     </div>
   </div>

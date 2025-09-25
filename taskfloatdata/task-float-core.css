@@ -86,17 +86,18 @@
   display: none;
 }
 
-input:invalid+.error-message {
+input:invalid + .error-message {
   display: block;
 }
 
-input:valid+.error-message {
+input:valid + .error-message {
   display: none;
 }
 
 .prio-assigned-container {
   display: flex;
   flex-direction: column;
+  width: 100%;
   gap: 8px;
   height: auto;
 }
@@ -120,6 +121,7 @@ input:valid+.error-message {
 .prio-subtask-container {
   display: flex;
   flex-direction: column;
+  width: 100%;
   gap: 8px;
   max-height: 200px;
 }
@@ -201,7 +203,7 @@ input:valid+.error-message {
   transform: rotate(180deg);
 }
 
-.assigned-user-list.visible~.assigned-container .dropdown-arrow {
+.assigned-user-list.visible ~ .assigned-container .dropdown-arrow {
   transform: rotate(180deg);
 }
 
@@ -238,7 +240,8 @@ textarea:focus {
 select {
   -webkit-appearance: none;
   -moz-appearance: none;
-  background: url(../assets/icons/arrow_drop_down.svg) no-repeat right 0.75rem center;
+  background: url(../assets/icons/arrow_drop_down.svg) no-repeat right 0.75rem
+    center;
   background-size: 1rem;
 }
 
@@ -250,3 +253,6 @@ select {
   margin-bottom: 100px;
 }
 
+#taskPriorityButtons {
+  width: 100%;
+}

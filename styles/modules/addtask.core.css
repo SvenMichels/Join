@@ -41,8 +41,10 @@
 .prio-content {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
   gap: 8px;
-  height: 88px;
+  max-height: 580px;
 }
 
 .prio-button-container {
@@ -60,6 +62,7 @@
 .prio-category-container {
   display: flex;
   flex-direction: column;
+  width: 100%;
   gap: 8px;
   height: 80px;
 }
@@ -124,4 +127,10 @@ input:valid+.error-message {
 
 .user-info-wrapper label {
   cursor: pointer;
+}
+
+.modal-content {
+  display: flex;
+  width: 100%;
+  gap: 23px;
 }

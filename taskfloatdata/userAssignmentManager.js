@@ -261,7 +261,7 @@ function setAssignedListState(list, isVisible) {
   toggleExpender(list, isVisible);
 }
 
-function toggleExpender(list, isVisibleOverride) {
+function toggleExpender(list, isVisibleOverride) {    
   const required = document.querySelector(".required-container-modal");
   if (!required) return;
   const shouldHideButtons =
@@ -270,7 +270,9 @@ function toggleExpender(list, isVisibleOverride) {
       : list
         ? list.classList.contains("visible")
         : true;
-
+  if (shouldHideButtons === true) {
+    required.classList.toggle("d-none", shouldHideButtons);
+  }
   if (window.matchMedia("(min-width: 991px)").matches) {
     required.classList.toggle("d-none", shouldHideButtons);
   }

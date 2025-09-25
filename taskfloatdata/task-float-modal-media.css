@@ -5,6 +5,19 @@
     align-items: center;
   }
 
+  .required-container-modal,
+  .task-h1-container-modal {
+    max-width: 600px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+  .modal-content,
+  .required-container-modal {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
   .task-container-modal {
     width: 100%;
     display: flex;
@@ -15,11 +28,19 @@
   .prio-container-modal {
     display: flex;
     flex-direction: column;
+    align-items: center;
     max-height: 382px;
     width: 100%;
     max-width: 600px;
     justify-content: space-between;
     gap: 30px;
+  }
+
+  .required-wrapper-modal {
+    display: flex;
+    align-items: flex-end;
+    width: 100%;
+    height: 196px;
   }
 }
 
@@ -30,12 +51,38 @@
     flex-direction: column;
     align-items: center;
   }
+
+  .required-container-modal,
+  .task-h1-container-modal {
+    max-width: 600px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .modal-content,
+  .required-container-modal {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .required-container-modal {
+    align-items: flex-start;
+  }
+
+  .required-wrapper-modal {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    width: 100%;
+    height: 196px;
+  }
 }
 
 @media (min-width: 768px) and (max-width: 991px) {
   .form-wrapper-modal {
     max-width: 80%;
-    height: 80vh;
+    height: 72vh;
   }
 
   .task-container-modal {
@@ -45,12 +92,38 @@
     gap: 16px;
     width: 100%;
   }
+
+  .required-container-modal,
+  .task-h1-container-modal {
+    max-width: 600px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .modal-content,
+  .required-container-modal {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .required-container-modal {
+    align-items: flex-start;
+  }
+
+  .required-wrapper-modal {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    width: 100%;
+    height: 196px;
+  }
 }
 
 @media (min-width: 992px) and (max-width: 1199px) {
   .form-wrapper-modal {
     max-width: 960px;
-    height: 73vh;
+    height: 85vh;
   }
 
   .form-container-modal {
@@ -61,6 +134,7 @@
 
   .task-container-modal {
     display: flex;
+    flex-direction: column;
     gap: 16px;
     width: 100%;
     margin: 0 auto;
@@ -83,17 +157,22 @@
   }
 
   .required-container-modal {
-    position: absolute;
-    bottom: 0;
-    left: 50px;
-    width: 90%;
+    margin-top: 100px;
   }
 }
 
 @media (min-width: 1200px) {
   .form-wrapper-modal {
     max-width: 960px;
-    height: 73vh;
+    height: 85vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .modal-content {
+    display: flex;
+    width: 100%;
+    gap: 23px;
   }
 
   .form-container-modal {
@@ -105,6 +184,7 @@
 
   .task-container-modal {
     display: flex;
+    flex-direction: column;
     gap: 16px;
     width: 100%;
     margin: 0 auto;
@@ -127,11 +207,7 @@
   }
 
   .required-container-modal {
-    position: absolute;
-    bottom: 0;
-    margin-top: 50px;
-    left: 50px;
-    width: 90%;
+    margin-top: 100px;
   }
 }
 
