@@ -403,6 +403,7 @@ export function closeDropdown(options, wrapper, arrow) {
  * @param {HTMLElement} options - Options element triggering the expansion.
  */
 export function subtaskExpander(isOpen, options) {
+  const buttonContainer = document.querySelector(".required-container-modal");
   const subContainer = document.querySelector(".prio-subtask-container");
   if (!subContainer) return;
 
@@ -410,6 +411,10 @@ export function subtaskExpander(isOpen, options) {
     (options.id === "categoryOptions" || options.id === "categoryOptions-modal");
 
   subContainer.classList.toggle("container-margin", shouldExpand);
+  
+  if (window.matchMedia("(min-width: 991px)").matches) {
+    buttonContainer.classList.toggle("d-none");
+  }
 }
 
 /**

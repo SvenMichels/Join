@@ -270,8 +270,10 @@ function toggleExpender(list, isVisibleOverride) {
       : list
         ? list.classList.contains("visible")
         : true;
-  // required.classList.toggle("d-none", shouldHideButtons);
-  // required.classList.toggle("expender-container-assigned", shouldHideButtons);
+
+  if (window.matchMedia("(min-width: 991px)").matches) {
+    required.classList.toggle("d-none", shouldHideButtons);
+  }
 }
 
 export function toggleUserListModal(event) {
