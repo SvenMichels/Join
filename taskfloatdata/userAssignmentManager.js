@@ -270,7 +270,7 @@ function toggleExpender(list, isVisibleOverride) {
       : list
         ? list.classList.contains("visible")
         : true;
-  required.classList.toggle("d-none", shouldHideButtons);
+  // required.classList.toggle("d-none", shouldHideButtons);
   // required.classList.toggle("expender-container-assigned", shouldHideButtons);
 }
 
