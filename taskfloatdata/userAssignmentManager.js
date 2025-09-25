@@ -9,6 +9,7 @@ import { createRemainingChip } from "../board/boardUtils.js";
 import { getInitials } from "../scripts/utils/helpers.js";
 import { fetchContactsListForAssignment } from "../scripts/firebase.js";
 import { initFormAndButtonHandlers } from "../addtask/formManagerInit.js";
+import { setupUserSearch } from "../addtask/userAssignmentHandler.js";
 
 let allSystemUsersModal = [];
 const selectedUserNamesModal = new Set();
@@ -250,116 +251,65 @@ function createUserChip(userOrName) {
   return chip;
 }
 
-function toggleExpender(list) {
-  if (!list) {
-    document.querySelector(".required-container-modal").classList.toggle("expender-container-assigned");
-  } else {
-    document.querySelector(".required-container-modal").classList.toggle("d-none");
-  }
+function setAssignedListState(list, isVisible) {
+  if (!list) return;
+  const assignImg = document.getElementById("assignedBtnImg-modal");
+  const backgroundElement = document.getElementById("formWrapper");
+  list.classList.toggle("visible", isVisible);
+  assignImg?.classList.toggle("rotated", isVisible);
+  backgroundElement?.classList.toggle("no-scroll", isVisible);
+  toggleExpender(list, isVisible);
 }
 
+function toggleExpender(list, isVisibleOverride) {
+  const required = document.querySelector(".required-container-modal");
+  if (!required) return;
+  const shouldHideButtons =
+    typeof isVisibleOverride === "boolean"
+      ? isVisibleOverride
+      : list
+        ? list.classList.contains("visible")
+        : true;
+  required.classList.toggle("d-none", shouldHideButtons);
+  // required.classList.toggle("expender-container-assigned", shouldHideButtons);
+}
 
-/**
- * Toggles the visibility of the user selection list and rotates the dropdown icon.
- * @description Shows or hides the user assignment dropdown and updates the arrow icon state
- * @param {Event} event - Click event.
- * @returns {void}
- */
 export function toggleUserListModal(event) {
   event.preventDefault();
   const list = document.getElementById("assignedUserList-modal");
-  const assignImg = document.getElementById("assignedBtnImg-modal");
-  toggleExpender(list);
-  toggleListVisibility(list, assignImg);
+  const shouldOpen = !list?.classList.contains("visible");
+  setAssignedListState(list, shouldOpen);
 }
 
-/**
- * Toggles list visibility and icon rotation.
- * @description Controls the display state of the user list and rotates the dropdown arrow
- * @param {HTMLElement} list - The user list container.
- * @param {HTMLElement} assignImg - The icon element.
- * @returns {void}
- * @private
- */
-function toggleListVisibility(list, assignImg) {
-  list.classList.toggle("visible");
-  const backgroundElement = document.getElementById("formWrapper");
-  if (backgroundElement.classList.contains("no-scroll")) {
-    backgroundElement.classList.remove("no-scroll");
-  } else {
-    backgroundElement.classList.add("no-scroll");
-  }
-  assignImg?.classList.toggle("rotated", list.classList.contains("visible"));
-}
-
-/**
- * Initializes the event listener for the user search input field.
- * @description Sets up search functionality for filtering users in the modal assignment list
- * @returns {void}
- */
 export function initUserSearchEventListener() {
   if (searchListenersInit) return;
   const searchInput = document.getElementById("searchUser-modal");
   if (!searchInput) return;
-
+  const handleInputFocus = () => {
+    const listEl = document.getElementById("assignedUserList-modal");
+    setAssignedListState(listEl, true);
+    loadAndRenderUsersModal();
+  };
+  searchInput.addEventListener("focus", handleInputFocus);
+  searchInput.addEventListener("click", handleInputFocus);
   searchInput.addEventListener("input", handleSearchInput);
-  searchInput.addEventListener("click", handleSearchInput);
-  searchInput.addEventListener("focus", handleSearchInput);
+  searchListenersInit = true;
 }
 
-/**
- * Handles input change in the user search field.
- * @description Filters and re-renders user checkboxes based on search input
- * @returns {Promise<void>}
- * @private
- */
-export async function handleSearchInput() {
-  const searchBar = document.getElementById("searchUser-modal");
+export async function handleSearchInput(e) {
+  const searchBar = e?.target ?? document.getElementById("searchUser-modal");
   const listEl = document.getElementById("assignedUserList-modal");
-  const arrow = document.getElementById("assignedBtnImg-modal");
+  setAssignedListState(listEl, true);
   await loadAndRenderUsersModal();
   if (!searchBar || !listEl) return;
-  const showAll = () => {
-    const preselected = Array.from(selectedUserNamesModal);
-    listEl.classList.add("visible");
-    arrow.classList.add("rotated");
+  const term = (searchBar.value || "").trim().toLowerCase();
+  const preselected = Array.from(selectedUserNamesModal);
+  if (!term) {
     renderUserCheckboxesModal(allSystemUsersModal, preselected);
-  };
-  const filterList = () => {
-    const term = searchBar.value.trim().toLowerCase();
-    const preselected = Array.from(selectedUserNamesModal);
-    listEl.classList.add("visible");
-    if (!term) {
-      renderUserCheckboxesModal(allSystemUsersModal, preselected);
-      return;
-    }
-    const matchedUsers = allSystemUsersModal.filter(u =>
-      u.userFullName.toLowerCase().includes(term)
-    );
-    renderUserCheckboxesModal(matchedUsers, preselected);
-  };
-  searchBar.addEventListener("focus", showAll);
-  searchBar.addEventListener("click", showAll);
-  searchBar.addEventListener("input", filterList);
-  renderUserCheckboxesModal(allSystemUsersModal, Array.from(selectedUserNamesModal));
+    return;
+  }
+  const matchedUsers = allSystemUsersModal.filter(u =>
+    u.userFullName.toLowerCase().includes(term)
+  );
+  renderUserCheckboxesModal(matchedUsers, preselected);
 }
-
-/**
- * Sets up DOM element references for user assignment functionality.
- * @description Creates and returns object with commonly used DOM element references
- * @param {string} containerId - ID of the container element
- * @param {string} toggleElementSelector - CSS selector for toggle element
- * @param {string} arrowSelector - CSS selector for arrow element
- * @param {string} inputSelector - CSS selector for input element
- * @returns {Object} Object containing DOM element references
- * @private
- */
-function setupConst(containerId, toggleElementSelector, arrowSelector, inputSelector) {
-  const container = document.getElementById(containerId);
-  const backgroundElement = document.getElementById("formWrapper");
-  const toggleElement = document.querySelector(toggleElementSelector);
-  const arrow = document.querySelector(arrowSelector);
-  const input = document.querySelector(inputSelector);
-  return { container, backgroundElement, toggleElement, arrow, input };
-}
-

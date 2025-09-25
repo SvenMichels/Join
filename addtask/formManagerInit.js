@@ -25,7 +25,7 @@ export function initAddTaskModalFlow() {
     const elements = getElementConfigsForAddTaskModal();
     attachCoreEvents(elements);
     updateCreateButtonState(elements);
-    handleSearchInput();
+    ensureAssignedUsersLoaded(elements.options);
 }
 
 /**

@@ -58,8 +58,11 @@ function handleAssignedOutsideModal(target) {
     const insideList = clickedInside(target, list);
     const insideWrapper = clickedInside(target, wrapper);
     if (!insideList && !insideWrapper) {
-        closeDropdown(list, wrapper, arrow)
-        document.querySelector(".required-container-modal").classList.toggle("d-none");
+        closeDropdown(list, wrapper, arrow);
+        document.getElementById("formWrapper")?.classList.remove("no-scroll");
+        document
+            .querySelector(".required-container-modal")
+            ?.classList.remove("d-none");
     }
 }
 

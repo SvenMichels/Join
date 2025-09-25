@@ -10,6 +10,7 @@ import { createRemainingChip } from "../board/boardUtils.js";
 import { clearSelectedUserNamesModal } from "../taskfloatdata/userAssignmentManager.js";
 import { fetchContactsListForAssignment } from "../scripts/firebase.js";
 
+
 let allSystemUsers = [];
 const selectedUserNames = new Set();
 
