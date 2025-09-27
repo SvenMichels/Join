@@ -231,13 +231,8 @@
     width: 100%;
   }
 
-  .space-container {
-    display: none;
-  }
-
   .create-container {
     display: flex;
-    /* justify-content: flex-end; */
     gap: 16px;
     max-width: 440px;
     padding-top: 50px;
