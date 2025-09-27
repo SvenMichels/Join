@@ -4,15 +4,17 @@
 }
 
 .required-container {
-  padding-top: 20px;
-  max-width: calc(1440px - 295px);
+  display: flex;
+  flex-direction: column;
+  /* padding-top: 20px; */
+  /* max-width: 440px; */
+  width: 100%;
+  justify-content: space-between;
 }
 
 .space-container {
-  width: 0px;
-  border: solid 1px;
-  color: #d1d1d1;
-  height: 100%;
+  border: solid 1px #d1d1d1;
+  height: 478px;
 }
 
 .subtask-spacer,

@@ -297,7 +297,8 @@
 
   .task-title-input,
   .task-description-input,
-  .task-dateInput {
+  .task-dateInput,
+  .required-wrapper-modal {
     max-width: 600px;
   }
 
@@ -348,5 +349,17 @@
 
   .space-container {
     display: none;
+  }
+
+  .required-container {
+    max-width: 440px;
+    width: 100%;
+    padding-bottom: 64px;
+  }
+
+  .task-h1-container {
+
+    max-width: 440px;
+    width: 100%;
   }
 }

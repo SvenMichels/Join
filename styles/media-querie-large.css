@@ -33,8 +33,9 @@
   }
 
   .required-container {
-    padding-bottom: 64px;
     max-width: 440px;
+    width: 100%;
+    padding-bottom: 64px;
   }
 
   .header-style {
@@ -92,6 +93,9 @@
 
   .task-h1-container {
     margin: 0;
+    /* max-width: 440px; */
+    width: 100%;
+    align-items: flex-start;
   }
 
   .form-wrapper {
@@ -209,6 +213,8 @@
   }
 
   .required-container {
+    max-width: 440px;
+    width: 100%;
     padding-bottom: 64px;
   }
 
@@ -225,11 +231,16 @@
     width: 100%;
   }
 
+  .space-container {
+    display: none;
+  }
+
   .create-container {
     display: flex;
-    justify-content: flex-end;
+    /* justify-content: flex-end; */
     gap: 16px;
     max-width: 440px;
+    padding-top: 50px;
   }
 
   .task-wrapper {

@@ -51,6 +51,7 @@
     gap: 16px;
     padding-bottom: 10px;
     padding-top: 50px;
+    max-width: 600px;
   }
 
   .nav-logo,
@@ -125,7 +126,7 @@
     flex-shrink: 0;
   }
 
-  .nav-menu > *:has(.nav-buttons) {
+  .nav-menu>*:has(.nav-buttons) {
     width: 80px;
   }
 
@@ -207,7 +208,7 @@
     height: clamp(3rem, 5vw, 3.5rem);
   }
 
-  .stats > div .counter {
+  .stats>div .counter {
     font-size: clamp(3rem, 5vw, 4rem);
   }
 
@@ -288,5 +289,17 @@
 
   .space-container {
     display: none;
+  }
+
+  .required-container {
+    max-width: 440px;
+    width: 100%;
+    padding-bottom: 64px;
+  }
+
+  .task-h1-container{
+
+    max-width: 440px;
+    width: 100%;
   }
 }

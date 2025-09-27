@@ -51,7 +51,17 @@
   display: flex;
   margin: 0px 3px;
   justify-content: space-between;
-  gap: clamp(0.4rem, 0.05rem, 1rem);
+  gap: clamp(0.35rem, 0.05rem, 1rem);
+  width: 98%;
+}
+
+.task-container {
+
+  justify-content: center;
+  /* align-items: center; */
+  display: flex;
+  flex-direction: column;
+
 }
 
 .prio-icons {

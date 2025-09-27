@@ -403,9 +403,9 @@ export function closeDropdown(options, wrapper, arrow) {
  * @param {HTMLElement} options - Options element triggering the expansion.
  */
 export function subtaskExpander(isOpen, options) {
-  const buttonContainer = document.querySelector(".required-container-modal");
+  const buttonContainer = document.querySelector(".required-container-modal") || document.querySelector(".required-container");
   const subContainer = document.querySelector(".prio-subtask-container");
-  
+
   if (!isOpen) {
     buttonContainer.classList.remove("d-none");
   } else {

@@ -12,6 +12,7 @@
     justify-content: space-between;
     width: 100%;
   }
+
   .modal-content,
   .required-container-modal {
     flex-direction: column;
