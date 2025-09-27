@@ -56,12 +56,9 @@
 }
 
 .task-container {
-
   justify-content: center;
-  /* align-items: center; */
   display: flex;
   flex-direction: column;
-
 }
 
 .prio-icons {
