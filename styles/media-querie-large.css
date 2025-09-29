@@ -141,7 +141,6 @@
   .task-wrapper {
     display: flex;
     flex-direction: column;
-    max-height: 382px;
     width: 100%;
     justify-content: space-between;
   }
@@ -245,7 +244,6 @@
   .task-wrapper {
     display: flex;
     flex-direction: column;
-    max-height: 382px;
     width: 100%;
     justify-content: space-between;
   }

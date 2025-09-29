@@ -362,14 +362,18 @@ async function lazyLoadUsers(options) {
  * @returns {Promise<void>}
  */
 export async function toggleDropdown(options, wrapper, arrow) {
+  const noScrollBody = document.body;
+  const isWrapperModal = document.getElementById("formWrapper") || document.getElementById("form-wrapper-modal");
+  console.log("Added no-scroll to body");
+  isWrapperModal?.classList.add("no-scroll");
+  noScrollBody.classList.add("no-scroll");
   if (!options) return;
   ensureOthersClosed(options);
+  noScrollBody.classList.add("no-scroll");
+  isWrapperModal?.classList.add("no-scroll");
   const buttonContainer = document.querySelector(".required-container-modal") || document.querySelector(".required-container");
   if ((options.id === "assignedUserList" || options.id === "assignedUserList-modal") && options.classList.contains("visible")) {
-    // const body = document.body;
     buttonContainer.classList.add("d-none");
-    // body.classList.add("no-scroll");
-    // document.documentElement.classList.add("no-scroll");
     return;
   }
   buttonContainer.classList.add("d-none");
@@ -406,10 +410,11 @@ export function closeDropdown(options, wrapper, arrow) {
     subtaskExpander(true, options);
     const buttonContainer = document.querySelector(".required-container-modal") || document.querySelector(".required-container");
     buttonContainer?.classList.remove("d-none");
-    // const body = document.body;
-    // body.classList.remove("no-scroll");
-    // document.documentElement.classList.remove("no-scroll");
   }
+  const isWrapperModal = document.getElementById("formWrapper");
+  const noScrollBody = document.body;
+  noScrollBody.classList.remove("no-scroll");
+  isWrapperModal?.classList.remove("no-scroll");
 }
 
 /**
@@ -427,10 +432,6 @@ export function subtaskExpander(isOpen, options) {
   }
   const shouldExpand = isOpen &&
     (options.id === "categoryOptions" || options.id === "categoryOptions-modal");
-  console.log(shouldExpand);
-  console.log(subContainer);
-
-
   subContainer.classList.toggle("container-margin", shouldExpand);
 }
 

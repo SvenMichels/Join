@@ -219,7 +219,7 @@ h1 {
 }
 
 .no-scroll {
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 select {

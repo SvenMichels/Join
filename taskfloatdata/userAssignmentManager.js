@@ -26,8 +26,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 /**
  * Loads and renders user checkboxes in the modal.
- * @description Always reloads contacts to ensure current user's data is displayed and handles preselected users
- * @param {Array<string>} [preselected=[]] - Array of preselected user names
+ * @description Always reloads contacts to ensure the current user's data is displayed and handles preselected users.
+ * @param {Array<string>} [preselected=[]] Array of preselected user names.
  * @returns {Promise<void>}
  */
 export async function loadAndRenderUsersModal(preselected = []) {
@@ -46,9 +46,8 @@ export async function loadAndRenderUsersModal(preselected = []) {
 
 /**
  * Loads contact data from the contact service.
- * @description Fetches contacts from the backend and populates the global user array
+ * @description Fetches contacts from the backend and populates the global user array.
  * @returns {Promise<void>}
- * @private
  */
 export async function loadContactData() {
   try {
@@ -64,7 +63,7 @@ export async function loadContactData() {
 /**
  * Clears all selected user names from the modal and resets the UI state.
  * Removes all chips and unchecks all checkboxes.
- * @description Resets the user selection state in the modal
+ * @description Resets the user selection state in the modal.
  * @returns {void}
  */
 export function clearSelectedUserNamesModal() {
@@ -79,8 +78,8 @@ export function clearSelectedUserNamesModal() {
 
 /**
  * Renders user checkboxes in the modal.
- * @description Creates and displays checkbox elements for user selection in the modal
- * @param {Array<Object>} users - Array of user objects.
+ * @description Creates and displays checkbox elements for user selection in the modal.
+ * @param {Array<Object>} users Array of user objects.
  * @returns {Promise<void>}
  */
 export async function renderUserCheckboxesModal(users) {
@@ -94,11 +93,10 @@ export async function renderUserCheckboxesModal(users) {
 
 /**
  * Renders the checkbox list in the container.
- * @description Creates and appends checkbox elements for each user in the container
- * @param {HTMLElement} container - Target DOM container.
- * @param {Array<Object>} users - List of users to render.
+ * @description Creates and appends checkbox elements for each user in the container.
+ * @param {HTMLElement} container Target DOM container.
+ * @param {Array<Object>} users List of users to render.
  * @returns {void}
- * @private
  */
 function renderCheckboxList(container, users) {
   container.innerHTML = "";
@@ -110,8 +108,8 @@ function renderCheckboxList(container, users) {
 
 /**
  * Applies a predefined user selection to the checkboxes.
- * @description Clears current selection and applies the provided user names as selected
- * @param {Array<string>} assignedUsers - User names to select.
+ * @description Clears the current selection and applies the provided user names as selected.
+ * @param {Array<string>} assignedUsers User names to select.
  * @returns {void}
  */
 export function applyUserPreselection(assignedUsers) {
@@ -124,10 +122,9 @@ export function applyUserPreselection(assignedUsers) {
 
 /**
  * Selects the checkboxes for the given user names.
- * @description Finds and activates checkboxes for the specified user names
- * @param {Array<string>} assignedUsers - Array of user names to select.
+ * @description Finds and activates checkboxes for the specified user names.
+ * @param {Array<string>} assignedUsers Array of user names to select.
  * @returns {void}
- * @private
  */
 function selectAssignedUsers(assignedUsers) {
 
@@ -143,10 +140,9 @@ function selectAssignedUsers(assignedUsers) {
 
 /**
  * Activates and highlights a checkbox wrapper.
- * @description Sets checkbox as checked and adds active styling to wrapper
- * @param {HTMLInputElement} checkbox - Target checkbox element.
+ * @description Sets the checkbox state and toggles the active styling on its wrapper.
+ * @param {HTMLInputElement} checkbox Target checkbox element.
  * @returns {void}
- * @private
  */
 function activateCheckbox(checkbox) {
   checkbox.checked = true;
@@ -155,10 +151,9 @@ function activateCheckbox(checkbox) {
 
 /**
  * Creates a DOM element for a user checkbox.
- * @description Constructs a complete checkbox wrapper element with event listeners
- * @param {Object} user - User object.
- * @returns {HTMLElement} Wrapper DOM element.
- * @private
+ * @description Constructs a complete checkbox wrapper element with attached listeners.
+ * @param {Object} user User object.
+ * @returns {HTMLElement}
  */
 function createUserCheckboxElement(user) {
 
@@ -169,10 +164,9 @@ function createUserCheckboxElement(user) {
 
 /**
  * Creates a wrapper for a user checkbox element.
- * @description Generates the HTML wrapper containing the user checkbox
- * @param {Object} user - User object.
- * @returns {HTMLElement} The wrapper DOM element.
- * @private
+ * @description Generates the HTML wrapper containing the user checkbox.
+ * @param {Object} user User object.
+ * @returns {HTMLElement}
  */
 function createCheckboxWrapper(user) {
   const wrapper = document.createElement("div");
@@ -183,10 +177,9 @@ function createCheckboxWrapper(user) {
 
 /**
  * Attaches a click listener to a checkbox wrapper.
- * @description Sets up event handlers for checkbox interaction and wrapper clicks
- * @param {HTMLElement} wrapper - Checkbox wrapper element.
+ * @description Sets up event handlers for checkbox interaction and wrapper clicks.
+ * @param {HTMLElement} wrapper Checkbox wrapper element.
  * @returns {void}
- * @private
  */
 function attachCheckboxListener(wrapper) {
 
@@ -211,7 +204,7 @@ function attachCheckboxListener(wrapper) {
 
 /**
  * Updates the UI to show selected users as colored chips.
- * @description Refreshes the display of selected users as visual chips with overflow handling
+ * @description Refreshes the display of selected users as visual chips with overflow handling.
  * @returns {void}
  */
 export function updateSelectedModal() {
@@ -233,10 +226,9 @@ export function updateSelectedModal() {
 
 /**
  * Creates a chip for the selected user.
- * @description Generates a visual chip element representing a selected user
- * @param {string|Object} userOrName - Name of the user or user object.
- * @returns {HTMLElement} The chip element.
- * @private
+ * @description Generates a visual chip element representing a selected user.
+ * @param {string|Object} userOrName Name of the user or user object.
+ * @returns {HTMLElement}
  */
 function createUserChip(userOrName) {
   const user = typeof userOrName === "string"
@@ -250,6 +242,13 @@ function createUserChip(userOrName) {
   return chip;
 }
 
+/**
+ * Toggles the visibility of the user list and associated UI state.
+ * @description Manages the display state of the user assignment list and related elements.
+ * @param {HTMLElement|null} list Target list element.
+ * @param {boolean} isVisible Indicates whether the list should be visible.
+ * @returns {void}
+ */
 function setAssignedListState(list, isVisible) {
   if (!list) return;
   const assignImg = document.getElementById("assignedBtnImg-modal");
@@ -260,6 +259,13 @@ function setAssignedListState(list, isVisible) {
   toggleExpender(list, isVisible);
 }
 
+/**
+ * Ensures other expanders are closed and toggles required container visibility.
+ * @description Manages the visibility of the required container based on the expander state.
+ * @param {HTMLElement|null} list Target list element.
+ * @param {boolean} [isVisibleOverride] Optional visibility override.
+ * @returns {void}
+ */
 function toggleExpender(list, isVisibleOverride) {
   const required = document.querySelector(".required-container-modal");
   if (!required) return;
@@ -276,6 +282,12 @@ function toggleExpender(list, isVisibleOverride) {
   required.classList.add("d-none", shouldHideButtons)
 }
 
+/**
+ * Toggles the assigned user list modal open or closed.
+ * @description Manages the opening and closing of the user list modal for assignment.
+ * @param {Event} event Triggering event instance.
+ * @returns {void}
+ */
 export function toggleUserListModal(event) {
   event.preventDefault();
   const list = document.getElementById("assignedUserList-modal");
@@ -283,6 +295,11 @@ export function toggleUserListModal(event) {
   setAssignedListState(list, shouldOpen);
 }
 
+/**
+ * Initializes the search input listeners for the user modal assignment feature.
+ * @description Sets up event listeners for the user search input in the assignment modal.
+ * @returns {void}
+ */
 export function initUserSearchEventListener() {
   if (searchListenersInit) return;
   const searchInput = document.getElementById("searchUser-modal");
@@ -298,6 +315,12 @@ export function initUserSearchEventListener() {
   searchListenersInit = true;
 }
 
+/**
+ * Processes search input to filter and display matching users.
+ * @description Handles the input event on the search bar to filter user list.
+ * @param {InputEvent} [e] Input event instance.
+ * @returns {Promise<void>}
+ */
 export async function handleSearchInput(e) {
   const searchBar = e?.target ?? document.getElementById("searchUser-modal");
   const listEl = document.getElementById("assignedUserList-modal");
