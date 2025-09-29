@@ -295,7 +295,7 @@ function getCategoryFrom(idRef) {
  * Closes assigned users dropdown if currently open.
  * @param {string} idRef - Context id.
  */
-function closeAssignedIfOpen(idRef) {
+export function closeAssignedIfOpen(idRef) {
   const { list, wrapper, arrow } = getAssignedFrom(idRef);
   if (isOpenEl(list)) closeDropdown(list, wrapper, arrow);
 }
@@ -304,7 +304,7 @@ function closeAssignedIfOpen(idRef) {
  * Closes category dropdown if currently open.
  * @param {string} idRef - Context id.
  */
-function closeCategoryIfOpen(idRef) {
+export function closeCategoryIfOpen(idRef) {
   const { list, wrapper, arrow } = getCategoryFrom(idRef);
   if (isOpenEl(list)) closeDropdown(list, wrapper, arrow);
 }
@@ -313,7 +313,7 @@ function closeCategoryIfOpen(idRef) {
  * Ensures only one dropdown group (category vs assigned) remains open.
  * @param {HTMLElement} options - The options container interacted with.
  */
-function ensureOthersClosed(options) {
+export function ensureOthersClosed(options) {
   const id = options.id;
   if (isCategoryId(id)) {
     closeAssignedIfOpen(id);
@@ -364,6 +364,15 @@ async function lazyLoadUsers(options) {
 export async function toggleDropdown(options, wrapper, arrow) {
   if (!options) return;
   ensureOthersClosed(options);
+  const buttonContainer = document.querySelector(".required-container-modal") || document.querySelector(".required-container");
+  if ((options.id === "assignedUserList" || options.id === "assignedUserList-modal") && options.classList.contains("visible")) {
+    // const body = document.body;
+    buttonContainer.classList.add("d-none");
+    // body.classList.add("no-scroll");
+    // document.documentElement.classList.add("no-scroll");
+    return;
+  }
+  buttonContainer.classList.add("d-none");
   const isOpen = applyToggle(options, wrapper, arrow);
   subtaskExpander(isOpen, options);
   if (!isOpen) return;
@@ -393,6 +402,13 @@ export function closeDropdown(options, wrapper, arrow) {
   }
   if (options.id === "categoryOptions" || options.id === "categoryOptions-modal") {
     subtaskExpander(false, options);
+  } else if (options.id === "assignedUserList" || options.id === "assignedUserList-modal") {
+    subtaskExpander(true, options);
+    const buttonContainer = document.querySelector(".required-container-modal") || document.querySelector(".required-container");
+    buttonContainer?.classList.remove("d-none");
+    // const body = document.body;
+    // body.classList.remove("no-scroll");
+    // document.documentElement.classList.remove("no-scroll");
   }
 }
 
@@ -405,16 +421,15 @@ export function closeDropdown(options, wrapper, arrow) {
 export function subtaskExpander(isOpen, options) {
   const buttonContainer = document.querySelector(".required-container-modal") || document.querySelector(".required-container");
   const subContainer = document.querySelector(".prio-subtask-container");
-
+  if (!subContainer) return;
   if (!isOpen) {
     buttonContainer.classList.remove("d-none");
-  } else {
-    buttonContainer.classList.add("d-none");
   }
-  if (!subContainer) return;
-
   const shouldExpand = isOpen &&
     (options.id === "categoryOptions" || options.id === "categoryOptions-modal");
+  console.log(shouldExpand);
+  console.log(subContainer);
+
 
   subContainer.classList.toggle("container-margin", shouldExpand);
 }

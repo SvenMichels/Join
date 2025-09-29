@@ -185,6 +185,10 @@
     display: none;
   }
 
+  .space-container {
+    display: none;
+  }
+
   .empty-placeholder {
     width: 100%;
   }

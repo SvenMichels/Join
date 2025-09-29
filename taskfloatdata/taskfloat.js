@@ -52,6 +52,8 @@ export function initTaskFloat() {
   initInputField("task-date-modal", 'task-date-modal-Hint', 'date');
   initFormAndButtonHandlers("formWrapper");
   initFormAndButtonHandlers("assignedUserList-modal");
+  attachEventListeners();
+  updateModalSubmitState();
   return initFormModal();
 }
 
@@ -86,6 +88,10 @@ function attachEventListeners() {
   bindSubtaskEnter();
   bindAssignToggle();
   bindClearButton();
+  document
+    .getElementById("task-title-modal")
+    ?.addEventListener("input", updateModalSubmitState);
+  $.date?.addEventListener("input", updateModalSubmitState);
 }
 
 /**
@@ -357,8 +363,15 @@ function fillBasicFields(task) {
   document.getElementById("task-title-modal").value = task.title || "";
   document.getElementById("task-description-modal").value = task.description || "";
   document.getElementById("task-date-modal").value = task.dueDate || "";
-  document.getElementById("category-modal").innerHTML = categoryLoad(task.category);
+  const categoryEl = document.getElementById("category-modal");
+  if (categoryEl) {
+    const rawCategory = task.category ? task.category.trim() : "";
+    categoryEl.innerHTML = categoryLoad(rawCategory);
+    categoryEl.dataset.selected = rawCategory;
+    categoryEl.value = rawCategory;
+  }
   selectPriorityModal((task.prio || "medium").toLowerCase());
+  updateModalSubmitState();
 }
 
 /**
@@ -401,6 +414,21 @@ function resetModalFormState() {
   clearSelectedUserNamesModal();
   cacheDom();
   setupOutsideClickHandler($.modal, document.getElementById("modal-overlay"));
+}
+
+function updateModalSubmitState() {
+  const submitBtn = $.form?.querySelector(".create-button");
+  if (!submitBtn) return;
+  const titleValue = document.getElementById("task-title-modal")?.value.trim() ?? "";
+  const dateValue = document.getElementById("task-date-modal")?.value.trim() ?? "";
+  const categoryEl = document.getElementById("category-modal");
+  const categoryValue =
+    categoryEl?.dataset.selected?.trim() ||
+    categoryEl?.value?.trim() ||
+    categoryEl?.textContent?.trim() ||
+    "";
+
+  submitBtn.disabled = !(titleValue && dateValue && categoryValue);
 }
 
 document.addEventListener("DOMContentLoaded", initTaskFloat);

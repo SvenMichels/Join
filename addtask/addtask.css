@@ -218,6 +218,10 @@ h1 {
   border: 2px solid #ffffff;
 }
 
+.no-scroll {
+  overflow-x: hidden;
+}
+
 select {
   appearance: none;
   -webkit-appearance: none;
@@ -380,6 +384,5 @@ select {
 }
 
 .task-h1-container {
-
   width: 100%;
 }

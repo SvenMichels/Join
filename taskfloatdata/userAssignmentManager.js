@@ -9,6 +9,7 @@ import { createRemainingChip } from "../board/boardUtils.js";
 import { getInitials } from "../scripts/utils/helpers.js";
 import { fetchContactsListForAssignment } from "../scripts/firebase.js";
 import { initFormAndButtonHandlers } from "../addtask/formManagerInit.js";
+import { ensureOthersClosed } from "../addtask/formManager.js";
 import { setupUserSearch } from "../addtask/userAssignmentHandler.js";
 
 let allSystemUsersModal = [];
@@ -22,9 +23,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initUserSearchEventListener();
   initFormAndButtonHandlers("formWrapper");
 });
-
-
-
 
 /**
  * Loads and renders user checkboxes in the modal.
@@ -43,6 +41,7 @@ export async function loadAndRenderUsersModal(preselected = []) {
   }
   initial.forEach(n => selectedUserNamesModal.add(n));
   await renderUserCheckboxesModal(allSystemUsersModal);
+  searchListenersInit = false;
 }
 
 /**
@@ -261,9 +260,10 @@ function setAssignedListState(list, isVisible) {
   toggleExpender(list, isVisible);
 }
 
-function toggleExpender(list, isVisibleOverride) {    
+function toggleExpender(list, isVisibleOverride) {
   const required = document.querySelector(".required-container-modal");
   if (!required) return;
+  ensureOthersClosed(list);
   const shouldHideButtons =
     typeof isVisibleOverride === "boolean"
       ? isVisibleOverride
@@ -271,11 +271,9 @@ function toggleExpender(list, isVisibleOverride) {
         ? list.classList.contains("visible")
         : true;
   if (shouldHideButtons === true) {
-    required.classList.toggle("d-none", shouldHideButtons);
+    required.classList.remove("d-none", shouldHideButtons);
   }
-  if (window.matchMedia("(min-width: 991px)").matches) {
-    required.classList.toggle("d-none", shouldHideButtons);
-  }
+  required.classList.add("d-none", shouldHideButtons)
 }
 
 export function toggleUserListModal(event) {
@@ -303,6 +301,7 @@ export function initUserSearchEventListener() {
 export async function handleSearchInput(e) {
   const searchBar = e?.target ?? document.getElementById("searchUser-modal");
   const listEl = document.getElementById("assignedUserList-modal");
+  e.stopPropagation();
   setAssignedListState(listEl, true);
   await loadAndRenderUsersModal();
   if (!searchBar || !listEl) return;

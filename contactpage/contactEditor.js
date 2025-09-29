@@ -6,7 +6,7 @@ import { getInitials } from '../scripts/utils/helpers.js';
 import { updateContact } from './contactDataService.js';
 import { setupDeleteButton } from './contactsMain.js';
 import { formValidation } from './contactsMain.js';
-import { showValidateBubble, confirmInputForFormValidation, initInputField, setFieldValidity, checkBubbleContext } from '../scripts/auth/Validation.js';
+import { showValidateBubble, confirmInputForFormValidation, initInputField, setFieldValidity, checkBubbleContext, isFieldValid } from '../scripts/auth/Validation.js';
 import { enableButton, disableButton } from '../scripts/events/loginevents.js';
 
 let editingContact = null;
@@ -81,8 +81,9 @@ export function getEditContactInput(contact) {
  * @returns {boolean} returns.emailValid - Whether email field is valid.
  */
 function validateEditInputs() {
-  const nameValid = confirmInputForFormValidation("editContactName", "editNameHint");
-  const emailValid = confirmInputForFormValidation("editContactEmail", "editEmailHint");
+  const nameValid = document.getElementById("editContactName").reportValidity();
+  const emailValid = document.getElementById("editContactEmail").reportValidity();
+  console.log(`validateEditInputs: nameValid=${nameValid}, emailValid=${emailValid}`);
 
   if (!nameValid) {
     showValidateBubble("editContactName", "Name invalid or too short.", "editNameHint", 2000);
@@ -274,7 +275,7 @@ function makeUpdateState(nameInput, emailInput, saveBtn) {
  * @returns {Object|undefined} Object containing the update state function, or undefined if elements not found.
  * @returns {Function} returns.updateState - Function to update validation state.
  */
-function setupEditValidationAndButton() {
+export function setupEditValidationAndButton() {
   const { nameInput, emailInput, saveBtn } = getEditEls();
   if (!nameInput || !emailInput || !saveBtn) return;
   if (nameInput.value.trim().length > 3) {

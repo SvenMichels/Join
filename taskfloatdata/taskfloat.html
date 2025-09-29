@@ -25,126 +25,126 @@
   <div id="formWrapper" class="form-wrapper-modal">
     <div class="form-container-modal">
       <form class="task-container-modal" id="taskForm-modal">
-            <div class="task-h1-container-modal">
-      <h1 id="modalTitle">Edit Task</h1>
-      <button class="close-button-modal" aria-label="Close">
-        <img class="icon" src="../assets/icons/close.svg" alt="Close icon" />
-      </button>
-    </div>
-    <div class="modal-content">
-        <div class="task-wrapper-modal">
-          <div class="task-title">
-            <label for="task-title-modal">Title <span class="color-red">*</span></label>
-            <input class="task-title-input" name="taskTitle" id="task-title-modal" placeholder="Enter a title"
-              type="text" />
-            <div style="position: relative; display: flex;">
-              <div id="titelModalHint" class="hint-bubble"></div>
-            </div>
-          </div>
-
-
-          <div class="task-description">
-            <label for="task-description-modal">Description</label>
-            <textarea class="task-description-input" name="taskDescription" id="task-description-modal"
-              placeholder="Enter a Description"></textarea>
-            <div style="position: relative; display: flex;">
-              <div id="descriptionModalHint" class="hint-bubble"></div>
-            </div>
-          </div>
-
-          <div class="task-date">
-            <label for="task-date-modal">Due Date <span class="color-red">*</span></label>
-            <input class="task-dateInput" name="taskDate" id="task-date-modal" placeholder="dd/mm/yyyy" type="date" />
-            <div class="hint-container">
-              <div id="task-date-modal-Hint" class="hint-bubble"></div>
-            </div>
-          </div>
+        <div class="task-h1-container-modal">
+          <h1 id="modalTitle">Edit Task</h1>
+          <button class="close-button-modal" aria-label="Close">
+            <img class="icon" src="../assets/icons/close.svg" alt="Close icon" />
+          </button>
         </div>
-
-        <div class="space-container"></div>
-
-        <div class="prio-container-modal">
-          <div class="prio-content">
-            <p>Priority</p>
-            <div id="taskPriorityButtons">
-              <div class="prio-button-container">
-                <button type="button" id="urgent-task-modal" class="prioButtons">
-                  Urgent
-                  <img id="urgent-task-img-modal" class="prio-buttons-images-modal" src="../assets/icons/urgent_red.svg"
-                    alt="urgent" />
-                </button>
-
-                <button type="button" id="medium-task-modal" class="prioButtons">
-                  Medium
-                  <img id="medium-task-img-modal" class="prio-buttons-images-modal"
-                    src="../assets/icons/medium_yellow.svg" alt="medium" />
-                </button>
-
-                <button type="button" id="low-task-modal" class="prioButtons">
-                  Low
-                  <img id="low-task-img-modal" class="prio-buttons-images-modal" src="../assets/icons/low_green.svg"
-                    alt="low" />
-                </button>
+        <div class="modal-content">
+          <div class="task-wrapper-modal">
+            <div class="task-title">
+              <label for="task-title-modal">Title <span class="color-red">*</span></label>
+              <input class="task-title-input" name="taskTitle" id="task-title-modal" placeholder="Enter a title"
+                type="text" />
+              <div style="position: relative; display: flex;">
+                <div id="titelModalHint" class="hint-bubble"></div>
               </div>
             </div>
 
-            <div class="prio-assigned-container">
-              <label for="searchUser-modal">Assigned to</label>
-              <div class="assigned-input-wrapper">
-                <div class="assigned-container-modal">
-                  <input id="searchUser-modal" placeholder="Select contact to assign" name="assignedUsers"
-                    class="prio-assign-input" type="text" />
-                  <button class="assigned-userlist-button-modal" type="button">
-                    <img id="assignedBtnImg-modal" class="assigned-input-Img-modal dropdown-arrow"
-                      src="../assets/icons/arrow_drop_down.svg" alt="Dropdown arrow" />
+
+            <div class="task-description">
+              <label for="task-description-modal">Description</label>
+              <textarea class="task-description-input" name="taskDescription" id="task-description-modal"
+                placeholder="Enter a Description"></textarea>
+              <div style="position: relative; display: flex;">
+                <div id="descriptionModalHint" class="hint-bubble"></div>
+              </div>
+            </div>
+
+            <div class="task-date">
+              <label for="task-date-modal">Due Date <span class="color-red">*</span></label>
+              <input class="task-dateInput" name="taskDate" id="task-date-modal" placeholder="dd/mm/yyyy" type="date" />
+              <div class="hint-container">
+                <div id="task-date-modal-Hint" class="hint-bubble"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="space-container"></div>
+
+          <div class="prio-container-modal">
+            <div class="prio-content">
+              <p>Priority</p>
+              <div id="taskPriorityButtons">
+                <div class="prio-button-container">
+                  <button type="button" id="urgent-task-modal" class="prioButtons">
+                    Urgent
+                    <img id="urgent-task-img-modal" class="prio-buttons-images-modal"
+                      src="../assets/icons/urgent_red.svg" alt="urgent" />
+                  </button>
+
+                  <button type="button" id="medium-task-modal" class="prioButtons">
+                    Medium
+                    <img id="medium-task-img-modal" class="prio-buttons-images-modal"
+                      src="../assets/icons/medium_yellow.svg" alt="medium" />
+                  </button>
+
+                  <button type="button" id="low-task-modal" class="prioButtons">
+                    Low
+                    <img id="low-task-img-modal" class="prio-buttons-images-modal" src="../assets/icons/low_green.svg"
+                      alt="low" />
                   </button>
                 </div>
-                <div id="assignedUserList-modal" class="assigned-user-list"></div>
               </div>
-              <div id="selectedUser-modal" class="selected-user-container-modal"></div>
-            </div>
+              <label for="searchUser-modal">Assigned to</label>
+              <div class="prio-assigned-container">
 
-            <div class="prio-category-container">
-              <p>Category <span class="color-red">*</span></p>
-              <div class="custom-select-wrapper">
-                <div class="custom-select" id="category-modal" data-selected="">
-                  Select a category
+                <div class="assigned-input-wrapper">
+                  <div class="assigned-container-modal">
+                    <input id="searchUser-modal" placeholder="Select contact to assign" name="assignedUsers"
+                      class="prio-assign-input" type="text" />
+                    <button class="assigned-userlist-button-modal" type="button">
+                      <img id="assignedBtnImg-modal" class="assigned-input-Img-modal dropdown-arrow"
+                        src="../assets/icons/arrow_drop_down.svg" alt="Dropdown arrow" />
+                    </button>
+                  </div>
+                  <div id="assignedUserList-modal" class="assigned-user-list"></div>
                 </div>
-                <button class="assignUserListBtn" type="button">
-                  <img id="categoryBtnImg-modal" class="assignedInputImg dropdown-arrow"
-                    src="../assets/icons/arrow_drop_down.svg" />
-                </button>
-                <ul class="custom-options" id="categoryOptions-modal">
-                  <li data-value="Technical_Task">Technical Task</li>
-                  <li data-value="User_Story">User Story</li>
-                </ul>
+                <div id="selectedUser-modal" class="selected-user-container-modal"></div>
               </div>
-            </div>
 
-            <div class="prio-subtask-container">
-              <label for="subtask-modal">Subtasks</label>
-              <div class="subtask-wrapper-modal">
-                <input class="prio-subtask-input" name="subtask" id="subtask-modal" type="text" maxlength="50" />
-                <button type="button" class="subtask-add-button-modal">
-                  <img src="../assets/icons/add.svg" alt="Add subtask" />
-                </button>
+              <div class="prio-category-container">
+                <p>Category <span class="color-red">*</span></p>
+                <div class="custom-select-wrapper">
+                  <div class="custom-select" id="category-modal" data-selected="">
+                    Select a category
+                  </div>
+                  <button class="assignUserListBtn" type="button">
+                    <img id="categoryBtnImg-modal" class="assignedInputImg dropdown-arrow"
+                      src="../assets/icons/arrow_drop_down.svg" />
+                  </button>
+                  <ul class="custom-options" id="categoryOptions-modal">
+                    <li data-value="Technical_Task">Technical Task</li>
+                    <li data-value="User_Story">User Story</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="prio-subtask-container">
+                <label for="subtask-modal">Subtasks</label>
+                <div class="subtask-wrapper-modal">
+                  <input class="prio-subtask-input" name="subtask" id="subtask-modal" type="text" maxlength="50" />
+                  <button type="button" class="subtask-add-button-modal">
+                    <img src="../assets/icons/add.svg" alt="Add subtask" />
+                  </button>
+                  <div class="hint-container">
+                    <div id="subtaskModalHint" class="hint-bubble"></div>
+                  </div>
+                </div>
+                <div id="subtaskList-modal"></div>
                 <div class="hint-container">
-                  <div id="subtaskModalHint" class="hint-bubble"></div>
+                  <div id="subtaskEditModalHint" class="hint-bubble"></div>
                 </div>
               </div>
-              <div id="subtaskList-modal"></div>
-              <div class="hint-container">
-                <div id="subtaskEditModalHint" class="hint-bubble"></div>
-              </div>
             </div>
-          </div>
           </div>
         </div>
         <div class="required-wrapper-modal">
           <div class="required-container-modal">
             <div>
               <span class="color-red">*</span>
-                <span>This field is required</span>
+              <span>This field is required</span>
             </div>
             <div class="create-container-modal">
               <button class="clear-button" id="clearBtn-modal" type="reset">
