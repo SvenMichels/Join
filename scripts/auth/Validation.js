@@ -46,18 +46,46 @@ initInputField('loginPassword', 'pwHint', 'password');
 export function initInputField(inputId, bubbleId, inputType) {
   const input = document.getElementById(inputId);
   if (!input) return;
+  const alreadyInitialized = input.dataset.validationInit === "true";
   const allowInnerSpaces = inputType === 'name';
   const subtaskAllowed = inputType === 'subtask';
   const phoneMode = inputType === 'phone';
   const dateMode = inputType === 'date';
   const discriptionMode = inputType === 'description';
-
   validateInput(input, bubbleId, { allowInnerSpaces, subtaskAllowed, phoneMode, dateMode, discriptionMode });
-  setFieldValidity(inputId, false);
+  if (!alreadyInitialized) {
+    input.addEventListener('input', (e) => inputEventlistener(inputId, bubbleId, e, inputType));
+    input.addEventListener('focus', (e) => focusEventlistener(inputId, bubbleId, e, inputType));
+    input.addEventListener('blur', () => { inputTrimmer(input); hideValidateBubble(bubbleId); });
+    input.dataset.validationInit = "true";
+  }
+  applyInitialFieldState(input, bubbleId, inputType);
+}
 
-  input.addEventListener('input', (e) => inputEventlistener(inputId, bubbleId, e, inputType));
-  input.addEventListener('focus', (e) => focusEventlistener(inputId, bubbleId, e, inputType));
-  input.addEventListener('blur', () => { inputTrimmer(input); hideValidateBubble(bubbleId); });
+/**
+ * Applies initial validation state for an input field.
+ * Evaluates the current value, shows the validation bubble,
+ * and updates the cached validity state without requiring user input.
+ *
+ * @param {HTMLInputElement} input - The input element to initialise.
+ * @param {string} bubbleId - Identifier of the associated validation bubble.
+ * @param {'email'|'password'|'name'|'phone'|'subtask'|'date'|'description'} inputType - Validation type applied to the field.
+ * @returns {void}
+ */
+function applyInitialFieldState(input, bubbleId, inputType) {
+  const rawValue = input.value ?? "";
+  const trimmed = rawValue.trim();
+  if (!trimmed.length) {
+    setFieldValidity(input.id, false);
+    return;
+  }
+  if (rawValue !== trimmed) {
+    input.value = trimmed;
+  }
+  const message = getMessage(inputType, input.id, bubbleId, { target: input });
+  showValidateBubble(input.id, message, bubbleId, 1500);
+  const isValid = message === 'Looks good!' || message === 'Password Matches';
+  setFieldValidity(input.id, isValid);
 }
 
 /**

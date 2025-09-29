@@ -83,15 +83,12 @@ export function getEditContactInput(contact) {
 function validateEditInputs() {
   const nameValid = document.getElementById("editContactName").reportValidity();
   const emailValid = document.getElementById("editContactEmail").reportValidity();
-  console.log(`validateEditInputs: nameValid=${nameValid}, emailValid=${emailValid}`);
-
   if (!nameValid) {
     showValidateBubble("editContactName", "Name invalid or too short.", "editNameHint", 2000);
   }
   if (!emailValid) {
     showValidateBubble("editContactEmail", "Email invalid.", "editEmailHint", 2000);
   }
-
   return { nameValid, emailValid };
 }
 
@@ -165,9 +162,9 @@ export function openEditDialog(contact) {
     fillEditForm(contact);
     setupDeleteButton(contact);
     setUserInitials(contact);
-    setupEditValidationAndButton();
     initInputField('editContactName', 'editNameHint', 'name');
     initInputField('editContactEmail', 'editEmailHint', 'email');
+    setupEditValidationAndButton();
   }
 }
 
@@ -217,15 +214,12 @@ function computeValidity() {
  * @param {boolean} validity.emailOk - Whether email field is valid.
  */
 function applyInitialValidity(saveBtn, { nameOk, emailOk }) {
-
+  setFieldValidity("editContactName", nameOk);
+  setFieldValidity("editContactEmail", emailOk);
   if (nameOk && emailOk) {
     enableButton(saveBtn);
-    setFieldValidity("editContactName", true);
-    setFieldValidity("editContactEmail", true);
   } else {
     disableButton(saveBtn);
-    setFieldValidity("editContactName", false);
-    setFieldValidity("editContactEmail", false);
   }
 }
 

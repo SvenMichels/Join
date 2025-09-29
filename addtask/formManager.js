@@ -362,14 +362,10 @@ async function lazyLoadUsers(options) {
  * @returns {Promise<void>}
  */
 export async function toggleDropdown(options, wrapper, arrow) {
-  const noScrollBody = document.body;
   const isWrapperModal = document.getElementById("formWrapper") || document.getElementById("form-wrapper-modal");
-  console.log("Added no-scroll to body");
   isWrapperModal?.classList.add("no-scroll");
-  noScrollBody.classList.add("no-scroll");
   if (!options) return;
   ensureOthersClosed(options);
-  noScrollBody.classList.add("no-scroll");
   isWrapperModal?.classList.add("no-scroll");
   const buttonContainer = document.querySelector(".required-container-modal") || document.querySelector(".required-container");
   if ((options.id === "assignedUserList" || options.id === "assignedUserList-modal") && options.classList.contains("visible")) {
@@ -412,8 +408,6 @@ export function closeDropdown(options, wrapper, arrow) {
     buttonContainer?.classList.remove("d-none");
   }
   const isWrapperModal = document.getElementById("formWrapper");
-  const noScrollBody = document.body;
-  noScrollBody.classList.remove("no-scroll");
   isWrapperModal?.classList.remove("no-scroll");
 }
 
