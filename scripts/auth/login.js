@@ -128,7 +128,8 @@ function storeCurrentUser(user) {
     userPhoneNumber: user.userPhoneNumber,
     userColor: user.userColor,
     userInitials: user.userInitials,
-    firstCharacter: user.firstCharacter
+    firstCharacter: user.firstCharacter,
+    hasSeenGreetingFeedback: false
   };
 
   localStorage.setItem("currentUser", JSON.stringify(userToStore));

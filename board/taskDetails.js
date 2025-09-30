@@ -94,7 +94,7 @@ function renderTaskDetailSubtasks(subtasks = [], subtaskDone = []) {
     return `
       
         <input type="checkbox" id="sub-${i}" class="subtask-checkbox" ${isChecked}>
-        <label for="sub-${i}">${txt}</label>${`<br class="m12-t">`}`;
+        <label id="${i}-label" for="sub-${i}">${txt}</label>${`<br class="m12-t">`}`;
   }).join("");
 
   subtasksEl.innerHTML = subtasksHtml;
@@ -160,13 +160,13 @@ export async function openTaskDetails(task) {
   const overlay = document.getElementById("modal-overlay");
   resetOverlay(overlay);
 
-  const modalHTML = await fetchModalHTML("../edittask/taskdetail.html");  
+  const modalHTML = await fetchModalHTML("../edittask/taskdetail.html");
   overlay.innerHTML = modalHTML;
 
   const allUsers = typeof window.allUsers === 'function' ? window.allUsers() : window.allUsers || [];
   await renderTaskDetailData(task, allUsers);
 
-  const modal = overlay.querySelector("#taskDetailModal");  
+  const modal = overlay.querySelector("#taskDetailModal");
   noScrollTaskDetails(modal);
   setupCloseButton(modal, overlay);
   setupOutsideClickHandler(modal, overlay);
@@ -341,7 +341,7 @@ export function bindOutsideClickToClose(container) {
   }
 
   window.outsideClickHandlerBound = true;
-  
+
   document.addEventListener('click', (event) => {
     if (!container.contains(event.target)) {
       container.classList.remove('open');

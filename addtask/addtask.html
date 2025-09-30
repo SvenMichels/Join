@@ -108,15 +108,15 @@
     <div class="form-container">
       <form class="task-container" id="taskForm">
         <div class="task-wrapper-container">
-        <div class="task-h1-container">
-          <h1>Add Task</h1>
-        </div>
+          <div class="task-h1-container">
+            <h1>Add Task</h1>
+          </div>
         </div>
         <div class="task-wrapper">
           <div class="task-detail-container">
             <div class="task-details-wrapper">
               <div class="task-title">
-                <label for="task-title">Title <span class="color-red">*</span></label>
+                <label for="task-title" id="task-title-label">Title <span class="color-red">*</span></label>
                 <input class="task-title-input" name="taskTitle" id="task-title" placeholder="Enter a title"
                   type="text" />
                 <span id="titleAlert" class="redSpan" style="display: none;">This field is required</span>
@@ -125,7 +125,7 @@
                 </div>
               </div>
               <div class="task-description">
-                <label for="task-description">Description</label>
+                <label for="task-description" id="task-description-label">Description</label>
                 <textarea class="task-description-input" name="taskDescription" id="task-description"
                   placeholder="Enter a Description" type="text"></textarea>
                 <div class="hint-container">
@@ -133,7 +133,7 @@
                 </div>
               </div>
               <div class="task-date">
-                <label for="task-date">Due Date <span class="color-red">*</span></label>
+                <label for="task-date" id="task-date-label">Due Date <span class="color-red">*</span></label>
                 <input class="task-dateInput" name="taskDate" id="task-date" placeholder="dd/mm/yyyy" type="date" />
                 <span id="dateAlert" class="redSpan" style="display: none;">This field is required</span>
                 <div class="hint-container">
@@ -199,7 +199,7 @@
               </div>
 
               <div class="prio-subtask-container">
-                <label for="subtask">Subtasks</label>
+                <label for="subtask" id="subtask-label">Subtasks</label>
                 <div class="subtask-wrapper">
                   <input class="prio-subtask-input" name="subtask" id="subtask" type="text" maxlength="128" />
                   <button type="button" class="subtask-add-button subtask-button-in-input">

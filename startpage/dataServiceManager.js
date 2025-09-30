@@ -16,16 +16,12 @@ import { validateTaskData, setTextUpdateSummary } from "../../startpage/taskStat
  * @param {number} config.retryDelayMs - Delay between retries in milliseconds.
  * @returns {Promise<void>}
  */
-export async function updateTaskSummaryWithRetryLogic(config = { maxRetries: 3, retryDelayMs: 800 }) {
+export async function updateTaskSummaryWithRetryLogic(config = { maxRetries: 1, retryDelayMs: 1200 }) {
   displayDataLoadingState();
 
   for (let attempt = 1; attempt <= config.maxRetries; attempt++) {
     const success = await loadAndUpdateSummary();
     if (success) return;
-
-    if (attempt < config.maxRetries) {
-      await new Promise(resolve => setTimeout(resolve, config.retryDelayMs));
-    }
   }
 
   displayErrorState();

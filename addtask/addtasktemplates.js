@@ -25,11 +25,10 @@ export function getUserCheckboxTemplate(user, isChecked = false) {
       <div class="selected-contact-chip ${user.userColor || 'color-1'}">
         ${user.userInitials || getInitials(user.userFullName)}
       </div>
-      <label for="${checkboxId}">${user.userFullName}</label>
+      <label for="${checkboxId}" id="${checkboxId}-label">${user.userFullName}</label>
     </div>
-    <input type="checkbox" id="${checkboxId}" class="user-checkbox" value="${user.userFullName}" ${
-    isChecked ? "checked" : ""
-  }>
+    <input type="checkbox" id="${checkboxId}" class="user-checkbox" value="${user.userFullName}" ${isChecked ? "checked" : ""
+    }>
   `;
 }
 

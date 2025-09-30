@@ -241,6 +241,10 @@ select {
   height: 56px;
 }
 
+.prio-subtask-container {
+  height: 216px;
+}
+
 .user-checkbox-wrapper.active {
   background: #091931;
   color: white;

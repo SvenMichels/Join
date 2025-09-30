@@ -4,8 +4,8 @@
 
 @media (max-width: 574px) {
   body {
-    overflow: hidden;
-    height: 100vh;
+    /* overflow: hidden; */
+    /* height: 100vh; */
     position: relative;
   }
 

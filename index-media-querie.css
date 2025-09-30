@@ -32,8 +32,8 @@
 
   .logo {
     position: absolute;
-    width: 200px;
-    height: auto;
+    width: 150px;
+    height: 138px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) scale(1);
@@ -58,8 +58,8 @@
   }
 
   @keyframes shrink-container {
-    0% {
-    }
+    0% {}
+
     100% {
       background-color: transparent;
       z-index: -1;
@@ -70,10 +70,11 @@
     0% {
       transform: translate(-50%, -50%) scale(1);
     }
+
     100% {
       transform: translate(0, 0) scale(0.5);
-      top: -50px;
-      left: -45px;
+      top: -0.75rem;
+      left: -0.5rem;
     }
   }
 
@@ -81,20 +82,23 @@
     from {
       opacity: 1;
     }
+
     to {
       opacity: 0;
     }
   }
+
   @keyframes fade-in {
     from {
       opacity: 0;
     }
+
     to {
       opacity: 1;
     }
   }
 
-  .content-holder > div:nth-child(3) {
+  .content-holder>div:nth-child(3) {
     position: static;
     width: 100%;
   }

@@ -13,14 +13,30 @@ import { getInitials } from "../scripts/utils/helpers.js";
  *
  * @returns {Object|null} The parsed user data object or `null` if not available/invalid.
  */
+const GREETING_FLAG_KEY = "hasSeenGreetingFeedback";
+const GREETING_SELECTOR = ".greetings";
+let hasFadedGreeting = false;
+
+const initialUserState = getStoredUserData();
+if (initialUserState?.[GREETING_FLAG_KEY]) {
+  hasFadedGreeting = true;
+}
+
 export function updateUserGreetingDisplay() {
   const userData = getStoredUserData();
   if (!userData) return;
 
-  const userName = userData.userFullName || "Guest;"
+  if (userData[GREETING_FLAG_KEY]) {
+    hideGreetingImmediately();
+    hasFadedGreeting = true;
+    return;
+  }
+
+  const userName = userData.userFullName || "Guest";
   const greeting = getTimeBasedGreeting();
 
   updateGreetingElements(greeting, userName);
+  showGreetingContainer();
 }
 
 /**
@@ -89,22 +105,54 @@ function getTimeBasedGreeting() {
  * Fades out the greeting message automatically on mobile view.
  * Applies a CSS class to hide the greeting after a short delay.
  */
-let hasFadedGreeting = false;
+// export function handleMobileGreetingFadeEffect() {
+//   if (hasFadedGreeting) return;
 
-export function handleMobileGreetingFadeEffect() {
-  if (hasFadedGreeting) return;
+//   const userData = getStoredUserData();
+//   if (userData?.[GREETING_FLAG_KEY]) {
+//     hasFadedGreeting = true;
+//     hideGreetingImmediately();
+//     window.removeEventListener("resize", handleMobileGreetingFadeEffect);
+//     return;
+//   }
 
-  if (window.innerWidth < 768) {
-    const greetings = document.querySelector(".greetings");
-    if (greetings) {
-      setTimeout(() => {
-        greetings.classList.add("hidden");
-        hasFadedGreeting = true;
-      }, 1000);
-    }
+//   if (window.innerWidth < 768) {
+//     const greetings = document.querySelector(GREETING_SELECTOR);
+//     if (!greetings) return;
+
+//     greetings.classList.remove("hidden");
+
+//     setTimeout(() => {
+//       greetings.classList.add("hidden");
+//       hasFadedGreeting = true;
+//       markGreetingSeen();
+//       window.removeEventListener("resize", handleMobileGreetingFadeEffect);
+//     }, 1500);
+//   }
+
+//   window.removeEventListener("resize", handleMobileGreetingFadeEffect);
+// }
+
+function markGreetingSeen() {
+  const userData = getStoredUserData();
+  if (!userData || userData[GREETING_FLAG_KEY]) return;
+
+  userData[GREETING_FLAG_KEY] = true;
+  try {
+    localStorage.setItem("currentUser", JSON.stringify(userData));
+  } catch {
+    // Ignore storage errors
   }
 }
 
-document.addEventListener("resize", () => {
-  handleMobileGreetingFadeEffect();
-});
+function hideGreetingImmediately() {
+  const greetings = document.querySelector(GREETING_SELECTOR);
+  if (greetings) greetings.classList.add("hidden");
+}
+
+function showGreetingContainer() {
+  const greetings = document.querySelector(GREETING_SELECTOR);
+  if (greetings) greetings.classList.remove("hidden");
+}
+
+// window.addEventListener("resize", handleMobileGreetingFadeEffect);

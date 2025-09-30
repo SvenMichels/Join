@@ -2,12 +2,12 @@ body {
   font-family: "Inter";
   margin: 0;
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  /* justify-content: center; */
   align-items: center;
-  overflow: hidden;
+  /* overflow: hidden; */
   background-color: #f6f7f8;
 }
 
@@ -178,6 +178,7 @@ input.password {
   justify-content: center;
   gap: 64px;
   max-width: 1440px;
+  margin-top: 20px;
   margin-bottom: 20px;
 }
 
@@ -285,7 +286,7 @@ input:focus::placeholder {
   inset: 0;
   width: 100vw;
   max-width: 1440px;
-  height: 100vh;
+  min-height: 100vh;
   background-color: #f6f7f8;
   overflow: hidden;
   animation: fade-container 2s ease forwards;
