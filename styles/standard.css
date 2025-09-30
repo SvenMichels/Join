@@ -13,14 +13,14 @@
     justify-content: space-between;
 } */
 
-/* body {
+body {
   margin: 0;
-  width: 100vw;
+  width: 100%;
   background-color: #f6f7f8;
   overflow-x: hidden;
   font-family: "Inter", sans-serif;
   color: #000000;
-} */
+}
 
 p {
   margin: 0;
