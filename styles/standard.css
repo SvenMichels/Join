@@ -2,14 +2,25 @@
   display: none;
 }
 
-body {
+/* body {
+    margin: 0;
+    width: 100%;
+    min-height: 100vh;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+} */
+
+/* body {
   margin: 0;
   width: 100vw;
   background-color: #f6f7f8;
-  /* overflow-x: hidden; */
+  overflow-x: hidden;
   font-family: "Inter", sans-serif;
   color: #000000;
-}
+} */
 
 p {
   margin: 0;

@@ -1,14 +1,34 @@
-body {
-  font-family: "Inter";
-  margin: 0;
-  width: 100vw;
-  min-height: 100vh;
+html {
   display: flex;
   flex-direction: column;
-  /* justify-content: center; */
   align-items: center;
-  /* overflow: hidden; */
-  background-color: #f6f7f8;
+  width: 100%;
+  height: 100%;
+  padding: 100px;
+  padding-bottom: 20px;
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1440px;
+  height: 100%;
+}
+
+.log-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.log-wrapper {
+  max-width: 652px;
+  height: 449px;
 }
 
 .landscape {
@@ -25,37 +45,18 @@ body {
 }
 
 .content-holder {
-  position: relative;
   display: flex;
-  justify-content: space-around;
   align-items: center;
-  width: 100vw;
-  max-width: 1440px;
-  height: 100%;
-  padding-top: 170px;
-}
-
-.content-holder>div:nth-child(1),
-.content-holder>div:nth-child(3) {
-  position: absolute;
-  top: 0;
-}
-
-.content-holder>div:nth-child(1) {
-  left: 0;
-}
-
-.content-holder>div:nth-child(3) {
-  right: 0;
+  justify-content: center;
 }
 
 .sign-up-container {
+  flex: 1;
   display: flex;
-  align-items: center;
-  gap: 20px;
-  width: 279px;
+  justify-content: flex-end;
+  gap: 35px;
   height: 49px;
-  padding-top: 67px;
+  width: 279px;
 }
 
 form {
@@ -174,11 +175,7 @@ input.password {
 
 .footer {
   display: flex;
-  align-items: center;
-  justify-content: center;
   gap: 64px;
-  max-width: 1440px;
-  margin-top: 20px;
   margin-bottom: 20px;
 }
 
@@ -281,56 +278,12 @@ input:focus::placeholder {
   gap: 16px;
 }
 
-.logo-fullscreen {
-  position: absolute;
-  inset: 0;
-  width: 100vw;
-  max-width: 1440px;
-  min-height: 100vh;
-  background-color: #f6f7f8;
-  overflow: hidden;
-  animation: fade-container 2s ease forwards;
-  animation-delay: 1.2s;
-  z-index: 10;
-}
-
-.logo-new {
-  position: absolute;
-  width: 274px;
-  height: 334px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(1);
-  transform-origin: center center;
-  animation: to-corner 2s ease forwards;
-  animation-delay: 1.2s;
-  will-change: transform, top, left;
+.logo-animation-wrapper {
+  flex: 1;
 }
 
 .logo-old {
   display: none;
-}
-
-@keyframes fade-container {
-  to {
-    background-color: transparent;
-    z-index: -1;
-    pointer-events: none;
-  }
-}
-
-@keyframes to-corner {
-  0% {
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(1);
-  }
-
-  100% {
-    top: -75px;
-    left: -55px;
-    transform: translate(0, 0) scale(0.365);
-  }
 }
 
 #loginPasswordValidationError,

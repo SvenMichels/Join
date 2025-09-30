@@ -1,87 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Join – Kanban Board</title>
+    <link
+      rel="icon"
+      href="../assets/icons/join_logo_2.svg"
+      type="image/x-icon"
+    />
+    <link rel="stylesheet" href="./index.css" />
+    <link rel="stylesheet" href="./index-media-querie.css" />
+    <link rel="stylesheet" href="styles/fonts.css" />
+    <link rel="stylesheet" href="styles/shared.css" />
+    <link rel="stylesheet" href="styles/standard.css" />
+    <!-- <link rel="stylesheet" href="../styles/media-querie-small.css" /> -->
+    <!-- <link rel="stylesheet" href="../styles/media-querie-medium.css" /> -->
+    <!-- <link rel="stylesheet" href="../styles/media-querie-large.css" /> -->
 
-<head>
-  <meta charset="utf-8" />
-  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-  <title>Join – Kanban Board</title>
-  <link rel="icon" href="../assets/icons/join_logo_2.svg" type="image/x-icon" />
-  <link rel="stylesheet" href="./index.css" />
-  <link rel="stylesheet" href="./index-media-querie.css" />
-  <link rel="stylesheet" href="styles/fonts.css" />
-  <link rel="stylesheet" href="styles/shared.css" />
-  <link rel="stylesheet" href="styles/standard.css" />
-  <link rel="stylesheet" href="../styles/media-querie-small.css" />
-  <link rel="stylesheet" href="../styles/media-querie-medium.css" />
-  <link rel="stylesheet" href="../styles/media-querie-large.css" />
+    <script src="./index.js" type="module"></script>
+    <script type="module" src="../board/board.js"></script>
+    <style></style>
+  </head>
 
-  <script src="./index.js" type="module"></script>
-  <script type="module" src="../board/board.js"></script>
-  <style>
-  </style>
-</head>
-
-<body>
-  <div id="rotateWarning" class="rotate-warning">
-    Please rotate your device back to portrait mode.
-  </div>
-  <div class="content-holder">
-    <div class="logo-fullscreen">
-      <img class="logo logo-old" src="./assets/icons/join_white.svg" alt="Startlogo" />
-      <img class="logo logo-new" src="./assets/icons/join_logo_2.svg" alt="Neues Logo" />
+  <body>
+    <div id="rotateWarning" class="rotate-warning">
+      Please rotate your device back to portrait mode.
     </div>
-    <div>
-      <div class="login-container">
-        <div class="login-header">
-          <h1 id="loginTitle">Log in</h1>
-          <div class="bar"></div>
-        </div>
-        <form class="login-form" id="loginForm">
-          <div class="text-area-icon-comb">
-            <img alt="Mail Icon" class="mail-icon" src="./assets/icons/mail.svg" />
-            <input class="email" id="loginEmail" placeholder="E-Mail" />
-          </div>
-          <div class="hint-container">
-            <div id="emailHint" class="hint-bubble"></div>
-          </div>
-
-          <div class="text-area-icon-comb">
-            <img alt="Password Icon" class="password-icon" src="./assets/icons/lock.svg" id="togglePasswordIcon" />
-            <input class="password" id="loginPassword" type="text" placeholder="Enter password" />
-          </div>
-          <div class="hint-container">
-            <div id="pwHint" class="hint-bubble"></div>
-          </div>
-
-
-        </form>
-        <div class="button-container">
-          <button class="btn logIn" onkeydown="enter">Log in</button>
-          <button class="button-guest-login">Guest Log in</button>
+    <div class="log-content">
+      <div class="logo-animation-wrapper">
+        <div class="logo-fullscreen">
+          <img
+            class="logo logo-old"
+            src="./assets/icons/join_white.svg"
+            alt="Startlogo"
+          />
+          <img
+            class="logo logo-new"
+            src="./assets/icons/join_logo_2.svg"
+            alt="Neues Logo"
+          />
         </div>
       </div>
-      <div></div>
-    </div>
-    <div>
+      <div class="content-holder">
+        <div class="log-wrapper">
+          <div class="login-container">
+            <div class="login-header">
+              <h1 id="loginTitle">Log in</h1>
+              <div class="bar"></div>
+            </div>
+            <form class="login-form" id="loginForm">
+              <div class="text-area-icon-comb">
+                <img
+                  alt="Mail Icon"
+                  class="mail-icon"
+                  src="./assets/icons/mail.svg"
+                />
+                <input class="email" id="loginEmail" placeholder="E-Mail" />
+              </div>
+              <div class="hint-container">
+                <div id="emailHint" class="hint-bubble"></div>
+              </div>
+
+              <div class="text-area-icon-comb">
+                <img
+                  alt="Password Icon"
+                  class="password-icon"
+                  src="./assets/icons/lock.svg"
+                  id="togglePasswordIcon"
+                />
+                <input
+                  class="password"
+                  id="loginPassword"
+                  type="text"
+                  placeholder="Enter password"
+                />
+              </div>
+              <div class="hint-container">
+                <div id="pwHint" class="hint-bubble"></div>
+              </div>
+            </form>
+            <div class="button-container">
+              <button class="btn logIn" onkeydown="enter">Log in</button>
+              <button class="button-guest-login">Guest Log in</button>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="sign-up-container">
+        <div class="sign-up-wrapper">
         <p>Not a Join user?</p>
-        <button class="sign-up-button" onclick="window.location.href = '../signup/signup.html';">
-          Sign up
-        </button>
+        <button
+          class="sign-up-button"
+          onclick="window.location.href = '../signup/signup.html';">Sign up</button>
+        </div>
       </div>
     </div>
-  </div>
-  <article id="failLoginFeedback" class="failLoginFeedback dp-none">
-    <p>
-      Incorrect credentials provided. Please check your username and password.
-    </p>
-  </article>
-  <footer class="footer">
-    <a class="footer-text" href="./privatepolicy/privatepolicyNoAcc.html">Privacy Policy</a>
-    <a class="footer-text" href="./legalnotice/legalnoticeNoAcc.html">Legal notice</a>
-  </footer>
-  <script src="./scripts/app.js" type="module"></script>
-  <script type="module" src="./scripts/events/loginevents.js"></script>
-</body>
-
+    <footer class="footer">
+      <a class="footer-text" href="./privatepolicy/privatepolicyNoAcc.html"
+        >Privacy Policy</a
+      >
+      <a class="footer-text" href="./legalnotice/legalnoticeNoAcc.html"
+        >Legal notice</a
+      >
+    </footer>
+    <article id="failLoginFeedback" class="failLoginFeedback dp-none">
+      <p>
+        Incorrect credentials provided. Please check your username and password.
+      </p>
+    </article>
+    <script src="./scripts/app.js" type="module"></script>
+    <script type="module" src="./scripts/events/loginevents.js"></script>
+  </body>
 </html>

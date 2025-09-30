@@ -14,6 +14,7 @@ main {
   align-items: center;
   width: 100vw;
   height: 100%;
+  max-width: 1440px;
 }
 
 .errorDiv {
@@ -53,10 +54,6 @@ form {
   margin-bottom: 0;
   padding-left: 2rem;
   box-sizing: border-box;
-}
-
-.main-container {
-  max-width: 1440px;
 }
 
 .checkbox-wrapper label {
@@ -206,7 +203,7 @@ button[type="submit"]:hover {
   gap: 64px;
   max-width: 1440px;
   margin-bottom: 20px;
-  margin-top: 20px;
+  margin-top: auto;
 }
 
 .footer-text {
@@ -298,8 +295,8 @@ input:focus::placeholder {
     padding-left: 1rem;
 
     img {
-      width: 64px;
-      height: 78px;
+      width: 75px;
+      height: 69px;
     }
   }
 
