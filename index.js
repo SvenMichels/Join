@@ -44,12 +44,12 @@ document.addEventListener("DOMContentLoaded", () => {
       animLogo.animate(
         [
           {
-            transform: `translate(0px, 0px) scale(1, 1)`,
+            transform: `translate(0px, 0px) scale(1)`,
             opacity: 1,
           },
           {
-            transform: `translate(${deltaX}px, ${deltaY}px) scale(${scaleX}, ${scaleY})`,
-            opacity: 0,
+            transform: `translate(${deltaX - 86}px, ${deltaY - 106}px) scale(${scaleX}, ${scaleY})`,
+            opacity: 1,
           },
         ],
         {

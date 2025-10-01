@@ -22,7 +22,7 @@
     font-size: clamp(12px, 1vw, 15px);
   }
 
-  .greetings .username {
+  .username {
     font-size: clamp(1.5rem, 4vw, 3rem);
     white-space: normal;
 
@@ -56,37 +56,6 @@
     gap: 20px;
   }
 
-  .greetings {
-    position: fixed;
-    inset: 0 0 60px;
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    overflow: auto;
-    background: white;
-    z-index: 9999;
-    will-change: opacity, transform;
-    transition-property: opacity, transform;
-    transition-duration: 1.2s, 1.5s;
-    transition-timing-function: ease-out, ease-out;
-    transition-delay: 1s, 1s;
-    transform: translateY(0);
-  }
-
-  .greetings p:first-child {
-    font-size: clamp(1.8rem, 6vw, 3rem);
-    line-height: 1.2;
-    text-align: center;
-  }
-
-  .greetings.hidden {
-    opacity: 0;
-    transform: translateY(-20px);
-    pointer-events: none;
-  }
-
   .urgent {
     justify-content: space-evenly;
   }
@@ -95,7 +64,7 @@
     font-size: clamp(1.5rem, 4vw, 3rem);
   }
 
-  .greetings .username {
+  .username {
     font-size: clamp(1.5rem, 4vw, 3rem);
     white-space: normal;
     text-align: center;
@@ -113,7 +82,7 @@
     white-space: nowrap;
   }
 
-  .greetings .username {
+  .username {
     font-size: clamp(1.5rem, 4vw, 3rem);
     white-space: normal;
     word-break: break-word;
@@ -128,7 +97,7 @@
 
   }
 
-  .greetings .username {
+  .username {
     font-size: clamp(1.5rem, 4vw, 3rem);
     white-space: normal;
     word-break: break-word;

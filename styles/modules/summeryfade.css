@@ -1,0 +1,65 @@
+.greetings .username {
+    font-size: clamp(12px, 2vw, 32px);
+    white-space: normal;
+    text-align: left;
+}
+
+.greeting-visible {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.75s ease, visibility 0.75s ease;
+}
+
+.greeting-hidden {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.75s ease, visibility 0.75s ease;
+}
+
+.greetings p:first-child {
+    font-weight: 500;
+    color: #2a3647;
+    font-size: clamp(2.2rem, 4vw, 3rem);
+    text-align: left;
+}
+
+@media (max-width: 768px) {
+    .greetings {
+        position: fixed;
+        inset: 0 0 60px;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        overflow: auto;
+        background: white;
+        z-index: 200;
+        font-size: clamp(1.5rem, 4vw, 3rem);
+        white-space: normal;
+        word-break: break-word;
+        text-align: center;
+        animation: fade-effekt 2s ease-in-out forwards;
+        animation-delay: 0.25s;
+    }
+
+    @keyframes fade-effekt {
+        0% {
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 0;
+        }
+    }
+
+    .greetings p:first-child {
+        font-size: clamp(1.8rem, 6vw, 3rem);
+        line-height: 1.2;
+        text-align: center;
+    }
+
+    .hidefade {
+        display: none;
+    }
+}

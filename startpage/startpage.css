@@ -297,13 +297,6 @@ main {
   border-radius: 50%;
 }
 
-.greetings p:first-child {
-  font-weight: 500;
-  color: #2a3647;
-  font-size: clamp(2.2rem, 4vw, 3rem);
-  text-align: left;
-}
-
 .username {
   display: flex;
   flex-direction: column;
@@ -316,7 +309,7 @@ main {
   text-decoration: none;
 }
 
-.greetings .username {
+.username {
   font-size: clamp(12px, 2vw, 32px);
   white-space: normal;
   text-align: left;
@@ -324,6 +317,10 @@ main {
 
 .last-name {
   font-size: clamp(12px, 2vw, 32px);
+}
+
+.hidden {
+  display: none;
 }
 
 #username {
@@ -335,14 +332,3 @@ main {
   font-weight: bold;
 }
 
-.greeting-visible {
-  opacity: 1;
-  visibility: visible;
-  transition: opacity 0.75s ease, visibility 0.75s ease;
-}
-
-.greeting-hidden {
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.75s ease, visibility 0.75s ease;
-}

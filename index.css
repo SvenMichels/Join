@@ -319,6 +319,7 @@ input:focus::placeholder {
   from {
     background-color: #fff;
   }
+
   to {
     background-color: transparent;
   }
@@ -331,20 +332,19 @@ input:focus::placeholder {
   animation-delay: 0.5s;
 }
 
-@keyframes shrink-to-corner {
+/* @keyframes shrink-to-corner {
   0% {
     transform: scale(1) translate(0, 0);
     opacity: 1;
   }
+
   100% {
-    transform: scale(0.5) translate(-1500px, -200px);
-    opacity: 0;
+    transform: scale(0.5) translate(-1600px, -200px);
+    opacity: 1;
   }
-}
+} */
 
 .logo-final {
   width: 100px;
   height: auto;
 }
-
-

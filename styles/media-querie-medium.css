@@ -71,6 +71,7 @@
     overflow-y: auto;
     box-sizing: border-box;
     padding: calc(100% - 97%);
+    min-height: calc(100vh - 180px);
   }
 
   .empty-placeholder {
@@ -297,7 +298,7 @@
     padding-bottom: 64px;
   }
 
-  .task-h1-container{
+  .task-h1-container {
 
     max-width: 440px;
     width: 100%;

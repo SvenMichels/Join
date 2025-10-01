@@ -33,6 +33,18 @@
     display: none;
   }
 
+  .board-container {
+    padding: 16px;
+    position: absolute;
+    top: 96px;
+    bottom: 80px;
+    left: 0;
+    right: 0;
+    overflow-y: auto;
+    box-sizing: border-box;
+    min-height: calc(100vh - 178px);
+  }
+
   .nav-bar {
     display: flex;
     position: fixed;
@@ -91,6 +103,7 @@
     width: 100%;
     overflow-y: auto;
     padding: calc(100% - 97%);
+    min-height: calc(100vh - 180px);
     box-sizing: border-box;
   }
 
@@ -172,18 +185,6 @@
 
   .empty-placeholder {
     width: 100%;
-  }
-
-  .board-container {
-    flex-direction: column;
-    padding: 16px;
-    position: absolute;
-    top: 96px;
-    bottom: 80px;
-    left: 0;
-    right: 0;
-    overflow-y: auto;
-    box-sizing: border-box;
   }
 
   .help-container {

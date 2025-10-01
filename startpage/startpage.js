@@ -6,14 +6,15 @@
 
 import { setupDropdown } from "../scripts/ui/dropdown.js";
 import { highlightActiveNavigationLinks } from "../scripts/utils/navUtils.js";
-import { updateUserGreetingDisplay } from "./userGreetingManager.js";
+import { updateUserGreetingDisplay, handleMobileGreetingFadeEffect } from "./userGreetingManager.js";
 import { updateTaskSummaryWithRetryLogic } from "./dataServiceManager.js";
 
 /**
  * Initializes the start page on DOMContentLoaded.
- */
+*/
 document.addEventListener("DOMContentLoaded", async () => {
   updateUserGreetingDisplay();
+  handleMobileGreetingFadeEffect();
   await updateTaskSummaryWithRetryLogic();
   setupDropdown("#openMenu", "#dropDownMenu");
   highlightActiveNavigationLinks();

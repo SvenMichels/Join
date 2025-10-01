@@ -310,14 +310,14 @@ input:focus::placeholder {
   }
 }
 
-@media (min-width: 576px) and (max-width: 991px) {
+@media(max-width: 991px) {
   .nav-logo-container {
-    margin: 1rem;
-    padding-left: 1rem;
+    margin: 0.925rem;
+    padding-left: 0.775rem;
 
     img {
-      width: 64px;
-      height: 78px;
+      width: 70.7px;
+      height: 85.4px;
     }
   }
 }
