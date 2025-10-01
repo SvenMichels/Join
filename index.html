@@ -23,20 +23,25 @@
     <div id="rotateWarning" class="rotate-warning">
       Please rotate your device back to portrait mode.
     </div>
+    <div class="logo-fullscreen">
+      <img
+        class="logo logo-old"
+        src="./assets/icons/join_white.svg"
+        alt="Startlogo"
+      />
+      <img
+        class="logo logo-anim logo-new"
+        src="./assets/icons/join_logo_2.svg"
+        alt="Neues Logo"
+      />
+    </div>
     <div class="log-content">
       <div class="logo-animation-wrapper">
-        <div class="logo-fullscreen">
-          <img
-            class="logo logo-old"
-            src="./assets/icons/join_white.svg"
-            alt="Startlogo"
-          />
-          <img
-            class="logo logo-new"
-            src="./assets/icons/join_logo_2.svg"
-            alt="Neues Logo"
-          />
-        </div>
+        <img
+          class="logo logo-final d-none"
+          src="./assets/icons/join_logo_2.svg"
+          alt="Neues Logo"
+        />
       </div>
       <div class="content-holder">
         <div class="log-wrapper">
@@ -85,10 +90,13 @@
       </div>
       <div class="sign-up-container">
         <div class="sign-up-wrapper">
-        <p>Not a Join user?</p>
-        <button
-          class="sign-up-button"
-          onclick="window.location.href = '../signup/signup.html';">Sign up</button>
+          <p>Not a Join user?</p>
+          <button
+            class="sign-up-button"
+            onclick="window.location.href = '../signup/signup.html';"
+          >
+            Sign up
+          </button>
         </div>
       </div>
     </div>

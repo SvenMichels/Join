@@ -60,7 +60,7 @@ body {
 .sign-up-wrapper {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   width: 100%;
 }
 
@@ -190,6 +190,10 @@ input.password {
   animation: slideUpFadeIn 0.6s ease-out forwards;
 }
 
+.d-none {
+  display: none;
+}
+
 @keyframes slideUpFadeIn {
   from {
     bottom: -100px;
@@ -301,61 +305,46 @@ input:focus::placeholder {
 
 .logo-fullscreen {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: #fff;
-  z-index: 10;
-  animation: container-ani-opacity 2s ease 1s forwards,container-ani-z-index 2s ease 1s forwards;
+  inset: 0;
+  background: #fff;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: bg-fade 1s ease forwards;
+  animation-delay: 2s;
 }
 
-@keyframes container-ani-z-index {
+@keyframes bg-fade {
   from {
-    z-index: 10;
+    background-color: #fff;
   }
   to {
-    display: flex;
-    width: fit-content;
-    height: fit-content;
-    position: relative;
-    top: 0;
-    left: 0;
-    right: 0;
     background-color: transparent;
   }
 }
 
-@keyframes container-ani-opacity {
-    from {
-        opacity: 1;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-.logo-new {
+.logo-anim {
   width: 274px;
   height: 334px;
-  position: relative;
-  top: calc(50% - 150px);
-  left: calc(50% - 150px);
-  animation: shrink-logo 2s ease-in-out forwards;
-  animation-delay: 2s;
+  animation: shrink-to-corner 1s ease-in-out forwards;
+  animation-delay: 0.5s;
 }
 
-@keyframes shrink-logo {
+@keyframes shrink-to-corner {
   0% {
-    transform: translate(0, 0) scale(1, 1);
-    width: auto;
-    height: auto;
+    transform: scale(1) translate(0, 0);
+    opacity: 1;
   }
   100% {
-    transform: translate(100%, 0) scale(1, 1);
-    width: 100px;
-    height: 123px;
+    transform: scale(0.5) translate(-1500px, -200px);
+    opacity: 0;
   }
+}
+
+.logo-final {
+  width: 100px;
+  height: auto;
 }
 
 
