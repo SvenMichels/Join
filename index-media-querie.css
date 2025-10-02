@@ -1,47 +1,47 @@
 @media (max-width: 991px) {
   html {
-    padding: 0;
+    /* padding: 0; */
   }
   body {
     margin: 0;
   }
 
   .log-content {
-    flex-direction: column;
-    gap: 26px;
+    /* flex-direction: column;
+    gap: 26px; */
   }
 
   .logo-animation-wrapper {
-    height: 120px;
-    min-height: 80px;
+    /* height: 120px;
+    min-height: 80px; */
   }
 
   .log-wrapper {
-    display: flex;
+    /* display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-    padding: 0 10px;
+    padding: 0 10px; */
   }
 
   .login-container {
-    margin-top: 0;
+    /* margin-top: 0;
     padding: 12px 12px;
-    gap: 16px;
+    gap: 16px; */
   }
 
   .sign-up-container {
-    justify-content: center;
+    /* justify-content: center;
     align-items: center;
-    width: 100%;
+    width: 100%; */
   }
 
   .sign-up-wrapper {
-    display: flex;
+    /* display: flex;
     align-items: center;
     justify-content: center;
     height: 49px;
-    gap: 32px;
+    gap: 32px; */
   }
 
   .logo-fullscreen {
@@ -104,8 +104,8 @@
 
     100% {
       transform: translate(0, 0) scale(0.7);
-      top: -0.2rem;
-      left: -0.2rem;
+      top: calc(-2%);
+      left: calc(-2%);
     }
   }
 
