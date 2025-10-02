@@ -1,10 +1,19 @@
+html {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
 body {
   font-family: "Inter", sans-serif;
   margin: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 100vh;
   background-color: rgb(72, 125, 179);
 }
 
@@ -12,6 +21,7 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   width: 100vw;
   height: 100%;
   max-width: 1440px;
@@ -46,13 +56,17 @@ form {
   width: 100%;
 }
 
+.nav-logo-wrapper {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+}
+
 .nav-logo-container {
   display: flex;
   width: 100%;
   max-width: 1440px;
-  margin: 2rem;
   margin-bottom: 0;
-  padding-left: 2rem;
   box-sizing: border-box;
 }
 
@@ -292,7 +306,7 @@ input:focus::placeholder {
 
   .nav-logo-container {
     margin: 1rem;
-    padding-left: 1rem;
+    padding-left: 2rem;
 
     img {
       width: 75px;
@@ -310,7 +324,7 @@ input:focus::placeholder {
   }
 }
 
-@media(max-width: 991px) {
+@media (max-width: 991px) {
   .nav-logo-container {
     margin: 0.925rem;
     padding-left: 0.775rem;
