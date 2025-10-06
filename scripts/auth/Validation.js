@@ -56,7 +56,11 @@ export function initInputField(inputId, bubbleId, inputType) {
   if (!alreadyInitialized) {
     input.addEventListener('input', (e) => inputEventlistener(inputId, bubbleId, e, inputType));
     input.addEventListener('focus', (e) => focusEventlistener(inputId, bubbleId, e, inputType));
-    input.addEventListener('blur', () => { inputTrimmer(input); hideValidateBubble(bubbleId); });
+    input.addEventListener('blur', () => {
+      inputTrimmer(input);
+      applyFieldColorOnBlur(inputId, bubbleId);
+      hideValidateBubble(bubbleId);
+    });
     input.dataset.validationInit = "true";
   }
   applyInitialFieldState(input, bubbleId, inputType);
@@ -188,9 +192,18 @@ export function inputEventlistener(inputId, bubbleId, e, inputType) {
       return;
     }
   }
+  const inputIdElement = document.getElementById(inputId);
   const msg = getMessage(inputType, inputId, bubbleId, e);
   showValidateBubble(inputId, msg, bubbleId);
   const isValid = msg === 'Looks good!' || msg === 'Password Matches';
+  if (isValid) {
+
+    inputIdElement.classList.remove('validate-border-red');
+    inputIdElement.classList.add('validate-border-blue');
+  } else {
+    inputIdElement.classList.remove('validate-border-blue');
+    inputIdElement.classList.add('validate-border-red');
+  }
   setFieldValidity(inputId, isValid);
 }
 
@@ -397,9 +410,26 @@ export function confirmInputForFormValidation(inputId, _bubbleId) {
 export function showValidateBubble(inputId, message, bubbleId, timeout = 3000) {
   const { inputIdElement, bubbleElement } = getBubbleElements(inputId, bubbleId);
   if (!inputIdElement || !bubbleElement) return;
-  const isValid = checkBubbleContext(message, bubbleElement);
-  toggleBubbleColor(inputIdElement, isValid);
+  checkBubbleContext(message, bubbleElement);
   setBubbleTimeout(bubbleElement, timeout);
+}
+
+/**
+ * Applies the correct color to the input field based on validity when the field loses focus.
+ * @description Colors the border of the input field according to its validity state
+ * @param {string} inputId - ID of the input field
+ * @param {string} bubbleId - ID of the validation bubble
+ * @returns {void}
+ */
+function applyFieldColorOnBlur(inputId, bubbleId) {
+  const { inputIdElement } = getBubbleElements(inputId, bubbleId);
+  if (!inputIdElement.value) {
+    inputIdElement.classList.add('validate-border-blue');
+    return;
+  }
+  if (!inputIdElement) return;
+  const isValid = isFieldValid(inputId);
+  toggleBubbleColor(inputIdElement, isValid);
 }
 
 /**

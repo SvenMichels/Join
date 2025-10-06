@@ -1,9 +1,5 @@
 .legal-container {
-  position: absolute;
-  top: 115px;
-  bottom: 0;
-  left: 232px;
-  right: 0px;
+  padding-left: 180px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -11,10 +7,10 @@
   padding-bottom: 50px;
 }
 
-.legal-container > * {
+.legal-container>* {
   width: 100%;
   max-width: 1016px;
-  padding: 0 96px; 
+  padding: 0 96px;
   box-sizing: border-box;
 }
 
@@ -31,23 +27,25 @@ h3 {
 }
 
 @media (max-width: 768px) {
-  .legal-container{
+  .legal-container {
     left: 0;
-    bottom: 80px; 
+    padding-left: 0;
+    bottom: 80px;
   }
 }
 
 @media (max-width: 576px) {
-   .legal-container{
+  .legal-container {
     top: 100px;
-   }
+  }
 }
 
 @media (max-width: 450px) {
-  .legal-container > *{
+  .legal-container>* {
     padding: 0 32px;
   }
-  p{
+
+  p {
     font-size: 16px !important;
     word-break: break-word;
   }

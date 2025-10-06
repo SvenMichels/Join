@@ -14,6 +14,7 @@ import { initializeBackButton, initializeFabMenu } from "../scripts/ui/fabContac
 import { initInputField, showValidateBubble, confirmInputForFormValidation, validateInput } from "../scripts/auth/Validation.js";
 import { enableButton, disableButton } from '../scripts/events/loginevents.js';
 import { handleResize, prepareResponsiveContactView } from './handleView.js';
+import { checkNoLoggedInUser, logoutUserHandler } from '../scripts/events/logoutevent.js';
 
 let contactList = [];
 let editingContact = null;
@@ -27,6 +28,8 @@ window.contactList = contactList;
  * @returns {void}
  */
 function setupEventListeners() {
+  checkNoLoggedInUser();
+  logoutUserHandler();
   setupProfileButton();
   setupOpenMenuListener();
   setupContactFormListeners();

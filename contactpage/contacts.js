@@ -7,6 +7,7 @@
 import { openEditDialog } from './contactEditor.js';
 import { renderContact as renderContactFunction } from './contactRenderer.js';
 import { LocalStorageService } from '../scripts/utils/localStorageHelper.js';
+import { checkNoLoggedInUser } from '../scripts/events/logoutevent.js';
 
 /**
  * Opens the contact editing dialog.

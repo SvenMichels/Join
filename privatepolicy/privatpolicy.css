@@ -1,9 +1,5 @@
 .policy-container {
-  position: absolute;
-  top: 115px;
-  bottom: 0;
-  left: 232px;
-  right: 0;
+  padding-left: 180px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -11,10 +7,10 @@
   padding-bottom: 50px;
 }
 
-.policy-container > * {
+.policy-container>* {
   width: 100%;
   max-width: 1016px;
-  padding: 0 96px; 
+  padding: 0 96px;
   box-sizing: border-box;
 }
 
@@ -28,23 +24,25 @@ a:hover {
 
 
 @media (max-width: 768px) {
-  .policy-container{
+  .policy-container {
+    padding-left: 0;
     left: 0;
-    bottom: 80px; 
+    bottom: 80px;
   }
 }
 
 @media (max-width: 576px) {
-   .policy-container{
+  .policy-container {
     top: 100px;
-   }
+  }
 }
 
 @media (max-width: 450px) {
-  .policy-container > *{
+  .policy-container>* {
     padding: 0 32px;
   }
-  p{
+
+  p {
     font-size: 16px !important;
     word-break: break-word;
   }

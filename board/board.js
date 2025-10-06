@@ -6,16 +6,16 @@
 
 import { LocalStorageService } from "../scripts/utils/localStorageHelper.js";
 import { updateEmptyLists } from "../scripts/utils/emptylisthelper.js";
-
 import { setupMobileDeviceListeners } from "../scripts/utils/mobileUtils.js";
 import { highlightActiveNavigationLinks, setupOpenMenuListener } from "../scripts/utils/navUtils.js";
 import { getInitials } from "../scripts/utils/helpers.js";
 import { renderTasks } from "./taskRenderer.js";
-import { fetchTasksAndUsers, normalizeTasks,} from "./taskManager.js";
+import { fetchTasksAndUsers, normalizeTasks, } from "./taskManager.js";
 import { openTaskModal } from "./modalManager.js";
 import { loadContactsForTaskAssignment } from "../contactpage/contactService.js";
 import { setupDragAndDrop } from "./dragDropManager.js";
 import { setupSearch } from "./searchManager.js";
+import { checkNoLoggedInUser, logoutUserHandler } from "../scripts/events/logoutevent.js";
 import "./taskDetails.js";
 import "./subtaskProgress.js";
 
@@ -38,6 +38,8 @@ window.addEventListener("click", setupOpenMenuListener);
  * Initializes the board when DOM is fully loaded.
  */
 export function initializeBoard() {
+  logoutUserHandler();
+  checkNoLoggedInUser();
   setupUIComponents();
   setupEventHandlers();
   loadInitialData();
@@ -61,7 +63,7 @@ function setupEventHandlers() {
   setupOrientationEvents();
   setupUserChangeEvents();
 }
- 
+
 /**
  * Initializes all event bindings related to task creation and updates.
  * This includes the main add-task button, board-specific task buttons,
@@ -167,7 +169,7 @@ function setupSearchEvents() {
   if (searchButton) {
     searchButton.addEventListener("click", executeSearch);
   }
-  
+
   if (searchField) {
     searchField.addEventListener("keydown", (event) => {
       if (event.key === "Enter") executeSearch();
@@ -194,7 +196,7 @@ function setupUserChangeEvents() {
   userChangeEvents.forEach(event => {
     window.addEventListener(event, handleUserChange);
   });
-  
+
   documentEvents.forEach(event => {
     document.addEventListener(event, handleUserChange);
   });
@@ -215,7 +217,7 @@ async function loadInitialData() {
 async function loadTasksAndUsers() {
   try {
     const { tasks, users } = await fetchAndProcessData();
-    
+
     await updateBoardWithData(tasks, users);
   } catch (error) {
     console.error("[Board] Failed to load tasks and users:", error);
@@ -229,7 +231,7 @@ async function loadTasksAndUsers() {
 async function fetchAndProcessData() {
   const [tasksResponse] = await fetchTasksAndUsers();
   const contactsList = await loadContactsForTaskAssignment();
-  
+
   return {
     tasks: normalizeTasks(tasksResponse),
     users: contactsList || []
@@ -243,7 +245,7 @@ async function fetchAndProcessData() {
  * @returns {Promise<void>}
  */
 async function updateBoardWithData(tasks, users) {
-  
+
   updateApplicationState(tasks, users);
   await initializeBoardComponents(tasks);
 }
@@ -255,7 +257,7 @@ async function updateBoardWithData(tasks, users) {
  */
 function updateApplicationState(tasks, users) {
   currentlyLoadedTasks = tasks;
-  allSystemUsers = users;  
+  allSystemUsers = users;
 }
 
 /**
@@ -265,7 +267,7 @@ function updateApplicationState(tasks, users) {
  */
 async function initializeBoardComponents(tasks) {
   await renderTasks(Object.values(tasks), allSystemUsers);
-  
+
   setupDragAndDrop(tasks);
   setupSearch(tasks);
   updateEmptyLists();
@@ -277,9 +279,9 @@ async function initializeBoardComponents(tasks) {
 function loadUserProfile() {
   const userData = getUserData();
   const profileButton = getProfileButton();
-  
+
   if (!profileButton) return;
-  
+
   updateProfileButton(profileButton, userData);
 }
 
@@ -289,11 +291,11 @@ function loadUserProfile() {
  */
 function getUserData() {
   const userData = LocalStorageService.getItem("currentUser");
-  
+
   if (!userData) {
     console.debug("[Board] No user data found in localStorage.");
   }
-  
+
   return userData;
 }
 
@@ -303,7 +305,7 @@ function getUserData() {
  */
 function getProfileButton() {
   const profileButton = document.getElementById("openMenu");
-  
+
   if (!profileButton) {
     return null;
   }
@@ -353,7 +355,7 @@ function filterTasks(searchTerm) {
 
     const isVisible = taskMatchesSearch(task, searchTerm);
     element.style.display = isVisible ? "flex" : "none";
-    
+
     if (isVisible) hasVisibleTasks = true;
   });
   return hasVisibleTasks;
@@ -388,7 +390,7 @@ function showNoResultsMessage(show) {
 function handleOrientationChange() {
   const warning = document.getElementById("rotateWarning");
   const shouldShow = isMobile() && isLandscape();
-  
+
   if (warning) {
     warning.style.display = shouldShow ? "flex" : "none";
   }
@@ -402,7 +404,7 @@ function handleOrientationChange() {
 async function handleUserChange() {
   const currentUser = LocalStorageService.getItem("currentUser");
   if (!currentUser) return;
-  
+
   // Reload tasks and contacts for the current user
   await loadTasksAndUsers();
   loadUserProfile();

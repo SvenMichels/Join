@@ -3,7 +3,7 @@
  * Manages the initialization and update logic for the dashboard/start page.
  * @module startpageController
  */
-
+import { logoutUserHandler, checkNoLoggedInUser } from "../scripts/events/logoutevent.js";
 import { setupDropdown } from "../scripts/ui/dropdown.js";
 import { highlightActiveNavigationLinks } from "../scripts/utils/navUtils.js";
 import { updateUserGreetingDisplay, handleMobileGreetingFadeEffect } from "./userGreetingManager.js";
@@ -13,11 +13,13 @@ import { updateTaskSummaryWithRetryLogic } from "./dataServiceManager.js";
  * Initializes the start page on DOMContentLoaded.
 */
 document.addEventListener("DOMContentLoaded", async () => {
+  await checkNoLoggedInUser();
   updateUserGreetingDisplay();
   handleMobileGreetingFadeEffect();
   await updateTaskSummaryWithRetryLogic();
   setupDropdown("#openMenu", "#dropDownMenu");
   highlightActiveNavigationLinks();
+  logoutUserHandler();
   window.addEventListener("focus", refreshData);
   window.addEventListener("pageshow", handlePageShow);
   document.addEventListener("visibilitychange", handleVisibilityChange);

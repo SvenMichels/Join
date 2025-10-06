@@ -12,7 +12,7 @@ body {
   /* justify-content: space-between; */
   /* background-color: #f6f7f8; */
   /* overflow-x: hidden; */
-  /* font-family: "Inter", sans-serif; */
+  font-family: "Inter", sans-serif;
   /* color: #000000; */
 }
 
@@ -306,7 +306,9 @@ p {
 
 .hint-container {
   display: flex;
+  max-width: 244px;
   position: relative;
+  width: 100%;
 }
 
 .validate-border-red:focus {

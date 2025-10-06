@@ -19,6 +19,7 @@ import { loadAndRenderUsersModal, initUserSearchEventListener } from "../taskflo
 import { addNewSubtask, addSubtaskOnEnterKey, renderSubtasks } from "./subtaskHandler.js";
 import { initInputField } from "../scripts/auth/Validation.js";
 import { collectTaskData } from "./formManagerState.js";
+import { checkNoLoggedInUser, logoutUserHandler } from "../scripts/events/logoutevent.js";
 
 /** @type {Object<string, HTMLElement>} */
 const domCache = {};
@@ -32,6 +33,8 @@ document.addEventListener("DOMContentLoaded", () => {
  * Initializes the application by setting up everything.
  */
 function initializeApplication() {
+  logoutUserHandler();
+  checkNoLoggedInUser();
   cacheDomElements();
   setupEventListeners();
   configureForm();
@@ -41,13 +44,20 @@ function initializeApplication() {
   setupDropdown("#openMenu", "#dropDownMenu");
   highlightActiveNavigationLinks();
   setupMobileDeviceListeners();
+  initializeFormFields()
+}
+
+/**
+ * Initializes the application by setting up everything.
+ */
+function initializeFormFields() {
   initInputField("task-title", 'titleHint', 'subtask');
   initInputField("task-description", 'descriptionHint', 'subtask');
   initInputField("subtask", 'subtaskHint', 'subtask');
   initInputField("task-date", 'addtaskdatehint', 'date');
   initUserAssignmentList();
   initFormAndButtonHandlers("form-wrapper");
-  initFormAndButtonHandlers("assignedUserList")
+  initFormAndButtonHandlers("assignedUserList");
 }
 
 /**

@@ -1,6 +1,7 @@
 import { bindPrivacyCheckbox, bindPolicyLinks, bindSignupForm } from "../scripts/events/loginevents.js";
 import { generateRandomColorClass } from "../scripts/utils/colors.js";
 import { getInitials } from "../scripts/utils/helpers.js";
+import { LocalStorageService } from "../scripts/utils/localStorageHelper.js";
 import { initInputField, confirmInputForFormValidation, showValidateBubble, setFieldValidity, hideValidateBubble } from "../scripts/auth/Validation.js";
 
 
