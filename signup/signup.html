@@ -19,11 +19,11 @@
 
 <body>
     <div id="rotateWarning" class="rotate-warning">
-    Please rotate your device back to portrait mode.
-  </div>
-          <div class="nav-logo-container">
-            <img alt="Join nav-logo" class="nav-logo" src="../assets/icons/join_logo_2.svg" />
-        </div>
+        Please rotate your device back to portrait mode.
+    </div>
+    <div class="nav-logo-container">
+        <img alt="Join nav-logo" class="nav-logo" src="../assets/icons/join_logo_2.svg" />
+    </div>
     <main class="main-container">
         <div class="nav-logo-wrapper">
         </div>
@@ -46,7 +46,7 @@
                         Name
                     </label>
                     <img alt="Name icon" class="input-icon" src="../assets/icons/person.svg" />
-                    <input class="name" autocomplete="name" id="inputName" name="name" placeholder="Name"/>
+                    <input class="name" autocomplete="name" id="inputName" name="name" placeholder="Name" />
 
                 </div>
                 <div class="hint-container">
@@ -56,7 +56,7 @@
                     <label class="visually-hidden" for="inputEmail">
                         Email
                     </label>
-                    <input class="email" autocomplete="email" id="inputEmail" name="email" placeholder="Email"/>
+                    <input class="email" autocomplete="email" id="inputEmail" name="email" placeholder="Email" />
                     <img alt="Email icon" class="input-icon" src="../assets/icons/mail.svg" />
 
                 </div>
@@ -67,7 +67,8 @@
                     <label class="visually-hidden" for="inputPassword">
                         Passwort
                     </label>
-                    <input class="password" autocomplete="new-password" id="inputPassword" name="password" placeholder="Password"/>
+                    <input class="password" autocomplete="new-password" id="inputPassword" name="password"
+                        placeholder="Password" />
                     <img alt="Toggle password visibility" class="input-icon toggle-password" id="togglePasswordIcon"
                         src="../assets/icons/visibility.svg" />
                 </div>
@@ -78,10 +79,10 @@
                     <label class="visually-hidden" for="inputConfirmPassword">
                         Passwort bestätigen
                     </label>
-                    <input class="conf-password" autocomplete="new-password" id="inputConfirmPassword" name="confirmPassword"
-                        placeholder="Confirm Password"/>
-                    <img alt="Toggle password visibility" id="toggleConfirmPasswordIcon" class="input-icon toggle-password"
-                        src="../assets/icons/visibility.svg" />
+                    <input class="conf-password" autocomplete="new-password" id="inputConfirmPassword"
+                        name="confirmPassword" placeholder="Confirm Password" />
+                    <img alt="Toggle password visibility" id="toggleConfirmPasswordIcon"
+                        class="input-icon toggle-password" src="../assets/icons/visibility.svg" />
                 </div>
                 <div class="hint-container">
                     <div id="pwCheckHint" class="hint-bubble"></div>
@@ -105,11 +106,12 @@
         <article id="userFeedback" class="userFeedback dp-none">
             <p>You Signed Up successfully</p>
         </article>
+        <footer class="footer">
+            <a class="footer-text" href="../privatepolicy/privatepolicyNoAcc.html">Privacy Policy</a>
+            <a class="footer-text" href="../legalnotice/legalnoticeNoAcc.html">Legal Notice</a>
+        </footer>
     </main>
-    <footer class="footer">
-        <a class="footer-text" href="../privatepolicy/privatepolicyNoAcc.html">Privacy Policy</a>
-        <a class="footer-text" href="../legalnotice/legalnoticeNoAcc.html">Legal Notice</a>
-    </footer>
+
     <div class="d_none" id="overlay">
     </div>
     <script src="../scripts/app.js" type="module"></script>

@@ -1,5 +1,5 @@
 .policy-container {
-  padding-left: 180px;
+  padding-left: 13rem;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -10,7 +10,7 @@
 .policy-container>* {
   width: 100%;
   max-width: 1016px;
-  padding: 0 96px;
+  padding: 0 60px;
   box-sizing: border-box;
 }
 
@@ -39,7 +39,7 @@ a:hover {
 
 @media (max-width: 450px) {
   .policy-container>* {
-    padding: 0 32px;
+    padding: 0 24px;
   }
 
   p {

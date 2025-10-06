@@ -26,7 +26,7 @@ body {
 
 .log-wrapper {
   max-width: 652px;
-  height: 449px;
+  /* height: 449px; */
 }
 
 .landscape {
@@ -51,16 +51,26 @@ body {
 .sign-up-container {
   flex: 1;
   display: flex;
-  justify-content: flex-end;
   height: 49px;
   width: 100%;
+  max-width: 482px;
+  justify-content: center;
+  margin: 0 auto;
 }
 
 .sign-up-wrapper {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.sign-up-wrapper-top {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  width: 100%;
+  gap: 1rem;
 }
 
 form {
@@ -178,6 +188,7 @@ input.password {
 .footer {
   display: flex;
   gap: 64px;
+  padding: 1rem 0;
 }
 
 .background-color {
@@ -247,8 +258,8 @@ input.password {
   border-radius: 30px;
   background-color: white;
   padding: clamp(1.5rem, 10vw, 5rem);
-  padding-top: 32px;
-  padding-bottom: 32px;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
   box-sizing: border-box;
 }
 

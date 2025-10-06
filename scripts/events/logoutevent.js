@@ -18,9 +18,12 @@ export async function checkNoLoggedInUser() {
   const currentUser = LocalStorageService.getItem("currentUser");
   const isLoginPage = /(?:\/|\\)index\.html$/.test(window.location.pathname);
   if (isLoginPage) return;
-
+  const isPrivacyPolicyPage = /(?:\/|\\)privatepolicyNoAcc\.html$/.test(window.location.pathname);
+  if (isPrivacyPolicyPage) return;
   const isSignupPage = /(?:\/|\\)signup\.html$/.test(window.location.pathname);
   if (isSignupPage) return;
+  const isLegalPage = /(?:\/|\\)legalnoticeNoAcc\.html$/.test(window.location.pathname);
+  if (isLegalPage) return;
 
   if (!currentUser) {
     window.location.href = "../index.html";

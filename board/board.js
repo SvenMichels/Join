@@ -293,7 +293,7 @@ function getUserData() {
   const userData = LocalStorageService.getItem("currentUser");
 
   if (!userData) {
-    console.debug("[Board] No user data found in localStorage.");
+    return null;
   }
 
   return userData;

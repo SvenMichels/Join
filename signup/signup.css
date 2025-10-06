@@ -213,6 +213,7 @@ button[type="submit"]:hover {
 .footer {
   display: flex;
   gap: 64px;
+  padding: 1rem 0;
 }
 
 .footer-text {
@@ -316,6 +317,7 @@ input:focus::placeholder {
 
   .footer {
     gap: 16px;
+    padding: 0.5rem 0;
   }
 }
 

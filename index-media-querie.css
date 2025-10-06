@@ -7,11 +7,15 @@
     margin: 0;
   }
 
-  /* .log-content {
-    flex-direction: column;
-    gap: 26px;
+  .sign-up-wrapper-top {
+    display: none;
   }
 
+  .sign-up-wrapper {
+    display: flex;
+  }
+
+  /*
   .logo-animation-wrapper {
     height: 120px;
     min-height: 80px;
